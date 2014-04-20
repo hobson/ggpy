@@ -1,20 +1,20 @@
-package org.ggp.base.server.event;
+package org.ggp.base.server.event
 
-import java.io.Serializable;
+import java.io.Serializable
 
-import org.ggp.base.util.observer.Event;
+import org.ggp.base.util.observer.Event
 
 
 class ServerTimeEvent(Event implements Serializable):
-{
+
 
     time = int()
 
     def ServerTimeEvent(time=int())
-	{
-        this.time = time;
+	
+        self.time = time
 
     def int getTime()
-	{
-        return time;
+	
+        return time
 

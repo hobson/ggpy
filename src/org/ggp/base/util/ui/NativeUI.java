@@ -1,6 +1,6 @@
-package org.ggp.base.util.ui;
+package org.ggp.base.util.ui
 
-import javax.swing.UIManager;
+import javax.swing.UIManager
 
 /**
  * NativeUI is a simple user-interface wrapper around the snippet of code
@@ -13,10 +13,9 @@ import javax.swing.UIManager;
  */
 class NativeUI(object):
     def void setNativeUI():
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e):
-            System.err.println("Unable to set native look and feel.");
-            // e.printStackTrace();
-        }
-    }
+        try 
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+        except Exception e):
+            System.err.println("Unable to set native look and feel.")
+            // e.printStackTrace()
+

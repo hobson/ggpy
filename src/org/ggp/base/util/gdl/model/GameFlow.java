@@ -1,37 +1,37 @@
-package org.ggp.base.util.gdl.model;
+package org.ggp.base.util.gdl.model
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.ArrayList
+import java.util.Collections
+import java.util.HashMap
+import java.util.HashSet
+import java.util.LinkedList
+import java.util.List
+import java.util.Map
+import java.util.Queue
+import java.util.Set
 
-import org.ggp.base.util.gdl.GdlUtils;
-import org.ggp.base.util.gdl.grammar.Gdl;
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlLiteral;
-import org.ggp.base.util.gdl.grammar.GdlNot;
-import org.ggp.base.util.gdl.grammar.GdlPool;
-import org.ggp.base.util.gdl.grammar.GdlRule;
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.gdl.grammar.GdlVariable;
-import org.ggp.base.util.gdl.model.assignments.AssignmentIterator;
-import org.ggp.base.util.gdl.model.assignments.Assignments;
-import org.ggp.base.util.gdl.model.assignments.AssignmentsFactory;
-import org.ggp.base.util.gdl.model.assignments.FunctionInfo;
-import org.ggp.base.util.gdl.model.assignments.FunctionInfoImpl;
-import org.ggp.base.util.gdl.transforms.CommonTransforms;
-import org.ggp.base.util.gdl.transforms.ConstantChecker;
-import org.ggp.base.util.gdl.transforms.ConstantCheckerFactory;
-import org.ggp.base.util.gdl.transforms.DeORer;
-import org.ggp.base.util.gdl.transforms.GdlCleaner;
-import org.ggp.base.util.gdl.transforms.VariableConstrainer;
+import org.ggp.base.util.gdl.GdlUtils
+import org.ggp.base.util.gdl.grammar.Gdl
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlLiteral
+import org.ggp.base.util.gdl.grammar.GdlNot
+import org.ggp.base.util.gdl.grammar.GdlPool
+import org.ggp.base.util.gdl.grammar.GdlRule
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.gdl.grammar.GdlVariable
+import org.ggp.base.util.gdl.model.assignments.AssignmentIterator
+import org.ggp.base.util.gdl.model.assignments.Assignments
+import org.ggp.base.util.gdl.model.assignments.AssignmentsFactory
+import org.ggp.base.util.gdl.model.assignments.FunctionInfo
+import org.ggp.base.util.gdl.model.assignments.FunctionInfoImpl
+import org.ggp.base.util.gdl.transforms.CommonTransforms
+import org.ggp.base.util.gdl.transforms.ConstantChecker
+import org.ggp.base.util.gdl.transforms.ConstantCheckerFactory
+import org.ggp.base.util.gdl.transforms.DeORer
+import org.ggp.base.util.gdl.transforms.GdlCleaner
+import org.ggp.base.util.gdl.transforms.VariableConstrainer
 
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimap
 
 
 /**
@@ -52,64 +52,64 @@ class GameFlow(object):
     constantForms = Set<SentenceForm>()
     constantChecker = ConstantChecker()
 
-    def GameFlow(List<Gdl> description) throws InterruptedException {
-        description = GdlCleaner.run(description);
-        description = DeORer.run(description);
-        description = VariableConstrainer.replaceFunctionValuedVariables(description);
+    def GameFlow(List<Gdl> description) throws InterruptedException 
+        description = GdlCleaner.run(description)
+        description = DeORer.run(description)
+        description = VariableConstrainer.replaceFunctionValuedVariables(description)
 
 		//First we use a sentence model to get the relevant sentence forms
-        SentenceDomainModel model = SentenceDomainModelFactory.createWithCartesianDomains(description);
-        formsControlledByFlow = new HashSet<SentenceForm>();
-        formsControlledByFlow.addAll(model.getIndependentSentenceForms());
-        formsControlledByFlow.removeAll(model.getConstantSentenceForms());
-        constantForms = model.getConstantSentenceForms();
+        SentenceDomainModel model = SentenceDomainModelFactory.createWithCartesianDomains(description)
+        formsControlledByFlow = new HashSet<SentenceForm>()
+        formsControlledByFlow.addAll(model.getIndependentSentenceForms())
+        formsControlledByFlow.removeAll(model.getConstantSentenceForms())
+        constantForms = model.getConstantSentenceForms()
 
-        constantChecker = ConstantCheckerFactory.createWithForwardChaining(model);
+        constantChecker = ConstantCheckerFactory.createWithForwardChaining(model)
 
 		//Figure out which of these sentences are true at each stage
-        solveTurns(model);
+        solveTurns(model)
 
-    private void solveTurns(SentenceDomainModel model) throws InterruptedException {
+    private void solveTurns(SentenceDomainModel model) throws InterruptedException 
 		//Before we can do anything else, we need a topological ordering on our forms
-        List<SentenceForm> ordering = getTopologicalOrdering(model.getIndependentSentenceForms(), model.getDependencyGraph());
-        ordering.retainAll(formsControlledByFlow);
+        List<SentenceForm> ordering = getTopologicalOrdering(model.getIndependentSentenceForms(), model.getDependencyGraph())
+        ordering.retainAll(formsControlledByFlow)
 
 		//Let's add function info to the consideration...
-        Map<SentenceForm, FunctionInfo> functionInfoMap = new HashMap<SentenceForm, FunctionInfo>();
+        Map<SentenceForm, FunctionInfo> functionInfoMap = new HashMap<SentenceForm, FunctionInfo>()
         for(SentenceForm form : constantForms):
-            functionInfoMap.put(form, FunctionInfoImpl.create(form, constantChecker));
+            functionInfoMap.put(form, FunctionInfoImpl.create(form, constantChecker))
 
 		//First we set the "true" values, then we get the forms controlled by the flow...
 		//Use "init" values
-        Set<GdlSentence> trueFlowSentences = new HashSet<GdlSentence>();
+        Set<GdlSentence> trueFlowSentences = new HashSet<GdlSentence>()
         for(SentenceForm form : constantForms):
             if(form.getName().equals(INIT)):
 			    for (GdlSentence initSentence : constantChecker.getTrueSentences(form)):
-                    GdlSentence trueSentence = GdlPool.getRelation(TRUE, initSentence.getBody());
-                    trueFlowSentences.add(trueSentence);
+                    GdlSentence trueSentence = GdlPool.getRelation(TRUE, initSentence.getBody())
+                    trueFlowSentences.add(trueSentence)
 		//Go through ordering, adding to trueFlowSentences
-        addSentenceForms(ordering, trueFlowSentences, model, functionInfoMap);
-        sentencesTrueByTurn.add(trueFlowSentences);
+        addSentenceForms(ordering, trueFlowSentences, model, functionInfoMap)
+        sentencesTrueByTurn.add(trueFlowSentences)
 
         outer : while(true):
 			//Now we use the "next" values from the previous turn
-            Set<GdlSentence> sentencesPreviouslyTrue = trueFlowSentences;
-            trueFlowSentences = new HashSet<GdlSentence>();
+            Set<GdlSentence> sentencesPreviouslyTrue = trueFlowSentences
+            trueFlowSentences = new HashSet<GdlSentence>()
             for(GdlSentence sentence : sentencesPreviouslyTrue):
                 if(sentence.getName().equals(NEXT)):
-                    GdlSentence trueSentence = GdlPool.getRelation(TRUE, sentence.getBody());
-                    trueFlowSentences.add(trueSentence);
+                    GdlSentence trueSentence = GdlPool.getRelation(TRUE, sentence.getBody())
+                    trueFlowSentences.add(trueSentence)
 
-            addSentenceForms(ordering, trueFlowSentences, model, functionInfoMap);
+            addSentenceForms(ordering, trueFlowSentences, model, functionInfoMap)
 
 			//Test if this turn's flow is the same as an earlier one
             for(int i = 0; i < sentencesTrueByTurn.size(); i++):
-                Set<GdlSentence> prevSet = sentencesTrueByTurn.get(i);
+                Set<GdlSentence> prevSet = sentencesTrueByTurn.get(i)
                 if(prevSet.equals(trueFlowSentences)):
 					//Complete the loop
-                    turnAfterLast = i;
-                    break outer;
-            sentencesTrueByTurn.add(trueFlowSentences);
+                    turnAfterLast = i
+                    break outer
+            sentencesTrueByTurn.add(trueFlowSentences)
 
         private void addSentenceForms(List<SentenceForm> ordering,
             Set<GdlSentence> trueFlowSentences,
@@ -121,160 +121,160 @@ class GameFlow(object):
 			//Use basic Assignments class, of course
 
             for(GdlSentence alwaysTrueSentences : model.getSentencesListedAsTrue(curForm))
-                trueFlowSentences.add(alwaysTrueSentences);
+                trueFlowSentences.add(alwaysTrueSentences)
             for(GdlRule rule : model.getRules(curForm)):
-                GdlSentence head = rule.getHead();
-                List<GdlVariable> varsInHead = GdlUtils.getVariables(head);
-                Assignments assignments = AssignmentsFactory.getAssignmentsForRule(rule, model, functionInfoMap, Collections.EMPTY_MAP);
+                GdlSentence head = rule.getHead()
+                List<GdlVariable> varsInHead = GdlUtils.getVariables(head)
+                Assignments assignments = AssignmentsFactory.getAssignmentsForRule(rule, model, functionInfoMap, Collections.EMPTY_MAP)
 
-                AssignmentIterator asnItr = assignments.getIterator();
+                AssignmentIterator asnItr = assignments.getIterator()
                 while(asnItr.hasNext()):
-                    Map<GdlVariable, GdlConstant> assignment = asnItr.next();
-                    bool isGoodAssignment = true;
+                    Map<GdlVariable, GdlConstant> assignment = asnItr.next()
+                    bool isGoodAssignment = true
 
-                    GdlSentence transformedHead = CommonTransforms.replaceVariables(head, assignment);
+                    GdlSentence transformedHead = CommonTransforms.replaceVariables(head, assignment)
                     if(trueFlowSentences.contains(transformedHead))
-                        asnItr.changeOneInNext(varsInHead, assignment);
+                        asnItr.changeOneInNext(varsInHead, assignment)
 
 					//Go through the conjuncts
                     for(GdlLiteral literal : rule.getBody()):
                         if(literal instanceof GdlSentence):
                             if(curForm.matches((GdlSentence) literal))
-                                throw new RuntimeException("Haven't implemented recursion in the game flow");
-                            GdlSentence transformed = CommonTransforms.replaceVariables((GdlSentence) literal, assignment);
-                            SentenceForm conjForm = model.getSentenceForm(transformed);
+                                throw new RuntimeException("Haven't implemented recursion in the game flow")
+                            GdlSentence transformed = CommonTransforms.replaceVariables((GdlSentence) literal, assignment)
+                            SentenceForm conjForm = model.getSentenceForm(transformed)
                             if(constantForms.contains(conjForm)):
                                 if(!constantChecker.isTrueConstant(transformed)):
-                                    isGoodAssignment = false;
-                                    asnItr.changeOneInNext(GdlUtils.getVariables(literal), assignment);
-							} else {
+                                    isGoodAssignment = false
+                                    asnItr.changeOneInNext(GdlUtils.getVariables(literal), assignment)
+							else:
                                 if(!trueFlowSentences.contains(transformed)):
 									//False sentence
-                                    isGoodAssignment = false;
-                                    asnItr.changeOneInNext(GdlUtils.getVariables(literal), assignment);
-						} else if(literal instanceof GdlNot):
-                            GdlSentence internal = (GdlSentence) ((GdlNot) literal).getBody();
-                            GdlSentence transformed = CommonTransforms.replaceVariables(internal, assignment);
-                            SentenceForm conjForm = model.getSentenceForm(transformed);
+                                    isGoodAssignment = false
+                                    asnItr.changeOneInNext(GdlUtils.getVariables(literal), assignment)
+						elif(literal instanceof GdlNot):
+                            GdlSentence internal = (GdlSentence) ((GdlNot) literal).getBody()
+                            GdlSentence transformed = CommonTransforms.replaceVariables(internal, assignment)
+                            SentenceForm conjForm = model.getSentenceForm(transformed)
 
                             if(constantForms.contains(conjForm)):
                                 if(constantChecker.isTrueConstant(transformed)):
-                                    isGoodAssignment = false;
-                                    asnItr.changeOneInNext(GdlUtils.getVariables(literal), assignment);
-							} else {
+                                    isGoodAssignment = false
+                                    asnItr.changeOneInNext(GdlUtils.getVariables(literal), assignment)
+							else:
                                 if(trueFlowSentences.contains(transformed)):
 									//False sentence
-                                    isGoodAssignment = false;
-                                    asnItr.changeOneInNext(GdlUtils.getVariables(literal), assignment);
+                                    isGoodAssignment = false
+                                    asnItr.changeOneInNext(GdlUtils.getVariables(literal), assignment)
 
 						//Nothing else needs attention, really
 
 					//We've gone through all the conjuncts and are at the
 					//end of the rule
                     if(isGoodAssignment):
-                        trueFlowSentences.add(transformedHead);
+                        trueFlowSentences.add(transformedHead)
                         if(varsInHead.isEmpty())
                             break; //out of the assignments for this rule
                         else
-                            asnItr.changeOneInNext(varsInHead, assignment);
+                            asnItr.changeOneInNext(varsInHead, assignment)
 			//We've gone through all the rules
 
     def getNumTurns():  # int
-        return sentencesTrueByTurn.size();
+        return sentencesTrueByTurn.size()
 
     def List<SentenceForm> getTopologicalOrdering(
             Set<SentenceForm> forms,
             Multimap<SentenceForm, SentenceForm> dependencyGraph):
 		//We want each form as a key of the dependency graph to
 		//follow all the forms in the dependency graph, except maybe itself
-        Queue<SentenceForm> queue = new LinkedList<SentenceForm>(forms);
-        List<SentenceForm> ordering = new ArrayList<SentenceForm>(forms.size());
-        Set<SentenceForm> alreadyOrdered = new HashSet<SentenceForm>();
+        Queue<SentenceForm> queue = new LinkedList<SentenceForm>(forms)
+        List<SentenceForm> ordering = new ArrayList<SentenceForm>(forms.size())
+        Set<SentenceForm> alreadyOrdered = new HashSet<SentenceForm>()
         while(!queue.isEmpty()):
-            SentenceForm curForm = queue.remove();
-            bool readyToAdd = true;
+            SentenceForm curForm = queue.remove()
+            bool readyToAdd = true
 			//Don't add if there are dependencies
             for(SentenceForm dependency : dependencyGraph.get(curForm)):
                 if(!dependency.equals(curForm) && !alreadyOrdered.contains(dependency)):
-                    readyToAdd = false;
-                    break;
+                    readyToAdd = false
+                    break
 			//Add it
             if(readyToAdd):
-                ordering.add(curForm);
-                alreadyOrdered.add(curForm);
-			} else {
-                queue.add(curForm);
+                ordering.add(curForm)
+                alreadyOrdered.add(curForm)
+			else:
+                queue.add(curForm)
 			//TODO: Add check for an infinite loop here
 			//Or replace with code that does stratification of loops
-        return ordering;
+        return ordering
 
 
     def Set<Integer> getTurnsConjunctsArePossible(List<GdlLiteral> body):
 		//We want to identify the conjuncts that are used by the
 		//game flow.
-        List<GdlLiteral> relevantLiterals = new ArrayList<GdlLiteral>();
+        List<GdlLiteral> relevantLiterals = new ArrayList<GdlLiteral>()
         for(GdlLiteral literal : body):
             if(literal instanceof GdlSentence):
-                GdlSentence sentence = (GdlSentence) literal;
+                GdlSentence sentence = (GdlSentence) literal
                 if(SentenceModelUtils.inSentenceFormGroup(sentence, formsControlledByFlow))
-                    relevantLiterals.add(literal);
-			} else if(literal instanceof GdlNot):
-                GdlNot not = (GdlNot) literal;
-                GdlSentence innerSentence = (GdlSentence) not.getBody();
+                    relevantLiterals.add(literal)
+			elif(literal instanceof GdlNot):
+                GdlNot not = (GdlNot) literal
+                GdlSentence innerSentence = (GdlSentence) not.getBody()
                 if(SentenceModelUtils.inSentenceFormGroup(innerSentence, formsControlledByFlow))
-                    relevantLiterals.add(literal);
+                    relevantLiterals.add(literal)
 
 		//If none are related to the game flow, then that's it. It can
 		//happen on any turn.
 		//if(relevantLiterals.isEmpty())
-			//return getCompleteTurnSet();
-        Set<Integer> turnsPossible = new HashSet<Integer>(getCompleteTurnSet());
+			//return getCompleteTurnSet()
+        Set<Integer> turnsPossible = new HashSet<Integer>(getCompleteTurnSet())
 
 		//For each of the relevant literals, we need to see if there are assignments
 		//such that
         for(GdlLiteral literal : relevantLiterals):
-            List<Integer> turns = new ArrayList<Integer>();
+            List<Integer> turns = new ArrayList<Integer>()
             if(literal instanceof GdlSentence):
                 for(int t = 0; t < getNumTurns(); t++):
                     if(sentencesTrueByTurn.get(t).contains(literal))
-                        turns.add(t);
+                        turns.add(t)
                     else for(GdlSentence s : sentencesTrueByTurn.get(t)):
 						//Could be true if there's an assignment
                         if(null != GdlUtils.getAssignmentMakingLeftIntoRight((GdlSentence)literal, s)):
-                            turns.add(t);
-                            break;
-			} else if(literal instanceof GdlNot):
-                GdlNot not = (GdlNot) literal;
-                GdlSentence internal = (GdlSentence) not.getBody();
+                            turns.add(t)
+                            break
+			elif(literal instanceof GdlNot):
+                GdlNot not = (GdlNot) literal
+                GdlSentence internal = (GdlSentence) not.getBody()
                 for(int t = 0; t < getNumTurns(); t++):
                     if(!sentencesTrueByTurn.get(t).contains(internal))
-                        turns.add(t);
+                        turns.add(t)
                     else for(GdlSentence s : sentencesTrueByTurn.get(t)):
                         if(null != GdlUtils.getAssignmentMakingLeftIntoRight(internal, s)):
-                            turns.add(t);
-                            break;
+                            turns.add(t)
+                            break
 			//Accumulate turns
 			//Note that all relevant conjuncts must be true, so this
 			//is an intersection of when the individual conjuncts
 			//could be true.
-            turnsPossible.retainAll(turns);
-        return turnsPossible;
+            turnsPossible.retainAll(turns)
+        return turnsPossible
 
-    private Set<Integer> completeTurnSet = null;
+    private Set<Integer> completeTurnSet = null
     def Set<Integer> getCompleteTurnSet():
         if(completeTurnSet == null):
-            completeTurnSet = new HashSet<Integer>();
+            completeTurnSet = new HashSet<Integer>()
             for(int i = 0; i < getNumTurns(); i++):
-                completeTurnSet.add(i);
-            completeTurnSet = Collections.unmodifiableSet(completeTurnSet);
-        return completeTurnSet;
+                completeTurnSet.add(i)
+            completeTurnSet = Collections.unmodifiableSet(completeTurnSet)
+        return completeTurnSet
 
     def Set<SentenceForm> getSentenceForms():
-        return formsControlledByFlow;
+        return formsControlledByFlow
 
     def Set<GdlSentence> getSentencesTrueOnTurn(int i):
-        return sentencesTrueByTurn.get(i);
+        return sentencesTrueByTurn.get(i)
 
     def getTurnAfterLast():  # int
-        return turnAfterLast;
+        return turnAfterLast
 

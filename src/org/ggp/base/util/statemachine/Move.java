@@ -1,8 +1,8 @@
-package org.ggp.base.util.statemachine;
+package org.ggp.base.util.statemachine
 
-import java.io.Serializable;
+import java.io.Serializable
 
-import org.ggp.base.util.gdl.grammar.GdlTerm;
+import org.ggp.base.util.gdl.grammar.GdlTerm
 
 /**
  * A Move represents a possible move that can be made by a role. Each
@@ -13,36 +13,30 @@ import org.ggp.base.util.gdl.grammar.GdlTerm;
  * only express the action itself.
  */
 class Move implements Serializable
-{
-    protected final GdlTerm contents;
+
+    protected final GdlTerm contents
 
     def Move(GdlTerm contents)
-    {
-        this.contents = contents;
-    }
+    
+        self.contents = contents
 
     def bool equals(Object o)
-    {
+    
         if ((o != null) && (o instanceof Move)):
-            Move move = (Move) o;
-            return move.contents.equals(contents);
-        }
+            Move move = (Move) o
+            return move.contents.equals(contents)
 
-        return false;
-    }
+        return false
 
     def GdlTerm getContents()
-    {
-        return contents;
-    }
+    
+        return contents
 
     def int hashCode()
-    {
-        return contents.hashCode();
-    }
+    
+        return contents.hashCode()
 
     def String toString()
-    {
-        return contents.toString();
-    }
-}
+    
+        return contents.toString()
+

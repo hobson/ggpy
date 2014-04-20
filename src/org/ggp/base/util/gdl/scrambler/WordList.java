@@ -1,7 +1,7 @@
-package org.ggp.base.util.gdl.scrambler;
+package org.ggp.base.util.gdl.scrambler
 
 class WordList(object):
-    def static String[] words = new String[] {
+    def static String[] words = new String[] 
 		"everything",
 		"officials",
 		"knowledge",
@@ -1868,5 +1868,4 @@ class WordList(object):
 		"macrofauna",
 		"parasitological",
 		"temporariness",
-	};
-}
+

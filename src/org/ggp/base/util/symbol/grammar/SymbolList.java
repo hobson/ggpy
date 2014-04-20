@@ -1,33 +1,33 @@
-package org.ggp.base.util.symbol.grammar;
+package org.ggp.base.util.symbol.grammar
 
-import java.util.List;
+import java.util.List
 
 class SymbolList(Symbol):
-{
 
-    private final List<Symbol> contents;
+
+    private final List<Symbol> contents
 
     SymbolList(List<Symbol> contents)
-	{
-        this.contents = contents;
+	
+        self.contents = contents
 
     def Symbol get(int index)
-	{
-        return contents.get(index);
+	
+        return contents.get(index)
 
     def int size()
-	{
-        return contents.size();
+	
+        return contents.size()
 
     def String toString()
-	{
-        StringBuilder sb = new StringBuilder();
+	
+        StringBuilder sb = new StringBuilder()
 
-        sb.append("( ");
+        sb.append("( ")
         for (Symbol symbol : contents)
-		{
-            sb.append(symbol.toString() + " ");
-        sb.append(")");
+		
+            sb.append(symbol.toString() + " ")
+        sb.append(")")
 
-        return sb.toString();
+        return sb.toString()
 

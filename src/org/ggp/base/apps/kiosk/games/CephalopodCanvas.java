@@ -1,65 +1,59 @@
-package org.ggp.base.apps.kiosk.games;
+package org.ggp.base.apps.kiosk.games
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Set;
+import java.awt.Color
+import java.awt.Graphics
+import java.util.Set
 
-import org.ggp.base.apps.kiosk.templates.CommonGraphics;
-import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
+import org.ggp.base.apps.kiosk.templates.CommonGraphics
+import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid
 
 
 class CephalopodCanvas(GameCanvas_FancyGrid):
     serialVersionUID = 1L  # int 
 
-    def String getGameName() { return "Cephalopod"; }
-    protected String getGameKey() { return "cephalopodMicro"; }
-    protected int getGridHeight() { return 3; }
-    protected int getGridWidth() { return 3; }
+    def String getGameName()  return "Cephalopod"
+    protected String getGameKey()  return "cephalopodMicro"
+    protected int getGridHeight()  return 3
+    protected int getGridWidth()  return 3
 
     protected Set<String> getFactsAboutCell(int xCell, int yCell):
-        return gameStateHasFactsMatching("\\( cell " + xCell + " " + yCell + " (.*) \\)");
-    }
+        return gameStateHasFactsMatching("\\( cell " + xCell + " " + yCell + " (.*) \\)")
 
     protected Set<String> getLegalMovesForCell(int xCell, int yCell):
-        return gameStateHasLegalMovesMatching("\\( play " + xCell + " " + yCell + " (.*) \\)");
-    }
+        return gameStateHasLegalMovesMatching("\\( play " + xCell + " " + yCell + " (.*) \\)")
 
     protected void renderCellContent(Graphics g, String theFact):
-        String[] cellFacts = theFact.split(" ");
+        String[] cellFacts = theFact.split(" ")
 
-        int cellValue = Integer.parseInt(cellFacts[4]);
-        String cellPlayer = cellFacts[5];
+        int cellValue = Integer.parseInt(cellFacts[4])
+        String cellPlayer = cellFacts[5]
 
         if (cellPlayer.equals("red")):
-            g.setColor(Color.RED);
-        } else if (cellPlayer.equals("black")):
-            g.setColor(Color.BLACK);
-        }
+            g.setColor(Color.RED)
+        elif (cellPlayer.equals("black")):
+            g.setColor(Color.BLACK)
 
-        CommonGraphics.fillWithString(g, "" + cellValue, 1.2);
-    }
+        CommonGraphics.fillWithString(g, "" + cellValue, 1.2)
 
     protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove):
         if(isSelectedCell(xCell, yCell)):
-            String[] moveParts = theMove.split(" ");
-            int captureMask = Integer.parseInt(moveParts[5]);
-            renderCaptureMask(g, captureMask);
-        }
-    }
+            String[] moveParts = theMove.split(" ")
+            int captureMask = Integer.parseInt(moveParts[5])
+            renderCaptureMask(g, captureMask)
+
 
     private void renderCaptureMask(Graphics g, int c):
-        bool leftBit = (c == 3 || c == 5 || c == 7 || c == 9 || c == 11 || c == 13 || c == 15);
-        bool rightBit = (c >= 9);
-        bool topBit = (c == 3 || c == 6 || c == 7 || c == 10 || c == 11 || c == 14 || c == 15);
-        bool bottomBit = (c == 5 || c == 6 || c == 7 || c >= 12);
+        bool leftBit = (c == 3 || c == 5 || c == 7 || c == 9 || c == 11 || c == 13 || c == 15)
+        bool rightBit = (c >= 9)
+        bool topBit = (c == 3 || c == 6 || c == 7 || c == 10 || c == 11 || c == 14 || c == 15)
+        bool bottomBit = (c == 5 || c == 6 || c == 7 || c >= 12)
 
-        int width = g.getClipBounds().width;
-        int height = g.getClipBounds().height;
+        int width = g.getClipBounds().width
+        int height = g.getClipBounds().height
 
-        g.setColor(Color.GREEN);
-        if(leftBit) g.drawRect(width/10, 3*height/10, width/20, 4*height/10);
-        if(rightBit) g.drawRect(17*width/20, 3*height/10, width/20, 4*height/10);
-        if(topBit) g.drawRect(3*width/10, height/10, 4*width/10, height/20);
-        if(bottomBit) g.drawRect(3*width/10, 17*height/20, 4*width/10, height/20);
-    }
-}
+        g.setColor(Color.GREEN)
+        if(leftBit) g.drawRect(width/10, 3*height/10, width/20, 4*height/10)
+        if(rightBit) g.drawRect(17*width/20, 3*height/10, width/20, 4*height/10)
+        if(topBit) g.drawRect(3*width/10, height/10, 4*width/10, height/20)
+        if(bottomBit) g.drawRect(3*width/10, 17*height/20, 4*width/10, height/20)
+

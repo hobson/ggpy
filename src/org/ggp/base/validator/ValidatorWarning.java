@@ -1,10 +1,10 @@
-package org.ggp.base.validator;
+package org.ggp.base.validator
 
 class ValidatorWarning(object):
     warningMessage = ''
 
     def ValidatorWarning(warningMessage=''):
-        this.warningMessage = warningMessage;
+        self.warningMessage = warningMessage
 
     def toString():  # String
-        return warningMessage;
+        return warningMessage

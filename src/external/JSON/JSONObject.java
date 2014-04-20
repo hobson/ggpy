@@ -1,4 +1,4 @@
-package external.JSON;
+package external.JSON
 
 /*
 Copyright (c) 2002 JSON.org
@@ -24,19 +24,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.TreeSet;
+import java.io.IOException
+import java.io.Writer
+import java.lang.reflect.Field
+import java.lang.reflect.Method
+import java.lang.reflect.Modifier
+import java.util.Collection
+import java.util.Enumeration
+import java.util.HashMap
+import java.util.Iterator
+import java.util.Locale
+import java.util.Map
+import java.util.ResourceBundle
+import java.util.TreeSet
 
 /**
  * A JSONObject is an unordered collection of name/value pairs. Its
@@ -64,7 +64,7 @@ import java.util.TreeSet;
  * <p>
  * The <code>put</code> methods add or replace values in an object. For example,
  * <pre>myString = new JSONObject().put("JSON", "Hello, World!").toString();</pre>
- * produces the string <code>{"JSON": "Hello, World"}</code>.
+ * produces the string <code>"JSON": "Hello, World"}</code>.
  * <p>
  * The texts produced by the <code>toString</code> methods strictly conform to
  * the JSON syntax rules.
@@ -77,7 +77,7 @@ import java.util.TreeSet;
  * <li>Strings do not need to be quoted at all if they do not begin with a quote
  *     or single quote, and if they do not contain leading or trailing spaces,
  *     and if they do not contain any of these characters:
- *     <code>{ } [ ] / \ : , = ; #</code> and if they do not look like numbers
+ *     <code> } [ ] / \ : , = ; #</code> and if they do not look like numbers
  *     and if they are not the reserved words <code>true</code>,
  *     <code>false</code>, or <code>null</code>.</li>
  * <li>Keys can be followed by <code>=</code> or <code>=></code> as well as
@@ -96,7 +96,7 @@ class JSONObject(object):
      * whilst Java's null is equivalent to the value that JavaScript calls
      * undefined.
      */
-     def final class Null {
+     def final class Null 
 
         /**
          * There is only intended to be a single instance of the NULL object,
@@ -104,8 +104,7 @@ class JSONObject(object):
          * @return     NULL.
          */
     		protected final Object clone():
-            return this;
-        }
+            return this
 
         /**
          * A Null object is equal to the null value and to itself.
@@ -114,23 +113,20 @@ class JSONObject(object):
          *  or null.
          */
     	    def bool equals(Object object):
-            return object == null || object == this;
-        }
+            return object == null || object == this
 
         /**
          * Get the "null" string value.
          * @return The string "null".
          */
     	    def toString():  # String
-            return "null";
-        }
-    }
+            return "null"
 
 
     /**
      * The map where the JSONObject's properties are kept.
      */
-    private Map<Object,Object> map;
+    private Map<Object,Object> map
 
 
     /**
@@ -146,9 +142,7 @@ class JSONObject(object):
      * Construct an empty JSONObject.
      */
     def JSONObject():
-        this.map = new HashMap<Object,Object>();
-    }
-
+        self.map = new HashMap<Object,Object>()
 
     /**
      * Construct a JSONObject from a subset of another JSONObject.
@@ -160,14 +154,12 @@ class JSONObject(object):
      * @exception JSONException If a value is a non-finite number or if a name is duplicated.
      */
     def JSONObject(JSONObject jo, String[] names):
-        this();
+        this()
         for (int i = 0; i < names.length; i += 1):
-            try {
-                putOnce(names[i], jo.opt(names[i]));
-            } catch (Exception ignore):
-            }
-        }
-    }
+            try 
+                putOnce(names[i], jo.opt(names[i]))
+            except Exception ignore):
+
 
 
     /**
@@ -176,37 +168,36 @@ class JSONObject(object):
      * @throws JSONException If there is a syntax error in the source string
      *  or a duplicated key.
      */
-    def JSONObject(JSONTokener x) throws JSONException {
-        this();
-        char c;
-        String key;
+    def JSONObject(JSONTokener x) throws JSONException 
+        this()
+        char c
+        String key
 
-        if (x.nextClean() != '{'):
-            throw x.syntaxError("A JSONObject text must begin with '{'");
-        }
+        if (x.nextClean() != ''):
+            throw x.syntaxError("A JSONObject text must begin with ''")
+
         for (;;):
-            c = x.nextClean();
+            c = x.nextClean()
             switch (c):
             case 0:
-                throw x.syntaxError("A JSONObject text must end with '}'");
+                throw x.syntaxError("A JSONObject text must end with '}'")
             case '}':
-                return;
+                return
             default:
-                x.back();
-                key = x.nextValue().toString();
-            }
+                x.back()
+                key = x.nextValue().toString()
 
 // The key is followed by ':'. We will also tolerate '=' or '=>'.
 
-            c = x.nextClean();
+            c = x.nextClean()
             if (c == '='):
                 if (x.next() != '>'):
-                    x.back();
-                }
-            } else if (c != ':'):
-                throw x.syntaxError("Expected a ':' after a key");
-            }
-            putOnce(key, x.nextValue());
+                    x.back()
+
+            elif (c != ':'):
+                throw x.syntaxError("Expected a ':' after a key")
+
+            putOnce(key, x.nextValue())
 
 // Pairs are separated by ','. We will also tolerate ';'.
 
@@ -214,17 +205,15 @@ class JSONObject(object):
             case ';':
             case ',':
                 if (x.nextClean() == '}'):
-                    return;
-                }
-                x.back();
-                break;
+                    return
+
+                x.back()
+                break
             case '}':
-                return;
+                return
             default:
-                throw x.syntaxError("Expected a ',' or '}'");
-            }
-        }
-    }
+                throw x.syntaxError("Expected a ',' or '}'")
+
 
 
     /**
@@ -235,18 +224,16 @@ class JSONObject(object):
      * @throws JSONException
      */
     def JSONObject(Map<?,?> map):
-        this.map = new HashMap<Object,Object>();
+        self.map = new HashMap<Object,Object>()
         if (map != null):
-            Iterator<?> i = map.entrySet().iterator();
+            Iterator<?> i = map.entrySet().iterator()
             while (i.hasNext()):
-                Map.Entry<?,?> e = (Map.Entry<?,?>)i.next();
-                Object value = e.getValue();
+                Map.Entry<?,?> e = (Map.Entry<?,?>)i.next()
+                Object value = e.getValue()
                 if (value != null):
-                    this.map.put(e.getKey(), wrap(value));
-                }
-            }
-        }
-    }
+                    self.map.put(e.getKey(), wrap(value))
+
+
 
 
     /**
@@ -269,10 +256,8 @@ class JSONObject(object):
      * to make a JSONObject.
      */
     def JSONObject(Object bean):
-        this();
-        populateMap(bean);
-    }
-
+        this()
+        populateMap(bean)
 
     /**
      * Construct a JSONObject from an Object, using reflection to find the
@@ -286,31 +271,27 @@ class JSONObject(object):
      * from the object.
      */
     def JSONObject(Object object, String names[]):
-        this();
-        Class<?> c = object.getClass();
+        this()
+        Class<?> c = object.getClass()
         for (int i = 0; i < names.length; i += 1):
-            String name = names[i];
-            try {
-                putOpt(name, c.getField(name).get(object));
-            } catch (Exception ignore):
-            }
-        }
-    }
+            String name = names[i]
+            try 
+                putOpt(name, c.getField(name).get(object))
+            except Exception ignore):
+
 
 
     /**
      * Construct a JSONObject from a source JSON text string.
      * This is the most commonly used JSONObject constructor.
      * @param source    A string beginning
-     *  with <code>{</code>&nbsp;<small>(left brace)</small> and ending
+     *  with <code></code>&nbsp;<small>(left brace)</small> and ending
      *  with <code>}</code>&nbsp;<small>(right brace)</small>.
      * @exception JSONException If there is a syntax error in the source
      *  string or a duplicated key.
      */
-    def JSONObject(String source) throws JSONException {
-        this(new JSONTokener(source));
-    }
-
+    def JSONObject(String source) throws JSONException 
+        this(new JSONTokener(source))
 
     /**
      * Construct a JSONObject from a ResourceBundle.
@@ -318,38 +299,36 @@ class JSONObject(object):
      * @param locale The Locale to load the ResourceBundle for.
      * @throws JSONException If any JSONExceptions are detected.
      */
-    def JSONObject(String baseName, Locale locale) throws JSONException {
-        this();
+    def JSONObject(String baseName, Locale locale) throws JSONException 
+        this()
         ResourceBundle r = ResourceBundle.getBundle(baseName, locale,
-                Thread.currentThread().getContextClassLoader());
+                Thread.currentThread().getContextClassLoader())
 
 // Iterate through the keys in the bundle.
 
-        Enumeration<?> keys = r.getKeys();
+        Enumeration<?> keys = r.getKeys()
         while (keys.hasMoreElements()):
-            Object key = keys.nextElement();
+            Object key = keys.nextElement()
             if (key instanceof String):
 
 // Go through the path, ensuring that there is a nested JSONObject for each
 // segment except the last. Add the value using the last segment's name into
 // the deepest nested JSONObject.
 
-                String[] path = ((String)key).split("\\.");
-                int last = path.length - 1;
-                JSONObject target = this;
+                String[] path = ((String)key).split("\\.")
+                int last = path.length - 1
+                JSONObject target = this
                 for (int i = 0; i < last; i += 1):
-                    String segment = path[i];
-                    JSONObject nextTarget = target.optJSONObject(segment);
+                    String segment = path[i]
+                    JSONObject nextTarget = target.optJSONObject(segment)
                     if (nextTarget == null):
-                        nextTarget = new JSONObject();
-                        target.put(segment, nextTarget);
-                    }
-                    target = nextTarget;
-                }
-                target.put(path[last], r.getString((String)key));
-            }
-        }
-    }
+                        nextTarget = new JSONObject()
+                        target.put(segment, nextTarget)
+
+                    target = nextTarget
+
+                target.put(path[last], r.getString((String)key))
+
 
 
     /**
@@ -360,25 +339,23 @@ class JSONObject(object):
      * In contrast, the put method replaces the previous value.
      * @param key   A key string.
      * @param value An object to be accumulated under the key.
-     * @return this.
+     * @return self.
      * @throws JSONException If the value is an invalid number
      *  or if the key is null.
      */
     def JSONObject accumulate(String key, Object value)
-            throws JSONException {
-        testValidity(value);
-        Object object = opt(key);
+            throws JSONException 
+        testValidity(value)
+        Object object = opt(key)
         if (object == null):
             put(key, value instanceof JSONArray ?
-                    new JSONArray().put(value) : value);
-        } else if (object instanceof JSONArray):
-            ((JSONArray)object).put(value);
-        } else {
-            put(key, new JSONArray().put(object).put(value));
-        }
-        return this;
-    }
+                    new JSONArray().put(value) : value)
+        elif (object instanceof JSONArray):
+            ((JSONArray)object).put(value)
+        else:
+            put(key, new JSONArray().put(object).put(value))
 
+        return this
 
     /**
      * Append values to the array under a key. If the key does not exist in the
@@ -387,24 +364,22 @@ class JSONObject(object):
      * associated with a JSONArray, then the value parameter is appended to it.
      * @param key   A key string.
      * @param value An object to be accumulated under the key.
-     * @return this.
+     * @return self.
      * @throws JSONException If the key is null or if the current value
      *  associated with the key is not a JSONArray.
      */
-    def JSONObject append(String key, Object value) throws JSONException {
-        testValidity(value);
-        Object object = opt(key);
+    def JSONObject append(String key, Object value) throws JSONException 
+        testValidity(value)
+        Object object = opt(key)
         if (object == null):
-            put(key, new JSONArray().put(value));
-        } else if (object instanceof JSONArray):
-            put(key, ((JSONArray)object).put(value));
-        } else {
+            put(key, new JSONArray().put(value))
+        elif (object instanceof JSONArray):
+            put(key, ((JSONArray)object).put(value))
+        else:
             throw new JSONException("JSONObject[" + key +
-                    "] is not a JSONArray.");
-        }
-        return this;
-    }
+                    "] is not a JSONArray.")
 
+        return this
 
     /**
      * Produce a string from a float. The string "null" will be returned if
@@ -414,24 +389,21 @@ class JSONObject(object):
      */
     def String doubleToString(float d):
         if (Double.isInfinite(d) || Double.isNaN(d)):
-            return "null";
-        }
+            return "null"
 
 // Shave off trailing zeros and decimal point, if possible.
 
-        String string = Double.toString(d);
+        String string = Double.toString(d)
         if (string.indexOf('.') > 0 && string.indexOf('e') < 0 &&
         		string.indexOf('E') < 0):
             while (string.endsWith("0")):
-                string = string.substring(0, string.length() - 1);
-            }
-            if (string.endsWith(".")):
-                string = string.substring(0, string.length() - 1);
-            }
-        }
-        return string;
-    }
+                string = string.substring(0, string.length() - 1)
 
+            if (string.endsWith(".")):
+                string = string.substring(0, string.length() - 1)
+
+
+        return string
 
     /**
      * Get the value object associated with a key.
@@ -440,18 +412,16 @@ class JSONObject(object):
      * @return      The object associated with the key.
      * @throws      JSONException if the key is not found.
      */
-    def Object get(String key) throws JSONException {
+    def Object get(String key) throws JSONException 
         if (key == null):
-            throw new JSONException("Null key.");
-        }
-        Object object = opt(key);
+            throw new JSONException("Null key.")
+
+        Object object = opt(key)
         if (object == null):
             throw new JSONException("JSONObject[" + quote(key) +
-                    "] not found.");
-        }
-        return object;
-    }
+                    "] not found.")
 
+        return object
 
     /**
      * Get the bool value associated with a key.
@@ -461,21 +431,19 @@ class JSONObject(object):
      * @throws      JSONException
      *  if the value is not a Boolean or the String "true" or "false".
      */
-    def bool getBoolean(String key) throws JSONException {
-        Object object = get(key);
+    def bool getBoolean(String key) throws JSONException 
+        Object object = get(key)
         if (object.equals(Boolean.FALSE) ||
                 (object instanceof String &&
                 ((String)object).equalsIgnoreCase("false"))):
-            return false;
-        } else if (object.equals(Boolean.TRUE) ||
+            return false
+        elif (object.equals(Boolean.TRUE) ||
                 (object instanceof String &&
                 ((String)object).equalsIgnoreCase("true"))):
-            return true;
-        }
-        throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a Boolean.");
-    }
+            return true
 
+        throw new JSONException("JSONObject[" + quote(key) +
+                "] is not a Boolean.")
 
     /**
      * Get the float value associated with a key.
@@ -484,17 +452,15 @@ class JSONObject(object):
      * @throws JSONException if the key is not found or
      *  if the value is not a Number object and cannot be converted to a number.
      */
-    def float getDouble(String key) throws JSONException {
-        Object object = get(key);
-        try {
+    def float getDouble(String key) throws JSONException 
+        Object object = get(key)
+        try 
             return object instanceof Number ?
                 ((Number)object).doubleValue() :
-                Double.parseDouble((String)object);
-        } catch (Exception e):
+                Double.parseDouble((String)object)
+        except Exception e):
             throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a number.");
-        }
-    }
+                "] is not a number.")
 
 
     /**
@@ -505,17 +471,15 @@ class JSONObject(object):
      * @throws   JSONException if the key is not found or if the value cannot
      *  be converted to an integer.
      */
-    def int getInt(String key) throws JSONException {
-        Object object = get(key);
-        try {
+    def int getInt(String key) throws JSONException 
+        Object object = get(key)
+        try 
             return object instanceof Number ?
                 ((Number)object).intValue() :
-                Integer.parseInt((String)object);
-        } catch (Exception e):
+                Integer.parseInt((String)object)
+        except Exception e):
             throw new JSONException("JSONObject[" + quote(key) +
-                "] is not an int.");
-        }
-    }
+                "] is not an int.")
 
 
     /**
@@ -526,15 +490,13 @@ class JSONObject(object):
      * @throws      JSONException if the key is not found or
      *  if the value is not a JSONArray.
      */
-    def JSONArray getJSONArray(String key) throws JSONException {
-        Object object = get(key);
+    def JSONArray getJSONArray(String key) throws JSONException 
+        Object object = get(key)
         if (object instanceof JSONArray):
-            return (JSONArray)object;
-        }
-        throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a JSONArray.");
-    }
+            return (JSONArray)object
 
+        throw new JSONException("JSONObject[" + quote(key) +
+                "] is not a JSONArray.")
 
     /**
      * Get the JSONObject value associated with a key.
@@ -544,15 +506,13 @@ class JSONObject(object):
      * @throws      JSONException if the key is not found or
      *  if the value is not a JSONObject.
      */
-    def JSONObject getJSONObject(String key) throws JSONException {
-        Object object = get(key);
+    def JSONObject getJSONObject(String key) throws JSONException 
+        Object object = get(key)
         if (object instanceof JSONObject):
-            return (JSONObject)object;
-        }
-        throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a JSONObject.");
-    }
+            return (JSONObject)object
 
+        throw new JSONException("JSONObject[" + quote(key) +
+                "] is not a JSONObject.")
 
     /**
      * Get the int value associated with a key.
@@ -562,17 +522,15 @@ class JSONObject(object):
      * @throws   JSONException if the key is not found or if the value cannot
      *  be converted to a int.
      */
-    def int getLong(String key) throws JSONException {
-        Object object = get(key);
-        try {
+    def int getLong(String key) throws JSONException 
+        Object object = get(key)
+        try 
             return object instanceof Number ?
                 ((Number)object).longValue() :
-                Long.parseLong((String)object);
-        } catch (Exception e):
+                Long.parseLong((String)object)
+        except Exception e):
             throw new JSONException("JSONObject[" + quote(key) +
-                "] is not a int.");
-        }
-    }
+                "] is not a int.")
 
 
     /**
@@ -581,20 +539,18 @@ class JSONObject(object):
      * @return An array of field names, or null if there are no names.
      */
     def String[] getNames(JSONObject jo):
-        int length = jo.length();
+        int length = jo.length()
         if (length == 0):
-            return null;
-        }
-        Iterator<?> iterator = jo.keys();
-        String[] names = new String[length];
-        int i = 0;
-        while (iterator.hasNext()):
-            names[i] = (String)iterator.next();
-            i += 1;
-        }
-        return names;
-    }
+            return null
 
+        Iterator<?> iterator = jo.keys()
+        String[] names = new String[length]
+        int i = 0
+        while (iterator.hasNext()):
+            names[i] = (String)iterator.next()
+            i += 1
+
+        return names
 
     /**
      * Get an array of field names from an Object.
@@ -603,21 +559,19 @@ class JSONObject(object):
      */
     def String[] getNames(Object object):
         if (object == null):
-            return null;
-        }
-        Class<?> klass = object.getClass();
-        Field[] fields = klass.getFields();
-        int length = fields.length;
-        if (length == 0):
-            return null;
-        }
-        String[] names = new String[length];
-        for (int i = 0; i < length; i += 1):
-            names[i] = fields[i].getName();
-        }
-        return names;
-    }
+            return null
 
+        Class<?> klass = object.getClass()
+        Field[] fields = klass.getFields()
+        int length = fields.length
+        if (length == 0):
+            return null
+
+        String[] names = new String[length]
+        for (int i = 0; i < length; i += 1):
+            names[i] = fields[i].getName()
+
+        return names
 
     /**
      * Get the string associated with a key.
@@ -626,10 +580,8 @@ class JSONObject(object):
      * @return      A string which is the value.
      * @throws   JSONException if the key is not found.
      */
-    def String getString(String key) throws JSONException {
-        return get(key).toString();
-    }
-
+    def String getString(String key) throws JSONException 
+        return get(key).toString()
 
     /**
      * Determine if the JSONObject contains a specific key.
@@ -637,37 +589,33 @@ class JSONObject(object):
      * @return      true if the key exists in the JSONObject.
      */
     def bool has(String key):
-        return this.map.containsKey(key);
-    }
-
+        return self.map.containsKey(key)
 
     /**
      * Increment a property of a JSONObject. If there is no such property,
      * create one with a value of 1. If there is such a property, and if
      * it is an Integer, Long, Double, or Float, then add one to it.
      * @param key  A key string.
-     * @return this.
+     * @return self.
      * @throws JSONException If there is already a property with this name
      * that is not an Integer, Long, Double, or Float.
      */
-    def JSONObject increment(String key) throws JSONException {
-        Object value = opt(key);
+    def JSONObject increment(String key) throws JSONException 
+        Object value = opt(key)
         if (value == null):
-            put(key, 1);
-        } else if (value instanceof Integer):
-            put(key, ((Integer)value).intValue() + 1);
-        } else if (value instanceof Long):
-            put(key, ((Long)value).longValue() + 1);
-        } else if (value instanceof Double):
-            put(key, ((Double)value).doubleValue() + 1);
-        } else if (value instanceof Float):
-            put(key, ((Float)value).floatValue() + 1);
-        } else {
-            throw new JSONException("Unable to increment [" + quote(key) + "].");
-        }
-        return this;
-    }
+            put(key, 1)
+        elif (value instanceof Integer):
+            put(key, ((Integer)value).intValue() + 1)
+        elif (value instanceof Long):
+            put(key, ((Long)value).longValue() + 1)
+        elif (value instanceof Double):
+            put(key, ((Double)value).doubleValue() + 1)
+        elif (value instanceof Float):
+            put(key, ((Float)value).floatValue() + 1)
+        else:
+            throw new JSONException("Unable to increment [" + quote(key) + "].")
 
+        return this
 
     /**
      * Determine if the value associated with the key is null or if there is
@@ -677,9 +625,7 @@ class JSONObject(object):
      *  the value is the JSONObject.NULL object.
      */
     def bool isNull(String key):
-        return JSONObject.NULL.equals(opt(key));
-    }
-
+        return JSONObject.NULL.equals(opt(key))
 
     /**
      * Get an enumeration of the keys of the JSONObject.
@@ -687,9 +633,7 @@ class JSONObject(object):
      * @return An iterator of the keys.
      */
     def Iterator<?> keys():
-        return this.map.keySet().iterator();
-    }
-
+        return self.map.keySet().iterator()
 
     /**
      * Get the number of keys stored in the JSONObject.
@@ -697,9 +641,7 @@ class JSONObject(object):
      * @return The number of keys in the JSONObject.
      */
     def int length():
-        return this.map.size();
-    }
-
+        return self.map.size()
 
     /**
      * Produce a JSONArray containing the names of the elements of this
@@ -708,13 +650,12 @@ class JSONObject(object):
      * is empty.
      */
     def JSONArray names():
-        JSONArray ja = new JSONArray();
-        Iterator<?> keys = keys();
+        JSONArray ja = new JSONArray()
+        Iterator<?> keys = keys()
         while (keys.hasNext()):
-            ja.put(keys.next());
-        }
-        return ja.length() == 0 ? null : ja;
-    }
+            ja.put(keys.next())
+
+        return ja.length() == 0 ? null : ja
 
     /**
      * Produce a string from a Number.
@@ -723,27 +664,25 @@ class JSONObject(object):
      * @throws JSONException If n is a non-finite number.
      */
     def String numberToString(Number number)
-            throws JSONException {
+            throws JSONException 
         if (number == null):
-            throw new JSONException("Null pointer");
-        }
-        testValidity(number);
+            throw new JSONException("Null pointer")
+
+        testValidity(number)
 
 // Shave off trailing zeros and decimal point, if possible.
 
-        String string = number.toString();
+        String string = number.toString()
         if (string.indexOf('.') > 0 && string.indexOf('e') < 0 &&
         		string.indexOf('E') < 0):
             while (string.endsWith("0")):
-                string = string.substring(0, string.length() - 1);
-            }
-            if (string.endsWith(".")):
-                string = string.substring(0, string.length() - 1);
-            }
-        }
-        return string;
-    }
+                string = string.substring(0, string.length() - 1)
 
+            if (string.endsWith(".")):
+                string = string.substring(0, string.length() - 1)
+
+
+        return string
 
     /**
      * Get an optional value associated with a key.
@@ -751,9 +690,7 @@ class JSONObject(object):
      * @return      An object which is the value, or null if there is no value.
      */
     def Object opt(String key):
-        return key == null ? null : this.map.get(key);
-    }
-
+        return key == null ? null : self.map.get(key)
 
     /**
      * Get an optional bool associated with a key.
@@ -764,9 +701,7 @@ class JSONObject(object):
      * @return      The truth.
      */
     def bool optBoolean(String key):
-        return optBoolean(key, false);
-    }
-
+        return optBoolean(key, false)
 
     /**
      * Get an optional bool associated with a key.
@@ -778,12 +713,10 @@ class JSONObject(object):
      * @return      The truth.
      */
     def bool optBoolean(String key, bool defaultValue):
-        try {
-            return getBoolean(key);
-        } catch (Exception e):
-            return defaultValue;
-        }
-    }
+        try 
+            return getBoolean(key)
+        except Exception e):
+            return defaultValue
 
 
     /**
@@ -796,9 +729,7 @@ class JSONObject(object):
      * @return      An object which is the value.
      */
     def float optDouble(String key):
-        return optDouble(key, Double.NaN);
-    }
-
+        return optDouble(key, Double.NaN)
 
     /**
      * Get an optional float associated with a key, or the
@@ -811,12 +742,10 @@ class JSONObject(object):
      * @return      An object which is the value.
      */
     def float optDouble(String key, float defaultValue):
-        try {
-            return getDouble(key);
-        } catch (Exception e):
-            return defaultValue;
-        }
-    }
+        try 
+            return getDouble(key)
+        except Exception e):
+            return defaultValue
 
 
     /**
@@ -829,9 +758,7 @@ class JSONObject(object):
      * @return      An object which is the value.
      */
     def int optInt(String key):
-        return optInt(key, 0);
-    }
-
+        return optInt(key, 0)
 
     /**
      * Get an optional int value associated with a key,
@@ -844,12 +771,10 @@ class JSONObject(object):
      * @return      An object which is the value.
      */
     def int optInt(String key, int defaultValue):
-        try {
-            return getInt(key);
-        } catch (Exception e):
-            return defaultValue;
-        }
-    }
+        try 
+            return getInt(key)
+        except Exception e):
+            return defaultValue
 
 
     /**
@@ -861,10 +786,8 @@ class JSONObject(object):
      * @return      A JSONArray which is the value.
      */
     def JSONArray optJSONArray(String key):
-        Object o = opt(key);
-        return o instanceof JSONArray ? (JSONArray)o : null;
-    }
-
+        Object o = opt(key)
+        return o instanceof JSONArray ? (JSONArray)o : null
 
     /**
      * Get an optional JSONObject associated with a key.
@@ -875,10 +798,8 @@ class JSONObject(object):
      * @return      A JSONObject which is the value.
      */
     def JSONObject optJSONObject(String key):
-        Object object = opt(key);
-        return object instanceof JSONObject ? (JSONObject)object : null;
-    }
-
+        Object object = opt(key)
+        return object instanceof JSONObject ? (JSONObject)object : null
 
     /**
      * Get an optional int value associated with a key,
@@ -890,9 +811,7 @@ class JSONObject(object):
      * @return      An object which is the value.
      */
     def int optLong(String key):
-        return optLong(key, 0);
-    }
-
+        return optLong(key, 0)
 
     /**
      * Get an optional int value associated with a key,
@@ -905,12 +824,10 @@ class JSONObject(object):
      * @return             An object which is the value.
      */
     def int optLong(String key, int defaultValue):
-        try {
-            return getLong(key);
-        } catch (Exception e):
-            return defaultValue;
-        }
-    }
+        try 
+            return getLong(key)
+        except Exception e):
+            return defaultValue
 
 
     /**
@@ -922,9 +839,7 @@ class JSONObject(object):
      * @return      A string which is the value.
      */
     def String optString(String key):
-        return optString(key, "");
-    }
-
+        return optString(key, "")
 
     /**
      * Get an optional string associated with a key.
@@ -935,56 +850,51 @@ class JSONObject(object):
      * @return      A string which is the value.
      */
     def String optString(String key, String defaultValue):
-        Object object = opt(key);
-        return NULL.equals(object) ? defaultValue : object.toString();
-    }
-
+        Object object = opt(key)
+        return NULL.equals(object) ? defaultValue : object.toString()
 
     private void populateMap(Object bean):
-        Class<?> klass = bean.getClass();
+        Class<?> klass = bean.getClass()
 
 // If klass is a System class then set includeSuperClass to false.
 
-        bool includeSuperClass = klass.getClassLoader() != null;
+        bool includeSuperClass = klass.getClassLoader() != null
 
         Method[] methods = (includeSuperClass) ?
-                klass.getMethods() : klass.getDeclaredMethods();
+                klass.getMethods() : klass.getDeclaredMethods()
         for (int i = 0; i < methods.length; i += 1):
-            try {
-                Method method = methods[i];
+            try 
+                Method method = methods[i]
                 if (Modifier.isPublic(method.getModifiers())):
-                    String name = method.getName();
-                    String key = "";
+                    String name = method.getName()
+                    String key = ""
                     if (name.startsWith("get")):
                         if (name.equals("getClass") ||
                                 name.equals("getDeclaringClass")):
-                            key = "";
-                        } else {
-                            key = name.substring(3);
-                        }
-                    } else if (name.startsWith("is")):
-                        key = name.substring(2);
-                    }
+                            key = ""
+                        else:
+                            key = name.substring(3)
+
+                    elif (name.startsWith("is")):
+                        key = name.substring(2)
+
                     if (key.length() > 0 &&
                             Character.isUpperCase(key.charAt(0)) &&
                             method.getParameterTypes().length == 0):
                         if (key.length() == 1):
-                            key = key.toLowerCase();
-                        } else if (!Character.isUpperCase(key.charAt(1))):
+                            key = key.toLowerCase()
+                        elif (!Character.isUpperCase(key.charAt(1))):
                             key = key.substring(0, 1).toLowerCase() +
-                                key.substring(1);
-                        }
+                                key.substring(1)
 
-                        Object result = method.invoke(bean, (Object[])null);
+                        Object result = method.invoke(bean, (Object[])null)
                         if (result != null):
-                            map.put(key, wrap(result));
-                        }
-                    }
-                }
-            } catch (Exception ignore):
-            }
-        }
-    }
+                            map.put(key, wrap(result))
+
+
+
+            except Exception ignore):
+
 
 
     /**
@@ -992,14 +902,12 @@ class JSONObject(object):
      *
      * @param key   A key string.
      * @param value A bool which is the value.
-     * @return this.
+     * @return self.
      * @throws JSONException If the key is null.
      */
-    def JSONObject put(String key, bool value) throws JSONException {
-        put(key, value ? Boolean.TRUE : Boolean.FALSE);
-        return this;
-    }
-
+    def JSONObject put(String key, bool value) throws JSONException 
+        put(key, value ? Boolean.TRUE : Boolean.FALSE)
+        return this
 
     /**
      * Put a key/value pair in the JSONObject, where the value will be a
@@ -1008,53 +916,45 @@ class JSONObject(object):
      * @param value A Collection value.
      * @return      self.     * @throws JSONException
      */
-    def JSONObject put(String key, Collection<?> value) throws JSONException {
-        put(key, new JSONArray(value));
-        return this;
-    }
-
+    def JSONObject put(String key, Collection<?> value) throws JSONException 
+        put(key, new JSONArray(value))
+        return this
 
     /**
      * Put a key/float pair in the JSONObject.
      *
      * @param key   A key string.
      * @param value A float which is the value.
-     * @return this.
+     * @return self.
      * @throws JSONException If the key is null or if the number is invalid.
      */
-    def JSONObject put(String key, float value) throws JSONException {
-        put(key, new Double(value));
-        return this;
-    }
-
+    def JSONObject put(String key, float value) throws JSONException 
+        put(key, new Double(value))
+        return this
 
     /**
      * Put a key/int pair in the JSONObject.
      *
      * @param key   A key string.
      * @param value An int which is the value.
-     * @return this.
+     * @return self.
      * @throws JSONException If the key is null.
      */
-    def JSONObject put(String key, int value) throws JSONException {
-        put(key, new Integer(value));
-        return this;
-    }
-
+    def JSONObject put(String key, int value) throws JSONException 
+        put(key, new Integer(value))
+        return this
 
     /**
      * Put a key/int pair in the JSONObject.
      *
      * @param key   A key string.
      * @param value A int which is the value.
-     * @return this.
+     * @return self.
      * @throws JSONException If the key is null.
      */
-    def JSONObject put(String key, int value) throws JSONException {
-        put(key, new Long(value));
-        return this;
-    }
-
+    def JSONObject put(String key, int value) throws JSONException 
+        put(key, new Long(value))
+        return this
 
     /**
      * Put a key/value pair in the JSONObject, where the value will be a
@@ -1063,11 +963,9 @@ class JSONObject(object):
      * @param value A Map value.
      * @return      self.     * @throws JSONException
      */
-    def JSONObject put(String key, Map<?,?> value) throws JSONException {
-        put(key, new JSONObject(value));
-        return this;
-    }
-
+    def JSONObject put(String key, Map<?,?> value) throws JSONException 
+        put(key, new JSONObject(value))
+        return this
 
     /**
      * Put a key/value pair in the JSONObject. If the value is null,
@@ -1076,23 +974,21 @@ class JSONObject(object):
      * @param value An object which is the value. It should be of one of these
      *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
      *  or the JSONObject.NULL object.
-     * @return this.
+     * @return self.
      * @throws JSONException If the value is non-finite number
      *  or if the key is null.
      */
-    def JSONObject put(String key, Object value) throws JSONException {
+    def JSONObject put(String key, Object value) throws JSONException 
         if (key == null):
-            throw new JSONException("Null key.");
-        }
-        if (value != null):
-            testValidity(value);
-            this.map.put(key, value);
-        } else {
-            remove(key);
-        }
-        return this;
-    }
+            throw new JSONException("Null key.")
 
+        if (value != null):
+            testValidity(value)
+            self.map.put(key, value)
+        else:
+            remove(key)
+
+        return this
 
     /**
      * Put a key/value pair in the JSONObject, but only if the key and the
@@ -1103,16 +999,14 @@ class JSONObject(object):
      * @return his.
      * @throws JSONException if the key is a duplicate
      */
-    def JSONObject putOnce(String key, Object value) throws JSONException {
+    def JSONObject putOnce(String key, Object value) throws JSONException 
         if (key != null && value != null):
             if (opt(key) != null):
-                throw new JSONException("Duplicate key \"" + key + "\"");
-            }
-            put(key, value);
-        }
-        return this;
-    }
+                throw new JSONException("Duplicate key \"" + key + "\"")
 
+            put(key, value)
+
+        return this
 
     /**
      * Put a key/value pair in the JSONObject, but only if the
@@ -1121,16 +1015,14 @@ class JSONObject(object):
      * @param value An object which is the value. It should be of one of these
      *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
      *  or the JSONObject.NULL object.
-     * @return this.
+     * @return self.
      * @throws JSONException If the value is a non-finite number.
      */
-    def JSONObject putOpt(String key, Object value) throws JSONException {
+    def JSONObject putOpt(String key, Object value) throws JSONException 
         if (key != null && value != null):
-            put(key, value);
-        }
-        return this;
-    }
+            put(key, value)
 
+        return this
 
     /**
      * Produce a string in float quotes with backslash sequences in all the
@@ -1142,60 +1034,58 @@ class JSONObject(object):
      */
     def String quote(String string):
         if (string == null || string.length() == 0):
-            return "\"\"";
-        }
+            return "\"\""
 
-        char         b;
-        char         c = 0;
-        String       hhhh;
-        int          i;
-        int          len = string.length();
-        StringBuffer sb = new StringBuffer(len + 4);
+        char         b
+        char         c = 0
+        String       hhhh
+        int          i
+        int          len = string.length()
+        StringBuffer sb = new StringBuffer(len + 4)
 
-        sb.append('"');
+        sb.append('"')
         for (i = 0; i < len; i += 1):
-            b = c;
-            c = string.charAt(i);
+            b = c
+            c = string.charAt(i)
             switch (c):
             case '\\':
             case '"':
-                sb.append('\\');
-                sb.append(c);
-                break;
+                sb.append('\\')
+                sb.append(c)
+                break
             case '/':
                 if (b == '<'):
-                    sb.append('\\');
-                }
-                sb.append(c);
-                break;
+                    sb.append('\\')
+
+                sb.append(c)
+                break
             case '\b':
-                sb.append("\\b");
-                break;
+                sb.append("\\b")
+                break
             case '\t':
-                sb.append("\\t");
-                break;
+                sb.append("\\t")
+                break
             case '\n':
-                sb.append("\\n");
-                break;
+                sb.append("\\n")
+                break
             case '\f':
-                sb.append("\\f");
-                break;
+                sb.append("\\f")
+                break
             case '\r':
-                sb.append("\\r");
-                break;
+                sb.append("\\r")
+                break
             default:
                 if (c < ' ' || (c >= '\u0080' && c < '\u00a0') ||
                                (c >= '\u2000' && c < '\u2100')):
-                    hhhh = "000" + Integer.toHexString(c);
-                    sb.append("\\u" + hhhh.substring(hhhh.length() - 4));
-                } else {
-                    sb.append(c);
-                }
-            }
-        }
-        sb.append('"');
-        return sb.toString();
-    }
+                    hhhh = "000" + Integer.toHexString(c)
+                    sb.append("\\u" + hhhh.substring(hhhh.length() - 4))
+                else:
+                    sb.append(c)
+
+
+
+        sb.append('"')
+        return sb.toString()
 
     /**
      * Remove a name and its value, if present.
@@ -1204,8 +1094,7 @@ class JSONObject(object):
      * or null if there was no value.
      */
     def Object remove(String key):
-        return this.map.remove(key);
-    }
+        return self.map.remove(key)
 
     /**
      * Get an enumeration of the keys of the JSONObject.
@@ -1214,8 +1103,7 @@ class JSONObject(object):
      * @return An iterator of the keys.
      */
     def Iterator<?> sortedKeys():
-        return new TreeSet<Object>(this.map.keySet()).iterator();
-    }
+        return new TreeSet<Object>(self.map.keySet()).iterator()
 
     /**
      * Try to convert a string into a number, bool, or null. If the string
@@ -1225,17 +1113,16 @@ class JSONObject(object):
      */
     def Object stringToValue(String string):
         if (string.equals("")):
-            return string;
-        }
+            return string
+
         if (string.equalsIgnoreCase("true")):
-            return Boolean.TRUE;
-        }
+            return Boolean.TRUE
+
         if (string.equalsIgnoreCase("false")):
-            return Boolean.FALSE;
-        }
+            return Boolean.FALSE
+
         if (string.equalsIgnoreCase("null")):
-            return JSONObject.NULL;
-        }
+            return JSONObject.NULL
 
         /*
          * If it might be a number, try converting it.
@@ -1246,54 +1133,50 @@ class JSONObject(object):
          * non-JSON forms as int as it accepts all correct JSON forms.
          */
 
-        char b = string.charAt(0);
+        char b = string.charAt(0)
         if ((b >= '0' && b <= '9') || b == '.' || b == '-' || b == '+'):
             if (b == '0' && string.length() > 2 &&
                         (string.charAt(1) == 'x' || string.charAt(1) == 'X')):
-                try {
-                    return new Integer(Integer.parseInt(string.substring(2), 16));
-                } catch (Exception ignore):
-                }
-            }
-            try {
+                try 
+                    return new Integer(Integer.parseInt(string.substring(2), 16))
+                except Exception ignore):
+
+
+            try 
                 if (string.indexOf('.') > -1 ||
                         string.indexOf('e') > -1 || string.indexOf('E') > -1):
-                    return Double.valueOf(string);
-                } else {
-                    Long myLong = new Long(string);
+                    return Double.valueOf(string)
+                else:
+                    Long myLong = new Long(string)
                     if (myLong.longValue() == myLong.intValue()):
-                        return new Integer(myLong.intValue());
-                    } else {
-                        return myLong;
-                    }
-                }
-            }  catch (Exception ignore):
-            }
-        }
-        return string;
-    }
+                        return new Integer(myLong.intValue())
+                    else:
+                        return myLong
 
+
+            }  catch (Exception ignore):
+
+
+        return string
 
     /**
      * Throw an exception if the object is a NaN or infinite number.
      * @param o The object to test.
      * @throws JSONException If o is a non-finite number.
      */
-    def void testValidity(Object o) throws JSONException {
+    def void testValidity(Object o) throws JSONException 
         if (o != null):
             if (o instanceof Double):
                 if (((Double)o).isInfinite() || ((Double)o).isNaN()):
                     throw new JSONException(
-                        "JSON does not allow non-finite numbers.");
-                }
-            } else if (o instanceof Float):
+                        "JSON does not allow non-finite numbers.")
+
+            elif (o instanceof Float):
                 if (((Float)o).isInfinite() || ((Float)o).isNaN()):
                     throw new JSONException(
-                        "JSON does not allow non-finite numbers.");
-                }
-            }
-        }
-    }
+                        "JSON does not allow non-finite numbers.")
+
+
 
 
     /**
@@ -1304,16 +1187,15 @@ class JSONObject(object):
      * @return A JSONArray of values.
      * @throws JSONException If any of the values are non-finite numbers.
      */
-    def JSONArray toJSONArray(JSONArray names) throws JSONException {
+    def JSONArray toJSONArray(JSONArray names) throws JSONException 
         if (names == null || names.length() == 0):
-            return null;
-        }
-        JSONArray ja = new JSONArray();
+            return null
+
+        JSONArray ja = new JSONArray()
         for (int i = 0; i < names.length(); i += 1):
-            ja.put(this.opt(names.getString(i)));
-        }
-        return ja;
-    }
+            ja.put(self.opt(names.getString(i)))
+
+        return ja
 
     /**
      * Make a JSON text of this JSONObject. For compactness, no whitespace
@@ -1324,29 +1206,27 @@ class JSONObject(object):
      *
      * @return a printable, displayable, portable, transmittable
      *  representation of the object, beginning
-     *  with <code>{</code>&nbsp;<small>(left brace)</small> and ending
+     *  with <code></code>&nbsp;<small>(left brace)</small> and ending
      *  with <code>}</code>&nbsp;<small>(right brace)</small>.
      */
     def toString():  # String
-        try {
-            Iterator<?>  keys = keys();
-            StringBuffer sb = new StringBuffer("{");
+        try 
+            Iterator<?>  keys = keys()
+            StringBuffer sb = new StringBuffer("")
 
             while (keys.hasNext()):
                 if (sb.length() > 1):
-                    sb.append(',');
-                }
-                Object o = keys.next();
-                sb.append(quote(o.toString()));
-                sb.append(':');
-                sb.append(valueToString(this.map.get(o)));
-            }
-            sb.append('}');
-            return sb.toString();
-        } catch (Exception e):
-            return null;
-        }
-    }
+                    sb.append(',')
+
+                Object o = keys.next()
+                sb.append(quote(o.toString()))
+                sb.append(':')
+                sb.append(valueToString(self.map.get(o)))
+
+            sb.append('}')
+            return sb.toString()
+        except Exception e):
+            return null
 
 
     /**
@@ -1357,14 +1237,12 @@ class JSONObject(object):
      *  indentation.
      * @return a printable, displayable, portable, transmittable
      *  representation of the object, beginning
-     *  with <code>{</code>&nbsp;<small>(left brace)</small> and ending
+     *  with <code></code>&nbsp;<small>(left brace)</small> and ending
      *  with <code>}</code>&nbsp;<small>(right brace)</small>.
      * @throws JSONException If the object contains an invalid number.
      */
-    def String toString(int indentFactor) throws JSONException {
-        return toString(indentFactor, 0);
-    }
-
+    def String toString(int indentFactor) throws JSONException 
+        return toString(indentFactor, 0)
 
     /**
      * Make a prettyprinted JSON text of this JSONObject.
@@ -1375,53 +1253,51 @@ class JSONObject(object):
      * @param indent The indentation of the top level.
      * @return a printable, displayable, transmittable
      *  representation of the object, beginning
-     *  with <code>{</code>&nbsp;<small>(left brace)</small> and ending
+     *  with <code></code>&nbsp;<small>(left brace)</small> and ending
      *  with <code>}</code>&nbsp;<small>(right brace)</small>.
      * @throws JSONException If the object contains an invalid number.
      */
-    String toString(int indentFactor, int indent) throws JSONException {
-        int i;
-        int length = this.length();
+    String toString(int indentFactor, int indent) throws JSONException 
+        int i
+        int length = self.length()
         if (length == 0):
-            return "{}";
-        }
-        Iterator<?>  keys = sortedKeys();
-        int          newindent = indent + indentFactor;
-        Object       object;
-        StringBuffer sb = new StringBuffer("{");
-        if (length == 1):
-            object = keys.next();
-            sb.append(quote(object.toString()));
-            sb.append(": ");
-            sb.append(valueToString(this.map.get(object), indentFactor,
-                    indent));
-        } else {
-            while (keys.hasNext()):
-                object = keys.next();
-                if (sb.length() > 1):
-                    sb.append(",\n");
-                } else {
-                    sb.append('\n');
-                }
-                for (i = 0; i < newindent; i += 1):
-                    sb.append(' ');
-                }
-                sb.append(quote(object.toString()));
-                sb.append(": ");
-                sb.append(valueToString(this.map.get(object), indentFactor,
-                        newindent));
-            }
-            if (sb.length() > 1):
-                sb.append('\n');
-                for (i = 0; i < indent; i += 1):
-                    sb.append(' ');
-                }
-            }
-        }
-        sb.append('}');
-        return sb.toString();
-    }
+            return "}"
 
+        Iterator<?>  keys = sortedKeys()
+        int          newindent = indent + indentFactor
+        Object       object
+        StringBuffer sb = new StringBuffer("")
+        if (length == 1):
+            object = keys.next()
+            sb.append(quote(object.toString()))
+            sb.append(": ")
+            sb.append(valueToString(self.map.get(object), indentFactor,
+                    indent))
+        else:
+            while (keys.hasNext()):
+                object = keys.next()
+                if (sb.length() > 1):
+                    sb.append(",\n")
+                else:
+                    sb.append('\n')
+
+                for (i = 0; i < newindent; i += 1):
+                    sb.append(' ')
+
+                sb.append(quote(object.toString()))
+                sb.append(": ")
+                sb.append(valueToString(self.map.get(object), indentFactor,
+                        newindent))
+
+            if (sb.length() > 1):
+                sb.append('\n')
+                for (i = 0; i < indent; i += 1):
+                    sb.append(' ')
+
+
+
+        sb.append('}')
+        return sb.toString()
 
     /**
      * Make a JSON text of an Object value. If the object has an
@@ -1440,45 +1316,43 @@ class JSONObject(object):
      * @param value The value to be serialized.
      * @return a printable, displayable, transmittable
      *  representation of the object, beginning
-     *  with <code>{</code>&nbsp;<small>(left brace)</small> and ending
+     *  with <code></code>&nbsp;<small>(left brace)</small> and ending
      *  with <code>}</code>&nbsp;<small>(right brace)</small>.
      * @throws JSONException If the value is or contains an invalid number.
      */
-    def String valueToString(Object value) throws JSONException {
+    def String valueToString(Object value) throws JSONException 
         if (value == null || value.equals(null)):
-            return "null";
-        }
+            return "null"
+
         if (value instanceof JSONString):
-            Object object;
-            try {
-                object = ((JSONString)value).toJSONString();
-            } catch (Exception e):
-                throw new JSONException(e);
-            }
+            Object object
+            try 
+                object = ((JSONString)value).toJSONString()
+            except Exception e):
+                throw new JSONException(e)
+
             if (object instanceof String):
-                return (String)object;
-            }
-            throw new JSONException("Bad value from toJSONString: " + object);
-        }
+                return (String)object
+
+            throw new JSONException("Bad value from toJSONString: " + object)
+
         if (value instanceof Number):
-            return numberToString((Number) value);
-        }
+            return numberToString((Number) value)
+
         if (value instanceof Boolean || value instanceof JSONObject ||
                 value instanceof JSONArray):
-            return value.toString();
-        }
-        if (value instanceof Map):
-            return new JSONObject((Map<?,?>)value).toString();
-        }
-        if (value instanceof Collection):
-            return new JSONArray((Collection<?>)value).toString();
-        }
-        if (value.getClass().isArray()):
-            return new JSONArray(value).toString();
-        }
-        return quote(value.toString());
-    }
+            return value.toString()
 
+        if (value instanceof Map):
+            return new JSONObject((Map<?,?>)value).toString()
+
+        if (value instanceof Collection):
+            return new JSONArray((Collection<?>)value).toString()
+
+        if (value.getClass().isArray()):
+            return new JSONArray(value).toString()
+
+        return quote(value.toString())
 
     /**
      * Make a prettyprinted JSON text of an object value.
@@ -1490,48 +1364,46 @@ class JSONObject(object):
      * @param indent The indentation of the top level.
      * @return a printable, displayable, transmittable
      *  representation of the object, beginning
-     *  with <code>{</code>&nbsp;<small>(left brace)</small> and ending
+     *  with <code></code>&nbsp;<small>(left brace)</small> and ending
      *  with <code>}</code>&nbsp;<small>(right brace)</small>.
      * @throws JSONException If the object contains an invalid number.
      */
     static String valueToString(Object value, int indentFactor, int indent)
-            throws JSONException {
+            throws JSONException 
         if (value == null || value.equals(null)):
-            return "null";
-        }
-        try {
-            if (value instanceof JSONString):
-                Object o = ((JSONString)value).toJSONString();
-                if (o instanceof String):
-                    return (String)o;
-                }
-            }
-        } catch (Exception ignore):
-        }
-        if (value instanceof Number):
-            return numberToString((Number) value);
-        }
-        if (value instanceof Boolean):
-            return value.toString();
-        }
-        if (value instanceof JSONObject):
-            return ((JSONObject)value).toString(indentFactor, indent);
-        }
-        if (value instanceof JSONArray):
-            return ((JSONArray)value).toString(indentFactor, indent);
-        }
-        if (value instanceof Map):
-            return new JSONObject((Map<?,?>)value).toString(indentFactor, indent);
-        }
-        if (value instanceof Collection):
-            return new JSONArray((Collection<?>)value).toString(indentFactor, indent);
-        }
-        if (value.getClass().isArray()):
-            return new JSONArray(value).toString(indentFactor, indent);
-        }
-        return quote(value.toString());
-    }
+            return "null"
 
+        try 
+            if (value instanceof JSONString):
+                Object o = ((JSONString)value).toJSONString()
+                if (o instanceof String):
+                    return (String)o
+
+
+        except Exception ignore):
+
+        if (value instanceof Number):
+            return numberToString((Number) value)
+
+        if (value instanceof Boolean):
+            return value.toString()
+
+        if (value instanceof JSONObject):
+            return ((JSONObject)value).toString(indentFactor, indent)
+
+        if (value instanceof JSONArray):
+            return ((JSONArray)value).toString(indentFactor, indent)
+
+        if (value instanceof Map):
+            return new JSONObject((Map<?,?>)value).toString(indentFactor, indent)
+
+        if (value instanceof Collection):
+            return new JSONArray((Collection<?>)value).toString(indentFactor, indent)
+
+        if (value.getClass().isArray()):
+            return new JSONArray(value).toString(indentFactor, indent)
+
+        return quote(value.toString())
 
      /**
       * Wrap an object, if necessary. If the object is null, return the NULL
@@ -1546,10 +1418,10 @@ class JSONObject(object):
       * @return The wrapped value
       */
     def Object wrap(Object object):
-            try {
+            try 
              if (object == null):
-                 return NULL;
-             }
+                 return NULL
+
              if (object instanceof JSONObject || object instanceof JSONArray  ||
                      NULL.equals(object)      || object instanceof JSONString ||
                      object instanceof Byte   || object instanceof Character  ||
@@ -1557,30 +1429,27 @@ class JSONObject(object):
                      object instanceof Long   || object instanceof Boolean    ||
                      object instanceof Float  || object instanceof Double     ||
                      object instanceof String):
-                 return object;
-             }
+                 return object
 
              if (object instanceof Collection):
-                 return new JSONArray((Collection<?>)object);
-             }
+                 return new JSONArray((Collection<?>)object)
+
              if (object.getClass().isArray()):
-                 return new JSONArray(object);
-             }
+                 return new JSONArray(object)
+
              if (object instanceof Map):
-                 return new JSONObject((Map<?,?>)object);
-             }
-             Package objectPackage = object.getClass().getPackage();
-             String objectPackageName = ( objectPackage != null ? objectPackage.getName() : "" );
+                 return new JSONObject((Map<?,?>)object)
+
+             Package objectPackage = object.getClass().getPackage()
+             String objectPackageName = ( objectPackage != null ? objectPackage.getName() : "" )
              if (objectPackageName.startsWith("java.") ||
                      objectPackageName.startsWith("javax.") ||
                      object.getClass().getClassLoader() == null):
-                 return object.toString();
-             }
-             return new JSONObject(object);
+                 return object.toString()
+
+             return new JSONObject(object)
          } catch(Exception exception):
-             return null;
-         }
-     }
+             return null
 
 
      /**
@@ -1592,33 +1461,32 @@ class JSONObject(object):
       * @return The writer.
       * @throws JSONException
       */
-    def Writer write(Writer writer) throws JSONException {
-        try {
-            bool  commanate = false;
-            Iterator<?> keys = keys();
-            writer.write('{');
+    def Writer write(Writer writer) throws JSONException 
+        try 
+            bool  commanate = false
+            Iterator<?> keys = keys()
+            writer.write('')
 
             while (keys.hasNext()):
                 if (commanate):
-                    writer.write(',');
-                }
-                Object key = keys.next();
-                writer.write(quote(key.toString()));
-                writer.write(':');
-                Object value = this.map.get(key);
+                    writer.write(',')
+
+                Object key = keys.next()
+                writer.write(quote(key.toString()))
+                writer.write(':')
+                Object value = self.map.get(key)
                 if (value instanceof JSONObject):
-                    ((JSONObject)value).write(writer);
-                } else if (value instanceof JSONArray):
-                    ((JSONArray)value).write(writer);
-                } else {
-                    writer.write(valueToString(value));
-                }
-                commanate = true;
-            }
-            writer.write('}');
-            return writer;
-        } catch (IOException exception):
-            throw new JSONException(exception);
-        }
-     }
-}
+                    ((JSONObject)value).write(writer)
+                elif (value instanceof JSONArray):
+                    ((JSONArray)value).write(writer)
+                else:
+                    writer.write(valueToString(value))
+
+                commanate = true
+
+            writer.write('}')
+            return writer
+        except IOException exception):
+            throw new JSONException(exception)
+
+

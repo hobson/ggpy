@@ -1,27 +1,27 @@
-package org.ggp.base.util.gdl.grammar;
+package org.ggp.base.util.gdl.grammar
 
 class GdlConstant(GdlTerm):
-{
+
 
     value = ''
 
     GdlConstant(String value)
-	{
-        this.value = value.intern();
+	
+        self.value = value.intern()
 
     def String getValue()
-	{
-        return value;
+	
+        return value
 
     def bool isGround()
-	{
-        return true;
+	
+        return true
 
     def GdlSentence toSentence()
-	{
-        return GdlPool.getProposition(this);
+	
+        return GdlPool.getProposition(this)
 
     def String toString()
-	{
-        return value;
+	
+        return value
 

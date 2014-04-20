@@ -1,8 +1,8 @@
-package org.ggp.base.apps.consoles;
+package org.ggp.base.apps.consoles
 
-import clojure.lang.RT;
-import clojure.lang.Symbol;
-import clojure.lang.Var;
+import clojure.lang.RT
+import clojure.lang.Symbol
+import clojure.lang.Var
 
 /**
  * ClojureConsole is a Clojure-based app that lets you interact with a Clojure
@@ -19,14 +19,13 @@ import clojure.lang.Var;
  */
 class ClojureConsole(object):
     def void main(String[] args):
-        Symbol CLOJURE_MAIN = Symbol.intern("clojure.main");
-        Var REQUIRE = RT.var("clojure.core", "require");
-        Var MAIN = RT.var("clojure.main", "main");
-        try {
-            REQUIRE.invoke(CLOJURE_MAIN);
-            MAIN.applyTo(RT.seq(new String[]{}));
+        Symbol CLOJURE_MAIN = Symbol.intern("clojure.main")
+        Var REQUIRE = RT.var("clojure.core", "require")
+        Var MAIN = RT.var("clojure.main", "main")
+        try 
+            REQUIRE.invoke(CLOJURE_MAIN)
+            MAIN.applyTo(RT.seq(new String[]}))
         } catch(Exception e):
-            e.printStackTrace();
-        }
-    }
-}
+            e.printStackTrace()
+
+

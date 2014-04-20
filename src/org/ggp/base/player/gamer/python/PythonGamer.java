@@ -1,16 +1,16 @@
-package org.ggp.base.player.gamer.python;
+package org.ggp.base.player.gamer.python
 
-import org.ggp.base.player.gamer.Gamer;
-import org.ggp.base.player.gamer.exception.AbortingException;
-import org.ggp.base.player.gamer.exception.GamePreviewException;
-import org.ggp.base.player.gamer.exception.MetaGamingException;
-import org.ggp.base.player.gamer.exception.MoveSelectionException;
-import org.ggp.base.player.gamer.exception.StoppingException;
-import org.ggp.base.util.game.Game;
-import org.ggp.base.util.gdl.grammar.GdlTerm;
-import org.ggp.base.util.logging.GamerLogger;
-import org.python.core.PyObject;
-import org.python.util.PythonInterpreter;
+import org.ggp.base.player.gamer.Gamer
+import org.ggp.base.player.gamer.exception.AbortingException
+import org.ggp.base.player.gamer.exception.GamePreviewException
+import org.ggp.base.player.gamer.exception.MetaGamingException
+import org.ggp.base.player.gamer.exception.MoveSelectionException
+import org.ggp.base.player.gamer.exception.StoppingException
+import org.ggp.base.util.game.Game
+import org.ggp.base.util.gdl.grammar.GdlTerm
+import org.ggp.base.util.logging.GamerLogger
+import org.python.core.PyObject
+import org.python.util.PythonInterpreter
 
 
 /**
@@ -32,30 +32,29 @@ import org.python.util.PythonInterpreter;
  * @author evancox
  */
 def abstract class PythonGamer(Gamer):
-{
-    Gamer thePythonGamer;
 
-    protected abstract String getPythonGamerName();
-    protected abstract String getPythonGamerModule();
+    Gamer thePythonGamer
+
+    protected abstract String getPythonGamerName()
+    protected abstract String getPythonGamerModule()
 
     // Gamer stubs are lazily loaded because the Python interface takes
     // time to initialize, so we only want to load it when necessary, and
     // not for light-weight things like returning the player name.
     private void lazilyLoadGamerStub():
     	if (thePythonGamer == null):
-	        try {
+	        try 
 	            // Load in the Python gamer, using a Jython intepreter.
-	            PythonInterpreter interpreter = new PythonInterpreter();
-	            interpreter.exec("from " + getPythonGamerModule() + " import " + getPythonGamerName());
-	            PyObject thePyClass = interpreter.get(getPythonGamerName());
-	            PyObject PyGamerObject = thePyClass.__call__();
-	            thePythonGamer = (Gamer)PyGamerObject.__tojava__(Gamer.class);
+	            PythonInterpreter interpreter = new PythonInterpreter()
+	            interpreter.exec("from " + getPythonGamerModule() + " import " + getPythonGamerName())
+	            PyObject thePyClass = interpreter.get(getPythonGamerName())
+	            PyObject PyGamerObject = thePyClass.__call__()
+	            thePythonGamer = (Gamer)PyGamerObject.__tojava__(Gamer.class)
 	        } catch(Exception e):
-	            GamerLogger.logError("GamePlayer", "Caught exception in Python initialization:");
-	            GamerLogger.logStackTrace("GamePlayer", e);
-	        }
-    	}
-    }
+	            GamerLogger.logError("GamePlayer", "Caught exception in Python initialization:")
+	            GamerLogger.logStackTrace("GamePlayer", e)
+
+
 
     // The following methods are overriden as 'final' because they should not
     // be changed in subclasses of this class. Subclasses of this class should
@@ -64,66 +63,60 @@ def abstract class PythonGamer(Gamer):
     // subclass of this class is a Java-implementation stub for the actual real
     // Python implementation.
 
-    def final void preview(Game game, int timeout) throws GamePreviewException {
-    	lazilyLoadGamerStub();
-        try {
-            thePythonGamer.preview(game, timeout);
+    def final void preview(Game game, int timeout) throws GamePreviewException 
+    	lazilyLoadGamerStub()
+        try 
+            thePythonGamer.preview(game, timeout)
         } catch(GamePreviewException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachinePreview:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachinePreview:")
+            GamerLogger.logStackTrace("GamePlayer", e)
 
-    def final void metaGame(int timeout) throws MetaGamingException {
-    	lazilyLoadGamerStub();
-        thePythonGamer.setMatch(getMatch());
-        thePythonGamer.setRoleName(getRoleName());
-        try {
-            thePythonGamer.metaGame(timeout);
+
+    def final void metaGame(int timeout) throws MetaGamingException 
+    	lazilyLoadGamerStub()
+        thePythonGamer.setMatch(getMatch())
+        thePythonGamer.setRoleName(getRoleName())
+        try 
+            thePythonGamer.metaGame(timeout)
         } catch(MetaGamingException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineMetaGame:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineMetaGame:")
+            GamerLogger.logStackTrace("GamePlayer", e)
 
-    def final GdlTerm selectMove(int timeout) throws MoveSelectionException {
-    	lazilyLoadGamerStub();
-        thePythonGamer.setMatch(getMatch());
-        thePythonGamer.setRoleName(getRoleName());
-        try {
-            return thePythonGamer.selectMove(timeout);
+
+    def final GdlTerm selectMove(int timeout) throws MoveSelectionException 
+    	lazilyLoadGamerStub()
+        thePythonGamer.setMatch(getMatch())
+        thePythonGamer.setRoleName(getRoleName())
+        try 
+            return thePythonGamer.selectMove(timeout)
         } catch(MoveSelectionException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineSelectMove:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-            return null;
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineSelectMove:")
+            GamerLogger.logStackTrace("GamePlayer", e)
+            return null
+
 
     def final void stop():
-    	lazilyLoadGamerStub();
-    	thePythonGamer.setMatch(getMatch());
-        thePythonGamer.setRoleName(getRoleName());
-        try {
-            thePythonGamer.stop();
+    	lazilyLoadGamerStub()
+    	thePythonGamer.setMatch(getMatch())
+        thePythonGamer.setRoleName(getRoleName())
+        try 
+            thePythonGamer.stop()
         } catch(StoppingException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineStop:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineStop:")
+            GamerLogger.logStackTrace("GamePlayer", e)
+
 
     def final void abort():
-    	lazilyLoadGamerStub();
-    	thePythonGamer.setMatch(getMatch());
-        thePythonGamer.setRoleName(getRoleName());
-        try {
-            thePythonGamer.abort();
+    	lazilyLoadGamerStub()
+    	thePythonGamer.setMatch(getMatch())
+        thePythonGamer.setRoleName(getRoleName())
+        try 
+            thePythonGamer.abort()
         } catch(AbortingException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineAbort:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineAbort:")
+            GamerLogger.logStackTrace("GamePlayer", e)
+
 
     def final String getName():
-    	return getPythonGamerName();
-    }
-}
+    	return getPythonGamerName()
+

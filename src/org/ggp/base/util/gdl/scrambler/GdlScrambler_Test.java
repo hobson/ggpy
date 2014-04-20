@@ -1,18 +1,18 @@
-package org.ggp.base.util.gdl.scrambler;
+package org.ggp.base.util.gdl.scrambler
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.ArrayList
+import java.util.List
+import java.util.Random
 
-import junit.framework.TestCase;
+import junit.framework.TestCase
 
-import org.ggp.base.util.game.Game;
-import org.ggp.base.util.game.GameRepository;
-import org.ggp.base.util.gdl.factory.GdlFactory;
-import org.ggp.base.util.gdl.factory.exceptions.GdlFormatException;
-import org.ggp.base.util.gdl.grammar.Gdl;
-import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
-import org.ggp.base.util.symbol.factory.exceptions.SymbolFormatException;
+import org.ggp.base.util.game.Game
+import org.ggp.base.util.game.GameRepository
+import org.ggp.base.util.gdl.factory.GdlFactory
+import org.ggp.base.util.gdl.factory.exceptions.GdlFormatException
+import org.ggp.base.util.gdl.grammar.Gdl
+import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine
+import org.ggp.base.util.symbol.factory.exceptions.SymbolFormatException
 
 /**
  * Unit tests for the GdlScrambler class, which provides a way
@@ -27,9 +27,8 @@ class GdlScrambler_Test(TestCase):
      * simply renders the Gdl and parses it in the naive way, without doing any
      * special modification. This is the trivial case of "scrambling".
      */
-    def void testNoOpScrambler() throws GdlFormatException, SymbolFormatException {
-    	runScramblerTest(new NoOpGdlScrambler());
-    }
+    def void testNoOpScrambler() throws GdlFormatException, SymbolFormatException 
+    	runScramblerTest(new NoOpGdlScrambler())
 
 	/**
 	 * When scrambling is enabled, the "MappingGdlScrambler" is used. This class
@@ -37,9 +36,8 @@ class GdlScrambler_Test(TestCase):
      * with scrambled versions, drawing new random tokens first from a list of
      * English words, and appending suffixes when the original list is exhausted.
 	 */
-    def void testMappingScrambler() throws GdlFormatException, SymbolFormatException {
-    	runScramblerTest(new MappingGdlScrambler(new Random()));
-    }
+    def void testMappingScrambler() throws GdlFormatException, SymbolFormatException 
+    	runScramblerTest(new MappingGdlScrambler(new Random()))
 
     /**
      * Furthermore, the mapping scrambler can be initialized with a Random object,
@@ -48,59 +46,58 @@ class GdlScrambler_Test(TestCase):
      * reloaded in the meantime.
      */
     def void testMappingScramblerConsistency():
-    	GdlScrambler aScrambler = new MappingGdlScrambler(new Random(123));
-    	GdlScrambler bScrambler = new MappingGdlScrambler(new Random(123));
-    	GdlScrambler cScrambler = new MappingGdlScrambler(new Random(234));
-    	GameRepository repo = GameRepository.getDefaultRepository();
+    	GdlScrambler aScrambler = new MappingGdlScrambler(new Random(123))
+    	GdlScrambler bScrambler = new MappingGdlScrambler(new Random(123))
+    	GdlScrambler cScrambler = new MappingGdlScrambler(new Random(234))
+    	GameRepository repo = GameRepository.getDefaultRepository()
     	for (String gameKey : repo.getGameKeys()):
-    		Game game = repo.getGame(gameKey);
-    		StringBuilder aScrambledRules = new StringBuilder();
-    		StringBuilder bScrambledRules = new StringBuilder();
-    		StringBuilder cScrambledRules = new StringBuilder();
-    		StringBuilder dScrambledRules = new StringBuilder();
-    		StringBuilder eScrambledRules = new StringBuilder();
-    		StringBuilder fScrambledRules = new StringBuilder();
+    		Game game = repo.getGame(gameKey)
+    		StringBuilder aScrambledRules = new StringBuilder()
+    		StringBuilder bScrambledRules = new StringBuilder()
+    		StringBuilder cScrambledRules = new StringBuilder()
+    		StringBuilder dScrambledRules = new StringBuilder()
+    		StringBuilder eScrambledRules = new StringBuilder()
+    		StringBuilder fScrambledRules = new StringBuilder()
     		for(Gdl rule : game.getRules()):
-    			aScrambledRules.append(aScrambler.scramble(rule)+"\n");
-    			bScrambledRules.append(bScrambler.scramble(rule)+"\n");
-    			cScrambledRules.append(cScrambler.scramble(rule)+"\n");
-    		}
-    		for(Gdl rule : game.getRules()):
-    			dScrambledRules.append(aScrambler.scramble(rule)+"\n");
-    			eScrambledRules.append(bScrambler.scramble(rule)+"\n");
-    			fScrambledRules.append(cScrambler.scramble(rule)+"\n");
-    		}
-    		assertEquals(aScrambledRules.toString(), bScrambledRules.toString());
-    		assertEquals(aScrambledRules.toString(), dScrambledRules.toString());
-    		assertEquals(aScrambledRules.toString(), eScrambledRules.toString());
-    		assertFalse(aScrambledRules.toString().equals(cScrambledRules.toString()));
-    		assertEquals(cScrambledRules.toString(), fScrambledRules.toString());
-    	}
-    }
+    			aScrambledRules.append(aScrambler.scramble(rule)+"\n")
+    			bScrambledRules.append(bScrambler.scramble(rule)+"\n")
+    			cScrambledRules.append(cScrambler.scramble(rule)+"\n")
 
-    private void runScramblerTest(GdlScrambler scrambler) throws SymbolFormatException, GdlFormatException {
-    	GameRepository repo = GameRepository.getDefaultRepository();
-    	for (String gameKey : repo.getGameKeys()):
-    		Game game = repo.getGame(gameKey);
-    		List<Gdl> theScrambledRules = new ArrayList<Gdl>();
     		for(Gdl rule : game.getRules()):
-    			String renderedRule = rule.toString();
-    			String renderedScrambledRule = scrambler.scramble(rule).toString();
-    			String renderedUnscrambledRule = scrambler.unscramble(renderedScrambledRule).toString();
-    			theScrambledRules.add(GdlFactory.create(renderedScrambledRule));
+    			dScrambledRules.append(aScrambler.scramble(rule)+"\n")
+    			eScrambledRules.append(bScrambler.scramble(rule)+"\n")
+    			fScrambledRules.append(cScrambler.scramble(rule)+"\n")
+
+    		assertEquals(aScrambledRules.toString(), bScrambledRules.toString())
+    		assertEquals(aScrambledRules.toString(), dScrambledRules.toString())
+    		assertEquals(aScrambledRules.toString(), eScrambledRules.toString())
+    		assertFalse(aScrambledRules.toString().equals(cScrambledRules.toString()))
+    		assertEquals(cScrambledRules.toString(), fScrambledRules.toString())
+
+
+    private void runScramblerTest(GdlScrambler scrambler) throws SymbolFormatException, GdlFormatException 
+    	GameRepository repo = GameRepository.getDefaultRepository()
+    	for (String gameKey : repo.getGameKeys()):
+    		Game game = repo.getGame(gameKey)
+    		List<Gdl> theScrambledRules = new ArrayList<Gdl>()
+    		for(Gdl rule : game.getRules()):
+    			String renderedRule = rule.toString()
+    			String renderedScrambledRule = scrambler.scramble(rule).toString()
+    			String renderedUnscrambledRule = scrambler.unscramble(renderedScrambledRule).toString()
+    			theScrambledRules.add(GdlFactory.create(renderedScrambledRule))
     			// If the scrambler claims that it scrambles the game, then the
     			// scrambled rules should be different than the original rules.
     			// Otherwise they should be identical.
     			if (scrambler.scrambles()):
-    				assertTrue(gameKey, !renderedRule.equals(renderedScrambledRule));
-    			} else {
-    				assertEquals(gameKey, renderedRule, renderedScrambledRule);
-    			}
+    				assertTrue(gameKey, !renderedRule.equals(renderedScrambledRule))
+    			else:
+    				assertEquals(gameKey, renderedRule, renderedScrambledRule)
+
     			// One important property for any scrambler is that the original
     			// and the unscrambled Gdl must be the same. This guarantees that
     			// the server can correctly unscramble responses from the players.
-    			assertEquals(gameKey, renderedRule, renderedUnscrambledRule);
-    		}
+    			assertEquals(gameKey, renderedRule, renderedUnscrambledRule)
+
 
 			// An important property for any scrambler is that the scrambled rules
 			// have the same physics as the regular rules. For example, the number
@@ -109,12 +106,11 @@ class GdlScrambler_Test(TestCase):
     		// be more thorough verification here, like looking at the number of
     		// legal joint moves in the first state, or simulating entire matches,
     		// but that would be expensive.
-            ProverStateMachine pNormal = new ProverStateMachine();
-            ProverStateMachine pScrambled = new ProverStateMachine();
-            pNormal.initialize(game.getRules());
-            pScrambled.initialize(theScrambledRules);
-            assertEquals(gameKey, pNormal.getRoles().size(), pScrambled.getRoles().size());
-            assertEquals(gameKey, pNormal.getInitialState().getContents().size(), pScrambled.getInitialState().getContents().size());
-    	}
-    }
-}
+            ProverStateMachine pNormal = new ProverStateMachine()
+            ProverStateMachine pScrambled = new ProverStateMachine()
+            pNormal.initialize(game.getRules())
+            pScrambled.initialize(theScrambledRules)
+            assertEquals(gameKey, pNormal.getRoles().size(), pScrambled.getRoles().size())
+            assertEquals(gameKey, pNormal.getInitialState().getContents().size(), pScrambled.getInitialState().getContents().size())
+
+

@@ -1,15 +1,13 @@
-package org.ggp.base.player.proxy;
+package org.ggp.base.player.proxy
 
-import org.ggp.base.util.observer.Event;
+import org.ggp.base.util.observer.Event
 
 class WorkingResponseSelectedEvent(Event):
     theResponse = String()
 
     def WorkingResponseSelectedEvent(String theResponse):
-        this.theResponse = theResponse;
-    }
+        self.theResponse = theResponse
 
     def String getWorkingResponse():
-        return theResponse;
-    }
-}
+        return theResponse
+

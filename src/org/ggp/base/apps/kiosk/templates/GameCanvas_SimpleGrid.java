@@ -1,8 +1,8 @@
-package org.ggp.base.apps.kiosk.templates;
+package org.ggp.base.apps.kiosk.templates
 
-import java.awt.Graphics;
+import java.awt.Graphics
 
-import org.ggp.base.apps.kiosk.GameCanvas;
+import org.ggp.base.apps.kiosk.GameCanvas
 
 
 /**
@@ -32,64 +32,62 @@ import org.ggp.base.apps.kiosk.GameCanvas;
 def abstract class GameCanvas_SimpleGrid(GameCanvas):
     serialVersionUID = 0x1  # int 
 
-    protected abstract int getGridWidth();
-    protected abstract int getGridHeight();
-    protected abstract void renderCell(Graphics g, int x, int y);
-    protected abstract void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin);
+    protected abstract int getGridWidth()
+    protected abstract int getGridHeight()
+    protected abstract void renderCell(Graphics g, int x, int y)
+    protected abstract void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin)
 
-    protected bool coordinatesStartAtOne() { return true; }
+    protected bool coordinatesStartAtOne()  return true
 
     mostRecentG = Graphics()
     protected final void paintGame(Graphics g):
-        int width = g.getClipBounds().width;
-        int height = g.getClipBounds().height;
+        int width = g.getClipBounds().width
+        int height = g.getClipBounds().height
 
-        mostRecentG = g;
+        mostRecentG = g
 
-        g.setColor(this.getBackground());
-        g.fillRect(0, 0, width, height);
+        g.setColor(self.getBackground())
+        g.fillRect(0, 0, width, height)
 
         if(gameState == null)
-            return;
+            return
 
-        int nGridWidth = getGridWidth();
-        int nGridHeight = getGridHeight();
+        int nGridWidth = getGridWidth()
+        int nGridHeight = getGridHeight()
 
-        int nCellWidth = width / nGridWidth;
-        int nCellHeight = height / nGridHeight;
+        int nCellWidth = width / nGridWidth
+        int nCellHeight = height / nGridHeight
 
         for(int x = 0; x < nGridWidth; x++):
             for(int y = 0; y < nGridHeight; y++):
-                Graphics cellGraphics = g.create(x*nCellWidth, y*nCellHeight, nCellWidth, nCellHeight);
+                Graphics cellGraphics = g.create(x*nCellWidth, y*nCellHeight, nCellWidth, nCellHeight)
                 if(coordinatesStartAtOne()):
-                    renderCell(cellGraphics, x+1, y+1);
-                } else {
-                    renderCell(cellGraphics, x, y);
-                }
-            }
-        }
-    }
+                    renderCell(cellGraphics, x+1, y+1)
+                else:
+                    renderCell(cellGraphics, x, y)
+
+
+
 
     protected final void handleClickEvent(int x, int y):
-        int width = mostRecentG.getClipBounds().width;
-        int height = mostRecentG.getClipBounds().height;
+        int width = mostRecentG.getClipBounds().width
+        int height = mostRecentG.getClipBounds().height
 
-        int nGridWidth = getGridWidth();
-        int nGridHeight = getGridHeight();
+        int nGridWidth = getGridWidth()
+        int nGridHeight = getGridHeight()
 
-        int nCellWidth = width / nGridWidth;
-        int nCellHeight = height / nGridHeight;
+        int nCellWidth = width / nGridWidth
+        int nCellHeight = height / nGridHeight
 
-        int xCell = x / nCellWidth;
-        int yCell = y / nCellHeight;
+        int xCell = x / nCellWidth
+        int yCell = y / nCellHeight
 
-        int xWithin = x % nCellWidth;
-        int yWithin = y % nCellHeight;
+        int xWithin = x % nCellWidth
+        int yWithin = y % nCellHeight
 
         if(coordinatesStartAtOne()):
-            handleClickOnCell(xCell+1, yCell+1, xWithin, yWithin);
-        } else {
-            handleClickOnCell(xCell, yCell, xWithin, yWithin);
-        }
-    }
-}
+            handleClickOnCell(xCell+1, yCell+1, xWithin, yWithin)
+        else:
+            handleClickOnCell(xCell, yCell, xWithin, yWithin)
+
+

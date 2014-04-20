@@ -1,5 +1,5 @@
-package org.ggp.base.player.gamer.python.stubs;
-import org.ggp.base.player.gamer.python.PythonGamer;
+package org.ggp.base.player.gamer.python.stubs
+import org.ggp.base.player.gamer.python.PythonGamer
 
 /**
  * SamplePythonGamerStub is a stub pointing to a version of @RandomGamer that
@@ -10,7 +10,6 @@ import org.ggp.base.player.gamer.python.PythonGamer;
  * @author Sam
  */
 class SamplePythonGamerStub(PythonGamer):
-{
-    protected String getPythonGamerModule() { return "sample_gamer"; }
-    protected String getPythonGamerName() { return "SamplePythonGamer"; }
-}
+
+    protected String getPythonGamerModule()  return "sample_gamer"
+    protected String getPythonGamerName()  return "SamplePythonGamer"

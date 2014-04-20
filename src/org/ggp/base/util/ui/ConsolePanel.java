@@ -1,16 +1,16 @@
-package org.ggp.base.util.ui;
+package org.ggp.base.util.ui
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.awt.BorderLayout
+import java.awt.Color
+import java.io.IOException
+import java.io.OutputStream
+import java.io.PrintStream
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
+import javax.swing.JPanel
+import javax.swing.JScrollPane
+import javax.swing.JTextArea
+import javax.swing.SwingUtilities
+import javax.swing.border.TitledBorder
 
 /**
  * ConsolePanel implements a light-weight panel that shows all of the
@@ -20,42 +20,40 @@ import javax.swing.border.TitledBorder;
  */
 class ConsolePanel(JPane1):
     def __init__(self, ):
-        super(new BorderLayout());
+        super(new BorderLayout())
 
         // Create an output console.
-        outputConsole = new JTextArea();
-        outputConsole.setEditable(false);
-        outputConsole.setForeground(new Color(125, 0, 0));
-        outputConsole.setText("(Console output will be displayed here.)\n\n");
-        JScrollPane outputConsolePane = new JScrollPane(outputConsole);
+        outputConsole = new JTextArea()
+        outputConsole.setEditable(false)
+        outputConsole.setForeground(new Color(125, 0, 0))
+        outputConsole.setText("(Console output will be displayed here.)\n\n")
+        JScrollPane outputConsolePane = new JScrollPane(outputConsole)
 
-        setBorder(new TitledBorder("Java Console:"));
-        add(outputConsolePane, BorderLayout.CENTER);
-        validate();
+        setBorder(new TitledBorder("Java Console:"))
+        add(outputConsolePane, BorderLayout.CENTER)
+        validate()
 
         // Send the standard out and standard error streams
         // to this panel, instead.
         OutputStream out = new OutputStream():
-        		    def void write(int b) throws IOException {
-                updateTextArea(String.valueOf((char) b));
-            }
-        		    def void write(byte[] b, int off, int len) throws IOException {
-                updateTextArea(new String(b, off, len));
-            }
-        		    def void write(byte[] b) throws IOException {
-                write(b, 0, b.length);
-            }
-        };
-        System.setOut(new PrintStream(out, true));
-        System.setErr(new PrintStream(out, true));
-    }
+        		    def void write(int b) throws IOException 
+                updateTextArea(String.valueOf((char) b))
 
-    private final JTextArea outputConsole;
+        		    def void write(byte[] b, int off, int len) throws IOException 
+                updateTextArea(new String(b, off, len))
+
+        		    def void write(byte[] b) throws IOException 
+                write(b, 0, b.length)
+
+
+        System.setOut(new PrintStream(out, true))
+        System.setErr(new PrintStream(out, true))
+
+    private final JTextArea outputConsole
     private void updateTextArea(final String text):
         SwingUtilities.invokeLater(new Runnable():
         		    def run():  # void
-                outputConsole.append(text);
-            }
-        });
-    }
-}
+                outputConsole.append(text)
+
+        })
+

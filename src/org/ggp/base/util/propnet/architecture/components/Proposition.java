@@ -1,13 +1,13 @@
-package org.ggp.base.util.propnet.architecture.components;
+package org.ggp.base.util.propnet.architecture.components
 
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.propnet.architecture.Component;
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.propnet.architecture.Component
 
 /**
  * The Proposition class is designed to represent named latches.
  */
 class Proposition(Component):
-{
+
 	/** The name of the Proposition. */
     name = GdlSentence()
 	/** The value of the Proposition. */
@@ -20,9 +20,9 @@ class Proposition(Component):
 	 *            The name of the Proposition.
 	 */
     def Proposition(name=GdlSentence())
-	{
-        this.name = name;
-        this.value = false;
+	
+        self.name = name
+        self.value = false
 
 	/**
 	 * Getter method.
@@ -30,8 +30,8 @@ class Proposition(Component):
 	 * @return The name of the Proposition.
 	 */
     def GdlSentence getName()
-	{
-        return name;
+	
+        return name
 
     /**
      * Setter method.
@@ -42,9 +42,8 @@ class Proposition(Component):
      * @return The name of the Proposition.
      */
     def void setName(GdlSentence newName)
-    {
-        name = newName;
-    }
+    
+        name = newName
 
 	/**
 	 * Returns the current value of the Proposition.
@@ -52,8 +51,8 @@ class Proposition(Component):
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
     def bool getValue()
-	{
-        return value;
+	
+        return value
 
 	/**
 	 * Setter method.
@@ -62,13 +61,12 @@ class Proposition(Component):
 	 *            The new value of the Proposition.
 	 */
     def void setValue(bool value)
-	{
-        this.value = value;
+	
+        self.value = value
 
 	/**
 	 * @see org.ggp.base.util.propnet.architecture.Component#toString()
 	 */
     def String toString()
-	{
-        return toDot("circle", value ? "red" : "white", name.toString());
-}
+	
+        return toDot("circle", value ? "red" : "white", name.toString())

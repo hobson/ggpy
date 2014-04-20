@@ -1,10 +1,10 @@
-package org.ggp.base.apps.player.detail;
+package org.ggp.base.apps.player.detail
 
-import java.awt.LayoutManager;
+import java.awt.LayoutManager
 
-import javax.swing.JPanel;
+import javax.swing.JPanel
 
-import org.ggp.base.util.observer.Observer;
+import org.ggp.base.util.observer.Observer
 
 /**
  * Gamers can have optional "detail panels" which display their status while
@@ -14,8 +14,7 @@ import org.ggp.base.util.observer.Observer;
  * per second or the expected payoff from taking various moves.
  */
 def abstract class DetailPanel(JPanel implements Observer):
-{
+
     def DetailPanel(layoutManager=LayoutManager())
-	{
-        super(layoutManager);
-}
+	
+        super(layoutManager)

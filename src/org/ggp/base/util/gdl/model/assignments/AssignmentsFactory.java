@@ -1,21 +1,21 @@
-package org.ggp.base.util.gdl.model.assignments;
+package org.ggp.base.util.gdl.model.assignments
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList
+import java.util.Collection
+import java.util.List
+import java.util.Map
+import java.util.Set
 
-import org.ggp.base.util.gdl.GdlUtils;
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlLiteral;
-import org.ggp.base.util.gdl.grammar.GdlRule;
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.gdl.grammar.GdlVariable;
-import org.ggp.base.util.gdl.model.SentenceDomainModel;
-import org.ggp.base.util.gdl.model.SentenceDomainModels;
-import org.ggp.base.util.gdl.model.SentenceDomainModels.VarDomainOpts;
-import org.ggp.base.util.gdl.model.SentenceForm;
+import org.ggp.base.util.gdl.GdlUtils
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlLiteral
+import org.ggp.base.util.gdl.grammar.GdlRule
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.gdl.grammar.GdlVariable
+import org.ggp.base.util.gdl.model.SentenceDomainModel
+import org.ggp.base.util.gdl.model.SentenceDomainModels
+import org.ggp.base.util.gdl.model.SentenceDomainModels.VarDomainOpts
+import org.ggp.base.util.gdl.model.SentenceForm
 
 
 class AssignmentsFactory(object):
@@ -26,7 +26,7 @@ class AssignmentsFactory(object):
         return new AssignmentsImpl(rule,
                 SentenceDomainModels.getVarDomains(rule, model, VarDomainOpts.INCLUDE_HEAD),
                 functionInfoMap,
-                completedSentenceFormValues);
+                completedSentenceFormValues)
 
     def static Assignments getAssignmentsForRule(GdlRule rule,
             Map<GdlVariable, Set<GdlConstant>> varDomains,
@@ -35,7 +35,7 @@ class AssignmentsFactory(object):
         return new AssignmentsImpl(rule,
                 varDomains,
                 functionInfoMap,
-                completedSentenceFormValues);
+                completedSentenceFormValues)
 
     def static Assignments getAssignmentsWithRecursiveInput(GdlRule rule,
             SentenceDomainModel model, SentenceForm form, GdlSentence input,
@@ -44,16 +44,16 @@ class AssignmentsFactory(object):
 		//Look for the literal(s) in the rule with the sentence form of the
 		//recursive input. This can be tricky if there are multiple matching
 		//literals.
-        List<GdlSentence> matchingLiterals = new ArrayList<GdlSentence>();
+        List<GdlSentence> matchingLiterals = new ArrayList<GdlSentence>()
         for(GdlLiteral literal : rule.getBody())
             if(literal instanceof GdlSentence)
                 if(form.matches((GdlSentence) literal))
-                    matchingLiterals.add((GdlSentence) literal);
+                    matchingLiterals.add((GdlSentence) literal)
 
-        List<Assignments> assignmentsList = new ArrayList<Assignments>();
+        List<Assignments> assignmentsList = new ArrayList<Assignments>()
         for(GdlSentence matchingLiteral : matchingLiterals):
 			//left has the variables, right has the constants
-            Map<GdlVariable, GdlConstant> preassignment = GdlUtils.getAssignmentMakingLeftIntoRight(matchingLiteral, input);
+            Map<GdlVariable, GdlConstant> preassignment = GdlUtils.getAssignmentMakingLeftIntoRight(matchingLiteral, input)
             if(preassignment != null):
                 Assignments assignments = new AssignmentsImpl(
                         preassignment,
@@ -63,14 +63,14 @@ class AssignmentsFactory(object):
 						//this be better factored somehow?
                         SentenceDomainModels.getVarDomains(rule, model, VarDomainOpts.INCLUDE_HEAD),
                         functionInfoMap,
-                        completedSentenceFormValues);
-                assignmentsList.add(assignments);
+                        completedSentenceFormValues)
+                assignmentsList.add(assignments)
 
         if(assignmentsList.size() == 0)
-            return new AssignmentsImpl();
+            return new AssignmentsImpl()
         if(assignmentsList.size() == 1)
-            return assignmentsList.get(0);
-        throw new RuntimeException("Not yet implemented: assignments for recursive functions with multiple recursive conjuncts");
+            return assignmentsList.get(0)
+        throw new RuntimeException("Not yet implemented: assignments for recursive functions with multiple recursive conjuncts")
 		//TODO: Plan to implement by subclassing Assignments into something
 		//that contains and iterates over multiple Assignments
 

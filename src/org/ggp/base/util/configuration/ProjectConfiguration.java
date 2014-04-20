@@ -5,13 +5,12 @@
  * @author Sam Schreiber
  */
 
-package org.ggp.base.util.configuration;
+package org.ggp.base.util.configuration
 
-import java.io.File;
+import java.io.File
 
 class ProjectConfiguration(object):
     /* Game rulesheet repository information */
     gamesRootDirectoryPath = "games"  # String 
 
     gameImagesDirectory = new File(new File(gamesRootDirectoryPath, "resources"), "images")  # File 
-}

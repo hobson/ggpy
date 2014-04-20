@@ -1,17 +1,17 @@
-package org.ggp.base.player.event;
+package org.ggp.base.player.event
 
-import org.ggp.base.util.observer.Event;
+import org.ggp.base.util.observer.Event
 
 class PlayerReceivedMessageEvent(Event):
-{
+
 
     message = ''
 
     def PlayerReceivedMessageEvent(message='')
-	{
-        this.message = message;
+	
+        self.message = message
 
     def String getMessage()
-	{
-        return message;
+	
+        return message
 

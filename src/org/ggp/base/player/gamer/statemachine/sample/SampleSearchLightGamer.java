@@ -1,23 +1,23 @@
-package org.ggp.base.player.gamer.statemachine.sample;
+package org.ggp.base.player.gamer.statemachine.sample
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.ArrayList
+import java.util.List
+import java.util.Random
 
-import org.ggp.base.apps.player.detail.DetailPanel;
-import org.ggp.base.apps.player.detail.SimpleDetailPanel;
-import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
-import org.ggp.base.player.gamer.exception.GamePreviewException;
-import org.ggp.base.player.gamer.statemachine.StateMachineGamer;
-import org.ggp.base.util.game.Game;
-import org.ggp.base.util.statemachine.MachineState;
-import org.ggp.base.util.statemachine.Move;
-import org.ggp.base.util.statemachine.StateMachine;
-import org.ggp.base.util.statemachine.cache.CachedStateMachine;
-import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
-import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
+import org.ggp.base.apps.player.detail.DetailPanel
+import org.ggp.base.apps.player.detail.SimpleDetailPanel
+import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent
+import org.ggp.base.player.gamer.exception.GamePreviewException
+import org.ggp.base.player.gamer.statemachine.StateMachineGamer
+import org.ggp.base.util.game.Game
+import org.ggp.base.util.statemachine.MachineState
+import org.ggp.base.util.statemachine.Move
+import org.ggp.base.util.statemachine.StateMachine
+import org.ggp.base.util.statemachine.cache.CachedStateMachine
+import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException
+import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException
+import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException
+import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine
 
 /**
  * SampleSearchLightGamer is a simple state-machine-based Gamer. It will,
@@ -41,15 +41,15 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
  * @author Sam Schreiber
  */
 class SampleSearchLightGamer(StateMachineGamer):
-{
+
 	/**
 	 * Does nothing
 	 */
     def void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
-	{
+	
 		// Do nothing.
 
-    private Random theRandom = new Random();
+    private Random theRandom = new Random()
 
 	/**
 	 * Employs a simple sample "Search Light" algorithm.  First selects a default legal move.
@@ -63,22 +63,22 @@ class SampleSearchLightGamer(StateMachineGamer):
 	 * </ol>
 	 */
     def Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
-	{
-	    StateMachine theMachine = getStateMachine();
-        int start = System.currentTimeMillis();
-        int finishBy = timeout - 1000;
+	
+	    StateMachine theMachine = getStateMachine()
+        int start = System.currentTimeMillis()
+        int finishBy = timeout - 1000
 
-        List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole());
-        Move selection = (moves.get(new Random().nextInt(moves.size())));
+        List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole())
+        Move selection = (moves.get(new Random().nextInt(moves.size())))
 
 		// Shuffle the moves into a random order, so that when we find the first
 		// move that doesn't give our opponent a forced win, we aren't always choosing
 		// the first legal move over and over (which is visibly repetitive).
-        List<Move> movesInRandomOrder = new ArrayList<Move>();
+        List<Move> movesInRandomOrder = new ArrayList<Move>()
         while(!moves.isEmpty()):
-		    Move aMove = moves.get(theRandom.nextInt(moves.size()));
-		    movesInRandomOrder.add(aMove);
-		    moves.remove(aMove);
+		    Move aMove = moves.get(theRandom.nextInt(moves.size()))
+		    movesInRandomOrder.add(aMove)
+		    moves.remove(aMove)
 
 		// Go through all of the legal moves in a random over, and consider each one.
 		// For each move, we want to determine whether taking that move will give our
@@ -89,15 +89,15 @@ class SampleSearchLightGamer(StateMachineGamer):
 		// We will also continue considering moves for two seconds, in case we can stumble
 		// upon a move which would cause us to win: if we find such a move, we will just
 		// immediately take it.
-        bool reasonableMoveFound = false;
-        int maxGoal = 0;
+        bool reasonableMoveFound = false
+        int maxGoal = 0
         for(Move moveUnderConsideration : movesInRandomOrder):
 		    // Check to see if there's time to continue.
-		    if(System.currentTimeMillis() > finishBy) break;
+		    if(System.currentTimeMillis() > finishBy) break
 
 		    // If we've found a reasonable move, only spend at most two seconds trying
 		    // to find a winning move.
-		    if(System.currentTimeMillis() > start + 2000 && reasonableMoveFound) break;
+		    if(System.currentTimeMillis() > start + 2000 && reasonableMoveFound) break
 
 		    // Get the next state of the game, if we take the move we're considering.
 		    // Since it's our turn, in an alternating-play game the opponent will only
@@ -106,7 +106,7 @@ class SampleSearchLightGamer(StateMachineGamer):
 		    // opponent's no-op. In a simultaneous-action game, however, the opponent
 		    // may have many moves, and so we will randomly pick one of our opponent's
 		    // possible actions and assume they do that.
-		    MachineState nextState = theMachine.getNextState(getCurrentState(), theMachine.getRandomJointMove(getCurrentState(), getRole(), moveUnderConsideration));
+		    MachineState nextState = theMachine.getNextState(getCurrentState(), theMachine.getRandomJointMove(getCurrentState(), getRole(), moveUnderConsideration))
 
 		    // Does the move under consideration end the game? If it does, do we win
 		    // or lose? If we lose, don't bother considering it. If we win, then we
@@ -114,70 +114,69 @@ class SampleSearchLightGamer(StateMachineGamer):
 		    // best goal, go ahead and tentatively select it
 		    if(theMachine.isTerminal(nextState)):
 		        if(theMachine.getGoal(nextState, getRole()) == 0):
-		            continue;
-		        } else if(theMachine.getGoal(nextState, getRole()) == 100):
-	                selection = moveUnderConsideration;
-	                break;
-		        } else {
+		            continue
+		        elif(theMachine.getGoal(nextState, getRole()) == 100):
+	                selection = moveUnderConsideration
+	                break
+		        else:
 		        	if (theMachine.getGoal(nextState, getRole()) > maxGoal)
-		        	{
-		        		selection = moveUnderConsideration;
-		        		maxGoal = theMachine.getGoal(nextState, getRole());
-		        	}
-		        	continue;
-		        }
-		    }
+		        	
+		        		selection = moveUnderConsideration
+		        		maxGoal = theMachine.getGoal(nextState, getRole())
+
+		        	continue
+
+
 
 		    // Check whether any of the legal joint moves from this state lead to
 		    // a loss for us. Again, this only makes sense in the context of an alternating
 		    // play zero-sum game, in which this is the opponent's move and they are trying
 		    // to make us lose, and so if they are offered any move that will make us lose
 		    // they will take it.
-		    bool forcedLoss = false;
+		    bool forcedLoss = false
 		    for(List<Move> jointMove : theMachine.getLegalJointMoves(nextState)):
-		        MachineState nextNextState = theMachine.getNextState(nextState, jointMove);
+		        MachineState nextNextState = theMachine.getNextState(nextState, jointMove)
 		        if(theMachine.isTerminal(nextNextState)):
 		            if(theMachine.getGoal(nextNextState, getRole()) == 0):
-		                forcedLoss = true;
-		                break;
-		            }
-		        }
+		                forcedLoss = true
+		                break
+
+
 
 		        // Check to see if there's time to continue.
 		        if(System.currentTimeMillis() > finishBy):
-		            forcedLoss = true;
-		            break;
-		        }
-		    }
+		            forcedLoss = true
+		            break
+
+
 
 		    // If we've verified that this move isn't going to lead us to a state where
 		    // our opponent can defeat us in one move, we should keep track of it.
 		    if(!forcedLoss):
-		        selection = moveUnderConsideration;
-		        reasonableMoveFound = true;
-		    }
+		        selection = moveUnderConsideration
+		        reasonableMoveFound = true
 
-        int stop = System.currentTimeMillis();
 
-        notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
-        return selection;
+        int stop = System.currentTimeMillis()
+
+        notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start))
+        return selection
     def stateMachineStop():  # void
 		// Do nothing.
 	/**
 	 * Uses a CachedProverStateMachine
 	 */
     def getInitialStateMachine():  # StateMachine
-        return new CachedStateMachine(new ProverStateMachine());
+        return new CachedStateMachine(new ProverStateMachine())
 
     def getName():  # String
-        return "SampleSearchLight";
+        return "SampleSearchLight"
 
     def getDetailPanel():  # DetailPanel
-        return new SimpleDetailPanel();
+        return new SimpleDetailPanel()
 
-    def void preview(Game g, int timeout) throws GamePreviewException {
+    def void preview(Game g, int timeout) throws GamePreviewException 
 		// Do nothing.
 
     def stateMachineAbort():  # void
 		// Do nothing.
-}

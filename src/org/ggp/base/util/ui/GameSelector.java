@@ -1,19 +1,19 @@
-package org.ggp.base.util.ui;
+package org.ggp.base.util.ui
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
+import java.util.ArrayList
+import java.util.Collections
+import java.util.HashMap
+import java.util.List
+import java.util.Map
 
-import javax.swing.JComboBox;
+import javax.swing.JComboBox
 
-import org.ggp.base.util.game.CloudGameRepository;
-import org.ggp.base.util.game.Game;
-import org.ggp.base.util.game.GameRepository;
-import org.ggp.base.util.game.LocalGameRepository;
+import org.ggp.base.util.game.CloudGameRepository
+import org.ggp.base.util.game.Game
+import org.ggp.base.util.game.GameRepository
+import org.ggp.base.util.game.LocalGameRepository
 
 
 /**
@@ -26,94 +26,85 @@ import org.ggp.base.util.game.LocalGameRepository;
  * @author Sam Schreiber
  */
 class GameSelector(ActionListener):
-    JComboBox<NamedItem> theGameList;
-    JComboBox<String> theRepositoryList;
+    JComboBox<NamedItem> theGameList
+    JComboBox<String> theRepositoryList
 
-    GameRepository theSelectedRepository;
-    Map<String, GameRepository> theCachedRepositories;
+    GameRepository theSelectedRepository
+    Map<String, GameRepository> theCachedRepositories
 
-    class NamedItem {
-        def final String theKey;
-        def final String theName;
+    class NamedItem 
+        def final String theKey
+        def final String theName
 
         def NamedItem(String theKey, String theName):
-            this.theKey = theKey;
-            this.theName = theName;
-        }
+            self.theKey = theKey
+            self.theName = theName
 
     	    def toString():  # String
-            return theName;
-        }
-    }
+            return theName
+
 
     def GameSelector():
-        theGameList = new JComboBox<NamedItem>();
-        theGameList.addActionListener(this);
+        theGameList = new JComboBox<NamedItem>()
+        theGameList.addActionListener(this)
 
-        theRepositoryList = new JComboBox<String>();
-        theRepositoryList.addActionListener(this);
+        theRepositoryList = new JComboBox<String>()
+        theRepositoryList.addActionListener(this)
 
-        theCachedRepositories = new HashMap<String, GameRepository>();
-        theRepositoryList.addItem("games.ggp.org/base");
-        theRepositoryList.addItem("games.ggp.org/dresden");
-        theRepositoryList.addItem("games.ggp.org/stanford");
-        theRepositoryList.addItem("Local Game Repository");
-    }
+        theCachedRepositories = new HashMap<String, GameRepository>()
+        theRepositoryList.addItem("games.ggp.org/base")
+        theRepositoryList.addItem("games.ggp.org/dresden")
+        theRepositoryList.addItem("games.ggp.org/stanford")
+        theRepositoryList.addItem("Local Game Repository")
 
     def void actionPerformed(ActionEvent e):
         if (e.getSource() == theRepositoryList):
-            String theRepositoryName = theRepositoryList.getSelectedItem().toString();
+            String theRepositoryName = theRepositoryList.getSelectedItem().toString()
             if (theCachedRepositories.containsKey(theRepositoryName)):
-                theSelectedRepository = theCachedRepositories.get(theRepositoryName);
-            } else {
+                theSelectedRepository = theCachedRepositories.get(theRepositoryName)
+            else:
                 if (theRepositoryName.equals("Local Game Repository")):
-                    theSelectedRepository = new LocalGameRepository();
-                } else {
-                    theSelectedRepository = new CloudGameRepository(theRepositoryName);
-                }
-                theCachedRepositories.put(theRepositoryName, theSelectedRepository);
-            }
-            repopulateGameList();
-        }
-    }
+                    theSelectedRepository = new LocalGameRepository()
+                else:
+                    theSelectedRepository = new CloudGameRepository(theRepositoryName)
+
+                theCachedRepositories.put(theRepositoryName, theSelectedRepository)
+
+            repopulateGameList()
+
 
     def GameRepository getSelectedGameRepository():
-        return theSelectedRepository;
-    }
+        return theSelectedRepository
 
     def void repopulateGameList():
-        GameRepository theRepository = getSelectedGameRepository();
-        List<String> theKeyList = new ArrayList<String>(theRepository.getGameKeys());
-        Collections.sort(theKeyList);
-        theGameList.removeAllItems();
+        GameRepository theRepository = getSelectedGameRepository()
+        List<String> theKeyList = new ArrayList<String>(theRepository.getGameKeys())
+        Collections.sort(theKeyList)
+        theGameList.removeAllItems()
         for (String theKey : theKeyList):
-            Game theGame = theRepository.getGame(theKey);
+            Game theGame = theRepository.getGame(theKey)
             if (theGame == null):
-                continue;
-            }
-            String theName = theGame.getName();
+                continue
+
+            String theName = theGame.getName()
             if (theName == null):
-                theName = theKey;
-            }
+                theName = theKey
+
             if (theName.length() > 24)
-                theName = theName.substring(0, 24) + "...";
-            theGameList.addItem(new NamedItem(theKey, theName));
-        }
-    }
+                theName = theName.substring(0, 24) + "..."
+            theGameList.addItem(new NamedItem(theKey, theName))
+
 
     def JComboBox<String> getRepositoryList():
-        return theRepositoryList;
-    }
+        return theRepositoryList
 
     def JComboBox<NamedItem> getGameList():
-        return theGameList;
-    }
+        return theGameList
 
     def Game getSelectedGame():
-        try {
-            return getSelectedGameRepository().getGame(((NamedItem)theGameList.getSelectedItem()).theKey);
+        try 
+            return getSelectedGameRepository().getGame(((NamedItem)theGameList.getSelectedItem()).theKey)
         } catch(Exception e):
-            return null;
-        }
-    }
-}
+            return null
+
+

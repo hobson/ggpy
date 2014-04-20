@@ -1,35 +1,35 @@
-package org.ggp.base.player.proxy;
+package org.ggp.base.player.proxy
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.PrintStream
+import java.net.Socket
+import java.util.ArrayList
+import java.util.List
 
-import org.ggp.base.player.event.PlayerDroppedPacketEvent;
-import org.ggp.base.player.event.PlayerReceivedMessageEvent;
-import org.ggp.base.player.event.PlayerSentMessageEvent;
-import org.ggp.base.player.gamer.Gamer;
-import org.ggp.base.player.gamer.statemachine.random.RandomGamer;
-import org.ggp.base.player.request.factory.RequestFactory;
-import org.ggp.base.player.request.grammar.AbortRequest;
-import org.ggp.base.player.request.grammar.Request;
-import org.ggp.base.player.request.grammar.StartRequest;
-import org.ggp.base.player.request.grammar.StopRequest;
-import org.ggp.base.util.logging.GamerLogger;
-import org.ggp.base.util.observer.Event;
-import org.ggp.base.util.observer.Observer;
-import org.ggp.base.util.observer.Subject;
-import org.ggp.base.util.reflection.ProjectSearcher;
+import org.ggp.base.player.event.PlayerDroppedPacketEvent
+import org.ggp.base.player.event.PlayerReceivedMessageEvent
+import org.ggp.base.player.event.PlayerSentMessageEvent
+import org.ggp.base.player.gamer.Gamer
+import org.ggp.base.player.gamer.statemachine.random.RandomGamer
+import org.ggp.base.player.request.factory.RequestFactory
+import org.ggp.base.player.request.grammar.AbortRequest
+import org.ggp.base.player.request.grammar.Request
+import org.ggp.base.player.request.grammar.StartRequest
+import org.ggp.base.player.request.grammar.StopRequest
+import org.ggp.base.util.logging.GamerLogger
+import org.ggp.base.util.observer.Event
+import org.ggp.base.util.observer.Observer
+import org.ggp.base.util.observer.Subject
+import org.ggp.base.util.reflection.ProjectSearcher
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Lists
 
 class ProxyGamePlayerClient(Thread implements Subject, Observer):
-{
+
     gamer = Gamer()
-    private final List<Observer> observers;
+    private final List<Observer> observers
 
     theConnection = Socket()
     theInput = BufferedReader()
@@ -41,122 +41,115 @@ class ProxyGamePlayerClient(Thread implements Subject, Observer):
      *  ProxyGamePlayerClient gamer port
      */
     def void main(String[] args):
-        GamerLogger.setSpilloverLogfile("spilloverLog");
-        GamerLogger.log("Proxy", "Starting the ProxyGamePlayerClient program.");
+        GamerLogger.setSpilloverLogfile("spilloverLog")
+        GamerLogger.log("Proxy", "Starting the ProxyGamePlayerClient program.")
 
         if (!(args.length == 2)):
-            GamerLogger.logError("Proxy", "Usage is: \n\tProxyGamePlayerClient gamer port");
-            return;
-        }
+            GamerLogger.logError("Proxy", "Usage is: \n\tProxyGamePlayerClient gamer port")
+            return
 
-        int port = 9147;
-        Gamer gamer = null;
-        try {
-            port = Integer.valueOf(args[1]);
+        int port = 9147
+        Gamer gamer = null
+        try 
+            port = Integer.valueOf(args[1])
         } catch(Exception e):
-            GamerLogger.logError("Proxy", args[1]+" is not a valid port.");
-            return;
-        }
+            GamerLogger.logError("Proxy", args[1]+" is not a valid port.")
+            return
 
         List<Class<?(Gamer>> gamers = Lists.newArrayList(ProjectSearcher.GAMERS.getConcreteClasses());):
-        List<String> gamerNames = new ArrayList<String>();
+        List<String> gamerNames = new ArrayList<String>()
         if(gamerNames.size()!=gamers.size())
-        {
+        
             for(Class<?> c : gamers)
-                gamerNames.add(c.getName().replaceAll("^.*\\.",""));
-        }
+                gamerNames.add(c.getName().replaceAll("^.*\\.",""))
 
-        int idx = gamerNames.indexOf(args[0]);
+        int idx = gamerNames.indexOf(args[0])
         if (idx == -1):
-            GamerLogger.logError("Proxy", args[0] + " is not a subclass of gamer.  Valid options are:");
+            GamerLogger.logError("Proxy", args[0] + " is not a subclass of gamer.  Valid options are:")
             for(String s : gamerNames)
-                GamerLogger.logError("Proxy", "\t"+s);
-            return;
-        }
+                GamerLogger.logError("Proxy", "\t"+s)
+            return
 
-        try {
-            gamer = (Gamer)(gamers.get(idx).newInstance());
+        try 
+            gamer = (Gamer)(gamers.get(idx).newInstance())
         } catch(Exception ex):
-            GamerLogger.logError("Proxy", "Cannot create instance of " + args[0]);
-            return;
-        }
+            GamerLogger.logError("Proxy", "Cannot create instance of " + args[0])
+            return
 
-        try {
-            ProxyGamePlayerClient theClient = new ProxyGamePlayerClient(port, gamer);
-            theClient.start();
-        } catch (IOException e):
-            GamerLogger.logStackTrace("Proxy", e);
-        }
-    }
+        try 
+            ProxyGamePlayerClient theClient = new ProxyGamePlayerClient(port, gamer)
+            theClient.start()
+        except IOException e):
+            GamerLogger.logStackTrace("Proxy", e)
+
 
     def ProxyGamePlayerClient(port=int(), Gamer gamer) throws IOException
-	{
-        observers = new ArrayList<Observer>();
+	
+        observers = new ArrayList<Observer>()
 
-        theConnection = new Socket("127.0.0.1", port);
-        theOutput = new PrintStream(theConnection.getOutputStream());
-        theInput = new BufferedReader(new InputStreamReader(theConnection.getInputStream()));
+        theConnection = new Socket("127.0.0.1", port)
+        theOutput = new PrintStream(theConnection.getOutputStream())
+        theInput = new BufferedReader(new InputStreamReader(theConnection.getInputStream()))
 
-        this.gamer = gamer;
-        gamer.addObserver(this);
+        self.gamer = gamer
+        gamer.addObserver(this)
 
     def void addObserver(Observer observer)
-	{
-        observers.add(observer);
+	
+        observers.add(observer)
 
     def void notifyObservers(Event event)
-	{
+	
         for (Observer observer : observers)
-		{
-            observer.observe(event);
+		
+            observer.observe(event)
 
     theCode = int()
 
     def void run()
-	{
+	
         while (!isInterrupted())
-		{
+		
             try
-			{
-			    ProxyMessage theMessage = ProxyMessage.readFrom(theInput);
-			    GamerLogger.log("Proxy", "[ProxyClient] Got message: " + theMessage);
-			    String in = theMessage.theMessage;
-			    theCode = theMessage.messageCode;
-			    int receptionTime = theMessage.receptionTime;
-                notifyObservers(new PlayerReceivedMessageEvent(in));
+			
+			    ProxyMessage theMessage = ProxyMessage.readFrom(theInput)
+			    GamerLogger.log("Proxy", "[ProxyClient] Got message: " + theMessage)
+			    String in = theMessage.theMessage
+			    theCode = theMessage.messageCode
+			    int receptionTime = theMessage.receptionTime
+                notifyObservers(new PlayerReceivedMessageEvent(in))
 
-                Request request = new RequestFactory().create(gamer, in);
+                Request request = new RequestFactory().create(gamer, in)
                 if(request instanceof StartRequest):
-				    RandomGamer theDefaultGamer = new RandomGamer();
-				    new RequestFactory().create(theDefaultGamer, in).process(1);
-				    GamerLogger.startFileLogging(theDefaultGamer.getMatch(), theDefaultGamer.getRoleName().toString());
-				    GamerLogger.log("Proxy", "[ProxyClient] Got message: " + theMessage);
-                String out = request.process(receptionTime);
+				    RandomGamer theDefaultGamer = new RandomGamer()
+				    new RequestFactory().create(theDefaultGamer, in).process(1)
+				    GamerLogger.startFileLogging(theDefaultGamer.getMatch(), theDefaultGamer.getRoleName().toString())
+				    GamerLogger.log("Proxy", "[ProxyClient] Got message: " + theMessage)
+                String out = request.process(receptionTime)
 
-                ProxyMessage outMessage = new ProxyMessage("DONE:" + out, theCode, 0L);
-                outMessage.writeTo(theOutput);
-                GamerLogger.log("Proxy", "[ProxyClient] Sent message: " + outMessage);
-                notifyObservers(new PlayerSentMessageEvent(out));
+                ProxyMessage outMessage = new ProxyMessage("DONE:" + out, theCode, 0L)
+                outMessage.writeTo(theOutput)
+                GamerLogger.log("Proxy", "[ProxyClient] Sent message: " + outMessage)
+                notifyObservers(new PlayerSentMessageEvent(out))
 
                 if(request instanceof StopRequest):
-				    GamerLogger.log("Proxy", "[ProxyClient] Got stop request, shutting down.");
-				    System.exit(0);
+				    GamerLogger.log("Proxy", "[ProxyClient] Got stop request, shutting down.")
+				    System.exit(0)
                 if(request instanceof AbortRequest):
-                    GamerLogger.log("Proxy", "[ProxyClient] Got abort request, shutting down.");
-                    System.exit(0);
-                }
-            catch (Exception e)
-			{
-			    GamerLogger.logStackTrace("Proxy", e);
-                notifyObservers(new PlayerDroppedPacketEvent());
+                    GamerLogger.log("Proxy", "[ProxyClient] Got abort request, shutting down.")
+                    System.exit(0)
 
-        GamerLogger.log("Proxy", "[ProxyClient] Got interrupted, shutting down.");
+            catch (Exception e)
+			
+			    GamerLogger.logStackTrace("Proxy", e)
+                notifyObservers(new PlayerDroppedPacketEvent())
+
+        GamerLogger.log("Proxy", "[ProxyClient] Got interrupted, shutting down.")
 
     def void observe(Event event):
         if(event instanceof WorkingResponseSelectedEvent):
-            WorkingResponseSelectedEvent theWorking = (WorkingResponseSelectedEvent)event;
-            ProxyMessage theMessage = new ProxyMessage("WORK:" + theWorking.getWorkingResponse(), theCode, 0L);
-            theMessage.writeTo(theOutput);
-            GamerLogger.log("Proxy", "[ProxyClient] Sent message: " + theMessage);
-        }
-    }
+            WorkingResponseSelectedEvent theWorking = (WorkingResponseSelectedEvent)event
+            ProxyMessage theMessage = new ProxyMessage("WORK:" + theWorking.getWorkingResponse(), theCode, 0L)
+            theMessage.writeTo(theOutput)
+            GamerLogger.log("Proxy", "[ProxyClient] Sent message: " + theMessage)
+

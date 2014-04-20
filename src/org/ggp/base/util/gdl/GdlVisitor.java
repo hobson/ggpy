@@ -1,18 +1,18 @@
-package org.ggp.base.util.gdl;
+package org.ggp.base.util.gdl
 
-import org.ggp.base.util.gdl.grammar.Gdl;
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlDistinct;
-import org.ggp.base.util.gdl.grammar.GdlFunction;
-import org.ggp.base.util.gdl.grammar.GdlLiteral;
-import org.ggp.base.util.gdl.grammar.GdlNot;
-import org.ggp.base.util.gdl.grammar.GdlOr;
-import org.ggp.base.util.gdl.grammar.GdlProposition;
-import org.ggp.base.util.gdl.grammar.GdlRelation;
-import org.ggp.base.util.gdl.grammar.GdlRule;
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.gdl.grammar.GdlTerm;
-import org.ggp.base.util.gdl.grammar.GdlVariable;
+import org.ggp.base.util.gdl.grammar.Gdl
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlDistinct
+import org.ggp.base.util.gdl.grammar.GdlFunction
+import org.ggp.base.util.gdl.grammar.GdlLiteral
+import org.ggp.base.util.gdl.grammar.GdlNot
+import org.ggp.base.util.gdl.grammar.GdlOr
+import org.ggp.base.util.gdl.grammar.GdlProposition
+import org.ggp.base.util.gdl.grammar.GdlRelation
+import org.ggp.base.util.gdl.grammar.GdlRule
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.gdl.grammar.GdlTerm
+import org.ggp.base.util.gdl.grammar.GdlVariable
 
 /**
  * A visitor for Gdl objects. The GdlVisitors class has methods for going
@@ -24,7 +24,7 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
  *
  * @author Alex Landau
  */
-def abstract class GdlVisitor {
+def abstract class GdlVisitor 
     def void visitGdl(Gdl gdl):
 		// Do nothing; override in a subclass to do something.
     def void visitTerm(GdlTerm term):

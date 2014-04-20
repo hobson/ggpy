@@ -1,75 +1,73 @@
-package org.ggp.base.util.symbol.factory;
+package org.ggp.base.util.symbol.factory
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList
+import java.util.LinkedList
+import java.util.List
 
-import org.ggp.base.util.symbol.factory.exceptions.SymbolFormatException;
-import org.ggp.base.util.symbol.grammar.Symbol;
-import org.ggp.base.util.symbol.grammar.SymbolAtom;
-import org.ggp.base.util.symbol.grammar.SymbolList;
-import org.ggp.base.util.symbol.grammar.SymbolPool;
+import org.ggp.base.util.symbol.factory.exceptions.SymbolFormatException
+import org.ggp.base.util.symbol.grammar.Symbol
+import org.ggp.base.util.symbol.grammar.SymbolAtom
+import org.ggp.base.util.symbol.grammar.SymbolList
+import org.ggp.base.util.symbol.grammar.SymbolPool
 
 
 class SymbolFactory
-{
+
     def Symbol create(String string) throws SymbolFormatException
-    {
+    
         try
-        {
-            String preprocessed = preprocess(string);
-            List<String> tokens = lex(preprocessed);
-            return convert(new LinkedList<String>(tokens));
-        }
+        
+            String preprocessed = preprocess(string)
+            List<String> tokens = lex(preprocessed)
+            return convert(new LinkedList<String>(tokens))
+
         catch (Exception e)
-        {
-            throw new SymbolFormatException(string);
-        }
-    }
+        
+            throw new SymbolFormatException(string)
+
 
     /* Private, implementation-specific methods below here */
 
     def Symbol convert(LinkedList<String> tokens)
-	{
+	
         if (tokens.getFirst().equals("("))
-		{
-            return convertList(tokens);
+		
+            return convertList(tokens)
         else
-		{
-            return convertAtom(tokens);
+		
+            return convertAtom(tokens)
 
     def SymbolAtom convertAtom(LinkedList<String> tokens)
-	{
-        return SymbolPool.getAtom(tokens.removeFirst());
+	
+        return SymbolPool.getAtom(tokens.removeFirst())
 
     def SymbolList convertList(LinkedList<String> tokens)
-	{
-        List<Symbol> contents = new ArrayList<Symbol>();
+	
+        List<Symbol> contents = new ArrayList<Symbol>()
 
-        tokens.removeFirst();
+        tokens.removeFirst()
         while (!tokens.getFirst().equals(")"))
-		{
-            contents.add(convert(tokens));
-        tokens.removeFirst();
+		
+            contents.add(convert(tokens))
+        tokens.removeFirst()
 
-        return SymbolPool.getList(contents);
+        return SymbolPool.getList(contents)
 
     def List<String> lex(String string)
-	{
-        List<String> tokens = new ArrayList<String>();
+	
+        List<String> tokens = new ArrayList<String>()
         for (String token : string.split(" "))
-		{
-            tokens.add(token);
+		
+            tokens.add(token)
 
-        return tokens;
+        return tokens
 
     def String preprocess(String string)
-	{
-        string = string.replaceAll("\\(", " ( ");
-        string = string.replaceAll("\\)", " ) ");
+	
+        string = string.replaceAll("\\(", " ( ")
+        string = string.replaceAll("\\)", " ) ")
 
-        string = string.replaceAll("\\s+", " ");
-        string = string.trim();
+        string = string.replaceAll("\\s+", " ")
+        string = string.trim()
 
-        return string;
-}
+        return string

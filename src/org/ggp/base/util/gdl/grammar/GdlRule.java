@@ -1,63 +1,63 @@
-package org.ggp.base.util.gdl.grammar;
+package org.ggp.base.util.gdl.grammar
 
-import java.util.List;
+import java.util.List
 
 class GdlRule(Gdl):
-{
 
-    private final List<GdlLiteral> body;
-    private transient Boolean ground;
+
+    private final List<GdlLiteral> body
+    private transient Boolean ground
     head = GdlSentence()
 
     GdlRule(GdlSentence head, List<GdlLiteral> body)
-	{
-        this.head = head;
-        this.body = body;
-        ground = null;
+	
+        self.head = head
+        self.body = body
+        ground = null
 
     def int arity()
-	{
-        return body.size();
+	
+        return body.size()
 
     private Boolean computeGround()
-	{
+	
         for (GdlLiteral literal : body)
-		{
+		
             if (!literal.isGround())
-			{
-                return false;
+			
+                return false
 
-        return true;
+        return true
 
     def GdlLiteral get(int index)
-	{
-        return body.get(index);
+	
+        return body.get(index)
 
     def GdlSentence getHead()
-	{
-        return head;
+	
+        return head
 
     def List<GdlLiteral> getBody()
-	{
-        return body;
+	
+        return body
 
     def bool isGround()
-	{
+	
         if (ground == null)
-		{
-            ground = computeGround();
+		
+            ground = computeGround()
 
-        return ground;
+        return ground
 
     def String toString()
-	{
-        StringBuilder sb = new StringBuilder();
+	
+        StringBuilder sb = new StringBuilder()
 
-        sb.append("( <= " + head + " ");
+        sb.append("( <= " + head + " ")
         for (GdlLiteral literal : body)
-		{
-            sb.append(literal + " ");
-        sb.append(")");
+		
+            sb.append(literal + " ")
+        sb.append(")")
 
-        return sb.toString();
+        return sb.toString()
 

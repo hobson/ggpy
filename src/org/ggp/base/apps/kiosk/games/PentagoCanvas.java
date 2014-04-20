@@ -1,75 +1,70 @@
-package org.ggp.base.apps.kiosk.games;
+package org.ggp.base.apps.kiosk.games
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.util.Set;
+import java.awt.Graphics
+import java.awt.Image
+import java.util.Set
 
-import org.ggp.base.apps.kiosk.templates.CommonGraphics;
-import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
+import org.ggp.base.apps.kiosk.templates.CommonGraphics
+import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid
 
 
 class PentagoCanvas(GameCanvas_FancyGrid):
     serialVersionUID = 1L  # int 
 
-    def String getGameName() { return "Pentago"; }
-    protected String getGameKey() { return "pentago"; }
-    protected int getGridHeight() { return 6; }
-    protected int getGridWidth() { return 6; }
+    def String getGameName()  return "Pentago"
+    protected String getGameKey()  return "pentago"
+    protected int getGridHeight()  return 6
+    protected int getGridWidth()  return 6
 
     protected Set<String> getFactsAboutCell(int xCell, int yCell):
-        int nQuad = getQuadrant(xCell, yCell);
-        xCell = ((xCell > 3) ? (xCell - 3) : xCell);
-        yCell = ((yCell > 3) ? (yCell - 3) : yCell);
-        return gameStateHasFactsMatching("\\( cellHolds " + nQuad + " " + xCell + " " + yCell + " (.*) \\)");
-    }
+        int nQuad = getQuadrant(xCell, yCell)
+        xCell = ((xCell > 3) ? (xCell - 3) : xCell)
+        yCell = ((yCell > 3) ? (yCell - 3) : yCell)
+        return gameStateHasFactsMatching("\\( cellHolds " + nQuad + " " + xCell + " " + yCell + " (.*) \\)")
 
     protected Set<String> getLegalMovesForCell(int xCell, int yCell):
-        int nQuad = getQuadrant(xCell, yCell);
-        xCell = ((xCell > 3) ? (xCell - 3) : xCell);
-        yCell = ((yCell > 3) ? (yCell - 3) : yCell);
-        Set<String> theMoves = gameStateHasLegalMovesMatching("\\( place " + nQuad + " " + xCell + " " + yCell + " \\)");
-        theMoves.addAll(gameStateHasLegalMovesMatching("\\( rotate " + nQuad + " (.*) \\)"));
-        return theMoves;
-    }
+        int nQuad = getQuadrant(xCell, yCell)
+        xCell = ((xCell > 3) ? (xCell - 3) : xCell)
+        yCell = ((yCell > 3) ? (yCell - 3) : yCell)
+        Set<String> theMoves = gameStateHasLegalMovesMatching("\\( place " + nQuad + " " + xCell + " " + yCell + " \\)")
+        theMoves.addAll(gameStateHasLegalMovesMatching("\\( rotate " + nQuad + " (.*) \\)"))
+        return theMoves
 
     protected void renderCellContent(Graphics g, String theFact):
-        String[] cellFacts = theFact.split(" ");
+        String[] cellFacts = theFact.split(" ")
 
-        String cellPlayer = cellFacts[5];
-        CommonGraphics.drawCheckersPiece(g, cellPlayer.equals("red") ? "wp" : "bp");
-    }
+        String cellPlayer = cellFacts[5]
+        CommonGraphics.drawCheckersPiece(g, cellPlayer.equals("red") ? "wp" : "bp")
 
-    private Image left_arrow = CommonGraphics.getImage("pentago", "BlueCircleArrowCCW.png");
-    private Image right_arrow = CommonGraphics.getImage("pentago", "BlueCircleArrowCW.png");
+    private Image left_arrow = CommonGraphics.getImage("pentago", "BlueCircleArrowCCW.png")
+    private Image right_arrow = CommonGraphics.getImage("pentago", "BlueCircleArrowCW.png")
 
     protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove):
-        String[] moveParts = theMove.split(" ");
+        String[] moveParts = theMove.split(" ")
         if(moveParts[1].equals("rotate")):
-            int nQuad = Integer.parseInt(moveParts[2]);
+            int nQuad = Integer.parseInt(moveParts[2])
             if(getQuadrant(xCell, yCell) == nQuad):
-                CommonGraphics.drawSelectionBox(g);
+                CommonGraphics.drawSelectionBox(g)
 
-                if(!(xCell == 2 || xCell == 5)) return;
-                if(!(yCell == 2 || yCell == 5)) return;
+                if(!(xCell == 2 || xCell == 5)) return
+                if(!(yCell == 2 || yCell == 5)) return
 
-                int width = g.getClipBounds().width;
-                int height = g.getClipBounds().height;
+                int width = g.getClipBounds().width
+                int height = g.getClipBounds().height
                 if(moveParts[3].equals("clockwise")):
-                    g.drawImage(left_arrow, 15, 15, width-30, height-30, null);
-                } else {
-                    g.drawImage(right_arrow, 15, 15, width-30, height-30, null);
-                }
-            }
-        }
-    }
+                    g.drawImage(left_arrow, 15, 15, width-30, height-30, null)
+                else:
+                    g.drawImage(right_arrow, 15, 15, width-30, height-30, null)
+
+
+
 
     private int getQuadrant(int xCell, int yCell):
         if(xCell > 3):
-            if(yCell > 3) return 1;
-            else return 4;
-        } else {
-            if (yCell > 3) return 2;
-            else return 3;
-        }
-    }
-}
+            if(yCell > 3) return 1
+            else return 4
+        else:
+            if (yCell > 3) return 2
+            else return 3
+
+

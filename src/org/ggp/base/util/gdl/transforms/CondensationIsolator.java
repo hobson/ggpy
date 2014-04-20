@@ -1,49 +1,49 @@
-package org.ggp.base.util.gdl.transforms;
+package org.ggp.base.util.gdl.transforms
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
+import java.io.IOException
+import java.util.ArrayList
+import java.util.Collection
+import java.util.Collections
+import java.util.HashSet
+import java.util.LinkedList
+import java.util.List
+import java.util.Map
+import java.util.Queue
+import java.util.Set
 
-import org.ggp.base.util.concurrency.ConcurrencyUtils;
-import org.ggp.base.util.gdl.GdlUtils;
-import org.ggp.base.util.gdl.grammar.Gdl;
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlDistinct;
-import org.ggp.base.util.gdl.grammar.GdlLiteral;
-import org.ggp.base.util.gdl.grammar.GdlNot;
-import org.ggp.base.util.gdl.grammar.GdlPool;
-import org.ggp.base.util.gdl.grammar.GdlRelation;
-import org.ggp.base.util.gdl.grammar.GdlRule;
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.gdl.grammar.GdlTerm;
-import org.ggp.base.util.gdl.grammar.GdlVariable;
-import org.ggp.base.util.gdl.model.CartesianSentenceFormDomain;
-import org.ggp.base.util.gdl.model.SentenceDomainModel;
-import org.ggp.base.util.gdl.model.SentenceDomainModelFactory;
-import org.ggp.base.util.gdl.model.SentenceDomainModelOptimizer;
-import org.ggp.base.util.gdl.model.SentenceDomainModels;
-import org.ggp.base.util.gdl.model.SentenceDomainModels.VarDomainOpts;
-import org.ggp.base.util.gdl.model.SentenceForm;
-import org.ggp.base.util.gdl.model.SentenceFormDomain;
-import org.ggp.base.util.gdl.model.SentenceFormModel;
-import org.ggp.base.util.gdl.model.SentenceForms;
-import org.ggp.base.util.gdl.model.SentenceModelUtils;
-import org.ggp.base.util.gdl.model.SimpleSentenceForm;
-import org.ggp.base.util.gdl.model.assignments.AssignmentsImpl;
+import org.ggp.base.util.concurrency.ConcurrencyUtils
+import org.ggp.base.util.gdl.GdlUtils
+import org.ggp.base.util.gdl.grammar.Gdl
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlDistinct
+import org.ggp.base.util.gdl.grammar.GdlLiteral
+import org.ggp.base.util.gdl.grammar.GdlNot
+import org.ggp.base.util.gdl.grammar.GdlPool
+import org.ggp.base.util.gdl.grammar.GdlRelation
+import org.ggp.base.util.gdl.grammar.GdlRule
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.gdl.grammar.GdlTerm
+import org.ggp.base.util.gdl.grammar.GdlVariable
+import org.ggp.base.util.gdl.model.CartesianSentenceFormDomain
+import org.ggp.base.util.gdl.model.SentenceDomainModel
+import org.ggp.base.util.gdl.model.SentenceDomainModelFactory
+import org.ggp.base.util.gdl.model.SentenceDomainModelOptimizer
+import org.ggp.base.util.gdl.model.SentenceDomainModels
+import org.ggp.base.util.gdl.model.SentenceDomainModels.VarDomainOpts
+import org.ggp.base.util.gdl.model.SentenceForm
+import org.ggp.base.util.gdl.model.SentenceFormDomain
+import org.ggp.base.util.gdl.model.SentenceFormModel
+import org.ggp.base.util.gdl.model.SentenceForms
+import org.ggp.base.util.gdl.model.SentenceModelUtils
+import org.ggp.base.util.gdl.model.SimpleSentenceForm
+import org.ggp.base.util.gdl.model.assignments.AssignmentsImpl
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists
+import com.google.common.collect.Multimap
+import com.google.common.collect.Sets
 
 
 /**
@@ -75,7 +75,7 @@ import com.google.common.collect.Sets;
  *
  */
 class CondensationIsolator(object):
-    def static List<Gdl> run(List<Gdl> description) throws InterruptedException {
+    def static List<Gdl> run(List<Gdl> description) throws InterruptedException 
 		//This class is not put together in any "optimal" way, so it's left in
 		//an unpolished state for now. A better version would use estimates of
 		//the impact of breaking apart rules. (It also needs to stop itself from
@@ -83,7 +83,7 @@ class CondensationIsolator(object):
 
 		//This version will be rather advanced.
 		//In particular, it will try to incorporate
-		//1) More thorough scanning for condensations;
+		//1) More thorough scanning for condensations
 		//2) Condensations that are only safe to perform because of mutexes.
 
 		//TODO: Don't perform condensations on stuff like (add _ _ _)...
@@ -92,9 +92,9 @@ class CondensationIsolator(object):
 		//As for headroom... maybe make sure that # of vars eliminated > # "kept"
 		//Or make sure none are kept? Use directional connected components?
 
-        description = GdlCleaner.run(description);
-        description = DeORer.run(description);
-        description = VariableConstrainer.replaceFunctionValuedVariables(description);
+        description = GdlCleaner.run(description)
+        description = DeORer.run(description)
+        description = VariableConstrainer.replaceFunctionValuedVariables(description)
 
 		//How do we define a condensation, and what needs to be true in it?
 		//Definition: A condensation set is a set of conjuncts of a
@@ -154,212 +154,212 @@ class CondensationIsolator(object):
 		 *
 		 * So, what kind of algorithm can we find to solve this task?
 		 */
-        List<Gdl> newDescription = new ArrayList<Gdl>();
-        Queue<GdlRule> rulesToAdd = new LinkedList<GdlRule>();
+        List<Gdl> newDescription = new ArrayList<Gdl>()
+        Queue<GdlRule> rulesToAdd = new LinkedList<GdlRule>()
 
         for(Gdl gdl : description):
             if(gdl instanceof GdlRule)
-                rulesToAdd.add((GdlRule) gdl);
+                rulesToAdd.add((GdlRule) gdl)
             else
-                newDescription.add(gdl);
+                newDescription.add(gdl)
 
 		//Don't use the model indiscriminately; it reflects the old description,
 		//not necessarily the new one
-        SentenceDomainModel model = SentenceDomainModelFactory.createWithCartesianDomains(description);
-        model = SentenceDomainModelOptimizer.restrictDomainsToUsefulValues(model);
-        UnusedSentenceNameSource sentenceNameSource = UnusedSentenceNameSource.create(model);
-        ConstantChecker constantChecker = ConstantCheckerFactory.createWithForwardChaining(model);
+        SentenceDomainModel model = SentenceDomainModelFactory.createWithCartesianDomains(description)
+        model = SentenceDomainModelOptimizer.restrictDomainsToUsefulValues(model)
+        UnusedSentenceNameSource sentenceNameSource = UnusedSentenceNameSource.create(model)
+        ConstantChecker constantChecker = ConstantCheckerFactory.createWithForwardChaining(model)
 
-        Set<SentenceForm> constantForms = model.getConstantSentenceForms();
+        Set<SentenceForm> constantForms = model.getConstantSentenceForms()
 
-        ConcurrencyUtils.checkForInterruption();
+        ConcurrencyUtils.checkForInterruption()
 
-        List<Gdl> curDescription = Lists.newArrayList(description);
+        List<Gdl> curDescription = Lists.newArrayList(description)
         while(!rulesToAdd.isEmpty()):
-            GdlRule curRule = rulesToAdd.remove();
+            GdlRule curRule = rulesToAdd.remove()
             if(isRecursive(curRule)):
 				//Don't mess with it!
-                newDescription.add(curRule);
-                continue;
-            GdlSentence curRuleHead = curRule.getHead();
+                newDescription.add(curRule)
+                continue
+            GdlSentence curRuleHead = curRule.getHead()
             if(SentenceModelUtils.inSentenceFormGroup(curRuleHead, constantForms)):
-                newDescription.add(curRule);
-                continue;
-            Set<GdlLiteral> condensationSet = getCondensationSet(curRule, model, constantChecker, sentenceNameSource);
-            ConcurrencyUtils.checkForInterruption();
+                newDescription.add(curRule)
+                continue
+            Set<GdlLiteral> condensationSet = getCondensationSet(curRule, model, constantChecker, sentenceNameSource)
+            ConcurrencyUtils.checkForInterruption()
             if(condensationSet != null):
-                List<GdlRule> newRules = applyCondensation(condensationSet, curRule, sentenceNameSource);
-                rulesToAdd.addAll(newRules);
+                List<GdlRule> newRules = applyCondensation(condensationSet, curRule, sentenceNameSource)
+                rulesToAdd.addAll(newRules)
 				//Since we're making only small changes, we can readjust
 				//the model as we go, instead of recomputing it
-                List<GdlRule> oldRules = Collections.singletonList(curRule);
-                List<Gdl> replacementDescription = Lists.newArrayList(curDescription);
-                replacementDescription.removeAll(oldRules);
-                replacementDescription.addAll(newRules);
-                curDescription = replacementDescription;
-                model = augmentModelWithNewForm(model, newRules);
-			} else {
-                newDescription.add(curRule);
-        return newDescription;
+                List<GdlRule> oldRules = Collections.singletonList(curRule)
+                List<Gdl> replacementDescription = Lists.newArrayList(curDescription)
+                replacementDescription.removeAll(oldRules)
+                replacementDescription.addAll(newRules)
+                curDescription = replacementDescription
+                model = augmentModelWithNewForm(model, newRules)
+			else:
+                newDescription.add(curRule)
+        return newDescription
 
         def void saveKif(List<Gdl> description):
 		//Save the description in a new file
 		//Useful for debugging chains of condensations to see
 		//which cause decreased performance
-        String filename = "ci0.kif";
-        int filenum = 0;
-        File file = null;
+        String filename = "ci0.kif"
+        int filenum = 0
+        File file = null
         while(file == null || file.exists()):
-            filenum++;
-            filename = "ci" + filenum + ".kif";
-            file = new File(filename);
-            file = new File("games/rulesheets", filename);
-        BufferedWriter out = null;
-        try {
-            out = new BufferedWriter(new FileWriter(file));
+            filenum++
+            filename = "ci" + filenum + ".kif"
+            file = new File(filename)
+            file = new File("games/rulesheets", filename)
+        BufferedWriter out = null
+        try 
+            out = new BufferedWriter(new FileWriter(file))
             for(Gdl gdl : description):
-                out.append(gdl.toString() + "\n");
+                out.append(gdl.toString() + "\n")
 		} catch(IOException e):
-            e.printStackTrace();
-		} finally {
-            try {
+            e.printStackTrace()
+		} finally 
+            try 
                 if (out != null):
-                    out.close();
-			} catch (IOException e) {}
+                    out.close()
+			except IOException e)
 
     def bool isRecursive(GdlRule rule):
         for(GdlLiteral literal : rule.getBody())
             if(literal instanceof GdlSentence)
                 if(((GdlSentence) literal).getName().equals(rule.getHead().getName()))
 					//A good approximation
-                    return true;
-        return false;
+                    return true
+        return false
 
-    def class UnusedSentenceNameSource {
-        private final Set<String> allNamesSoFar;
+    def class UnusedSentenceNameSource 
+        private final Set<String> allNamesSoFar
 
 	    def UnusedSentenceNameSource(Collection<String> initialNames):
-            allNamesSoFar = Sets.newHashSet(initialNames);
+            allNamesSoFar = Sets.newHashSet(initialNames)
 
 	    def static UnusedSentenceNameSource create(SentenceFormModel model):
-            Set<String> sentenceFormNames = SentenceForms.getNames(model.getSentenceForms());
-            return new UnusedSentenceNameSource(sentenceFormNames);
+            Set<String> sentenceFormNames = SentenceForms.getNames(model.getSentenceForms())
+            return new UnusedSentenceNameSource(sentenceFormNames)
 
 	    def GdlConstant getNameWithPrefix(GdlConstant prefix):
             for(int i = 0; ; i++):
-                String candidateName = prefix + "_tmp" + i;
+                String candidateName = prefix + "_tmp" + i
                 if(!allNamesSoFar.contains(candidateName)):
-                    allNamesSoFar.add(candidateName);
-                    return GdlPool.getConstant(candidateName);
+                    allNamesSoFar.add(candidateName)
+                    return GdlPool.getConstant(candidateName)
 
     def List<GdlRule> applyCondensation(
             Set<GdlLiteral> condensationSet, GdlRule rule,
             UnusedSentenceNameSource sentenceNameSource):
 
-        Set<GdlVariable> varsInCondensationSet = new HashSet<GdlVariable>();
+        Set<GdlVariable> varsInCondensationSet = new HashSet<GdlVariable>()
         for(GdlLiteral literal : condensationSet)
-            varsInCondensationSet.addAll(GdlUtils.getVariables(literal));
-        Set<GdlVariable> varsToKeep = new HashSet<GdlVariable>();
+            varsInCondensationSet.addAll(GdlUtils.getVariables(literal))
+        Set<GdlVariable> varsToKeep = new HashSet<GdlVariable>()
 		//Which vars do we "keep" (put in our new condensed literal)?
 		//Vars that are both:
 		//1) In the condensation set, in a non-mutex literal
 		//2) Either in the head or somewhere else outside the condensation set
         for(GdlLiteral literal : condensationSet)
-            varsToKeep.addAll(GdlUtils.getVariables(literal));
-        Set<GdlVariable> varsToKeep2 = new HashSet<GdlVariable>();
-        varsToKeep2.addAll(GdlUtils.getVariables(rule.getHead()));
+            varsToKeep.addAll(GdlUtils.getVariables(literal))
+        Set<GdlVariable> varsToKeep2 = new HashSet<GdlVariable>()
+        varsToKeep2.addAll(GdlUtils.getVariables(rule.getHead()))
         for(GdlLiteral literal : rule.getBody())
             if(!condensationSet.contains(literal))
-                varsToKeep2.addAll(GdlUtils.getVariables(literal));
-        varsToKeep.retainAll(varsToKeep2);
+                varsToKeep2.addAll(GdlUtils.getVariables(literal))
+        varsToKeep.retainAll(varsToKeep2)
 
 		//Now we're ready to split it apart
 		//Let's make the new rule
-        List<GdlTerm> orderedVars = new ArrayList<GdlTerm>(varsToKeep);
-        GdlConstant condenserName = sentenceNameSource.getNameWithPrefix(rule.getHead().getName());
+        List<GdlTerm> orderedVars = new ArrayList<GdlTerm>(varsToKeep)
+        GdlConstant condenserName = sentenceNameSource.getNameWithPrefix(rule.getHead().getName())
 		//Make the rule head
-        GdlSentence condenserHead;
+        GdlSentence condenserHead
         if(orderedVars.isEmpty()):
-            condenserHead = GdlPool.getProposition(condenserName);
-		} else {
-            condenserHead = GdlPool.getRelation(condenserName, orderedVars);
-        List<GdlLiteral> condenserBody = new ArrayList<GdlLiteral>(condensationSet);
-        GdlRule condenserRule = GdlPool.getRule(condenserHead, condenserBody);
+            condenserHead = GdlPool.getProposition(condenserName)
+		else:
+            condenserHead = GdlPool.getRelation(condenserName, orderedVars)
+        List<GdlLiteral> condenserBody = new ArrayList<GdlLiteral>(condensationSet)
+        GdlRule condenserRule = GdlPool.getRule(condenserHead, condenserBody)
 		//TODO: Look for existing rules matching the new one
 
-        List<GdlLiteral> remainingLiterals = new ArrayList<GdlLiteral>();
+        List<GdlLiteral> remainingLiterals = new ArrayList<GdlLiteral>()
         for(GdlLiteral literal : rule.getBody())
             if(!condensationSet.contains(literal))
-                remainingLiterals.add(literal);
+                remainingLiterals.add(literal)
 
-        remainingLiterals.add(condenserHead);
-        GdlRule modifiedRule = GdlPool.getRule(rule.getHead(), remainingLiterals);
+        remainingLiterals.add(condenserHead)
+        GdlRule modifiedRule = GdlPool.getRule(rule.getHead(), remainingLiterals)
 
-        List<GdlRule> newRules = new ArrayList<GdlRule>(2);
-        newRules.add(condenserRule);
-        newRules.add(modifiedRule);
-        return newRules;
+        List<GdlRule> newRules = new ArrayList<GdlRule>(2)
+        newRules.add(condenserRule)
+        newRules.add(modifiedRule)
+        return newRules
 
     def Set<GdlLiteral> getCondensationSet(GdlRule rule,
             SentenceDomainModel model,
             ConstantChecker checker,
-            UnusedSentenceNameSource sentenceNameSource) throws InterruptedException {
+            UnusedSentenceNameSource sentenceNameSource) throws InterruptedException 
 		//We use each variable as a starting point
-        List<GdlVariable> varsInRule = GdlUtils.getVariables(rule);
-        List<GdlVariable> varsInHead = GdlUtils.getVariables(rule.getHead());
-        List<GdlVariable> varsNotInHead = new ArrayList<GdlVariable>(varsInRule);
-        varsNotInHead.removeAll(varsInHead);
+        List<GdlVariable> varsInRule = GdlUtils.getVariables(rule)
+        List<GdlVariable> varsInHead = GdlUtils.getVariables(rule.getHead())
+        List<GdlVariable> varsNotInHead = new ArrayList<GdlVariable>(varsInRule)
+        varsNotInHead.removeAll(varsInHead)
 
         for(GdlVariable var : varsNotInHead):
-            ConcurrencyUtils.checkForInterruption();
+            ConcurrencyUtils.checkForInterruption()
 
-            Set<GdlLiteral> minSet = new HashSet<GdlLiteral>();
+            Set<GdlLiteral> minSet = new HashSet<GdlLiteral>()
             for(GdlLiteral literal : rule.getBody())
                 if(GdlUtils.getVariables(literal).contains(var))
-                    minSet.add(literal);
+                    minSet.add(literal)
 
 			//#1 is already done
 			//Now we try #2
-            Set<GdlVariable> varsNeeded = new HashSet<GdlVariable>();
-            Set<GdlVariable> varsSupplied = new HashSet<GdlVariable>();
+            Set<GdlVariable> varsNeeded = new HashSet<GdlVariable>()
+            Set<GdlVariable> varsSupplied = new HashSet<GdlVariable>()
             for(GdlLiteral literal : minSet)
                 if(literal instanceof GdlRelation)
-                    varsSupplied.addAll(GdlUtils.getVariables(literal));
+                    varsSupplied.addAll(GdlUtils.getVariables(literal))
                 else if(literal instanceof GdlDistinct || literal instanceof GdlNot)
-                    varsNeeded.addAll(GdlUtils.getVariables(literal));
-            varsNeeded.removeAll(varsSupplied);
+                    varsNeeded.addAll(GdlUtils.getVariables(literal))
+            varsNeeded.removeAll(varsSupplied)
             if(!varsNeeded.isEmpty())
-                continue;
+                continue
 
-            List<Set<GdlLiteral>> candidateSuppliersList = new ArrayList<Set<GdlLiteral>>();
+            List<Set<GdlLiteral>> candidateSuppliersList = new ArrayList<Set<GdlLiteral>>()
             for(GdlVariable varNeeded : varsNeeded):
-                Set<GdlLiteral> suppliers = new HashSet<GdlLiteral>();
+                Set<GdlLiteral> suppliers = new HashSet<GdlLiteral>()
                 for(GdlLiteral literal : rule.getBody())
                     if(literal instanceof GdlRelation)
                         if(GdlUtils.getVariables(literal).contains(varNeeded))
-                            suppliers.add(literal);
-                candidateSuppliersList.add(suppliers);
+                            suppliers.add(literal)
+                candidateSuppliersList.add(suppliers)
 
 			//TODO: Now... I'm not sure if we want to minimize the number of
 			//literals added, or the number of variables added
 			//Right now, I don't have time to worry about optimization
 			//Currently, we pick one at random
 			//TODO: Optimize this
-            Set<GdlLiteral> literalsToAdd = new HashSet<GdlLiteral>();
+            Set<GdlLiteral> literalsToAdd = new HashSet<GdlLiteral>()
             for(Set<GdlLiteral> suppliers : candidateSuppliersList)
                 if(Collections.disjoint(suppliers, literalsToAdd))
-                    literalsToAdd.add(suppliers.iterator().next());
-            minSet.addAll(literalsToAdd);
+                    literalsToAdd.add(suppliers.iterator().next())
+            minSet.addAll(literalsToAdd)
 
             if(goodCondensationSetByHeuristic(minSet, rule, model, checker, sentenceNameSource))
-                return minSet;
+                return minSet
 
-        return null;
+        return null
 
     def bool goodCondensationSetByHeuristic(
             Set<GdlLiteral> minSet, GdlRule rule, SentenceDomainModel model,
             ConstantChecker checker,
-            UnusedSentenceNameSource sentenceNameSource) throws InterruptedException {
+            UnusedSentenceNameSource sentenceNameSource) throws InterruptedException 
 		//We actually want the sentence model here so we can see the domains
 		//also, if it's a constant, ...
 		//Anyway... we want to compare the heuristic for the number of assignments
@@ -381,68 +381,68 @@ class CondensationIsolator(object):
 
         int assignments = AssignmentsImpl.getNumAssignmentsEstimate(rule,
                 SentenceDomainModels.getVarDomains(rule, model, VarDomainOpts.INCLUDE_HEAD),
-                checker);
-        int literals = rule.arity();
+                checker)
+        int literals = rule.arity()
         if(literals > 1)
             literals++; //We have to "and" the literals together
 		//Note that even though constants will be factored out, we're concerned here
 		//with getting through them in a reasonable amount of time, so we do want to
 		//count them. TODO: Not sure if they should be counted in L, though...
-        int curRuleHeuristic = assignments * literals;
+        int curRuleHeuristic = assignments * literals
 		//And if we split them up...
-        List<GdlRule> newRules = applyCondensation(minSet, rule, sentenceNameSource);
-        GdlRule r1 = newRules.get(0), r2 = newRules.get(1);
+        List<GdlRule> newRules = applyCondensation(minSet, rule, sentenceNameSource)
+        GdlRule r1 = newRules.get(0), r2 = newRules.get(1)
 
 		//Augment the model
-        SentenceDomainModel newModel = augmentModelWithNewForm(model, newRules);
+        SentenceDomainModel newModel = augmentModelWithNewForm(model, newRules)
 
         int a1 = AssignmentsImpl.getNumAssignmentsEstimate(r1,
-                SentenceDomainModels.getVarDomains(r1, newModel, VarDomainOpts.INCLUDE_HEAD), checker);
+                SentenceDomainModels.getVarDomains(r1, newModel, VarDomainOpts.INCLUDE_HEAD), checker)
         int a2 = AssignmentsImpl.getNumAssignmentsEstimate(r2,
-                SentenceDomainModels.getVarDomains(r2, newModel, VarDomainOpts.INCLUDE_HEAD), checker);
-        int l1 = r1.arity(); if(l1 > 1) l1++;
-        int l2 = r2.arity(); if(l2 > 1) l2++;
+                SentenceDomainModels.getVarDomains(r2, newModel, VarDomainOpts.INCLUDE_HEAD), checker)
+        int l1 = r1.arity(); if(l1 > 1) l1++
+        int l2 = r2.arity(); if(l2 > 1) l2++
 
 		//Whether we split or not depends on what the two heuristics say
-        int newRulesHeuristic = a1 * l1 + a2 * l2;
-        return newRulesHeuristic < curRuleHeuristic;
+        int newRulesHeuristic = a1 * l1 + a2 * l2
+        return newRulesHeuristic < curRuleHeuristic
 
     def SentenceDomainModel augmentModelWithNewForm(
             final SentenceDomainModel oldModel, List<GdlRule> newRules):
-        final SentenceForm newForm = SimpleSentenceForm.create(newRules.get(0).getHead());
-        final SentenceFormDomain newFormDomain = getNewFormDomain(newRules.get(0), oldModel, newForm);
+        final SentenceForm newForm = SimpleSentenceForm.create(newRules.get(0).getHead())
+        final SentenceFormDomain newFormDomain = getNewFormDomain(newRules.get(0), oldModel, newForm)
         return new SentenceDomainModel():
         		    def SentenceFormDomain getDomain(SentenceForm form):
                 if (form.equals(newForm)):
-                    return newFormDomain;
-                return oldModel.getDomain(form);
+                    return newFormDomain
+                return oldModel.getDomain(form)
 
         		    def Set<SentenceForm> getIndependentSentenceForms():
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException()
         		    def Set<SentenceForm> getConstantSentenceForms():
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException()
         		    def Multimap<SentenceForm, SentenceForm> getDependencyGraph():
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException()
         		    def Set<GdlSentence> getSentencesListedAsTrue(SentenceForm form):
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException()
         		    def Set<GdlRule> getRules(SentenceForm form):
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException()
         		    def Set<SentenceForm> getSentenceForms():
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException()
         		    def List<Gdl> getDescription():
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException()
         		    def SentenceForm getSentenceForm(GdlSentence sentence):
-                throw new UnsupportedOperationException();
-		};
+                throw new UnsupportedOperationException()
+
 
     def SentenceFormDomain getNewFormDomain(GdlRule condensingRule,
             SentenceDomainModel oldModel, SentenceForm newForm):
         Map<GdlVariable, Set<GdlConstant>> varDomains = SentenceDomainModels.getVarDomains(
-                condensingRule, oldModel, VarDomainOpts.BODY_ONLY);
+                condensingRule, oldModel, VarDomainOpts.BODY_ONLY)
 
-        List<Set<GdlConstant>> domainsForSlots = Lists.newArrayList();
+        List<Set<GdlConstant>> domainsForSlots = Lists.newArrayList()
         for (GdlTerm term : GdlUtils.getTupleFromSentence(condensingRule.getHead())):
             if (!(term instanceof GdlVariable)):
-                throw new RuntimeException("Expected all slots in the head of a condensing rule to be variables, but the rule was: " + condensingRule);
-            domainsForSlots.add(varDomains.get(term));
-        return CartesianSentenceFormDomain.create(newForm, domainsForSlots);
+                throw new RuntimeException("Expected all slots in the head of a condensing rule to be variables, but the rule was: " + condensingRule)
+            domainsForSlots.add(varDomains.get(term))
+        return CartesianSentenceFormDomain.create(newForm, domainsForSlots)

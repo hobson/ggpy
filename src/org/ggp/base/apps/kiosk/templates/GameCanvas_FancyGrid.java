@@ -1,14 +1,14 @@
-package org.ggp.base.apps.kiosk.templates;
+package org.ggp.base.apps.kiosk.templates
 
-import java.awt.Graphics;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.awt.Graphics
+import java.util.HashMap
+import java.util.Iterator
+import java.util.Map
+import java.util.Set
+import java.util.SortedSet
+import java.util.TreeSet
 
-import org.ggp.base.util.statemachine.MachineState;
+import org.ggp.base.util.statemachine.MachineState
 
 
 /**
@@ -80,90 +80,81 @@ import org.ggp.base.util.statemachine.MachineState;
 def abstract class GameCanvas_FancyGrid(GameCanvas_SimpleGrid):
     serialVersionUID = 1L  # int 
 
-    protected abstract Set<String> getFactsAboutCell(int xCell, int yCell);
-    protected abstract Set<String> getLegalMovesForCell(int xCell, int yCell);
+    protected abstract Set<String> getFactsAboutCell(int xCell, int yCell)
+    protected abstract Set<String> getLegalMovesForCell(int xCell, int yCell)
 
-    protected void renderCellBackground(Graphics g, int xCell, int yCell) {};
-    protected void renderCellForeground(Graphics g, int xCell, int yCell) {};
-    protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove) {};
+    protected void renderCellBackground(Graphics g, int xCell, int yCell)
+    protected void renderCellForeground(Graphics g, int xCell, int yCell)
+    protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove)
 
-    protected void renderCellContent(Graphics g, String theFact) {};
-    protected void renderCellContent(Graphics g, Set<String> theFacts){
+    protected void renderCellContent(Graphics g, String theFact)
+    protected void renderCellContent(Graphics g, Set<String> theFacts)
         if(theFacts.size() > 0):
             if(theFacts.size() > 1):
-                System.err.println("More than one fact for a cell? Unexpected!");
-            }
+                System.err.println("More than one fact for a cell? Unexpected!")
 
-            String theFact = theFacts.iterator().next();
-            renderCellContent(g, theFact);
-        }
-    }
+            String theFact = theFacts.iterator().next()
+            renderCellContent(g, theFact)
 
-    protected bool useGridVisualization() { return true; }
+
+    protected bool useGridVisualization()  return true
 
     protected final bool isSelectedCell(int xCell, int yCell):
-        return (yCell == selectedRow && xCell == selectedColumn);
-    }
+        return (yCell == selectedRow && xCell == selectedColumn)
 
-    private int selectedRow = -1;
-    private int selectedColumn = -1;
+    private int selectedRow = -1
+    private int selectedColumn = -1
     currentSelectedMove = String()
-    private Iterator<String> possibleSelectedMoves = null;
+    private Iterator<String> possibleSelectedMoves = null
     protected final void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin):
         if(selectedRow != yCell || selectedColumn != xCell || !possibleSelectedMoves.hasNext()):
-            SortedSet<String> theMoves = new TreeSet<String>(getLegalMovesForCell(xCell, yCell));
+            SortedSet<String> theMoves = new TreeSet<String>(getLegalMovesForCell(xCell, yCell))
             if(theMoves.size() == 0)
-                return;
-            possibleSelectedMoves = theMoves.iterator();
-        }
+                return
+            possibleSelectedMoves = theMoves.iterator()
 
-        selectedRow = yCell;
-        selectedColumn = xCell;
+        selectedRow = yCell
+        selectedColumn = xCell
 
-        currentSelectedMove = possibleSelectedMoves.next();
-        submitWorkingMove(stringToMove(currentSelectedMove));
-    }
+        currentSelectedMove = possibleSelectedMoves.next()
+        submitWorkingMove(stringToMove(currentSelectedMove))
 
     // Cache all of the facts about cells that we compute, since they should not
     // change unless the game state changes.
-    private Map<Integer, Set<String>> factsCache = new HashMap<Integer, Set<String>>();
+    private Map<Integer, Set<String>> factsCache = new HashMap<Integer, Set<String>>()
     protected Set<String> getCachedFactsAboutCell(int xCell, int yCell):
-        int cellHash = xCell*getGridHeight()*2 + yCell;
-        Set<String> cachedFacts = factsCache.get(cellHash);
+        int cellHash = xCell*getGridHeight()*2 + yCell
+        Set<String> cachedFacts = factsCache.get(cellHash)
         if(cachedFacts != null)
-            return cachedFacts;
+            return cachedFacts
 
-        Set<String> realFacts = getFactsAboutCell(xCell, yCell);
-        factsCache.put(cellHash, realFacts);
-        return realFacts;
-    }
+        Set<String> realFacts = getFactsAboutCell(xCell, yCell)
+        factsCache.put(cellHash, realFacts)
+        return realFacts
 
     // When the game state changes, clear our cache of known facts.
     def void updateGameState(MachineState gameState):
-        factsCache.clear();
-        super.updateGameState(gameState);
-    }
+        factsCache.clear()
+        super.updateGameState(gameState)
 
     protected final void renderCell(Graphics g, int xCell, int yCell):
-        renderCellBackground(g, xCell, yCell);
-        renderCellContent(g, getCachedFactsAboutCell(xCell, yCell));
-        if(useGridVisualization()) CommonGraphics.drawCellBorder(g);
-        renderCellForeground(g, xCell, yCell);
+        renderCellBackground(g, xCell, yCell)
+        renderCellContent(g, getCachedFactsAboutCell(xCell, yCell))
+        if(useGridVisualization()) CommonGraphics.drawCellBorder(g)
+        renderCellForeground(g, xCell, yCell)
         if(!currentSelectedMove.isEmpty()):
-            renderMoveSelectionForCell(g, xCell, yCell, currentSelectedMove);
+            renderMoveSelectionForCell(g, xCell, yCell, currentSelectedMove)
             if(useGridVisualization() && isSelectedCell(xCell, yCell))
-                CommonGraphics.drawSelectionBox(g);
-        }
-    }
+                CommonGraphics.drawSelectionBox(g)
+
 
     def final void clearMoveSelection():
-        submitWorkingMove(null);
+        submitWorkingMove(null)
 
-        possibleSelectedMoves = null;
-        currentSelectedMove = "";
-        selectedColumn = -1;
-        selectedRow = -1;
+        possibleSelectedMoves = null
+        currentSelectedMove = ""
+        selectedColumn = -1
+        selectedRow = -1
 
-        repaint();
-    }
-}
+        repaint()
+

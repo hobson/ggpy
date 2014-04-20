@@ -1,27 +1,27 @@
-package org.ggp.base.util.statemachine;
+package org.ggp.base.util.statemachine
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.LinkedList
+import java.util.List
+import java.util.Map
+import java.util.Random
+import java.util.Set
 
-import org.ggp.base.util.gdl.grammar.Gdl;
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.gdl.grammar.GdlTerm;
-import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
+import org.ggp.base.util.gdl.grammar.Gdl
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.gdl.grammar.GdlTerm
+import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException
+import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException
+import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException
 
 
 /**
  * Provides the base class for all state machine implementations.
  */
 def abstract class StateMachine
-{
+
     // ============================================
     //          Stubs for implementations
     // ============================================
@@ -33,7 +33,7 @@ def abstract class StateMachine
 	 * This method should only be called once, and it should be called before any
 	 * other methods on the StateMachine.
 	 */
-    def abstract void initialize(List<Gdl> description);
+    def abstract void initialize(List<Gdl> description)
     /**
      * Returns the goal value for the given role in the given state. Goal values
      * are always between 0 and 100.
@@ -43,25 +43,25 @@ def abstract class StateMachine
      * is called on a terminal state, this indicates an error in either the game
      * description or the StateMachine implementation.
      */
-    def abstract int getGoal(MachineState state, Role role) throws GoalDefinitionException;
+    def abstract int getGoal(MachineState state, Role role) throws GoalDefinitionException
     /**
      * Returns true if and only if the given state is a terminal state (i.e. the
      * game is over).
      */
-    def abstract bool isTerminal(MachineState state);
+    def abstract bool isTerminal(MachineState state)
 
     /**
      * Returns a list of the roles in the game, in the same order as they
      * were defined in the game description.
      * <p>
-     * The result will be the same as calling {@link Role#computeRoles(List)}
+     * The result will be the same as calling @link Role#computeRoles(List)
      * on the game rules used to initialize this state machine.
      */
-    def abstract List<Role> getRoles();
+    def abstract List<Role> getRoles()
     /**
      * Returns the initial state of the game.
      */
-    def abstract MachineState getInitialState();
+    def abstract MachineState getInitialState()
 
     /**
      * Returns a list containing every move that is legal for the given role in the
@@ -71,18 +71,18 @@ def abstract class StateMachine
      * an error in either the game description or the StateMachine implementation.
      */
     // TODO: There are philosophical reasons for this to return Set<Move> rather than List<Move>.
-    def abstract List<Move> getLegalMoves(MachineState state, Role role) throws MoveDefinitionException;
+    def abstract List<Move> getLegalMoves(MachineState state, Role role) throws MoveDefinitionException
 
     /**
      * Returns the next state of the game given the current state and a joint move
      * list containing one move per role.
      *
      * @param moves A list containing one move per role. The moves should be
-     * listed in the same order as roles are listed by {@link #getRoles()}.
+     * listed in the same order as roles are listed by @link #getRoles()}.
      * @throws TransitionDefinitionException indicates an error in either the
      * game description or the StateMachine implementation.
      */
-    def abstract MachineState getNextState(MachineState state, List<Move> moves) throws TransitionDefinitionException;
+    def abstract MachineState getNextState(MachineState state, List<Move> moves) throws TransitionDefinitionException
 
     // The following methods are included in the abstract StateMachine base so
     // implementations which use alternative Role/Move/State representations
@@ -90,14 +90,13 @@ def abstract class StateMachine
     // They are implemented for convenience, using the default ways of generating
     // these objects, but they can be overridden to support machine-specific objects.
     def MachineState getMachineStateFromSentenceList(Set<GdlSentence> sentenceList):
-        return new MachineState(sentenceList);
-    }
+        return new MachineState(sentenceList)
+
     def Role getRoleFromConstant(GdlConstant constant):
-        return new Role(constant);
-    }
+        return new Role(constant)
+
     def Move getMoveFromTerm(GdlTerm term):
-        return new Move(term);
-    }
+        return new Move(term)
 
     // ============================================
     //          Stubs for advanced methods
@@ -113,15 +112,14 @@ def abstract class StateMachine
      * <p>
      * CONTRACT: Should be called once per move.
      */
-    def void doPerMoveWork() {}
+    def void doPerMoveWork()
 
     /** Override this to provide memory-saving destructive-next-state functionality.
      * <p>
      * CONTRACT: After calling this method, "state" should not be accessed.
      */
-    def MachineState getNextStateDestructively(MachineState state, List<Move> moves) throws TransitionDefinitionException {
-        return getNextState(state, moves);
-    }
+    def MachineState getNextStateDestructively(MachineState state, List<Move> moves) throws TransitionDefinitionException 
+        return getNextState(state, moves)
 
     /** Override this to allow the state machine to be conditioned on a particular current state.
      * This means that the state machine will only handle portions of the game tree at and below
@@ -132,21 +130,19 @@ def abstract class StateMachine
      *           is not "theState" or one of its descendants in the game tree.
      */
     def void updateRoot(MachineState theState):
-        ;
-    }
+        
 
     // ============================================
     //   Implementations of convenience methods
     // ============================================
 
     def String getName():
-        return this.getClass().getSimpleName();
-    }
+        return self.getClass().getSimpleName()
 
     /**
      * Returns a list containing every joint move possible in the given state.
      * A joint move consists of one move for each role, with the moves in the
-     * same ordering that their roles have in {@link #getRoles()}.
+     * same ordering that their roles have in @link #getRoles()}.
      * <p>
      * The list of possible joint moves is the Cartesian product of the lists
      * of legal moves available for each player.
@@ -156,41 +152,37 @@ def abstract class StateMachine
      * player.
      */
     def List<List<Move>> getLegalJointMoves(MachineState state) throws MoveDefinitionException
-    {
-        List<List<Move>> legals = new ArrayList<List<Move>>();
+    
+        List<List<Move>> legals = new ArrayList<List<Move>>()
         for (Role role : getRoles()):
-            legals.add(getLegalMoves(state, role));
-        }
+            legals.add(getLegalMoves(state, role))
 
-        List<List<Move>> crossProduct = new ArrayList<List<Move>>();
-        crossProductLegalMoves(legals, crossProduct, new LinkedList<Move>());
+        List<List<Move>> crossProduct = new ArrayList<List<Move>>()
+        crossProductLegalMoves(legals, crossProduct, new LinkedList<Move>())
 
-        return crossProduct;
-    }
+        return crossProduct
 
     /**
      * Returns a list of every joint move possible in the given state in which
      * the given role makes the given move. This will be a subset of the list
-     * of joint moves given by {@link #getLegalJointMoves(MachineState)}.
+     * of joint moves given by @link #getLegalJointMoves(MachineState)}.
      */
     def List<List<Move>> getLegalJointMoves(MachineState state, Role role, Move move) throws MoveDefinitionException
-    {
-        List<List<Move>> legals = new ArrayList<List<Move>>();
+    
+        List<List<Move>> legals = new ArrayList<List<Move>>()
         for (Role r : getRoles()):
             if (r.equals(role)):
-                List<Move> m = new ArrayList<Move>();
-                m.add(move);
-                legals.add(m);
-            } else {
-                legals.add(getLegalMoves(state, r));
-            }
-        }
+                List<Move> m = new ArrayList<Move>()
+                m.add(move)
+                legals.add(m)
+            else:
+                legals.add(getLegalMoves(state, r))
 
-        List<List<Move>> crossProduct = new ArrayList<List<Move>>();
-        crossProductLegalMoves(legals, crossProduct, new LinkedList<Move>());
 
-        return crossProduct;
-    }
+        List<List<Move>> crossProduct = new ArrayList<List<Move>>()
+        crossProductLegalMoves(legals, crossProduct, new LinkedList<Move>())
+
+        return crossProduct
 
     /**
      * Returns a list containing every possible next state of the game after
@@ -199,14 +191,12 @@ def abstract class StateMachine
      * be included multiple times.
      */
     def List<MachineState> getNextStates(MachineState state) throws MoveDefinitionException, TransitionDefinitionException
-    {
-        List<MachineState> nextStates = new ArrayList<MachineState>();
+    
+        List<MachineState> nextStates = new ArrayList<MachineState>()
         for (List<Move> move : getLegalJointMoves(state)):
-            nextStates.add(getNextState(state, move));
-        }
+            nextStates.add(getNextState(state, move))
 
-        return nextStates;
-    }
+        return nextStates
 
     /**
      * Returns a map from each move that is legal for the given role in
@@ -217,112 +207,101 @@ def abstract class StateMachine
      * then each list of states in the map will only contain one state.
      */
     def Map<Move, List<MachineState>> getNextStates(MachineState state, Role role) throws MoveDefinitionException, TransitionDefinitionException
-    {
-        Map<Move, List<MachineState>> nextStates = new HashMap<Move, List<MachineState>>();
-        Map<Role, Integer> roleIndices = getRoleIndices();
+    
+        Map<Move, List<MachineState>> nextStates = new HashMap<Move, List<MachineState>>()
+        Map<Role, Integer> roleIndices = getRoleIndices()
         for (List<Move> moves : getLegalJointMoves(state)):
-            Move move = moves.get(roleIndices.get(role));
+            Move move = moves.get(roleIndices.get(role))
             if (!nextStates.containsKey(move)):
-                nextStates.put(move, new ArrayList<MachineState>());
-            }
-            nextStates.get(move).add(getNextState(state, moves));
-        }
+                nextStates.put(move, new ArrayList<MachineState>())
 
-        return nextStates;
-    }
+            nextStates.get(move).add(getNextState(state, moves))
+
+        return nextStates
 
     protected void crossProductLegalMoves(List<List<Move>> legals, List<List<Move>> crossProduct, LinkedList<Move> partial)
-    {
+    
         if (partial.size() == legals.size()):
-            crossProduct.add(new ArrayList<Move>(partial));
-        } else {
+            crossProduct.add(new ArrayList<Move>(partial))
+        else:
             for (Move move : legals.get(partial.size())):
-                partial.addLast(move);
-                crossProductLegalMoves(legals, crossProduct, partial);
-                partial.removeLast();
-            }
-        }
-    }
+                partial.addLast(move)
+                crossProductLegalMoves(legals, crossProduct, partial)
+                partial.removeLast()
 
-    private Map<Role,Integer> roleIndices = null;
+
+
+    private Map<Role,Integer> roleIndices = null
     /**
      * Returns a mapping from a role to the index of that role, as in
-     * the list returned by {@link #getRoles()}. This may be a faster
-     * way to check the index of a role than calling {@link List#indexOf(Object)}
+     * the list returned by @link #getRoles()}. This may be a faster
+     * way to check the index of a role than calling @link List#indexOf(Object)
      * on that list.
      */
     def Map<Role, Integer> getRoleIndices()
-    {
+    
         if(roleIndices == null):
-            roleIndices = new HashMap<Role, Integer>();
-            List<Role> roles = getRoles();
+            roleIndices = new HashMap<Role, Integer>()
+            List<Role> roles = getRoles()
             for (int i = 0; i < roles.size(); i++):
-                roleIndices.put(roles.get(i), i);
-            }
-        }
+                roleIndices.put(roles.get(i), i)
 
-        return roleIndices;
-    }
+
+        return roleIndices
 
     /**
      * Returns the goal values for each role in the given state. The goal values
      * are listed in the same order the roles are listed in the game rules, which
-     * is the same order in which they're returned by {@link #getRoles()}.
+     * is the same order in which they're returned by @link #getRoles()}.
      *
      * @throws GoalDefinitionException if there is no goal value or more than one
      * goal value for any one role in the given state. If this occurs when this
      * is called on a terminal state, this indicates an error in either the game
      * description or the StateMachine implementation.
      */
-    def List<Integer> getGoals(MachineState state) throws GoalDefinitionException {
-        List<Integer> theGoals = new ArrayList<Integer>();
+    def List<Integer> getGoals(MachineState state) throws GoalDefinitionException 
+        List<Integer> theGoals = new ArrayList<Integer>()
         for (Role r : getRoles()):
-            theGoals.add(getGoal(state, r));
-        }
-        return theGoals;
-    }
+            theGoals.add(getGoal(state, r))
+
+        return theGoals
 
     /**
      * Returns a random joint move from among all the possible joint moves in
      * the given state.
      */
     def List<Move> getRandomJointMove(MachineState state) throws MoveDefinitionException
-    {
-        List<Move> random = new ArrayList<Move>();
+    
+        List<Move> random = new ArrayList<Move>()
         for (Role role : getRoles()):
-            random.add(getRandomMove(state, role));
-        }
+            random.add(getRandomMove(state, role))
 
-        return random;
-    }
+        return random
 
     /**
      * Returns a random joint move from among all the possible joint moves in
      * the given state in which the given role makes the given move.
      */
     def List<Move> getRandomJointMove(MachineState state, Role role, Move move) throws MoveDefinitionException
-    {
-        List<Move> random = new ArrayList<Move>();
+    
+        List<Move> random = new ArrayList<Move>()
         for (Role r : getRoles()):
             if (r.equals(role)):
-                random.add(move);
-            } else {
-                random.add(getRandomMove(state, r));
-            }
-        }
+                random.add(move)
+            else:
+                random.add(getRandomMove(state, r))
 
-        return random;
-    }
+
+        return random
 
     /**
      * Returns a random move from among the possible legal moves for the
      * given role in the given state.
      */
     def Move getRandomMove(MachineState state, Role role) throws MoveDefinitionException
-    {
-        List<Move> legals = getLegalMoves(state, role);
-        return legals.get(new Random().nextInt(legals.size()));
-    }
+    
+        List<Move> legals = getLegalMoves(state, role)
+        return legals.get(new Random().nextInt(legals.size()))
 
     /**
      * Returns a state chosen at random from the possible next states of the
@@ -333,10 +312,9 @@ def abstract class StateMachine
      * as multiple joint moves may result in the same state.
      */
     def MachineState getRandomNextState(MachineState state) throws MoveDefinitionException, TransitionDefinitionException
-    {
-        List<Move> random = getRandomJointMove(state);
-        return getNextState(state, random);
-    }
+    
+        List<Move> random = getRandomJointMove(state)
+        return getNextState(state, random)
 
     /**
      * Returns a random next state of the game from the possible next states
@@ -350,10 +328,9 @@ def abstract class StateMachine
      * there is only one possible next state for this method to return.
      */
     def MachineState getRandomNextState(MachineState state, Role role, Move move) throws MoveDefinitionException, TransitionDefinitionException
-    {
-        List<Move> random = getRandomJointMove(state, role, move);
-        return getNextState(state, random);
-    }
+    
+        List<Move> random = getRandomJointMove(state, role, move)
+        return getNextState(state, random)
 
     /**
      * Returns a terminal state derived from repeatedly making random joint moves
@@ -362,35 +339,33 @@ def abstract class StateMachine
      * @param theDepth an integer array, the 0th element of which will be set to
      * the number of state changes that were made to reach a terminal state.
      */
-    def MachineState performDepthCharge(MachineState state, final int[] theDepth) throws TransitionDefinitionException, MoveDefinitionException {
-        int nDepth = 0;
+    def MachineState performDepthCharge(MachineState state, final int[] theDepth) throws TransitionDefinitionException, MoveDefinitionException 
+        int nDepth = 0
         while(!isTerminal(state)):
-            nDepth++;
-            state = getNextStateDestructively(state, getRandomJointMove(state));
-        }
-        if(theDepth != null)
-            theDepth[0] = nDepth;
-        return state;
-    }
+            nDepth++
+            state = getNextStateDestructively(state, getRandomJointMove(state))
 
-    def void getAverageDiscountedScoresFromRepeatedDepthCharges(final MachineState state, final float[] avgScores, final float[] avgDepth, final float discountFactor, final int repetitions) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
-    	avgDepth[0] = 0;
+        if(theDepth != null)
+            theDepth[0] = nDepth
+        return state
+
+    def void getAverageDiscountedScoresFromRepeatedDepthCharges(final MachineState state, final float[] avgScores, final float[] avgDepth, final float discountFactor, final int repetitions) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException 
+    	avgDepth[0] = 0
     	for (int j = 0; j < avgScores.length; j++):
-    		avgScores[j] = 0;
-    	}
-    	final int[] depth = new int[1];
+    		avgScores[j] = 0
+
+    	final int[] depth = new int[1]
     	for (int i = 0; i < repetitions; i++):
-    		MachineState stateForCharge = state.clone();
-    		stateForCharge = performDepthCharge(stateForCharge, depth);
-    		avgDepth[0] += depth[0];
-    		final float accumulatedDiscountFactor = Math.pow(discountFactor, depth[0]);
+    		MachineState stateForCharge = state.clone()
+    		stateForCharge = performDepthCharge(stateForCharge, depth)
+    		avgDepth[0] += depth[0]
+    		final float accumulatedDiscountFactor = Math.pow(discountFactor, depth[0])
     		for (int j = 0; j < avgScores.length; j++):
-    			avgScores[j] += getGoal(stateForCharge, getRoles().get(j)) * accumulatedDiscountFactor;
-    		}
-    	}
-    	avgDepth[0] /= repetitions;
+    			avgScores[j] += getGoal(stateForCharge, getRoles().get(j)) * accumulatedDiscountFactor
+
+
+    	avgDepth[0] /= repetitions
     	for (int j = 0; j < avgScores.length; j++):
-    		avgScores[j] /= repetitions;
-    	}
-    }
-}
+    		avgScores[j] /= repetitions
+
+

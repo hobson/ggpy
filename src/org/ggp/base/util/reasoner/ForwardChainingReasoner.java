@@ -1,8 +1,8 @@
-package org.ggp.base.util.reasoner;
+package org.ggp.base.util.reasoner
 
-import org.ggp.base.util.gdl.model.SentenceDomainModel;
-import org.ggp.base.util.gdl.transforms.VariableConstrainer;
-import org.ggp.base.util.reasoner.gdl.GdlChainingReasoner;
+import org.ggp.base.util.gdl.model.SentenceDomainModel
+import org.ggp.base.util.gdl.transforms.VariableConstrainer
+import org.ggp.base.util.reasoner.gdl.GdlChainingReasoner
 
 /**
  * An interface for a forward-chaining reasoner. The interface is
@@ -11,9 +11,9 @@ import org.ggp.base.util.reasoner.gdl.GdlChainingReasoner;
  * representations of rules and sentences) can easily be swapped
  * out for another.
  *
- * See {@link GdlChainingReasoner} for one such implementation.
+ * See @link GdlChainingReasoner} for one such implementation.
  */
-def interface ForwardChainingReasoner<Rule, Sentences> {
+def interface ForwardChainingReasoner<Rule, Sentences> 
 	/**
 	 * Returns a set of sentences that are always true, which can be
 	 * used as a basis and added to via getUnion. This includes all
@@ -22,26 +22,26 @@ def interface ForwardChainingReasoner<Rule, Sentences> {
 	 * rules, depending on the implementation and how it is
 	 * instantiated.
 	 */
-    Sentences getConstantSentences();
+    Sentences getConstantSentences()
 
 	/**
 	 * Given a rule and all sentences known to be true so far, returns
 	 * all new results of applying the rule.
 	 *
 	 * For the outputs of this method to be valid, the GDL that the rule
-	 * is derived from should have had the {@link VariableConstrainer}
+	 * is derived from should have had the @link VariableConstrainer
 	 * transformation applied to it.
 	 */
     Sentences getRuleResults(Rule rule, SentenceDomainModel domainModel,
-            Sentences sentencesSoFar) throws InterruptedException;
+            Sentences sentencesSoFar) throws InterruptedException
 
 	/**
 	 * Returns the union of the two sets of sentences. Calling this
 	 * method invalidates oldSentences.
 	 */
-    Sentences getUnion(Sentences oldSentences, Sentences newSentences);
+    Sentences getUnion(Sentences oldSentences, Sentences newSentences)
 
 	/**
 	 * Returns true iff newSentences is a subset of oldSentences.
 	 */
-    bool isSubsetOf(Sentences oldSentences, Sentences newSentences);
+    bool isSubsetOf(Sentences oldSentences, Sentences newSentences)

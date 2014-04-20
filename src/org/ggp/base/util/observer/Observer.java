@@ -1,7 +1,7 @@
-package org.ggp.base.util.observer;
+package org.ggp.base.util.observer
 
 def interface Observer
-{
 
-    def void observe(Event event);
+
+    def void observe(Event event)
 

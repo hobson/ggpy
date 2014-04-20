@@ -1,17 +1,17 @@
-package org.ggp.base.player.gamer.clojure;
+package org.ggp.base.player.gamer.clojure
 
-import org.ggp.base.player.gamer.Gamer;
-import org.ggp.base.player.gamer.exception.AbortingException;
-import org.ggp.base.player.gamer.exception.GamePreviewException;
-import org.ggp.base.player.gamer.exception.MetaGamingException;
-import org.ggp.base.player.gamer.exception.MoveSelectionException;
-import org.ggp.base.player.gamer.exception.StoppingException;
-import org.ggp.base.util.game.Game;
-import org.ggp.base.util.gdl.grammar.GdlTerm;
-import org.ggp.base.util.logging.GamerLogger;
+import org.ggp.base.player.gamer.Gamer
+import org.ggp.base.player.gamer.exception.AbortingException
+import org.ggp.base.player.gamer.exception.GamePreviewException
+import org.ggp.base.player.gamer.exception.MetaGamingException
+import org.ggp.base.player.gamer.exception.MoveSelectionException
+import org.ggp.base.player.gamer.exception.StoppingException
+import org.ggp.base.util.game.Game
+import org.ggp.base.util.gdl.grammar.GdlTerm
+import org.ggp.base.util.logging.GamerLogger
 
-import clojure.lang.RT;
-import clojure.lang.Var;
+import clojure.lang.RT
+import clojure.lang.Var
 
 /**
  * ClojureGamer is a superclass that allows you to hook Clojure gamers into the
@@ -32,32 +32,31 @@ import clojure.lang.Var;
  * @author Sam Schreiber
  */
 def abstract class ClojureGamer(Gamer):
-{
-    Gamer theClojureGamer;
 
-    protected abstract String getClojureGamerFile();
-    protected abstract String getClojureGamerName();
+    Gamer theClojureGamer
+
+    protected abstract String getClojureGamerFile()
+    protected abstract String getClojureGamerName()
 
     // Gamer stubs are lazily loaded because the Clojure interface takes
     // time to initialize, so we only want to load it when necessary, and
     // not for light-weight things like returning the player name.
     private void lazilyLoadGamerStub():
     	if (theClojureGamer == null):
-	        try {
+	        try 
 	            // Load the Clojure script -- as a side effect this initializes the runtime.
-	            RT.loadResourceScript(getClojureGamerFile() + ".clj");
+	            RT.loadResourceScript(getClojureGamerFile() + ".clj")
 
 	            // Get a reference to the gamer-generating function.
-	            Var gamerVar = RT.var("gamer_namespace", getClojureGamerName());
+	            Var gamerVar = RT.var("gamer_namespace", getClojureGamerName())
 
 	            // Call it!
-	            theClojureGamer = (Gamer)gamerVar.invoke();
+	            theClojureGamer = (Gamer)gamerVar.invoke()
 	        } catch(Exception e):
-	            GamerLogger.logError("GamePlayer", "Caught exception in Clojure initialization:");
-	            GamerLogger.logStackTrace("GamePlayer", e);
-	        }
-    	}
-    }
+	            GamerLogger.logError("GamePlayer", "Caught exception in Clojure initialization:")
+	            GamerLogger.logStackTrace("GamePlayer", e)
+
+
 
     // The following methods are overriden as 'final' because they should not
     // be changed in subclasses of this class. Subclasses of this class should
@@ -66,66 +65,60 @@ def abstract class ClojureGamer(Gamer):
     // subclass of this class is a Java-implementation stub for the actual real
     // Clojure implementation.
 
-    def final void preview(Game game, int timeout) throws GamePreviewException {
-    	lazilyLoadGamerStub();
-        try {
-            theClojureGamer.preview(game, timeout);
+    def final void preview(Game game, int timeout) throws GamePreviewException 
+    	lazilyLoadGamerStub()
+        try 
+            theClojureGamer.preview(game, timeout)
         } catch(GamePreviewException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineMetaGame:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineMetaGame:")
+            GamerLogger.logStackTrace("GamePlayer", e)
 
-    def final void metaGame(int timeout) throws MetaGamingException {
-    	lazilyLoadGamerStub();
-        theClojureGamer.setMatch(getMatch());
-        theClojureGamer.setRoleName(getRoleName());
-        try {
-            theClojureGamer.metaGame(timeout);
+
+    def final void metaGame(int timeout) throws MetaGamingException 
+    	lazilyLoadGamerStub()
+        theClojureGamer.setMatch(getMatch())
+        theClojureGamer.setRoleName(getRoleName())
+        try 
+            theClojureGamer.metaGame(timeout)
         } catch(MetaGamingException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineMetaGame:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineMetaGame:")
+            GamerLogger.logStackTrace("GamePlayer", e)
 
-    def final GdlTerm selectMove(int timeout) throws MoveSelectionException {
-    	lazilyLoadGamerStub();
-        theClojureGamer.setMatch(getMatch());
-        theClojureGamer.setRoleName(getRoleName());
-        try {
-            return theClojureGamer.selectMove(timeout);
+
+    def final GdlTerm selectMove(int timeout) throws MoveSelectionException 
+    	lazilyLoadGamerStub()
+        theClojureGamer.setMatch(getMatch())
+        theClojureGamer.setRoleName(getRoleName())
+        try 
+            return theClojureGamer.selectMove(timeout)
         } catch(MoveSelectionException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineSelectMove:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-            return null;
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineSelectMove:")
+            GamerLogger.logStackTrace("GamePlayer", e)
+            return null
+
 
     def final void stop():
-    	lazilyLoadGamerStub();
-        theClojureGamer.setMatch(getMatch());
-        theClojureGamer.setRoleName(getRoleName());
-        try {
-            theClojureGamer.stop();
+    	lazilyLoadGamerStub()
+        theClojureGamer.setMatch(getMatch())
+        theClojureGamer.setRoleName(getRoleName())
+        try 
+            theClojureGamer.stop()
         } catch(StoppingException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineStop:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineStop:")
+            GamerLogger.logStackTrace("GamePlayer", e)
+
 
     def final void abort():
-    	lazilyLoadGamerStub();
-        theClojureGamer.setMatch(getMatch());
-        theClojureGamer.setRoleName(getRoleName());
-        try {
-            theClojureGamer.abort();
+    	lazilyLoadGamerStub()
+        theClojureGamer.setMatch(getMatch())
+        theClojureGamer.setRoleName(getRoleName())
+        try 
+            theClojureGamer.abort()
         } catch(AbortingException e):
-            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineAbort:");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineAbort:")
+            GamerLogger.logStackTrace("GamePlayer", e)
+
 
     def final String getName():
-	   return getClojureGamerName();
-    }
-}
+	   return getClojureGamerName()
+

@@ -1,10 +1,10 @@
-package org.ggp.base.util.gdl.scrambler;
+package org.ggp.base.util.gdl.scrambler
 
-import junit.framework.TestCase;
+import junit.framework.TestCase
 
-import org.ggp.base.util.game.Game;
-import org.ggp.base.util.game.GameRepository;
-import org.ggp.base.util.gdl.grammar.Gdl;
+import org.ggp.base.util.game.Game
+import org.ggp.base.util.game.GameRepository
+import org.ggp.base.util.gdl.grammar.Gdl
 
 /**
  * Unit tests for the GdlRenderer class, which provides a way
@@ -19,13 +19,12 @@ class GdlRenderer_Test(TestCase):
 	 * on a Gdl object.
 	 */
     def void testSimpleRendering():
-    	GdlRenderer renderer = new GdlRenderer();
-    	GameRepository repo = GameRepository.getDefaultRepository();
+    	GdlRenderer renderer = new GdlRenderer()
+    	GameRepository repo = GameRepository.getDefaultRepository()
     	for (String gameKey : repo.getGameKeys()):
-    		Game game = repo.getGame(gameKey);
+    		Game game = repo.getGame(gameKey)
     		for(Gdl rule : game.getRules()):
-    			assertEquals(rule.toString(), renderer.renderGdl(rule));
-    		}
-    	}
-    }
-}
+    			assertEquals(rule.toString(), renderer.renderGdl(rule))
+
+
+

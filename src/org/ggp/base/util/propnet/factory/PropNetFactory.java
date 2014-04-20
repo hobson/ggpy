@@ -1,14 +1,14 @@
-package org.ggp.base.util.propnet.factory;
+package org.ggp.base.util.propnet.factory
 
-import java.util.List;
+import java.util.List
 
-import org.ggp.base.util.gdl.grammar.Gdl;
-import org.ggp.base.util.gdl.grammar.GdlRule;
-import org.ggp.base.util.logging.GamerLogger;
-import org.ggp.base.util.propnet.architecture.PropNet;
-import org.ggp.base.util.propnet.factory.converter.PropNetConverter;
-import org.ggp.base.util.propnet.factory.flattener.PropNetFlattener;
-import org.ggp.base.util.statemachine.Role;
+import org.ggp.base.util.gdl.grammar.Gdl
+import org.ggp.base.util.gdl.grammar.GdlRule
+import org.ggp.base.util.logging.GamerLogger
+import org.ggp.base.util.propnet.architecture.PropNet
+import org.ggp.base.util.propnet.factory.converter.PropNetConverter
+import org.ggp.base.util.propnet.factory.flattener.PropNetFlattener
+import org.ggp.base.util.statemachine.Role
 
 
 /**
@@ -16,7 +16,7 @@ import org.ggp.base.util.statemachine.Role;
  * descriptions.
  */
 class PropNetFactory
-{
+
 	/**
 	 * Creates a PropNet from a game description using the following process:
 	 * <ol>
@@ -29,13 +29,12 @@ class PropNetFactory
 	 * @return An equivalent PropNet.
 	 */
     def static PropNet create(List<Gdl> description)
-	{
-        try {
-            List<GdlRule> flatDescription = new PropNetFlattener(description).flatten();
-            GamerLogger.log("StateMachine", "Converting...");
-            return new PropNetConverter().convert(Role.computeRoles(description), flatDescription);
+	
+        try 
+            List<GdlRule> flatDescription = new PropNetFlattener(description).flatten()
+            GamerLogger.log("StateMachine", "Converting...")
+            return new PropNetConverter().convert(Role.computeRoles(description), flatDescription)
         } catch(Exception e):
-            GamerLogger.logStackTrace("StateMachine", e);
-            return null;
-        }
-}
+            GamerLogger.logStackTrace("StateMachine", e)
+            return null
+

@@ -1,22 +1,22 @@
-package org.ggp.base.player.gamer.statemachine;
+package org.ggp.base.player.gamer.statemachine
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayList
+import java.util.List
 
-import org.ggp.base.player.gamer.Gamer;
-import org.ggp.base.player.gamer.exception.AbortingException;
-import org.ggp.base.player.gamer.exception.MetaGamingException;
-import org.ggp.base.player.gamer.exception.MoveSelectionException;
-import org.ggp.base.player.gamer.exception.StoppingException;
-import org.ggp.base.util.gdl.grammar.GdlTerm;
-import org.ggp.base.util.logging.GamerLogger;
-import org.ggp.base.util.statemachine.MachineState;
-import org.ggp.base.util.statemachine.Move;
-import org.ggp.base.util.statemachine.Role;
-import org.ggp.base.util.statemachine.StateMachine;
-import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
+import org.ggp.base.player.gamer.Gamer
+import org.ggp.base.player.gamer.exception.AbortingException
+import org.ggp.base.player.gamer.exception.MetaGamingException
+import org.ggp.base.player.gamer.exception.MoveSelectionException
+import org.ggp.base.player.gamer.exception.StoppingException
+import org.ggp.base.util.gdl.grammar.GdlTerm
+import org.ggp.base.util.logging.GamerLogger
+import org.ggp.base.util.statemachine.MachineState
+import org.ggp.base.util.statemachine.Move
+import org.ggp.base.util.statemachine.Role
+import org.ggp.base.util.statemachine.StateMachine
+import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException
+import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException
+import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException
 
 
 /**
@@ -31,7 +31,7 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  * @author Sam
  */
 def abstract class StateMachineGamer(Gamer):
-{
+
     // =====================================================================
     // First, the abstract methods which need to be overriden by subclasses.
     // These determine what state machine is used, what the gamer does during
@@ -41,7 +41,7 @@ def abstract class StateMachineGamer(Gamer):
      * Defines which state machine this gamer will use.
      * @return
      */
-    def abstract StateMachine getInitialStateMachine();
+    def abstract StateMachine getInitialStateMachine()
 
     /**
      * Defines the metagaming action taken by a player during the START_CLOCK
@@ -50,7 +50,7 @@ def abstract class StateMachineGamer(Gamer):
      * @throws MoveDefinitionException
      * @throws GoalDefinitionException
      */
-    def abstract void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException;
+    def abstract void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 
     /**
      * Defines the algorithm that the player uses to select their move.
@@ -60,17 +60,17 @@ def abstract class StateMachineGamer(Gamer):
      * @throws MoveDefinitionException
      * @throws GoalDefinitionException
      */
-    def abstract Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException;
+    def abstract Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 
     /**
      * Defines any actions that the player takes upon the game cleanly ending.
      */
-    def abstract void stateMachineStop();
+    def abstract void stateMachineStop()
 
     /**
      * Defines any actions that the player takes upon the game abruptly ending.
      */
-    def abstract void stateMachineAbort();
+    def abstract void stateMachineAbort()
 
     // =====================================================================
     // Next, methods which can be used by subclasses to get information about
@@ -80,23 +80,23 @@ def abstract class StateMachineGamer(Gamer):
 	 * Returns the current state of the game.
 	 */
     def final MachineState getCurrentState()
-	{
-        return currentState;
+	
+        return currentState
 
 	/**
 	 * Returns the role that this gamer is playing as in the game.
 	 */
     def final Role getRole()
-	{
-        return role;
+	
+        return role
 
 	/**
 	 * Returns the state machine.  This is used for calculating the next state and other operations, such as computing
 	 * the legal moves for all players, whether states are terminal, and the goal values of terminal states.
 	 */
     def final StateMachine getStateMachine()
-	{
-        return stateMachine;
+	
+        return stateMachine
 
     /**
      * Cleans up the role, currentState and stateMachine. This should only be
@@ -105,12 +105,11 @@ def abstract class StateMachineGamer(Gamer):
      * only used in the Proxy, for players designed to run 24/7.
      */
     protected final void cleanupAfterMatch():
-        role = null;
-        currentState = null;
-        stateMachine = null;
-        setMatch(null);
-        setRoleName(null);
-    }
+        role = null
+        currentState = null
+        stateMachine = null
+        setMatch(null)
+        setRoleName(null)
 
     /**
      * Switches stateMachine to newStateMachine, playing through the match
@@ -123,28 +122,26 @@ def abstract class StateMachineGamer(Gamer):
      * @param newStateMachine the new state machine
      */
     protected final void switchStateMachine(StateMachine newStateMachine):
-        try {
-            MachineState newCurrentState = newStateMachine.getInitialState();
-            Role newRole = newStateMachine.getRoleFromConstant(getRoleName());
+        try 
+            MachineState newCurrentState = newStateMachine.getInitialState()
+            Role newRole = newStateMachine.getRoleFromConstant(getRoleName())
 
             // Attempt to run through the game history in the new machine
-            List<List<GdlTerm>> theMoveHistory = getMatch().getMoveHistory();
+            List<List<GdlTerm>> theMoveHistory = getMatch().getMoveHistory()
             for(List<GdlTerm> nextMove : theMoveHistory):
-                List<Move> theJointMove = new ArrayList<Move>();
+                List<Move> theJointMove = new ArrayList<Move>()
                 for(GdlTerm theSentence : nextMove)
-                    theJointMove.add(newStateMachine.getMoveFromTerm(theSentence));
-                newCurrentState = newStateMachine.getNextStateDestructively(newCurrentState, theJointMove);
-            }
+                    theJointMove.add(newStateMachine.getMoveFromTerm(theSentence))
+                newCurrentState = newStateMachine.getNextStateDestructively(newCurrentState, theJointMove)
 
             // Finally, switch over if everything went well.
-            role = newRole;
-            currentState = newCurrentState;
-            stateMachine = newStateMachine;
-        } catch (Exception e):
-            GamerLogger.log("GamePlayer", "Caught an exception while switching state machine!");
-            GamerLogger.logStackTrace("GamePlayer", e);
-        }
-    }
+            role = newRole
+            currentState = newCurrentState
+            stateMachine = newStateMachine
+        except Exception e):
+            GamerLogger.log("GamePlayer", "Caught an exception while switching state machine!")
+            GamerLogger.logStackTrace("GamePlayer", e)
+
 
     // =====================================================================
     // Finally, methods which are overridden with proper state-machine-based
@@ -159,20 +156,20 @@ def abstract class StateMachineGamer(Gamer):
 	 * then calls stateMachineMetaGame.
 	 */
     def final void metaGame(int timeout) throws MetaGamingException
-	{
+	
         try
-		{
-            stateMachine = getInitialStateMachine();
-            stateMachine.initialize(getMatch().getGame().getRules());
-            currentState = stateMachine.getInitialState();
-            role = stateMachine.getRoleFromConstant(getRoleName());
-            getMatch().appendState(currentState.getContents());
+		
+            stateMachine = getInitialStateMachine()
+            stateMachine.initialize(getMatch().getGame().getRules())
+            currentState = stateMachine.getInitialState()
+            role = stateMachine.getRoleFromConstant(getRoleName())
+            getMatch().appendState(currentState.getContents())
 
-            stateMachineMetaGame(timeout);
+            stateMachineMetaGame(timeout)
         catch (Exception e)
-		{
-		    GamerLogger.logStackTrace("GamePlayer", e);
-            throw new MetaGamingException(e);
+		
+		    GamerLogger.logStackTrace("GamePlayer", e)
+            throw new MetaGamingException(e)
 
 	/**
 	 * A wrapper function for stateMachineSelectMove. When we are asked to
@@ -181,60 +178,59 @@ def abstract class StateMachineGamer(Gamer):
 	 * current state.
 	 */
     def final GdlTerm selectMove(int timeout) throws MoveSelectionException
-	{
+	
         try
-		{
-            stateMachine.doPerMoveWork();
+		
+            stateMachine.doPerMoveWork()
 
-            List<GdlTerm> lastMoves = getMatch().getMostRecentMoves();
+            List<GdlTerm> lastMoves = getMatch().getMostRecentMoves()
             if (lastMoves != null)
-			{
-                List<Move> moves = new ArrayList<Move>();
+			
+                List<Move> moves = new ArrayList<Move>()
                 for (GdlTerm sentence : lastMoves)
-				{
-                    moves.add(stateMachine.getMoveFromTerm(sentence));
+				
+                    moves.add(stateMachine.getMoveFromTerm(sentence))
 
-                currentState = stateMachine.getNextState(currentState, moves);
-                getMatch().appendState(currentState.getContents());
+                currentState = stateMachine.getNextState(currentState, moves)
+                getMatch().appendState(currentState.getContents())
 
-            return stateMachineSelectMove(timeout).getContents();
+            return stateMachineSelectMove(timeout).getContents()
         catch (Exception e)
-		{
-		    GamerLogger.logStackTrace("GamePlayer", e);
-            throw new MoveSelectionException(e);
+		
+		    GamerLogger.logStackTrace("GamePlayer", e)
+            throw new MoveSelectionException(e)
 
-    def void stop() throws StoppingException {
-        try {
-            stateMachine.doPerMoveWork();
+    def void stop() throws StoppingException 
+        try 
+            stateMachine.doPerMoveWork()
 
-            List<GdlTerm> lastMoves = getMatch().getMostRecentMoves();
+            List<GdlTerm> lastMoves = getMatch().getMostRecentMoves()
             if (lastMoves != null)
-			{
-                List<Move> moves = new ArrayList<Move>();
+			
+                List<Move> moves = new ArrayList<Move>()
                 for (GdlTerm sentence : lastMoves)
-				{
-                    moves.add(stateMachine.getMoveFromTerm(sentence));
+				
+                    moves.add(stateMachine.getMoveFromTerm(sentence))
 
-                currentState = stateMachine.getNextState(currentState, moves);
-                getMatch().appendState(currentState.getContents());
-                getMatch().markCompleted(stateMachine.getGoals(currentState));
+                currentState = stateMachine.getNextState(currentState, moves)
+                getMatch().appendState(currentState.getContents())
+                getMatch().markCompleted(stateMachine.getGoals(currentState))
 
-            stateMachineStop();
+            stateMachineStop()
         catch (Exception e)
-		{
-            GamerLogger.logStackTrace("GamePlayer", e);
-            throw new StoppingException(e);
+		
+            GamerLogger.logStackTrace("GamePlayer", e)
+            throw new StoppingException(e)
 
-    def void abort() throws AbortingException {
-        try {
-            stateMachineAbort();
+    def void abort() throws AbortingException 
+        try 
+            stateMachineAbort()
         catch (Exception e)
-		{
-            GamerLogger.logStackTrace("GamePlayer", e);
-            throw new AbortingException(e);
+		
+            GamerLogger.logStackTrace("GamePlayer", e)
+            throw new AbortingException(e)
 
     // Internal state about the current state of the state machine.
     role = Role()
     currentState = MachineState()
     stateMachine = StateMachine()
-}

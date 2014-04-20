@@ -1,8 +1,8 @@
-package org.ggp.base.util.gdl;
+package org.ggp.base.util.gdl
 
-import org.ggp.base.util.symbol.grammar.Symbol;
-import org.ggp.base.util.symbol.grammar.SymbolAtom;
-import org.ggp.base.util.symbol.grammar.SymbolList;
+import org.ggp.base.util.symbol.grammar.Symbol
+import org.ggp.base.util.symbol.grammar.SymbolAtom
+import org.ggp.base.util.symbol.grammar.SymbolList
 
 /**
  * The GdlValidator class implements Gdl validation for the GdlFactory class.
@@ -10,7 +10,7 @@ import org.ggp.base.util.symbol.grammar.SymbolList;
  * Gdl expression without error.
  */
 class GdlValidator
-{
+
 
 	/**
 	 * Validates whether a Symbol can be transformed into a Gdl expression
@@ -32,19 +32,19 @@ class GdlValidator
 	 * @return True if the Symbol passes validation; false otherwise.
 	 */
     def bool validate(Symbol symbol)
-	{
+	
         if ( symbol instanceof SymbolAtom )
-		{
-            return true;
+		
+            return true
         else if ( containsAnonymousList(symbol) )
-		{
-            return false;
+		
+            return false
         else if ( containsOr(symbol) )
-		{
-            return false;
+		
+            return false
         else
-		{
-            return true;
+		
+            return true
 
 	/**
 	 * A recursive method that checks whether a Symbol contains SymbolList that
@@ -55,24 +55,24 @@ class GdlValidator
 	 * @return True if the Symbol passes validation; false otherwise.
 	 */
     private bool containsAnonymousList(Symbol symbol)
-	{
+	
         if ( symbol instanceof SymbolAtom )
-		{
-            return false;
+		
+            return false
         else
-		{
+		
             if ( symbol instanceof SymbolList )
-			{
-                return true;
+			
+                return true
             else
-			{
+			
                 for ( int i = 1; i < ((SymbolList)symbol).size(); i++ )
-				{
+				
                     if ( containsAnonymousList(((SymbolList)symbol).get(i)) )
-					{
-                        return true;
+					
+                        return true
 
-                return false;
+                return false
 
 	/**
 	 * A recursive method that checks whether a Symbol contains the deprecated
@@ -83,21 +83,21 @@ class GdlValidator
 	 * @return True if the Symbol passes validation; false otherwise.
 	 */
     private bool containsOr(Symbol symbol)
-	{
+	
         if ( symbol instanceof SymbolAtom )
-		{
-            return false;
+		
+            return false
         else
-		{
+		
             if ( symbol.toString().toLowerCase().equals("or") )
-			{
-                return true;
+			
+                return true
             else if ( symbol instanceof SymbolList )
-			{
+			
                 for ( int i = 1; i < ((SymbolList)symbol).size(); i++ )
-				{
+				
                     if ( containsOr(((SymbolList)symbol).get(i)) )
-					{
-                        return true;
-        return false;
+					
+                        return true
+        return false
 

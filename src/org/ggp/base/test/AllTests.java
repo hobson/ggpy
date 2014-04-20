@@ -1,10 +1,10 @@
-package org.ggp.base.test;
+package org.ggp.base.test
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.runner.RunWith
+import org.junit.runners.Suite
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
+@Suite.SuiteClasses(
     GameParsingTests.class,
     GdlCleanerTests.class,
     NoTabsInRulesheetsTest.class,

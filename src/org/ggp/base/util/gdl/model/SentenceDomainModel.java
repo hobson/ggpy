@@ -1,4 +1,4 @@
-package org.ggp.base.util.gdl.model;
+package org.ggp.base.util.gdl.model
 
 
 /**
@@ -8,7 +8,7 @@ package org.ggp.base.util.gdl.model;
  * be in which positions of each sentence form.
  *
  * The recommended way to create a SentenceDomainModel is
- * via {@link SentenceDomainModelFactory#createWithCartesianDomains(java.util.List)}.
+ * via @link SentenceDomainModelFactory#createWithCartesianDomains(java.util.List)}.
  */
 def interface SentenceDomainModel(SentenceFormModel):
 	/**
@@ -16,4 +16,4 @@ def interface SentenceDomainModel(SentenceFormModel):
 	 * information about which particular sentences of the given
 	 * sentence form are possible.
 	 */
-    SentenceFormDomain getDomain(SentenceForm form);
+    SentenceFormDomain getDomain(SentenceForm form)

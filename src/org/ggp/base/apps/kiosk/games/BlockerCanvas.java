@@ -1,57 +1,53 @@
-package org.ggp.base.apps.kiosk.games;
+package org.ggp.base.apps.kiosk.games
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Set;
+import java.awt.Color
+import java.awt.Graphics
+import java.util.Set
 
-import org.ggp.base.apps.kiosk.templates.CommonGraphics;
-import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
+import org.ggp.base.apps.kiosk.templates.CommonGraphics
+import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid
 
 
 class BlockerCanvas(GameCanvas_FancyGrid):
     serialVersionUID = 1L  # int 
 
-    def String getGameName() { return "Blocker"; }
-    protected String getGameKey() { return "blocker"; }
-    protected int getGridHeight() { return 6; }
-    protected int getGridWidth() { return 6; }
+    def String getGameName()  return "Blocker"
+    protected String getGameKey()  return "blocker"
+    protected int getGridHeight()  return 6
+    protected int getGridWidth()  return 6
 
-    protected bool coordinatesStartAtOne() { return false; }
+    protected bool coordinatesStartAtOne()  return false
 
     protected void renderCellBackground(Graphics g, int xCell, int yCell):
-        int width = g.getClipBounds().width;
-        int height = g.getClipBounds().height;
+        int width = g.getClipBounds().width
+        int height = g.getClipBounds().height
 
-        bool isBlue = (yCell == 0) || (yCell == 5);
-        bool isBlack = ((xCell == 0) || (xCell == 5)) && !isBlue;
+        bool isBlue = (yCell == 0) || (yCell == 5)
+        bool isBlack = ((xCell == 0) || (xCell == 5)) && !isBlue
 
         if(isBlue):
-            CommonGraphics.drawBubbles(g, xCell*11+yCell);
-        } else if(isBlack):
-            g.setColor(Color.GRAY);
-            g.fillRect(1, 1, width-2, height-2);
-        }
-    }
+            CommonGraphics.drawBubbles(g, xCell*11+yCell)
+        elif(isBlack):
+            g.setColor(Color.GRAY)
+            g.fillRect(1, 1, width-2, height-2)
+
 
     protected void renderCellContent(Graphics g, String theFact):
-        int width = g.getClipBounds().width;
-        int height = g.getClipBounds().height;
+        int width = g.getClipBounds().width
+        int height = g.getClipBounds().height
 
-        String[] theFacts = theFact.split(" ");
-        String theProperty = theFacts[4];
+        String[] theFacts = theFact.split(" ")
+        String theProperty = theFacts[4]
         if(theProperty.equals("blk")):
-            CommonGraphics.drawBubbles(g, theFact.hashCode());
-        } else if(theProperty.equals("crosser")):
-            g.setColor(Color.GRAY);
-            g.fillRect(1, 1, width-2, height-2);
-        }
-    }
+            CommonGraphics.drawBubbles(g, theFact.hashCode())
+        elif(theProperty.equals("crosser")):
+            g.setColor(Color.GRAY)
+            g.fillRect(1, 1, width-2, height-2)
+
 
     protected Set<String> getFactsAboutCell(int xCell, int yCell):
-        return gameStateHasFactsMatching("\\( cell " + xCell + " " + yCell + " (.*) \\)");
-    }
+        return gameStateHasFactsMatching("\\( cell " + xCell + " " + yCell + " (.*) \\)")
 
     protected Set<String> getLegalMovesForCell(int xCell, int yCell):
-        return gameStateHasLegalMovesMatching("\\( mark " + xCell + " " + yCell + " \\)");
-    }
-}
+        return gameStateHasLegalMovesMatching("\\( mark " + xCell + " " + yCell + " \\)")
+

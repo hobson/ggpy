@@ -1,21 +1,21 @@
-package org.ggp.base.util.gdl.model.assignments;
+package org.ggp.base.util.gdl.model.assignments
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.ArrayList
+import java.util.Collections
+import java.util.HashMap
+import java.util.HashSet
+import java.util.List
+import java.util.Map
+import java.util.Map.Entry
+import java.util.Set
 
-import org.ggp.base.util.gdl.GdlUtils;
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.gdl.grammar.GdlTerm;
-import org.ggp.base.util.gdl.grammar.GdlVariable;
+import org.ggp.base.util.gdl.GdlUtils
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.gdl.grammar.GdlTerm
+import org.ggp.base.util.gdl.grammar.GdlVariable
 
 //This class has a natural ordering that is inconsistent with equals.
-class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
+class IterationOrderCandidate implements Comparable<IterationOrderCandidate> 
 		//Information specific to this ordering
         private List<Integer> sourceConjunctIndices; //Which conjuncts are we using as sources, and in what order?
         private List<GdlVariable> varOrdering; //In what order do we assign variables?
@@ -33,7 +33,7 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
         private List<Integer> sourceConjunctSizes; //same indexing as candidates
         functionalSentences = List<GdlSentence>()
         private List<FunctionInfo> functionalSentencesInfo; //Indexing same as functionalSentences
-        private Map<GdlVariable, Integer> varDomainSizes;
+        private Map<GdlVariable, Integer> varDomainSizes
 
 		/**
 		 * This constructor is for creating the start node of the
@@ -53,37 +53,37 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
                 List<GdlSentence> functionalSentences,
                 List<FunctionInfo> functionalSentencesInfo,
                 Map<GdlVariable, Integer> varDomainSizes):
-            sourceConjunctIndices = new ArrayList<Integer>();
-            varOrdering = new ArrayList<GdlVariable>();
-            functionalConjunctIndices = new ArrayList<Integer>();
-            varSources = new ArrayList<Integer>();
+            sourceConjunctIndices = new ArrayList<Integer>()
+            varOrdering = new ArrayList<GdlVariable>()
+            functionalConjunctIndices = new ArrayList<Integer>()
+            varSources = new ArrayList<Integer>()
 
-            this.varsToAssign = varsToAssign;
-            this.sourceConjunctCandidates = sourceConjunctCandidates;
-            this.sourceConjunctSizes = sourceConjunctSizes;
-            this.functionalSentences = functionalSentences;
-            this.functionalSentencesInfo = functionalSentencesInfo;
-            this.varDomainSizes = varDomainSizes;
+            self.varsToAssign = varsToAssign
+            self.sourceConjunctCandidates = sourceConjunctCandidates
+            self.sourceConjunctSizes = sourceConjunctSizes
+            self.functionalSentences = functionalSentences
+            self.functionalSentencesInfo = functionalSentencesInfo
+            self.varDomainSizes = varDomainSizes
 
 	    def List<GdlSentence> getFunctionalConjuncts():
 			//Returns, for each var, the conjunct defining it (if any)
-            List<GdlSentence> functionalConjuncts = new ArrayList<GdlSentence>(functionalConjunctIndices.size());
+            List<GdlSentence> functionalConjuncts = new ArrayList<GdlSentence>(functionalConjunctIndices.size())
             for(int index : functionalConjunctIndices):
                 if(index == -1)
-                    functionalConjuncts.add(null);
+                    functionalConjuncts.add(null)
                 else
-                    functionalConjuncts.add(functionalSentences.get(index));
-            return functionalConjuncts;
+                    functionalConjuncts.add(functionalSentences.get(index))
+            return functionalConjuncts
 
 	    def List<GdlSentence> getSourceConjuncts():
 			//These are the selected source conjuncts, not just the candidates.
-            List<GdlSentence> sourceConjuncts = new ArrayList<GdlSentence>(sourceConjunctIndices.size());
+            List<GdlSentence> sourceConjuncts = new ArrayList<GdlSentence>(sourceConjunctIndices.size())
             for(int index : sourceConjunctIndices):
-                sourceConjuncts.add(sourceConjunctCandidates.get(index));
-            return sourceConjuncts;
+                sourceConjuncts.add(sourceConjunctCandidates.get(index))
+            return sourceConjuncts
 
 	    def List<GdlVariable> getVariableOrdering():
-            return varOrdering;
+            return varOrdering
 
 		/**
 		 * This constructor is for "completing" the ordering by
@@ -93,26 +93,26 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 	    def IterationOrderCandidate(
                 IterationOrderCandidate parent):
 			//Shared rules
-            this.varsToAssign = parent.varsToAssign;
-            this.sourceConjunctCandidates = parent.sourceConjunctCandidates;
-            this.sourceConjunctSizes = parent.sourceConjunctSizes;
-            this.functionalSentences = parent.functionalSentences;
-            this.functionalSentencesInfo = parent.functionalSentencesInfo;
-            this.varDomainSizes = parent.varDomainSizes;
+            self.varsToAssign = parent.varsToAssign
+            self.sourceConjunctCandidates = parent.sourceConjunctCandidates
+            self.sourceConjunctSizes = parent.sourceConjunctSizes
+            self.functionalSentences = parent.functionalSentences
+            self.functionalSentencesInfo = parent.functionalSentencesInfo
+            self.varDomainSizes = parent.varDomainSizes
 
 			//Individual rules:
 			//We can share this because we won't be adding to it
-            sourceConjunctIndices = parent.sourceConjunctIndices;
+            sourceConjunctIndices = parent.sourceConjunctIndices
 			//These others we'll be adding to
-            varOrdering = new ArrayList<GdlVariable>(parent.varOrdering);
-            functionalConjunctIndices = new ArrayList<Integer>(parent.functionalConjunctIndices);
-            varSources = new ArrayList<Integer>(parent.varSources);
+            varOrdering = new ArrayList<GdlVariable>(parent.varOrdering)
+            functionalConjunctIndices = new ArrayList<Integer>(parent.functionalConjunctIndices)
+            varSources = new ArrayList<Integer>(parent.varSources)
 			//Fill out the ordering with all remaining variables: Easy enough
             for(GdlVariable var : varsToAssign):
                 if(!varOrdering.contains(var)):
-                    varOrdering.add(var);
-                    functionalConjunctIndices.add(-1);
-                    varSources.add(-1);
+                    varOrdering.add(var)
+                    functionalConjunctIndices.add(-1)
+                    varSources.add(-1)
 
 		/**
 		 * This constructor is for adding a source conjunct to an
@@ -122,23 +122,23 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 	    def IterationOrderCandidate(
                 IterationOrderCandidate parent, int i):
 			//Shared rules:
-            this.varsToAssign = parent.varsToAssign;
-            this.sourceConjunctCandidates = parent.sourceConjunctCandidates;
-            this.sourceConjunctSizes = parent.sourceConjunctSizes;
-            this.functionalSentences = parent.functionalSentences;
-            this.functionalSentencesInfo = parent.functionalSentencesInfo;
-            this.varDomainSizes = parent.varDomainSizes;
+            self.varsToAssign = parent.varsToAssign
+            self.sourceConjunctCandidates = parent.sourceConjunctCandidates
+            self.sourceConjunctSizes = parent.sourceConjunctSizes
+            self.functionalSentences = parent.functionalSentences
+            self.functionalSentencesInfo = parent.functionalSentencesInfo
+            self.varDomainSizes = parent.varDomainSizes
 
 
 			//Individual rules:
-            sourceConjunctIndices = new ArrayList<Integer>(parent.sourceConjunctIndices);
-            varOrdering = new ArrayList<GdlVariable>(parent.varOrdering);
-            functionalConjunctIndices = new ArrayList<Integer>(parent.functionalConjunctIndices);
-            varSources = new ArrayList<Integer>(parent.varSources);
+            sourceConjunctIndices = new ArrayList<Integer>(parent.sourceConjunctIndices)
+            varOrdering = new ArrayList<GdlVariable>(parent.varOrdering)
+            functionalConjunctIndices = new ArrayList<Integer>(parent.functionalConjunctIndices)
+            varSources = new ArrayList<Integer>(parent.varSources)
 			//Add the new source conjunct
-            sourceConjunctIndices.add(i);
-            GdlSentence sourceConjunctCandidate = sourceConjunctCandidates.get(i);
-            List<GdlVariable> varsFromConjunct = GdlUtils.getVariables(sourceConjunctCandidate);
+            sourceConjunctIndices.add(i)
+            GdlSentence sourceConjunctCandidate = sourceConjunctCandidates.get(i)
+            List<GdlVariable> varsFromConjunct = GdlUtils.getVariables(sourceConjunctCandidate)
 			//Ignore both previously added vars and duplicates
 			//Oh, but we need to be careful here, at some point.
 			//i.e., what if there are multiple of the same variable
@@ -146,9 +146,9 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 			//That should probably be handled later.
             for(GdlVariable var : varsFromConjunct):
                 if(!varOrdering.contains(var)):
-                    varOrdering.add(var);
-                    varSources.add(i);
-                    functionalConjunctIndices.add(-1);
+                    varOrdering.add(var)
+                    varSources.add(i)
+                    functionalConjunctIndices.add(-1)
 
 		/**
 		 * This constructor is for adding a function to the ordering.
@@ -158,74 +158,74 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
                 GdlSentence functionalSentence,
                 int functionalSentenceIndex, GdlVariable functionOutput):
 			//Shared rules:
-            this.varsToAssign = parent.varsToAssign;
-            this.sourceConjunctCandidates = parent.sourceConjunctCandidates;
-            this.sourceConjunctSizes = parent.sourceConjunctSizes;
-            this.functionalSentences = parent.functionalSentences;
-            this.functionalSentencesInfo = parent.functionalSentencesInfo;
-            this.varDomainSizes = parent.varDomainSizes;
+            self.varsToAssign = parent.varsToAssign
+            self.sourceConjunctCandidates = parent.sourceConjunctCandidates
+            self.sourceConjunctSizes = parent.sourceConjunctSizes
+            self.functionalSentences = parent.functionalSentences
+            self.functionalSentencesInfo = parent.functionalSentencesInfo
+            self.varDomainSizes = parent.varDomainSizes
 
 			//Individual rules:
-            sourceConjunctIndices = new ArrayList<Integer>(parent.sourceConjunctIndices);
-            varOrdering = new ArrayList<GdlVariable>(parent.varOrdering);
-            functionalConjunctIndices = new ArrayList<Integer>(parent.functionalConjunctIndices);
-            varSources = new ArrayList<Integer>(parent.varSources);
+            sourceConjunctIndices = new ArrayList<Integer>(parent.sourceConjunctIndices)
+            varOrdering = new ArrayList<GdlVariable>(parent.varOrdering)
+            functionalConjunctIndices = new ArrayList<Integer>(parent.functionalConjunctIndices)
+            varSources = new ArrayList<Integer>(parent.varSources)
 			//And we add the function
-            List<GdlVariable> varsInFunction = GdlUtils.getVariables(functionalSentence);
+            List<GdlVariable> varsInFunction = GdlUtils.getVariables(functionalSentence)
 			//First, add the remaining arguments
             for(GdlVariable var : varsInFunction):
                 if(!varOrdering.contains(var) && !var.equals(functionOutput) && varsToAssign.contains(var)):
-                    varOrdering.add(var);
-                    functionalConjunctIndices.add(-1);
-                    varSources.add(-1);
+                    varOrdering.add(var)
+                    functionalConjunctIndices.add(-1)
+                    varSources.add(-1)
 			//Then the output
-            varOrdering.add(functionOutput);
-            functionalConjunctIndices.add(functionalSentenceIndex);
-            varSources.add(-1);
+            varOrdering.add(functionOutput)
+            functionalConjunctIndices.add(functionalSentenceIndex)
+            varSources.add(-1)
 
 	    def getHeuristicValue():  # int
-            int heuristic = 1;
+            int heuristic = 1
             for(int sourceIndex : sourceConjunctIndices):
-                heuristic *= sourceConjunctSizes.get(sourceIndex);
+                heuristic *= sourceConjunctSizes.get(sourceIndex)
             for(int v = 0; v < varOrdering.size(); v++):
                 if(varSources.get(v) == -1 && functionalConjunctIndices.get(v) == -1):
 					//It's not set by a source conjunct or a function
-                    heuristic *= varDomainSizes.get(varOrdering.get(v));
+                    heuristic *= varDomainSizes.get(varOrdering.get(v))
 
 
 			//We want complete orderings to show up faster
 			//so we add a little incentive to pick them
 			//Add 1 to the value of non-complete orderings
             if(varOrdering.size() < varsToAssign.size())
-                heuristic++;
+                heuristic++
 
-//			System.out.println("Heuristic value is " + heuristic + " with functionalConjunctIndices " + functionalConjunctIndices);
-            return heuristic;
+//			System.out.println("Heuristic value is " + heuristic + " with functionalConjunctIndices " + functionalConjunctIndices)
+            return heuristic
 	    def isComplete():  # bool
-            return varOrdering.containsAll(varsToAssign);
+            return varOrdering.containsAll(varsToAssign)
 	    def List<IterationOrderCandidate> getChildren(bool analyticFunctionOrdering):
-            List<IterationOrderCandidate> allChildren = new ArrayList<IterationOrderCandidate>();
-            allChildren.addAll(getSourceConjunctChildren());
-            allChildren.addAll(getFunctionAddedChildren(analyticFunctionOrdering));
-//			System.out.println("Number of children being added: " + allChildren.size());
-            return allChildren;
+            List<IterationOrderCandidate> allChildren = new ArrayList<IterationOrderCandidate>()
+            allChildren.addAll(getSourceConjunctChildren())
+            allChildren.addAll(getFunctionAddedChildren(analyticFunctionOrdering))
+//			System.out.println("Number of children being added: " + allChildren.size())
+            return allChildren
         private List<IterationOrderCandidate> getSourceConjunctChildren():
-            List<IterationOrderCandidate> children = new ArrayList<IterationOrderCandidate>();
+            List<IterationOrderCandidate> children = new ArrayList<IterationOrderCandidate>()
 
 			//If we are already using functions, short-circuit to cut off
 			//repetition of the search space
             for(int index : functionalConjunctIndices):
                 if(index != -1):
-                    return Collections.emptyList();
+                    return Collections.emptyList()
 
 			//This means we want a reference to the original list of conjuncts.
-            int lastSourceConjunctIndex = -1;
+            int lastSourceConjunctIndex = -1
             if(!sourceConjunctIndices.isEmpty())
-                lastSourceConjunctIndex = sourceConjunctIndices.get(sourceConjunctIndices.size() - 1);
+                lastSourceConjunctIndex = sourceConjunctIndices.get(sourceConjunctIndices.size() - 1)
 
             for(int i = lastSourceConjunctIndex + 1; i < sourceConjunctCandidates.size(); i++):
-                children.add(new IterationOrderCandidate(this, i));
-            return children;
+                children.add(new IterationOrderCandidate(this, i))
+            return children
         private List<IterationOrderCandidate> getFunctionAddedChildren(bool analyticFunctionOrdering):
 			//We can't just add those functions that
 			//are "ready" to be added. We should be adding all those variables
@@ -236,7 +236,7 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 			//largest domain, or one that is tied for largest.
 			//New criterion: Must also NOT be in preassignment.
 
-            List<IterationOrderCandidate> children = new ArrayList<IterationOrderCandidate>();
+            List<IterationOrderCandidate> children = new ArrayList<IterationOrderCandidate>()
 
 			//It would be really nice here to just analytically choose
 			//the set of functions we're going to use.
@@ -258,115 +258,115 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 				//For each variable, a list of functions
 				//(refer to functions by their indices)
 				//and the set of outstanding vars they depend on...
-                Map<GdlVariable, Set<Integer>> functionsProducingVars = new HashMap<GdlVariable, Set<Integer>>();
+                Map<GdlVariable, Set<Integer>> functionsProducingVars = new HashMap<GdlVariable, Set<Integer>>()
 				//We start by adding to the varOrdering the vars not produced by functions
 				//First, we have to find them
                 for(int i = 0; i < functionalSentencesInfo.size(); i++):
-                    GdlSentence functionalSentence = functionalSentences.get(i);
-                    FunctionInfo functionInfo = functionalSentencesInfo.get(i);
-                    Set<GdlVariable> producibleVars = functionInfo.getProducibleVars(functionalSentence);
+                    GdlSentence functionalSentence = functionalSentences.get(i)
+                    FunctionInfo functionInfo = functionalSentencesInfo.get(i)
+                    Set<GdlVariable> producibleVars = functionInfo.getProducibleVars(functionalSentence)
                     for(GdlVariable producibleVar : producibleVars):
                         if(!functionsProducingVars.containsKey(producibleVar))
-                            functionsProducingVars.put(producibleVar, new HashSet<Integer>());
-                        functionsProducingVars.get(producibleVar).add(i);
+                            functionsProducingVars.put(producibleVar, new HashSet<Integer>())
+                        functionsProducingVars.get(producibleVar).add(i)
 				//Non-producible vars get iterated over before we start
 				//deciding which functions to add
                 for(GdlVariable var : varsToAssign):
                     if(!varOrdering.contains(var)):
                         if(!functionsProducingVars.containsKey(var)):
 							//Add var to the ordering
-                            varOrdering.add(var);
-                            functionalConjunctIndices.add(-1);
-                            varSources.add(-1);
+                            varOrdering.add(var)
+                            functionalConjunctIndices.add(-1)
+                            varSources.add(-1)
 
 
 				//Map is from potential set of dependencies to function indices
-                Map<Set<GdlVariable>, Set<Integer>> functionsHavingDependencies = new HashMap<Set<GdlVariable>, Set<Integer>>();
+                Map<Set<GdlVariable>, Set<Integer>> functionsHavingDependencies = new HashMap<Set<GdlVariable>, Set<Integer>>()
 				//Create this map...
                 for(int i = 0; i < functionalSentencesInfo.size(); i++):
-                    GdlSentence functionalSentence = functionalSentences.get(i);
-                    FunctionInfo functionInfo = functionalSentencesInfo.get(i);
-                    Set<GdlVariable> producibleVars = functionInfo.getProducibleVars(functionalSentence);
-                    Set<GdlVariable> allVars = new HashSet<GdlVariable>(GdlUtils.getVariables(functionalSentence));
+                    GdlSentence functionalSentence = functionalSentences.get(i)
+                    FunctionInfo functionInfo = functionalSentencesInfo.get(i)
+                    Set<GdlVariable> producibleVars = functionInfo.getProducibleVars(functionalSentence)
+                    Set<GdlVariable> allVars = new HashSet<GdlVariable>(GdlUtils.getVariables(functionalSentence))
 					//Variables already in varOrdering don't go in dependents list
-                    producibleVars.removeAll(varOrdering);
-                    allVars.removeAll(varOrdering);
+                    producibleVars.removeAll(varOrdering)
+                    allVars.removeAll(varOrdering)
                     for(GdlVariable producibleVar : producibleVars):
-                        Set<GdlVariable> dependencies = new HashSet<GdlVariable>();
-                        dependencies.addAll(allVars);
-                        dependencies.remove(producibleVar);
+                        Set<GdlVariable> dependencies = new HashSet<GdlVariable>()
+                        dependencies.addAll(allVars)
+                        dependencies.remove(producibleVar)
                         if(!functionsHavingDependencies.containsKey(dependencies))
-                            functionsHavingDependencies.put(dependencies, new HashSet<Integer>());
-                        functionsHavingDependencies.get(dependencies).add(i);
+                            functionsHavingDependencies.put(dependencies, new HashSet<Integer>())
+                        functionsHavingDependencies.get(dependencies).add(i)
 				//Now, we can keep creating functions to generate the remaining variables
                 while(varOrdering.size() < varsToAssign.size()):
                     if(functionsHavingDependencies.isEmpty())
-                        throw new RuntimeException("We should not run out of functions we could use");
+                        throw new RuntimeException("We should not run out of functions we could use")
 					//Find the smallest set of dependencies
-                    Set<GdlVariable> dependencySetToUse = null;
+                    Set<GdlVariable> dependencySetToUse = null
                     if(functionsHavingDependencies.containsKey(Collections.emptySet())):
-                        dependencySetToUse = Collections.emptySet();
-					} else {
-                        int smallestSize = Integer.MAX_VALUE;
+                        dependencySetToUse = Collections.emptySet()
+					else:
+                        int smallestSize = Integer.MAX_VALUE
                         for(Set<GdlVariable> dependencySet : functionsHavingDependencies.keySet()):
                             if(dependencySet.size() < smallestSize):
-                                smallestSize = dependencySet.size();
-                                dependencySetToUse = dependencySet;
+                                smallestSize = dependencySet.size()
+                                dependencySetToUse = dependencySet
 					//See if any of the functions are applicable
-                    Set<Integer> functions = functionsHavingDependencies.get(dependencySetToUse);
-                    int functionToUse = -1;
-                    GdlVariable varProduced = null;
+                    Set<Integer> functions = functionsHavingDependencies.get(dependencySetToUse)
+                    int functionToUse = -1
+                    GdlVariable varProduced = null
                     for (int function : functions):
-                        GdlSentence functionalSentence = functionalSentences.get(function);
-                        FunctionInfo functionInfo = functionalSentencesInfo.get(function);
-                        Set<GdlVariable> producibleVars = functionInfo.getProducibleVars(functionalSentence);
-                        producibleVars.removeAll(dependencySetToUse);
-                        producibleVars.removeAll(varOrdering);
+                        GdlSentence functionalSentence = functionalSentences.get(function)
+                        FunctionInfo functionInfo = functionalSentencesInfo.get(function)
+                        Set<GdlVariable> producibleVars = functionInfo.getProducibleVars(functionalSentence)
+                        producibleVars.removeAll(dependencySetToUse)
+                        producibleVars.removeAll(varOrdering)
                         if(!producibleVars.isEmpty()):
-                            functionToUse = function;
-                            varProduced = producibleVars.iterator().next();
-                            break;
+                            functionToUse = function
+                            varProduced = producibleVars.iterator().next()
+                            break
 
                     if(functionToUse == -1):
 						//None of these functions were actually useful now?
 						//Dump the dependency set
-                        functionsHavingDependencies.remove(dependencySetToUse);
-					} else {
+                        functionsHavingDependencies.remove(dependencySetToUse)
+					else:
 						//Apply the function
 						//1) Add the remaining dependencies as iterated variables
                         for(GdlVariable var : dependencySetToUse):
-                            varOrdering.add(var);
-                            functionalConjunctIndices.add(-1);
-                            varSources.add(-1);
+                            varOrdering.add(var)
+                            functionalConjunctIndices.add(-1)
+                            varSources.add(-1)
 						//2) Add the function's produced variable (varProduced)
-                        varOrdering.add(varProduced);
-                        functionalConjunctIndices.add(functionToUse);
-                        varSources.add(-1);
+                        varOrdering.add(varProduced)
+                        functionalConjunctIndices.add(functionToUse)
+                        varSources.add(-1)
 						//3) Remove all vars added this way from all dependency sets
-                        Set<GdlVariable> addedVars = new HashSet<GdlVariable>();
-                        addedVars.addAll(dependencySetToUse);
-                        addedVars.add(varProduced);
+                        Set<GdlVariable> addedVars = new HashSet<GdlVariable>()
+                        addedVars.addAll(dependencySetToUse)
+                        addedVars.add(varProduced)
 						//Tricky, because we have to merge sets
 						//Easier to use a new map
-                        Map<Set<GdlVariable>, Set<Integer>> newFunctionsHavingDependencies = new HashMap<Set<GdlVariable>, Set<Integer>>();
+                        Map<Set<GdlVariable>, Set<Integer>> newFunctionsHavingDependencies = new HashMap<Set<GdlVariable>, Set<Integer>>()
                         for(Entry<Set<GdlVariable>, Set<Integer>> entry : functionsHavingDependencies.entrySet()):
-                            Set<GdlVariable> newKey = new HashSet<GdlVariable>(entry.getKey());
-                            newKey.removeAll(addedVars);
+                            Set<GdlVariable> newKey = new HashSet<GdlVariable>(entry.getKey())
+                            newKey.removeAll(addedVars)
                             if(!newFunctionsHavingDependencies.containsKey(newKey))
-                                newFunctionsHavingDependencies.put(newKey, new HashSet<Integer>());
-                            newFunctionsHavingDependencies.get(newKey).addAll(entry.getValue());
-                        functionsHavingDependencies = newFunctionsHavingDependencies;
+                                newFunctionsHavingDependencies.put(newKey, new HashSet<Integer>())
+                            newFunctionsHavingDependencies.get(newKey).addAll(entry.getValue())
+                        functionsHavingDependencies = newFunctionsHavingDependencies
 						//4) Remove this function from the lists?
                         for(Set<Integer> functionSet : functionsHavingDependencies.values())
-                            functionSet.remove(functionToUse);
+                            functionSet.remove(functionToUse)
 
 
 				//Now we need to actually return the ordering in a list
 				//Here's the quick way to do that...
 				//(since we've added all the new stuff to ourself already)
-                return Collections.singletonList(new IterationOrderCandidate(this));
+                return Collections.singletonList(new IterationOrderCandidate(this))
 
-			} else {
+			else:
 
 				//Let's try a new technique for restricting the space of possibilities...
 				//We already have an ordering on the functions
@@ -377,16 +377,16 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 				//We might also try requiring that c.f. i NOT provide a variable
 				//used by c.f. j, though there may be multiple possibilities as
 				//to what it could provide.
-                int lastFunctionUsedIndex = -1;
+                int lastFunctionUsedIndex = -1
                 if (!functionalConjunctIndices.isEmpty()):
-                    lastFunctionUsedIndex = Collections.max(functionalConjunctIndices);
-                Set<GdlVariable> varsProducedByFunctions = new HashSet<GdlVariable>();
+                    lastFunctionUsedIndex = Collections.max(functionalConjunctIndices)
+                Set<GdlVariable> varsProducedByFunctions = new HashSet<GdlVariable>()
                 for (int i = 0; i < functionalConjunctIndices.size(); i++):
                     if (functionalConjunctIndices.get(i) != -1):
-                        varsProducedByFunctions.add(varOrdering.get(i));
+                        varsProducedByFunctions.add(varOrdering.get(i))
                 for (int i = 0; i < functionalSentencesInfo.size(); i++):
-                    GdlSentence functionalSentence = functionalSentences.get(i);
-                    FunctionInfo functionInfo = functionalSentencesInfo.get(i);
+                    GdlSentence functionalSentence = functionalSentences.get(i)
+                    FunctionInfo functionInfo = functionalSentencesInfo.get(i)
 
                     if (i < lastFunctionUsedIndex):
 						//We need to figure out whether i could use any of the
@@ -394,22 +394,22 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 						//TODO: Try this with a finer grain
 						//i.e., see if i needs a var from a function that is after
 						//it, not one that might be before it
-                        List<GdlVariable> varsInSentence = GdlUtils.getVariables(functionalSentence);
+                        List<GdlVariable> varsInSentence = GdlUtils.getVariables(functionalSentence)
                         if (Collections.disjoint(varsInSentence, varsProducedByFunctions)):
-                            continue;
+                            continue
 
 					//What is the best variable to grab from this form, if there are any?
-                    GdlVariable bestVariable = getBestVariable(functionalSentence, functionInfo);
+                    GdlVariable bestVariable = getBestVariable(functionalSentence, functionInfo)
                     if (bestVariable == null):
-                        continue;
+                        continue
                     IterationOrderCandidate newCandidate =
-                        new IterationOrderCandidate(this, functionalSentence, i, bestVariable);
-                    children.add(newCandidate);
+                        new IterationOrderCandidate(this, functionalSentence, i, bestVariable)
+                    children.add(newCandidate)
 
 				//If there are no more functions to add, add the completed version
                 if (children.isEmpty()):
-                    children.add(new IterationOrderCandidate(this));
-                return children;
+                    children.add(new IterationOrderCandidate(this))
+                return children
         private GdlVariable getBestVariable(GdlSentence functionalSentence,
                 FunctionInfo functionInfo):
 			//If all the variables that can be set by the functional sentence are in
@@ -418,37 +418,36 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 
 			//The FunctionInfo is sentence-independent, so we need the context
 			//of the sentence (which has variables in it).
-            List<GdlTerm> tuple = GdlUtils.getTupleFromSentence(functionalSentence);
-            List<Boolean> dependentSlots = functionInfo.getDependentSlots();
+            List<GdlTerm> tuple = GdlUtils.getTupleFromSentence(functionalSentence)
+            List<Boolean> dependentSlots = functionInfo.getDependentSlots()
             if(tuple.size() != dependentSlots.size())
-                throw new RuntimeException("Mismatched sentence " + functionalSentence + " and constant form " + functionInfo);
+                throw new RuntimeException("Mismatched sentence " + functionalSentence + " and constant form " + functionInfo)
 
-            Set<GdlVariable> candidateVars = new HashSet<GdlVariable>();
+            Set<GdlVariable> candidateVars = new HashSet<GdlVariable>()
             for(int i = 0; i < tuple.size(); i++):
-                GdlTerm term = tuple.get(i);
+                GdlTerm term = tuple.get(i)
                 if(term instanceof GdlVariable && dependentSlots.get(i)
 						&& !varOrdering.contains(term)
 						&& varsToAssign.contains(term))
-                    candidateVars.add((GdlVariable) term);
+                    candidateVars.add((GdlVariable) term)
 			//Now we look at the domains, trying to find the largest
-            GdlVariable bestVar = null;
-            int bestDomainSize = 0;
+            GdlVariable bestVar = null
+            int bestDomainSize = 0
             for(GdlVariable var : candidateVars):
-                int domainSize = varDomainSizes.get(var);
+                int domainSize = varDomainSizes.get(var)
                 if(domainSize > bestDomainSize):
-                    bestVar = var;
-                    bestDomainSize = domainSize;
+                    bestVar = var
+                    bestDomainSize = domainSize
             return bestVar; //null if none are usable
 
 		//This class has a natural ordering that is inconsistent with equals.
     	    def int compareTo(IterationOrderCandidate o):
-            int diff = getHeuristicValue() - o.getHeuristicValue();
+            int diff = getHeuristicValue() - o.getHeuristicValue()
             if(diff < 0)
-                return -1;
+                return -1
             else if(diff == 0)
-                return 0;
+                return 0
             else
-                return 1;
+                return 1
     	    def toString():  # String
-            return varOrdering.toString() + " with sources " + getSourceConjuncts().toString() + "; functional?: " + functionalConjunctIndices + "; domain sizes are " + this.varDomainSizes;
-	}
+            return varOrdering.toString() + " with sources " + getSourceConjuncts().toString() + "; functional?: " + functionalConjunctIndices + "; domain sizes are " + self.varDomainSizes

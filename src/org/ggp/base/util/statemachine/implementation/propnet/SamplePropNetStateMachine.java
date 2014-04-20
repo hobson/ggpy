@@ -1,28 +1,28 @@
-package org.ggp.base.util.statemachine.implementation.propnet;
+package org.ggp.base.util.statemachine.implementation.propnet
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList
+import java.util.HashSet
+import java.util.LinkedList
+import java.util.List
+import java.util.Map
+import java.util.Set
 
-import org.ggp.base.util.gdl.grammar.Gdl;
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlRelation;
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.propnet.architecture.Component;
-import org.ggp.base.util.propnet.architecture.PropNet;
-import org.ggp.base.util.propnet.architecture.components.Proposition;
-import org.ggp.base.util.propnet.factory.PropNetFactory;
-import org.ggp.base.util.statemachine.MachineState;
-import org.ggp.base.util.statemachine.Move;
-import org.ggp.base.util.statemachine.Role;
-import org.ggp.base.util.statemachine.StateMachine;
-import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
-import org.ggp.base.util.statemachine.implementation.prover.query.ProverQueryBuilder;
+import org.ggp.base.util.gdl.grammar.Gdl
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlRelation
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.propnet.architecture.Component
+import org.ggp.base.util.propnet.architecture.PropNet
+import org.ggp.base.util.propnet.architecture.components.Proposition
+import org.ggp.base.util.propnet.factory.PropNetFactory
+import org.ggp.base.util.statemachine.MachineState
+import org.ggp.base.util.statemachine.Move
+import org.ggp.base.util.statemachine.Role
+import org.ggp.base.util.statemachine.StateMachine
+import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException
+import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException
+import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException
+import org.ggp.base.util.statemachine.implementation.prover.query.ProverQueryBuilder
 
 
 class SamplePropNetStateMachine(StateMachine):
@@ -39,10 +39,9 @@ class SamplePropNetStateMachine(StateMachine):
      * your discretion.
      */
     def void initialize(List<Gdl> description):
-        propNet = PropNetFactory.create(description);
-        roles = propNet.getRoles();
-        ordering = getOrdering();
-    }
+        propNet = PropNetFactory.create(description)
+        roles = propNet.getRoles()
+        ordering = getOrdering()
 
 	/**
 	 * Computes if the state is terminal. Should return the value
@@ -50,7 +49,7 @@ class SamplePropNetStateMachine(StateMachine):
 	 */
     def bool isTerminal(MachineState state):
 		// TODO: Compute whether the MachineState is terminal.
-        return false;
+        return false
 
 	/**
 	 * Computes the goal for a role in the current state.
@@ -60,9 +59,9 @@ class SamplePropNetStateMachine(StateMachine):
 	 * GoalDefinitionException because the goal is ill-defined.
 	 */
     def int getGoal(MachineState state, Role role)
-    throws GoalDefinitionException {
+    throws GoalDefinitionException 
 		// TODO: Compute the goal for role in state.
-        return -1;
+        return -1
 
 	/**
 	 * Returns the initial state. The initial state can be computed
@@ -71,23 +70,23 @@ class SamplePropNetStateMachine(StateMachine):
 	 */
     def getInitialState():  # MachineState
 		// TODO: Compute the initial state.
-        return null;
+        return null
 
 	/**
 	 * Computes the legal moves for role in state.
 	 */
     def List<Move> getLegalMoves(MachineState state, Role role)
-    throws MoveDefinitionException {
+    throws MoveDefinitionException 
 		// TODO: Compute legal moves.
-        return null;
+        return null
 
 	/**
 	 * Computes the next state given state and the list of moves.
 	 */
     def MachineState getNextState(MachineState state, List<Move> moves)
-    throws TransitionDefinitionException {
+    throws TransitionDefinitionException 
 		// TODO: Compute the next state.
-        return null;
+        return null
 
 	/**
 	 * This should compute the topological ordering of propositions.
@@ -104,23 +103,23 @@ class SamplePropNetStateMachine(StateMachine):
 	 * @return The order in which the truth values of propositions need to be set.
 	 */
     def List<Proposition> getOrdering()
-	{
+	
 	    // List to contain the topological ordering.
-	    List<Proposition> order = new LinkedList<Proposition>();
+	    List<Proposition> order = new LinkedList<Proposition>()
 
 		// All of the components in the PropNet
-        List<Component> components = new ArrayList<Component>(propNet.getComponents());
+        List<Component> components = new ArrayList<Component>(propNet.getComponents())
 
 		// All of the propositions in the PropNet.
-        List<Proposition> propositions = new ArrayList<Proposition>(propNet.getPropositions());
+        List<Proposition> propositions = new ArrayList<Proposition>(propNet.getPropositions())
 
 	    // TODO: Compute the topological ordering.
 
-        return order;
+        return order
 
 	/* Already implemented for you */
     def List<Role> getRoles():
-        return roles;
+        return roles
 
 	/* Helper methods */
 
@@ -136,15 +135,15 @@ class SamplePropNetStateMachine(StateMachine):
 	 * @return
 	 */
     private List<GdlSentence> toDoes(List<Move> moves)
-	{
-        List<GdlSentence> doeses = new ArrayList<GdlSentence>(moves.size());
-        Map<Role, Integer> roleIndices = getRoleIndices();
+	
+        List<GdlSentence> doeses = new ArrayList<GdlSentence>(moves.size())
+        Map<Role, Integer> roleIndices = getRoleIndices()
 
         for (int i = 0; i < roles.size(); i++)
-		{
-            int index = roleIndices.get(roles.get(i));
-            doeses.add(ProverQueryBuilder.toDoes(roles.get(i), moves.get(index)));
-        return doeses;
+		
+            int index = roleIndices.get(roles.get(i))
+            doeses.add(ProverQueryBuilder.toDoes(roles.get(i), moves.get(index)))
+        return doeses
 
 	/**
 	 * Takes in a Legal Proposition and returns the appropriate corresponding Move
@@ -152,8 +151,8 @@ class SamplePropNetStateMachine(StateMachine):
 	 * @return a PropNetMove
 	 */
     def static Move getMoveFromProposition(Proposition p)
-	{
-        return new Move(p.getName().get(1));
+	
+        return new Move(p.getName().get(1))
 
 	/**
 	 * Helper method for parsing the value of a goal proposition
@@ -161,10 +160,10 @@ class SamplePropNetStateMachine(StateMachine):
 	 * @return the integer value of the goal proposition
 	 */
     private int getGoalValue(Proposition goalProposition)
-	{
-        GdlRelation relation = (GdlRelation) goalProposition.getName();
-        GdlConstant constant = (GdlConstant) relation.get(1);
-        return Integer.parseInt(constant.toString());
+	
+        GdlRelation relation = (GdlRelation) goalProposition.getName()
+        GdlConstant constant = (GdlConstant) relation.get(1)
+        return Integer.parseInt(constant.toString())
 
 	/**
 	 * A Naive implementation that computes a PropNetMachineState
@@ -173,14 +172,13 @@ class SamplePropNetStateMachine(StateMachine):
 	 * @return PropNetMachineState
 	 */
     def MachineState getStateFromBase()
-	{
-        Set<GdlSentence> contents = new HashSet<GdlSentence>();
+	
+        Set<GdlSentence> contents = new HashSet<GdlSentence>()
         for (Proposition p : propNet.getBasePropositions().values())
-		{
-            p.setValue(p.getSingleInput().getValue());
+		
+            p.setValue(p.getSingleInput().getValue())
             if (p.getValue())
-			{
-                contents.add(p.getName());
+			
+                contents.add(p.getName())
 
-        return new MachineState(contents);
-}
+        return new MachineState(contents)

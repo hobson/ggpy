@@ -1,64 +1,60 @@
-package org.ggp.base.apps.kiosk.games;
+package org.ggp.base.apps.kiosk.games
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Set;
+import java.awt.Color
+import java.awt.Graphics
+import java.util.Set
 
-import org.ggp.base.apps.kiosk.templates.CommonGraphics;
-import org.ggp.base.apps.kiosk.templates.GameCanvas_Chessboard;
+import org.ggp.base.apps.kiosk.templates.CommonGraphics
+import org.ggp.base.apps.kiosk.templates.GameCanvas_Chessboard
 
 
 class KnightFightCanvas(GameCanvas_Chessboard):
     serialVersionUID = 1L  # int 
 
-    def String getGameName() { return "Knight Fight"; }
-    protected String getGameKey() { return "knightfight"; }
-    protected int getGridHeight() { return 10; }
-    protected int getGridWidth() { return 10; }
+    def String getGameName()  return "Knight Fight"
+    protected String getGameKey()  return "knightfight"
+    protected int getGridHeight()  return 10
+    protected int getGridWidth()  return 10
 
     protected Set<String> getFactsAboutCell(int xCell, int yCell):
-        return gameStateHasFactsMatching("\\( cell " + xCell + " " + yCell + " (.*) \\)");
-    }
+        return gameStateHasFactsMatching("\\( cell " + xCell + " " + yCell + " (.*) \\)")
 
     protected Set<String> getLegalMovesForCell(int xCell, int yCell):
-        Set<String> theMoves = gameStateHasLegalMovesMatching("\\( move " + xCell + " " + yCell + " (.*) \\)");
-        theMoves.addAll(gameStateHasLegalMovesMatching("ortho"));
-        theMoves.addAll(gameStateHasLegalMovesMatching("diag"));
-        return theMoves;
-    }
+        Set<String> theMoves = gameStateHasLegalMovesMatching("\\( move " + xCell + " " + yCell + " (.*) \\)")
+        theMoves.addAll(gameStateHasLegalMovesMatching("ortho"))
+        theMoves.addAll(gameStateHasLegalMovesMatching("diag"))
+        return theMoves
 
     protected void renderCellContent(Graphics g, String theFact):
-        String[] cellFacts = theFact.split(" ");
-        String cellType = cellFacts[4];
-        if(cellType.equals("b")) return;
+        String[] cellFacts = theFact.split(" ")
+        String cellType = cellFacts[4]
+        if(cellType.equals("b")) return
 
         if(cellType.equals("arrow")):
-            CommonGraphics.drawBubbles(g, theFact.hashCode());
-        } else {
-            CommonGraphics.drawChessPiece(g, cellType.charAt(0) + "n");
-        }
-    }
+            CommonGraphics.drawBubbles(g, theFact.hashCode())
+        else:
+            CommonGraphics.drawChessPiece(g, cellType.charAt(0) + "n")
+
 
     protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove):
-        int width = g.getClipBounds().width;
-        int height = g.getClipBounds().height;
+        int width = g.getClipBounds().width
+        int height = g.getClipBounds().height
 
-        String[] moveParts = theMove.split(" ");
+        String[] moveParts = theMove.split(" ")
 
         if(moveParts[0].equals("ortho")):
             if(isSelectedCell(xCell, yCell))
-                CommonGraphics.fillWithString(g, "+", 1.2);
-        } else if(moveParts[0].equals("diag")):
+                CommonGraphics.fillWithString(g, "+", 1.2)
+        elif(moveParts[0].equals("diag")):
             if(isSelectedCell(xCell, yCell))
-                CommonGraphics.fillWithString(g, "x", 1.2);
-        } else {
-            int xTarget = Integer.parseInt(moveParts[4]);
-            int yTarget = Integer.parseInt(moveParts[5]);
+                CommonGraphics.fillWithString(g, "x", 1.2)
+        else:
+            int xTarget = Integer.parseInt(moveParts[4])
+            int yTarget = Integer.parseInt(moveParts[5])
             if(xCell == xTarget && yCell == yTarget):
-                g.setColor(new Color(0, 0, 255, 192));
-                g.drawRect(3, 3, width-6, height-6);
-                CommonGraphics.fillWithString(g, "X", 3);
-            }
-        }
-    }
-}
+                g.setColor(new Color(0, 0, 255, 192))
+                g.drawRect(3, 3, width-6, height-6)
+                CommonGraphics.fillWithString(g, "X", 3)
+
+
+

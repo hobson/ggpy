@@ -1,21 +1,21 @@
-package org.ggp.base.util.gdl.factory.exceptions;
+package org.ggp.base.util.gdl.factory.exceptions
 
-import org.ggp.base.util.symbol.grammar.Symbol;
+import org.ggp.base.util.symbol.grammar.Symbol
 
 class GdlFormatException(Exception):
-{
+
 
     source = Symbol()
 
     def GdlFormatException(source=Symbol())
-	{
-        this.source = source;
+	
+        self.source = source
 
     def Symbol getSource()
-	{
-        return source;
+	
+        return source
 
     def String toString()
-	{
-        return "Improperly formatted gdl expression: " + source;
+	
+        return "Improperly formatted gdl expression: " + source
 

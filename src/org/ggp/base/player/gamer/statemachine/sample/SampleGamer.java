@@ -1,16 +1,16 @@
-package org.ggp.base.player.gamer.statemachine.sample;
+package org.ggp.base.player.gamer.statemachine.sample
 
-import org.ggp.base.apps.player.detail.DetailPanel;
-import org.ggp.base.apps.player.detail.SimpleDetailPanel;
-import org.ggp.base.player.gamer.exception.GamePreviewException;
-import org.ggp.base.player.gamer.statemachine.StateMachineGamer;
-import org.ggp.base.util.game.Game;
-import org.ggp.base.util.statemachine.StateMachine;
-import org.ggp.base.util.statemachine.cache.CachedStateMachine;
-import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
-import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
+import org.ggp.base.apps.player.detail.DetailPanel
+import org.ggp.base.apps.player.detail.SimpleDetailPanel
+import org.ggp.base.player.gamer.exception.GamePreviewException
+import org.ggp.base.player.gamer.statemachine.StateMachineGamer
+import org.ggp.base.util.game.Game
+import org.ggp.base.util.statemachine.StateMachine
+import org.ggp.base.util.statemachine.cache.CachedStateMachine
+import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException
+import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException
+import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException
+import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine
 
 /**
  * SampleGamer is a simplified version of the StateMachineGamer, dropping some
@@ -23,9 +23,9 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
  */
 
 def abstract class SampleGamer(StateMachineGamer):
-{
+
     def void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
-	{
+	
 		// Sample gamers do no metagaming at the beginning of the match.
 
 
@@ -35,15 +35,15 @@ def abstract class SampleGamer(StateMachineGamer):
 	 * Then this function would return "MyGamer"
 	 */
     def getName():  # String
-        return getClass().getSimpleName();
+        return getClass().getSimpleName()
 
 	// This is the default State Machine
     def getInitialStateMachine():  # StateMachine
-        return new CachedStateMachine(new ProverStateMachine());
+        return new CachedStateMachine(new ProverStateMachine())
 
 	// This is the defaul Sample Panel
     def getDetailPanel():  # DetailPanel
-        return new SimpleDetailPanel();
+        return new SimpleDetailPanel()
 
 
 
@@ -53,6 +53,5 @@ def abstract class SampleGamer(StateMachineGamer):
     def stateMachineAbort():  # void
 		// Sample gamers do no special cleanup when the match ends abruptly.
 
-    def void preview(Game g, int timeout) throws GamePreviewException {
+    def void preview(Game g, int timeout) throws GamePreviewException 
 		// Sample gamers do no game previewing.
-}

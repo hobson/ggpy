@@ -1,8 +1,8 @@
-package org.ggp.base.util.gdl.model;
+package org.ggp.base.util.gdl.model
 
-import java.util.Set;
+import java.util.Set
 
-import org.ggp.base.util.gdl.grammar.GdlSentence;
+import org.ggp.base.util.gdl.grammar.GdlSentence
 
 
 class SentenceModelUtils(object):
@@ -10,6 +10,6 @@ class SentenceModelUtils(object):
             Set<SentenceForm> forms):
         for(SentenceForm form : forms)
             if(form.matches(sentence))
-                return true;
-        return false;
+                return true
+        return false
 

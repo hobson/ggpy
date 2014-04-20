@@ -1,14 +1,14 @@
-package org.ggp.base.player.gamer.statemachine.sample;
+package org.ggp.base.player.gamer.statemachine.sample
 
-import java.util.List;
+import java.util.List
 
-import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent;
-import org.ggp.base.util.statemachine.MachineState;
-import org.ggp.base.util.statemachine.Move;
-import org.ggp.base.util.statemachine.StateMachine;
-import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
-import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
+import org.ggp.base.player.gamer.event.GamerSelectedMoveEvent
+import org.ggp.base.util.statemachine.MachineState
+import org.ggp.base.util.statemachine.Move
+import org.ggp.base.util.statemachine.StateMachine
+import org.ggp.base.util.statemachine.exceptions.GoalDefinitionException
+import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException
+import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException
 
 /**
  * SampleMonteCarloGamer is a simple state-machine-based Gamer. It will use a
@@ -24,63 +24,62 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  * @author Sam Schreiber
  */
 class SampleMonteCarloGamer(SampleGamer):
-{
+
 	/**
 	 * Employs a simple sample "Monte Carlo" algorithm.
 	 */
     def Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
-	{
-	    StateMachine theMachine = getStateMachine();
-        int start = System.currentTimeMillis();
-        int finishBy = timeout - 1000;
+	
+	    StateMachine theMachine = getStateMachine()
+        int start = System.currentTimeMillis()
+        int finishBy = timeout - 1000
 
-        List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole());
-        Move selection = moves.get(0);
+        List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole())
+        Move selection = moves.get(0)
         if (moves.size() > 1):
-    		int[] moveTotalPoints = new int[moves.size()];
-    		int[] moveTotalAttempts = new int[moves.size()];
+    		int[] moveTotalPoints = new int[moves.size()]
+    		int[] moveTotalAttempts = new int[moves.size()]
 
     		// Perform depth charges for each candidate move, and keep track
     		// of the total score and total attempts accumulated for each move.
     		for (int i = 0; true; i = (i+1) % moves.size()):
     		    if (System.currentTimeMillis() > finishBy)
-    		        break;
+    		        break
 
-    		    int theScore = performDepthChargeFromMove(getCurrentState(), moves.get(i));
-    		    moveTotalPoints[i] += theScore;
-    		    moveTotalAttempts[i] += 1;
-    		}
+    		    int theScore = performDepthChargeFromMove(getCurrentState(), moves.get(i))
+    		    moveTotalPoints[i] += theScore
+    		    moveTotalAttempts[i] += 1
+
 
     		// Compute the expected score for each move.
-    		float[] moveExpectedPoints = new float[moves.size()];
+    		float[] moveExpectedPoints = new float[moves.size()]
     		for (int i = 0; i < moves.size(); i++):
-    		    moveExpectedPoints[i] = (float)moveTotalPoints[i] / moveTotalAttempts[i];
-    		}
+    		    moveExpectedPoints[i] = (float)moveTotalPoints[i] / moveTotalAttempts[i]
+
 
     		// Find the move with the best expected score.
-    		int bestMove = 0;
-    		float bestMoveScore = moveExpectedPoints[0];
+    		int bestMove = 0
+    		float bestMoveScore = moveExpectedPoints[0]
     		for (int i = 1; i < moves.size(); i++):
     		    if (moveExpectedPoints[i] > bestMoveScore):
-    		        bestMoveScore = moveExpectedPoints[i];
-    		        bestMove = i;
-    		    }
-    		}
-    		selection = moves.get(bestMove);
+    		        bestMoveScore = moveExpectedPoints[i]
+    		        bestMove = i
 
-        int stop = System.currentTimeMillis();
 
-        notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
-        return selection;
+    		selection = moves.get(bestMove)
 
-    private int[] depth = new int[1];
+        int stop = System.currentTimeMillis()
+
+        notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start))
+        return selection
+
+    private int[] depth = new int[1]
     int performDepthChargeFromMove(MachineState theState, Move myMove):
-	    StateMachine theMachine = getStateMachine();
-	    try {
-            MachineState finalState = theMachine.performDepthCharge(theMachine.getRandomNextState(theState, getRole(), myMove), depth);
-            return theMachine.getGoal(finalState, getRole());
-        } catch (Exception e):
-            e.printStackTrace();
-            return 0;
-        }
-}
+	    StateMachine theMachine = getStateMachine()
+	    try 
+            MachineState finalState = theMachine.performDepthCharge(theMachine.getRandomNextState(theState, getRole(), myMove), depth)
+            return theMachine.getGoal(finalState, getRole())
+        except Exception e):
+            e.printStackTrace()
+            return 0
+

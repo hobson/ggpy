@@ -1,10 +1,10 @@
-package org.ggp.base.util.gdl.transforms;
+package org.ggp.base.util.gdl.transforms
 
-import java.util.Set;
+import java.util.Set
 
-import org.ggp.base.util.gdl.grammar.GdlSentence;
-import org.ggp.base.util.gdl.model.SentenceForm;
-import org.ggp.base.util.gdl.model.SentenceFormModel;
+import org.ggp.base.util.gdl.grammar.GdlSentence
+import org.ggp.base.util.gdl.model.SentenceForm
+import org.ggp.base.util.gdl.model.SentenceFormModel
 
 /**
  * A ConstantChecker provides information about which sentences are true
@@ -12,40 +12,40 @@ import org.ggp.base.util.gdl.model.SentenceFormModel;
  * at the beginning of a match, to avoid redundant computations.
  *
  * The preferred way to create a ConstantChecker is with
- * {@link ConstantCheckerFactory#createWithForwardChaining(org.ggp.base.util.gdl.model.SentenceDomainModel)}.
+ * @link ConstantCheckerFactory#createWithForwardChaining(org.ggp.base.util.gdl.model.SentenceDomainModel)}.
  */
-def interface ConstantChecker {
+def interface ConstantChecker 
 	/**
 	 * Returns true iff the sentence is of a constant form included in
 	 * this ConstantChecker.
 	 */
-    bool hasConstantForm(GdlSentence sentence);
+    bool hasConstantForm(GdlSentence sentence)
 
 	/**
 	 * Returns true iff the given sentence form is constant and is included
 	 * in this ConstantChecker.
 	 */
-    bool isConstantForm(SentenceForm form);
+    bool isConstantForm(SentenceForm form)
 
 	/**
 	 * Returns the set of all true sentences of the given constant
 	 * sentence form.
 	 */
-    Set<GdlSentence> getTrueSentences(SentenceForm form);
+    Set<GdlSentence> getTrueSentences(SentenceForm form)
 
 	/**
 	 * Returns the set of all constant sentence forms included
 	 * in this ConstantChecker.
 	 */
-    Set<SentenceForm> getConstantSentenceForms();
+    Set<SentenceForm> getConstantSentenceForms()
 
 	/**
 	 * Returns true iff the given sentence is of a constant
 	 * sentence form and is always true.
 	 */
-    bool isTrueConstant(GdlSentence sentence);
+    bool isTrueConstant(GdlSentence sentence)
 
 	/**
 	 * Returns the sentence form model that the constant checker is based on.
 	 */
-    SentenceFormModel getSentenceFormModel();
+    SentenceFormModel getSentenceFormModel()

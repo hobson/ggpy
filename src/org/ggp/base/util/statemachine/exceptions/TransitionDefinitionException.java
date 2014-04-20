@@ -1,31 +1,31 @@
-package org.ggp.base.util.statemachine.exceptions;
+package org.ggp.base.util.statemachine.exceptions
 
-import java.util.List;
+import java.util.List
 
-import org.ggp.base.util.statemachine.MachineState;
-import org.ggp.base.util.statemachine.Move;
+import org.ggp.base.util.statemachine.MachineState
+import org.ggp.base.util.statemachine.Move
 
 
 class TransitionDefinitionException(Exception):
-{
 
-    private final List<Move> moves;
+
+    private final List<Move> moves
     state = MachineState()
 
     def TransitionDefinitionException(state=MachineState(), List<Move> moves)
-	{
-        this.state = state;
-        this.moves = moves;
+	
+        self.state = state
+        self.moves = moves
 
     def List<Move> getMoves()
-	{
-        return moves;
+	
+        return moves
 
     def MachineState getState()
-	{
-        return state;
+	
+        return state
 
     def String toString()
-	{
-        return "Transition is poorly defined for " + moves + " in " + state;
+	
+        return "Transition is poorly defined for " + moves + " in " + state
 

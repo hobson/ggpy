@@ -1,13 +1,13 @@
-package org.ggp.base.apps.player.config;
+package org.ggp.base.apps.player.config
 
-import java.awt.LayoutManager;
+import java.awt.LayoutManager
 
-import javax.swing.JPanel;
+import javax.swing.JPanel
 
 def abstract class ConfigPanel(JPanel):
-{
+
 
     def ConfigPanel(layoutManager=LayoutManager())
-	{
-        super(layoutManager);
+	
+        super(layoutManager)
 

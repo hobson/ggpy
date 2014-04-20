@@ -1,10 +1,10 @@
-package org.ggp.base.util.game;
+package org.ggp.base.util.game
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.File
+import java.util.HashSet
+import java.util.Set
 
-import org.ggp.base.util.files.FileUtils;
+import org.ggp.base.util.files.FileUtils
 
 
 /**
@@ -15,19 +15,17 @@ import org.ggp.base.util.files.FileUtils;
  */
 class TestGameRepository(GameRepository):
     protected Set<String> getUncachedGameKeys():
-        Set<String> theKeys = new HashSet<String>();
+        Set<String> theKeys = new HashSet<String>()
         for(File game : new File("games/test").listFiles()):
-            if(!game.getName().endsWith(".kif")) continue;
-            theKeys.add(game.getName().replace(".kif", ""));
-        }
-        return theKeys;
-    }
+            if(!game.getName().endsWith(".kif")) continue
+            theKeys.add(game.getName().replace(".kif", ""))
+
+        return theKeys
 
     protected Game getUncachedGame(String theKey):
-    	try {
-    		return Game.createEphemeralGame(Game.preprocessRulesheet(FileUtils.readFileAsString(new File("games/test/" + theKey + ".kif"))));
-    	} catch (Exception e):
-    		throw new RuntimeException(e);
-    	}
-    }
-}
+    	try 
+    		return Game.createEphemeralGame(Game.preprocessRulesheet(FileUtils.readFileAsString(new File("games/test/" + theKey + ".kif"))))
+    	except Exception e):
+    		throw new RuntimeException(e)
+
+

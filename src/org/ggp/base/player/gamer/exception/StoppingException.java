@@ -1,11 +1,11 @@
-package org.ggp.base.player.gamer.exception;
+package org.ggp.base.player.gamer.exception
 
 class StoppingException(Exception):
-{
+
     def StoppingException(cause=Throwable()):
-        super(cause);
+        super(cause)
 
     def String toString()
-	{
-        return "An unhandled exception ocurred during stopping: " + super.toString();
+	
+        return "An unhandled exception ocurred during stopping: " + super.toString()
 

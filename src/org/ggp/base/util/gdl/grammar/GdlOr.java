@@ -1,53 +1,53 @@
-package org.ggp.base.util.gdl.grammar;
+package org.ggp.base.util.gdl.grammar
 
-import java.util.List;
+import java.util.List
 
 class GdlOr(GdlLiteral):
-{
 
-    private final List<GdlLiteral> disjuncts;
-    private transient Boolean ground;
+
+    private final List<GdlLiteral> disjuncts
+    private transient Boolean ground
 
     GdlOr(List<GdlLiteral> disjuncts)
-	{
-        this.disjuncts = disjuncts;
-        ground = null;
+	
+        self.disjuncts = disjuncts
+        ground = null
 
     def int arity()
-	{
-        return disjuncts.size();
+	
+        return disjuncts.size()
 
     private bool computeGround()
-	{
+	
         for (GdlLiteral literal : disjuncts)
-		{
+		
             if (!literal.isGround())
-			{
-                return false;
+			
+                return false
 
-        return true;
+        return true
 
     def GdlLiteral get(int index)
-	{
-        return disjuncts.get(index);
+	
+        return disjuncts.get(index)
 
     def bool isGround()
-	{
+	
         if (ground == null)
-		{
-            ground = computeGround();
+		
+            ground = computeGround()
 
-        return ground;
+        return ground
 
     def String toString()
-	{
-        StringBuilder sb = new StringBuilder();
+	
+        StringBuilder sb = new StringBuilder()
 
-        sb.append("( or ");
+        sb.append("( or ")
         for (GdlLiteral literal : disjuncts)
-		{
-            sb.append(literal + " ");
-        sb.append(")");
+		
+            sb.append(literal + " ")
+        sb.append(")")
 
-        return sb.toString();
+        return sb.toString()
 

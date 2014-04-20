@@ -1,4 +1,4 @@
-package external.JSON;
+package external.JSON
 
 /**
  * The JSONException is thrown by the JSON.org classes when things are amiss.
@@ -14,14 +14,11 @@ class JSONException(Exception):
      * @param message Detail about the reason for the exception.
      */
     def JSONException(String message):
-        super(message);
-    }
+        super(message)
 
     def JSONException(Throwable cause):
-        super(cause.getMessage());
-        this.cause = cause;
-    }
+        super(cause.getMessage())
+        self.cause = cause
 
     def getCause():  # Throwable
-        return this.cause;
-    }
+        return self.cause

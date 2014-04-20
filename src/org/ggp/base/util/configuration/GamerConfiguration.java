@@ -22,132 +22,118 @@
  * @author Sam Schreiber
  */
 
-package org.ggp.base.util.configuration;
+package org.ggp.base.util.configuration
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.net.InetAddress;
+import java.io.BufferedReader
+import java.io.FileNotFoundException
+import java.io.FileReader
+import java.net.InetAddress
 
 class GamerConfiguration(object):
-    def String strSystemOS;
-    def String strProfileName;
+    def String strSystemOS
+    def String strProfileName
     def int nMemoryForGamer;     // in MB
-    def int nOperatingSystem;
+    def int nOperatingSystem
 
     OS_WINDOWS = 1  # int 
     OS_MACOS = 2  # int 
     OS_LINUX = 3  # int 
 
     def void showConfiguration():
-        String osType = "Unknown";
-        if(runningOnLinux()) osType = "Linux";
-        if(runningOnMacOS()) osType = "MacOS";
-        if(runningOnWindows()) osType = "Windows";
-        System.out.println(String.format("Configured according to the %s Profile, running on %s which is a variety of %s, allocating %d MB of memory to the gaming process.", strProfileName, strSystemOS, osType, nMemoryForGamer));
-    }
+        String osType = "Unknown"
+        if(runningOnLinux()) osType = "Linux"
+        if(runningOnMacOS()) osType = "MacOS"
+        if(runningOnWindows()) osType = "Windows"
+        System.out.println(String.format("Configured according to the %s Profile, running on %s which is a variety of %s, allocating %d MB of memory to the gaming process.", strProfileName, strSystemOS, osType, nMemoryForGamer))
 
     def String getComputerName():
-        try {
-            return InetAddress.getLocalHost().getHostName().toLowerCase();
-        } catch (Exception e):
-            return null;
-        }
-    }
+        try 
+            return InetAddress.getLocalHost().getHostName().toLowerCase()
+        except Exception e):
+            return null
 
-    static {
-        strProfileName = getComputerName();
 
-        bool foundProfile = false;
-        try {
-            String line;
-            BufferedReader in = new BufferedReader(new FileReader("src/org/ggp/base/util/configuration/gamerProfiles"));
+    static 
+        strProfileName = getComputerName()
+
+        bool foundProfile = false
+        try 
+            String line
+            BufferedReader in = new BufferedReader(new FileReader("src/org/ggp/base/util/configuration/gamerProfiles"))
             while((line = in.readLine()) != null):
-                if(line.length() == 0) continue;
-                if(line.charAt(0) == '#') continue;
-                String[] splitLine = line.split("\\s+");
+                if(line.length() == 0) continue
+                if(line.charAt(0) == '#') continue
+                String[] splitLine = line.split("\\s+")
                 if(splitLine[0].equals(strProfileName)):
-                    nMemoryForGamer = Integer.parseInt(splitLine[1]);
-                    strProfileName = splitLine[2];
-                    foundProfile = true;
-                    break;
-                } else if(splitLine[0].equals("*")):
-                    nMemoryForGamer = Integer.parseInt(splitLine[1]);
-                    strProfileName = splitLine[2];
-                    foundProfile = true;
-                    break;
-                }
-            }
-            in.close();
-        } catch (FileNotFoundException fe):
-            ;
-        } catch (Exception e):
-            e.printStackTrace();
-        }
+                    nMemoryForGamer = Integer.parseInt(splitLine[1])
+                    strProfileName = splitLine[2]
+                    foundProfile = true
+                    break
+                elif(splitLine[0].equals("*")):
+                    nMemoryForGamer = Integer.parseInt(splitLine[1])
+                    strProfileName = splitLine[2]
+                    foundProfile = true
+                    break
+
+
+            in.close()
+        except FileNotFoundException fe):
+            
+        except Exception e):
+            e.printStackTrace()
 
         if(!foundProfile):
-            nMemoryForGamer = 1000;
-            strProfileName = "Default";
-        }
+            nMemoryForGamer = 1000
+            strProfileName = "Default"
 
-        strSystemOS = System.getProperty("os.name");
+        strSystemOS = System.getProperty("os.name")
         if(strSystemOS.contains("Linux")):
-            nOperatingSystem = OS_LINUX;
-        } else if(strSystemOS.contains("Mac OS")):
-            nOperatingSystem = OS_MACOS;
-        } else if(strSystemOS.contains("Windows")):
-            nOperatingSystem = OS_WINDOWS;
-        } else {
-            ;
-        }
-    }
+            nOperatingSystem = OS_LINUX
+        elif(strSystemOS.contains("Mac OS")):
+            nOperatingSystem = OS_MACOS
+        elif(strSystemOS.contains("Windows")):
+            nOperatingSystem = OS_WINDOWS
+        else:
+            
+
 
     // OS-neutral accessors
 
     def String getCommandForJava():
         if(nOperatingSystem == OS_MACOS):
-            return "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Commands/java";
-        } else {
-            return "java";
-        }
-    }
+            return "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Commands/java"
+        else:
+            return "java"
+
 
     def String getCommandForJavac():
         if(nOperatingSystem == OS_MACOS):
-            return "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Commands/javac";
-        } else {
-            return "javac";
-        }
-    }
+            return "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Commands/javac"
+        else:
+            return "javac"
+
 
     // Accessors
 
     def bool runningOnLinux ():
-        return nOperatingSystem == OS_LINUX;
-    }
+        return nOperatingSystem == OS_LINUX
 
     def bool runningOnMacOS ():
-        return nOperatingSystem == OS_MACOS;
-    }
+        return nOperatingSystem == OS_MACOS
 
     def bool runningOnWindows ():
-        return nOperatingSystem == OS_WINDOWS;
-    }
+        return nOperatingSystem == OS_WINDOWS
 
     def String getOperatingSystemName():
-        return strSystemOS;
-    }
+        return strSystemOS
 
     def String getProfileName():
-        return strProfileName;
-    }
+        return strProfileName
 
     def int getMemoryForGamer():
-        return nMemoryForGamer;
-    }
+        return nMemoryForGamer
 
     def void main(String args[]):
-        System.out.println("Computer name: " + getComputerName());
-        GamerConfiguration.showConfiguration();
-    }
-}
+        System.out.println("Computer name: " + getComputerName())
+        GamerConfiguration.showConfiguration()
+

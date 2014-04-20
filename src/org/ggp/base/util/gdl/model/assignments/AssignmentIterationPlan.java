@@ -1,28 +1,28 @@
-package org.ggp.base.util.gdl.model.assignments;
+package org.ggp.base.util.gdl.model.assignments
 
-import java.util.List;
-import java.util.Map;
+import java.util.List
+import java.util.Map
 
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlDistinct;
-import org.ggp.base.util.gdl.grammar.GdlVariable;
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlDistinct
+import org.ggp.base.util.gdl.grammar.GdlVariable
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableMap
 
 class AssignmentIterationPlan(object):
 	//TODO: Come up with better representations
-    private final ImmutableList<GdlVariable> varsToAssign;
-    private final ImmutableList<ImmutableList<ImmutableList<GdlConstant>>> tuplesBySource;
-    private final ImmutableMap<GdlVariable, GdlConstant> headAssignment;
-    private final ImmutableList<Integer> indicesToChangeWhenNull;
-    private final ImmutableList<GdlDistinct> distincts;
-    private final ImmutableMap<Integer, GdlVariable> varsToChangePerDistinct;
-    private final ImmutableMap<Integer, AssignmentFunction> valuesToCompute;
-    private final ImmutableList<Integer> sourceDefiningSlot;
-    private final ImmutableList<ImmutableList<GdlConstant>> valuesToIterate;
-    private final ImmutableList<ImmutableList<Integer>> varsChosenBySource;
-    private final ImmutableList<ImmutableList<Boolean>> putDontCheckBySource;
+    private final ImmutableList<GdlVariable> varsToAssign
+    private final ImmutableList<ImmutableList<ImmutableList<GdlConstant>>> tuplesBySource
+    private final ImmutableMap<GdlVariable, GdlConstant> headAssignment
+    private final ImmutableList<Integer> indicesToChangeWhenNull
+    private final ImmutableList<GdlDistinct> distincts
+    private final ImmutableMap<Integer, GdlVariable> varsToChangePerDistinct
+    private final ImmutableMap<Integer, AssignmentFunction> valuesToCompute
+    private final ImmutableList<Integer> sourceDefiningSlot
+    private final ImmutableList<ImmutableList<GdlConstant>> valuesToIterate
+    private final ImmutableList<ImmutableList<Integer>> varsChosenBySource
+    private final ImmutableList<ImmutableList<Boolean>> putDontCheckBySource
     empty = bool()
     allDone = bool()
 
@@ -40,58 +40,58 @@ class AssignmentIterationPlan(object):
             ImmutableList<ImmutableList<Boolean>> putDontCheckBySource,
             bool empty,
             bool allDone):
-        this.varsToAssign = varsToAssign;
-        this.tuplesBySource = tuplesBySource;
-        this.headAssignment = headAssignment;
-        this.indicesToChangeWhenNull = indicesToChangeWhenNull;
-        this.distincts = distincts;
-        this.varsToChangePerDistinct = varsToChangePerDistinct;
-        this.valuesToCompute = valuesToCompute;
-        this.sourceDefiningSlot = sourceDefiningSlot;
-        this.valuesToIterate = valuesToIterate;
-        this.varsChosenBySource = varsChosenBySource;
-        this.putDontCheckBySource = putDontCheckBySource;
-        this.empty = empty;
-        this.allDone = allDone;
+        self.varsToAssign = varsToAssign
+        self.tuplesBySource = tuplesBySource
+        self.headAssignment = headAssignment
+        self.indicesToChangeWhenNull = indicesToChangeWhenNull
+        self.distincts = distincts
+        self.varsToChangePerDistinct = varsToChangePerDistinct
+        self.valuesToCompute = valuesToCompute
+        self.sourceDefiningSlot = sourceDefiningSlot
+        self.valuesToIterate = valuesToIterate
+        self.varsChosenBySource = varsChosenBySource
+        self.putDontCheckBySource = putDontCheckBySource
+        self.empty = empty
+        self.allDone = allDone
 
     def ImmutableList<GdlVariable> getVarsToAssign():
-        return varsToAssign;
+        return varsToAssign
 
     def ImmutableList<ImmutableList<ImmutableList<GdlConstant>>> getTuplesBySource():
-        return tuplesBySource;
+        return tuplesBySource
 
     def ImmutableMap<GdlVariable, GdlConstant> getHeadAssignment():
-        return headAssignment;
+        return headAssignment
 
     def ImmutableList<Integer> getIndicesToChangeWhenNull():
-        return indicesToChangeWhenNull;
+        return indicesToChangeWhenNull
 
     def ImmutableList<GdlDistinct> getDistincts():
-        return distincts;
+        return distincts
 
     def ImmutableMap<Integer, GdlVariable> getVarsToChangePerDistinct():
-        return varsToChangePerDistinct;
+        return varsToChangePerDistinct
 
     def ImmutableMap<Integer, AssignmentFunction> getValuesToCompute():
-        return valuesToCompute;
+        return valuesToCompute
 
     def ImmutableList<Integer> getSourceDefiningSlot():
-        return sourceDefiningSlot;
+        return sourceDefiningSlot
 
     def ImmutableList<ImmutableList<GdlConstant>> getValuesToIterate():
-        return valuesToIterate;
+        return valuesToIterate
 
     def ImmutableList<ImmutableList<Integer>> getVarsChosenBySource():
-        return varsChosenBySource;
+        return varsChosenBySource
 
     def ImmutableList<ImmutableList<Boolean>> getPutDontCheckBySource():
-        return putDontCheckBySource;
+        return putDontCheckBySource
 
     def getEmpty():  # bool
-        return empty;
+        return empty
 
     def getAllDone():  # bool
-        return allDone;
+        return allDone
 
     def final AssignmentIterationPlan EMPTY_ITERATION_PLAN =
             new AssignmentIterationPlan(
@@ -108,7 +108,7 @@ class AssignmentIterationPlan(object):
                     null,
                     true,
                     false
-					);
+					)
 
     def static AssignmentIterationPlan create(List<GdlVariable> varsToAssign,
             List<ImmutableList<ImmutableList<GdlConstant>>> tuplesBySource,
@@ -124,7 +124,7 @@ class AssignmentIterationPlan(object):
             bool empty,
             bool allDone):
         if (empty):
-            return EMPTY_ITERATION_PLAN;
+            return EMPTY_ITERATION_PLAN
         return new AssignmentIterationPlan(ImmutableList.copyOf(varsToAssign),
                 ImmutableList.copyOf(tuplesBySource),
                 ImmutableMap.copyOf(headAssignment),
@@ -137,12 +137,12 @@ class AssignmentIterationPlan(object):
                 ImmutableList.copyOf(varsChosenBySource),
                 ImmutableList.copyOf(putDontCheckBySource),
                 empty,
-                allDone);
+                allDone)
 
     private static <T> ImmutableMap<Integer, T> fromNullableList(
             List<T> nullableList):
-        ImmutableMap.Builder<Integer, T> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<Integer, T> builder = ImmutableMap.builder()
         for (int i = 0; i < nullableList.size(); i++):
             if (nullableList.get(i) != null):
-                builder.put(i, nullableList.get(i));
-        return builder.build();
+                builder.put(i, nullableList.get(i))
+        return builder.build()

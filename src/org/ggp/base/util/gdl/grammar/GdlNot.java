@@ -1,29 +1,29 @@
-package org.ggp.base.util.gdl.grammar;
+package org.ggp.base.util.gdl.grammar
 
 class GdlNot(GdlLiteral):
-{
+
 
     body = GdlLiteral()
-    private transient Boolean ground;
+    private transient Boolean ground
 
     GdlNot(GdlLiteral body)
-	{
-        this.body = body;
-        ground = null;
+	
+        self.body = body
+        ground = null
 
     def GdlLiteral getBody()
-	{
-        return body;
+	
+        return body
 
     def bool isGround()
-	{
+	
         if (ground == null)
-		{
-            ground = body.isGround();
+		
+            ground = body.isGround()
 
-        return ground;
+        return ground
 
     def String toString()
-	{
-        return "( not " + body + " )";
+	
+        return "( not " + body + " )"
 

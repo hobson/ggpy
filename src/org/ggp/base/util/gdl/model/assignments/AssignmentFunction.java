@@ -1,18 +1,18 @@
-package org.ggp.base.util.gdl.model.assignments;
+package org.ggp.base.util.gdl.model.assignments
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList
+import java.util.List
+import java.util.Map
 
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlFunction;
-import org.ggp.base.util.gdl.grammar.GdlRelation;
-import org.ggp.base.util.gdl.grammar.GdlTerm;
-import org.ggp.base.util.gdl.grammar.GdlVariable;
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlFunction
+import org.ggp.base.util.gdl.grammar.GdlRelation
+import org.ggp.base.util.gdl.grammar.GdlTerm
+import org.ggp.base.util.gdl.grammar.GdlVariable
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableMap
+import com.google.common.collect.Maps
 
 class AssignmentFunction(object):
 		//How is the AssignmentFunction going to operate?
@@ -30,12 +30,12 @@ class AssignmentFunction(object):
 		//to the same variable. In this case we call these other
 		//functions with the same arguments and return null if
 		//any of the answers differ.
-        private final ImmutableList<AssignmentFunction> internalFunctions;
+        private final ImmutableList<AssignmentFunction> internalFunctions
 	    querySize = int()
-        private final ImmutableList<Boolean> isInputConstant;
-        private final ImmutableMap<Integer, GdlConstant> queryConstants;
-        private final ImmutableList<Integer> queryInputIndices;
-        private final ImmutableMap<ImmutableList<GdlConstant>, GdlConstant> function;
+        private final ImmutableList<Boolean> isInputConstant
+        private final ImmutableMap<Integer, GdlConstant> queryConstants
+        private final ImmutableList<Integer> queryInputIndices
+        private final ImmutableMap<ImmutableList<GdlConstant>, GdlConstant> function
 		//Some sort of trie might work better here...
 
         private AssignmentFunction(ImmutableList<AssignmentFunction> internalFunctions,
@@ -44,92 +44,91 @@ class AssignmentFunction(object):
                 ImmutableMap<Integer, GdlConstant> queryConstants,
                 ImmutableList<Integer> queryInputIndices,
                 ImmutableMap<ImmutableList<GdlConstant>, GdlConstant> function):
-            this.internalFunctions = internalFunctions;
-            this.querySize = querySize;
-            this.isInputConstant = isInputConstant;
-            this.queryConstants = queryConstants;
-            this.queryInputIndices = queryInputIndices;
-            this.function = function;
+            self.internalFunctions = internalFunctions
+            self.querySize = querySize
+            self.isInputConstant = isInputConstant
+            self.queryConstants = queryConstants
+            self.queryInputIndices = queryInputIndices
+            self.function = function
 
 	    def static AssignmentFunction create(GdlRelation conjunct, FunctionInfo functionInfo,
                 GdlVariable rightmostVar, List<GdlVariable> varOrder,
                 Map<GdlVariable, GdlConstant> preassignment):
 			//We have to set up the things mentioned above...
-            List<AssignmentFunction> internalFunctions = new ArrayList<AssignmentFunction>();
+            List<AssignmentFunction> internalFunctions = new ArrayList<AssignmentFunction>()
 
 			//We can traverse the conjunct for the list of variables/constants...
-            List<GdlTerm> terms = new ArrayList<GdlTerm>();
-            gatherVars(conjunct.getBody(), terms);
+            List<GdlTerm> terms = new ArrayList<GdlTerm>()
+            gatherVars(conjunct.getBody(), terms)
 			//Note that we assume here that the var of interest only
 			//appears once in the relation...
-            int varIndex = terms.indexOf(rightmostVar);
+            int varIndex = terms.indexOf(rightmostVar)
             if(varIndex == -1):
-                System.out.println("conjunct is: " + conjunct);
-                System.out.println("terms are: " + terms);
-                System.out.println("righmostVar is: " + rightmostVar);
-            terms.remove(rightmostVar);
-            Map<ImmutableList<GdlConstant>, GdlConstant> function = functionInfo.getValueMap(varIndex);
+                System.out.println("conjunct is: " + conjunct)
+                System.out.println("terms are: " + terms)
+                System.out.println("righmostVar is: " + rightmostVar)
+            terms.remove(rightmostVar)
+            Map<ImmutableList<GdlConstant>, GdlConstant> function = functionInfo.getValueMap(varIndex)
 
 			//Set up inputs and such, using terms
-            int querySize = terms.size();
-            List<Boolean> isInputConstant = new ArrayList<Boolean>(terms.size());
-            Map<Integer, GdlConstant> queryConstants = Maps.newHashMap();
-            List<Integer> queryInputIndices = new ArrayList<Integer>(terms.size());
+            int querySize = terms.size()
+            List<Boolean> isInputConstant = new ArrayList<Boolean>(terms.size())
+            Map<Integer, GdlConstant> queryConstants = Maps.newHashMap()
+            List<Integer> queryInputIndices = new ArrayList<Integer>(terms.size())
             for(int i = 0; i < terms.size(); i++):
-                GdlTerm term = terms.get(i);
+                GdlTerm term = terms.get(i)
                 if(term instanceof GdlConstant):
-                    isInputConstant.add(true);
-                    queryConstants.put(i, (GdlConstant) term);
-                    queryInputIndices.add(-1);
-				} else if(term instanceof GdlVariable):
+                    isInputConstant.add(true)
+                    queryConstants.put(i, (GdlConstant) term)
+                    queryInputIndices.add(-1)
+				elif(term instanceof GdlVariable):
 					//Is it in the head assignment?
                     if(preassignment.containsKey(term)):
-                        isInputConstant.add(true);
-                        queryConstants.put(i, preassignment.get(term));
-                        queryInputIndices.add(-1);
-					} else {
-                        isInputConstant.add(false);
-//						queryConstants.add(null);
+                        isInputConstant.add(true)
+                        queryConstants.put(i, preassignment.get(term))
+                        queryInputIndices.add(-1)
+					else:
+                        isInputConstant.add(false)
+//						queryConstants.add(null)
 						//What value do we put here?
 						//We want to grab some value out of the
 						//input tuple, which uses functional ordering
 						//Index of the relevant variable, by the
 						//assignment's ordering
-                        queryInputIndices.add(varOrder.indexOf(term));
+                        queryInputIndices.add(varOrder.indexOf(term))
             return new AssignmentFunction(
                     ImmutableList.copyOf(internalFunctions),
                     querySize,
                     ImmutableList.copyOf(isInputConstant),
                     ImmutableMap.copyOf(queryConstants),
                     ImmutableList.copyOf(queryInputIndices),
-                    ImmutableMap.copyOf(function));
+                    ImmutableMap.copyOf(function))
 
 	    def functional():  # bool
-            return (function != null);
+            return (function != null)
 
         def void gatherVars(List<GdlTerm> body, List<GdlTerm> terms):
             for(GdlTerm term : body):
                 if(term instanceof GdlConstant || term instanceof GdlVariable)
-                    terms.add(term);
+                    terms.add(term)
                 else if(term instanceof GdlFunction)
-                    gatherVars(((GdlFunction)term).getBody(), terms);
+                    gatherVars(((GdlFunction)term).getBody(), terms)
 
 	    def GdlConstant getValue(List<GdlConstant> remainingTuple):
 			//We have a map from a tuple of GdlConstants
 			//to the GdlConstant we need, provided by the FunctionInfo.
 			//We need to make the tuple for this map.
-            List<GdlConstant> queryTuple = new ArrayList<GdlConstant>(querySize);
+            List<GdlConstant> queryTuple = new ArrayList<GdlConstant>(querySize)
 			//Now we have to fill in the query
             for(int i = 0; i < querySize; i++):
                 if(isInputConstant.get(i)):
-                    queryTuple.add(queryConstants.get(i));
-				} else {
-                    queryTuple.add(remainingTuple.get(queryInputIndices.get(i)));
+                    queryTuple.add(queryConstants.get(i))
+				else:
+                    queryTuple.add(remainingTuple.get(queryInputIndices.get(i)))
 			//The query is filled; we ask the map
-            GdlConstant answer = function.get(queryTuple);
+            GdlConstant answer = function.get(queryTuple)
 
             for (AssignmentFunction internalFunction : internalFunctions):
                 if (internalFunction.getValue(remainingTuple) != answer):
-                    return null;
-            return answer;
-	}
+                    return null
+            return answer

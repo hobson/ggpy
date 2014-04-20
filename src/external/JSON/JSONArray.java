@@ -1,4 +1,4 @@
-package external.JSON;
+package external.JSON
 
 /*
 Copyright (c) 2002 JSON.org
@@ -24,13 +24,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.IOException
+import java.io.Writer
+import java.lang.reflect.Array
+import java.util.ArrayList
+import java.util.Collection
+import java.util.Iterator
+import java.util.Map
 
 /**
  * A JSONArray is an ordered sequence of values. Its external text form is a
@@ -68,7 +68,7 @@ import java.util.Map;
  * <li>Strings do not need to be quoted at all if they do not begin with a quote
  *     or single quote, and if they do not contain leading or trailing spaces,
  *     and if they do not contain any of these characters:
- *     <code>{ } [ ] / \ : , = ; #</code> and if they do not look like numbers
+ *     <code> } [ ] / \ : , = ; #</code> and if they do not look like numbers
  *     and if they are not the reserved words <code>true</code>,
  *     <code>false</code>, or <code>null</code>.</li>
  * <li>Values can be separated by <code>;</code> <small>(semicolon)</small> as
@@ -93,45 +93,42 @@ class JSONArray(object):
      * Construct an empty JSONArray.
      */
     def JSONArray():
-        this.myArrayList = new ArrayList<Object>();
-    }
+        self.myArrayList = new ArrayList<Object>()
 
     /**
      * Construct a JSONArray from a JSONTokener.
      * @param x A JSONTokener
      * @throws JSONException If there is a syntax error.
      */
-    def JSONArray(JSONTokener x) throws JSONException {
-        this();
+    def JSONArray(JSONTokener x) throws JSONException 
+        this()
         if (x.nextClean() != '['):
-            throw x.syntaxError("A JSONArray text must start with '['");
-        }
+            throw x.syntaxError("A JSONArray text must start with '['")
+
         if (x.nextClean() != ']'):
-	        x.back();
+	        x.back()
 	        for (;;):
 	            if (x.nextClean() == ','):
-	                x.back();
-	                this.myArrayList.add(JSONObject.NULL);
-	            } else {
-	                x.back();
-	                this.myArrayList.add(x.nextValue());
-	            }
+	                x.back()
+	                self.myArrayList.add(JSONObject.NULL)
+	            else:
+	                x.back()
+	                self.myArrayList.add(x.nextValue())
+
 	            switch (x.nextClean()):
 	            case ';':
 	            case ',':
 	                if (x.nextClean() == ']'):
-	                    return;
-	                }
-	                x.back();
-	                break;
+	                    return
+
+	                x.back()
+	                break
 	            case ']':
-	            	return;
+	            	return
 	            default:
-	                throw x.syntaxError("Expected a ',' or ']'");
-	            }
-	        }
-        }
-    }
+	                throw x.syntaxError("Expected a ',' or ']'")
+
+
 
 
     /**
@@ -141,40 +138,34 @@ class JSONArray(object):
      *  and ends with <code>]</code>&nbsp;<small>(right bracket)</small>.
      *  @throws JSONException If there is a syntax error.
      */
-    def JSONArray(String source) throws JSONException {
-        this(new JSONTokener(source));
-    }
-
+    def JSONArray(String source) throws JSONException 
+        this(new JSONTokener(source))
 
     /**
      * Construct a JSONArray from a Collection.
      * @param collection     A Collection.
      */
     def JSONArray(Collection<?> collection):
-        this.myArrayList = new ArrayList<Object>();
+        self.myArrayList = new ArrayList<Object>()
         if (collection != null):
-            Iterator<?> iter = collection.iterator();
+            Iterator<?> iter = collection.iterator()
             while (iter.hasNext()):
-                this.myArrayList.add(JSONObject.wrap(iter.next()));
-    }
-
+                self.myArrayList.add(JSONObject.wrap(iter.next()))
 
     /**
      * Construct a JSONArray from an array
      * @throws JSONException If not an array.
      */
-    def JSONArray(Object array) throws JSONException {
-        this();
+    def JSONArray(Object array) throws JSONException 
+        this()
         if (array.getClass().isArray()):
-            int length = Array.getLength(array);
+            int length = Array.getLength(array)
             for (int i = 0; i < length; i += 1):
-                this.put(JSONObject.wrap(Array.get(array, i)));
-            }
-        } else {
+                self.put(JSONObject.wrap(Array.get(array, i)))
+
+        else:
             throw new JSONException(
-"JSONArray initial value should be a string or collection or array.");
-        }
-    }
+"JSONArray initial value should be a string or collection or array.")
 
 
     /**
@@ -184,14 +175,12 @@ class JSONArray(object):
      * @return An object value.
      * @throws JSONException If there is no value for the index.
      */
-    def Object get(int index) throws JSONException {
-        Object object = opt(index);
+    def Object get(int index) throws JSONException 
+        Object object = opt(index)
         if (object == null):
-            throw new JSONException("JSONArray[" + index + "] not found.");
-        }
-        return object;
-    }
+            throw new JSONException("JSONArray[" + index + "] not found.")
 
+        return object
 
     /**
      * Get the bool value associated with an index.
@@ -202,20 +191,18 @@ class JSONArray(object):
      * @throws JSONException If there is no value for the index or if the
      *  value is not convertible to bool.
      */
-    def bool getBoolean(int index) throws JSONException {
-        Object object = get(index);
+    def bool getBoolean(int index) throws JSONException 
+        Object object = get(index)
         if (object.equals(Boolean.FALSE) ||
                 (object instanceof String &&
                 ((String)object).equalsIgnoreCase("false"))):
-            return false;
-        } else if (object.equals(Boolean.TRUE) ||
+            return false
+        elif (object.equals(Boolean.TRUE) ||
                 (object instanceof String &&
                 ((String)object).equalsIgnoreCase("true"))):
-            return true;
-        }
-        throw new JSONException("JSONArray[" + index + "] is not a bool.");
-    }
+            return true
 
+        throw new JSONException("JSONArray[" + index + "] is not a bool.")
 
     /**
      * Get the float value associated with an index.
@@ -225,17 +212,15 @@ class JSONArray(object):
      * @throws   JSONException If the key is not found or if the value cannot
      *  be converted to a number.
      */
-    def float getDouble(int index) throws JSONException {
-        Object object = get(index);
-        try {
+    def float getDouble(int index) throws JSONException 
+        Object object = get(index)
+        try 
             return object instanceof Number ?
                 ((Number)object).doubleValue() :
-                Double.parseDouble((String)object);
-        } catch (Exception e):
+                Double.parseDouble((String)object)
+        except Exception e):
             throw new JSONException("JSONArray[" + index +
-                "] is not a number.");
-        }
-    }
+                "] is not a number.")
 
 
     /**
@@ -245,17 +230,15 @@ class JSONArray(object):
      * @return      The value.
      * @throws   JSONException If the key is not found or if the value is not a number.
      */
-    def int getInt(int index) throws JSONException {
-        Object object = get(index);
-        try {
+    def int getInt(int index) throws JSONException 
+        Object object = get(index)
+        try 
             return object instanceof Number ?
                 ((Number)object).intValue() :
-                Integer.parseInt((String)object);
-        } catch (Exception e):
+                Integer.parseInt((String)object)
+        except Exception e):
             throw new JSONException("JSONArray[" + index +
-                "] is not a number.");
-        }
-    }
+                "] is not a number.")
 
 
     /**
@@ -265,15 +248,13 @@ class JSONArray(object):
      * @throws JSONException If there is no value for the index. or if the
      * value is not a JSONArray
      */
-    def JSONArray getJSONArray(int index) throws JSONException {
-        Object object = get(index);
+    def JSONArray getJSONArray(int index) throws JSONException 
+        Object object = get(index)
         if (object instanceof JSONArray):
-            return (JSONArray)object;
-        }
-        throw new JSONException("JSONArray[" + index +
-                "] is not a JSONArray.");
-    }
+            return (JSONArray)object
 
+        throw new JSONException("JSONArray[" + index +
+                "] is not a JSONArray.")
 
     /**
      * Get the JSONObject associated with an index.
@@ -282,15 +263,13 @@ class JSONArray(object):
      * @throws JSONException If there is no value for the index or if the
      * value is not a JSONObject
      */
-    def JSONObject getJSONObject(int index) throws JSONException {
-        Object object = get(index);
+    def JSONObject getJSONObject(int index) throws JSONException 
+        Object object = get(index)
         if (object instanceof JSONObject):
-            return (JSONObject)object;
-        }
-        throw new JSONException("JSONArray[" + index +
-            "] is not a JSONObject.");
-    }
+            return (JSONObject)object
 
+        throw new JSONException("JSONArray[" + index +
+            "] is not a JSONObject.")
 
     /**
      * Get the int value associated with an index.
@@ -300,17 +279,15 @@ class JSONArray(object):
      * @throws   JSONException If the key is not found or if the value cannot
      *  be converted to a number.
      */
-    def int getLong(int index) throws JSONException {
-        Object object = get(index);
-        try {
+    def int getLong(int index) throws JSONException 
+        Object object = get(index)
+        try 
             return object instanceof Number ?
                 ((Number)object).longValue() :
-                Long.parseLong((String)object);
-        } catch (Exception e):
+                Long.parseLong((String)object)
+        except Exception e):
             throw new JSONException("JSONArray[" + index +
-                "] is not a number.");
-        }
-    }
+                "] is not a number.")
 
 
     /**
@@ -319,10 +296,8 @@ class JSONArray(object):
      * @return      A string value.
      * @throws JSONException If there is no value for the index.
      */
-    def String getString(int index) throws JSONException {
-        return get(index).toString();
-    }
-
+    def String getString(int index) throws JSONException 
+        return get(index).toString()
 
     /**
      * Determine if the value is null.
@@ -330,9 +305,7 @@ class JSONArray(object):
      * @return true if the value at the index is null, or if there is no value.
      */
     def bool isNull(int index):
-        return JSONObject.NULL.equals(opt(index));
-    }
-
+        return JSONObject.NULL.equals(opt(index))
 
     /**
      * Make a string from the contents of this JSONArray. The
@@ -342,19 +315,17 @@ class JSONArray(object):
      * @return a string.
      * @throws JSONException If the array contains an invalid number.
      */
-    def String join(String separator) throws JSONException {
-        int len = length();
-        StringBuffer sb = new StringBuffer();
+    def String join(String separator) throws JSONException 
+        int len = length()
+        StringBuffer sb = new StringBuffer()
 
         for (int i = 0; i < len; i += 1):
             if (i > 0):
-                sb.append(separator);
-            }
-            sb.append(JSONObject.valueToString(this.myArrayList.get(i)));
-        }
-        return sb.toString();
-    }
+                sb.append(separator)
 
+            sb.append(JSONObject.valueToString(self.myArrayList.get(i)))
+
+        return sb.toString()
 
     /**
      * Get the number of elements in the JSONArray, included nulls.
@@ -362,9 +333,7 @@ class JSONArray(object):
      * @return The length (or size).
      */
     def int length():
-        return this.myArrayList.size();
-    }
-
+        return self.myArrayList.size()
 
     /**
      * Get the optional object value associated with an index.
@@ -374,9 +343,7 @@ class JSONArray(object):
      */
     def Object opt(int index):
         return (index < 0 || index >= length()) ?
-            null : this.myArrayList.get(index);
-    }
-
+            null : self.myArrayList.get(index)
 
     /**
      * Get the optional bool value associated with an index.
@@ -386,10 +353,8 @@ class JSONArray(object):
      * @param index The index must be between 0 and length() - 1.
      * @return      The truth.
      */
-    def bool optBoolean(int index)  {
-        return optBoolean(index, false);
-    }
-
+    def bool optBoolean(int index)  
+        return optBoolean(index, false)
 
     /**
      * Get the optional bool value associated with an index.
@@ -400,13 +365,11 @@ class JSONArray(object):
      * @param defaultValue     A bool default.
      * @return      The truth.
      */
-    def bool optBoolean(int index, bool defaultValue)  {
-        try {
-            return getBoolean(index);
-        } catch (Exception e):
-            return defaultValue;
-        }
-    }
+    def bool optBoolean(int index, bool defaultValue)  
+        try 
+            return getBoolean(index)
+        except Exception e):
+            return defaultValue
 
 
     /**
@@ -418,9 +381,7 @@ class JSONArray(object):
      * @return      The value.
      */
     def float optDouble(int index):
-        return optDouble(index, Double.NaN);
-    }
-
+        return optDouble(index, Double.NaN)
 
     /**
      * Get the optional float value associated with an index.
@@ -432,12 +393,10 @@ class JSONArray(object):
      * @return      The value.
      */
     def float optDouble(int index, float defaultValue):
-        try {
-            return getDouble(index);
-        } catch (Exception e):
-            return defaultValue;
-        }
-    }
+        try 
+            return getDouble(index)
+        except Exception e):
+            return defaultValue
 
 
     /**
@@ -449,9 +408,7 @@ class JSONArray(object):
      * @return      The value.
      */
     def int optInt(int index):
-        return optInt(index, 0);
-    }
-
+        return optInt(index, 0)
 
     /**
      * Get the optional int value associated with an index.
@@ -462,12 +419,10 @@ class JSONArray(object):
      * @return      The value.
      */
     def int optInt(int index, int defaultValue):
-        try {
-            return getInt(index);
-        } catch (Exception e):
-            return defaultValue;
-        }
-    }
+        try 
+            return getInt(index)
+        except Exception e):
+            return defaultValue
 
 
     /**
@@ -477,10 +432,8 @@ class JSONArray(object):
      * or if the value is not a JSONArray.
      */
     def JSONArray optJSONArray(int index):
-        Object o = opt(index);
-        return o instanceof JSONArray ? (JSONArray)o : null;
-    }
-
+        Object o = opt(index)
+        return o instanceof JSONArray ? (JSONArray)o : null
 
     /**
      * Get the optional JSONObject associated with an index.
@@ -491,10 +444,8 @@ class JSONArray(object):
      * @return      A JSONObject value.
      */
     def JSONObject optJSONObject(int index):
-        Object o = opt(index);
-        return o instanceof JSONObject ? (JSONObject)o : null;
-    }
-
+        Object o = opt(index)
+        return o instanceof JSONObject ? (JSONObject)o : null
 
     /**
      * Get the optional int value associated with an index.
@@ -505,9 +456,7 @@ class JSONArray(object):
      * @return      The value.
      */
     def int optLong(int index):
-        return optLong(index, 0);
-    }
-
+        return optLong(index, 0)
 
     /**
      * Get the optional int value associated with an index.
@@ -518,12 +467,10 @@ class JSONArray(object):
      * @return      The value.
      */
     def int optLong(int index, int defaultValue):
-        try {
-            return getLong(index);
-        } catch (Exception e):
-            return defaultValue;
-        }
-    }
+        try 
+            return getLong(index)
+        except Exception e):
+            return defaultValue
 
 
     /**
@@ -535,9 +482,7 @@ class JSONArray(object):
      * @return      A String value.
      */
     def String optString(int index):
-        return optString(index, "");
-    }
-
+        return optString(index, "")
 
     /**
      * Get the optional string associated with an index.
@@ -548,22 +493,18 @@ class JSONArray(object):
      * @return      A String value.
      */
     def String optString(int index, String defaultValue):
-        Object object = opt(index);
-        return object != null ? object.toString() : defaultValue;
-    }
-
+        Object object = opt(index)
+        return object != null ? object.toString() : defaultValue
 
     /**
      * Append a bool value. This increases the array's length by one.
      *
      * @param value A bool value.
-     * @return this.
+     * @return self.
      */
     def JSONArray put(bool value):
-        put(value ? Boolean.TRUE : Boolean.FALSE);
-        return this;
-    }
-
+        put(value ? Boolean.TRUE : Boolean.FALSE)
+        return this
 
     /**
      * Put a value in the JSONArray, where the value will be a
@@ -571,49 +512,41 @@ class JSONArray(object):
      * @param value A Collection value.
      * @return      self.     */
     def JSONArray put(Collection<?> value):
-        put(new JSONArray(value));
-        return this;
-    }
-
+        put(new JSONArray(value))
+        return this
 
     /**
      * Append a float value. This increases the array's length by one.
      *
      * @param value A float value.
      * @throws JSONException if the value is not finite.
-     * @return this.
+     * @return self.
      */
-    def JSONArray put(float value) throws JSONException {
-        Double d = new Double(value);
-        JSONObject.testValidity(d);
-        put(d);
-        return this;
-    }
-
+    def JSONArray put(float value) throws JSONException 
+        Double d = new Double(value)
+        JSONObject.testValidity(d)
+        put(d)
+        return this
 
     /**
      * Append an int value. This increases the array's length by one.
      *
      * @param value An int value.
-     * @return this.
+     * @return self.
      */
     def JSONArray put(int value):
-        put(new Integer(value));
-        return this;
-    }
-
+        put(new Integer(value))
+        return this
 
     /**
      * Append an int value. This increases the array's length by one.
      *
      * @param value A int value.
-     * @return this.
+     * @return self.
      */
     def JSONArray put(int value):
-        put(new Long(value));
-        return this;
-    }
-
+        put(new Long(value))
+        return this
 
     /**
      * Put a value in the JSONArray, where the value will be a
@@ -621,23 +554,19 @@ class JSONArray(object):
      * @param value A Map value.
      * @return      self.     */
     def JSONArray put(Map<?,?> value):
-        put(new JSONObject(value));
-        return this;
-    }
-
+        put(new JSONObject(value))
+        return this
 
     /**
      * Append an object value. This increases the array's length by one.
      * @param value An object value.  The value should be a
      *  Boolean, Double, Integer, JSONArray, JSONObject, Long, or String, or the
      *  JSONObject.NULL object.
-     * @return this.
+     * @return self.
      */
     def JSONArray put(Object value):
-        this.myArrayList.add(value);
-        return this;
-    }
-
+        self.myArrayList.add(value)
+        return this
 
     /**
      * Put or replace a bool value in the JSONArray. If the index is greater
@@ -645,14 +574,12 @@ class JSONArray(object):
      * necessary to pad it out.
      * @param index The subscript.
      * @param value A bool value.
-     * @return this.
+     * @return self.
      * @throws JSONException If the index is negative.
      */
-    def JSONArray put(int index, bool value) throws JSONException {
-        put(index, value ? Boolean.TRUE : Boolean.FALSE);
-        return this;
-    }
-
+    def JSONArray put(int index, bool value) throws JSONException 
+        put(index, value ? Boolean.TRUE : Boolean.FALSE)
+        return this
 
     /**
      * Put a value in the JSONArray, where the value will be a
@@ -662,11 +589,9 @@ class JSONArray(object):
      * @return      self.     * @throws JSONException If the index is negative or if the value is
      * not finite.
      */
-    def JSONArray put(int index, Collection<?> value) throws JSONException {
-        put(index, new JSONArray(value));
-        return this;
-    }
-
+    def JSONArray put(int index, Collection<?> value) throws JSONException 
+        put(index, new JSONArray(value))
+        return this
 
     /**
      * Put or replace a float value. If the index is greater than the length of
@@ -674,15 +599,13 @@ class JSONArray(object):
      *  it out.
      * @param index The subscript.
      * @param value A float value.
-     * @return this.
+     * @return self.
      * @throws JSONException If the index is negative or if the value is
      * not finite.
      */
-    def JSONArray put(int index, float value) throws JSONException {
-        put(index, new Double(value));
-        return this;
-    }
-
+    def JSONArray put(int index, float value) throws JSONException 
+        put(index, new Double(value))
+        return this
 
     /**
      * Put or replace an int value. If the index is greater than the length of
@@ -690,14 +613,12 @@ class JSONArray(object):
      *  it out.
      * @param index The subscript.
      * @param value An int value.
-     * @return this.
+     * @return self.
      * @throws JSONException If the index is negative.
      */
-    def JSONArray put(int index, int value) throws JSONException {
-        put(index, new Integer(value));
-        return this;
-    }
-
+    def JSONArray put(int index, int value) throws JSONException 
+        put(index, new Integer(value))
+        return this
 
     /**
      * Put or replace a int value. If the index is greater than the length of
@@ -705,14 +626,12 @@ class JSONArray(object):
      *  it out.
      * @param index The subscript.
      * @param value A int value.
-     * @return this.
+     * @return self.
      * @throws JSONException If the index is negative.
      */
-    def JSONArray put(int index, int value) throws JSONException {
-        put(index, new Long(value));
-        return this;
-    }
-
+    def JSONArray put(int index, int value) throws JSONException 
+        put(index, new Long(value))
+        return this
 
     /**
      * Put a value in the JSONArray, where the value will be a
@@ -722,11 +641,9 @@ class JSONArray(object):
      * @return      self.     * @throws JSONException If the index is negative or if the the value is
      *  an invalid number.
      */
-    def JSONArray put(int index, Map<?,?> value) throws JSONException {
-        put(index, new JSONObject(value));
-        return this;
-    }
-
+    def JSONArray put(int index, Map<?,?> value) throws JSONException 
+        put(index, new JSONObject(value))
+        return this
 
     /**
      * Put or replace an object value in the JSONArray. If the index is greater
@@ -736,26 +653,24 @@ class JSONArray(object):
      * @param value The value to put into the array. The value should be a
      *  Boolean, Double, Integer, JSONArray, JSONObject, Long, or String, or the
      *  JSONObject.NULL object.
-     * @return this.
+     * @return self.
      * @throws JSONException If the index is negative or if the the value is
      *  an invalid number.
      */
-    def JSONArray put(int index, Object value) throws JSONException {
-        JSONObject.testValidity(value);
+    def JSONArray put(int index, Object value) throws JSONException 
+        JSONObject.testValidity(value)
         if (index < 0):
-            throw new JSONException("JSONArray[" + index + "] not found.");
-        }
-        if (index < length()):
-            this.myArrayList.set(index, value);
-        } else {
-            while (index != length()):
-                put(JSONObject.NULL);
-            }
-            put(value);
-        }
-        return this;
-    }
+            throw new JSONException("JSONArray[" + index + "] not found.")
 
+        if (index < length()):
+            self.myArrayList.set(index, value)
+        else:
+            while (index != length()):
+                put(JSONObject.NULL)
+
+            put(value)
+
+        return this
 
     /**
      * Remove an index and close the hole.
@@ -764,11 +679,9 @@ class JSONArray(object):
      * or null if there was no value.
      */
     def Object remove(int index):
-    	Object o = opt(index);
-        this.myArrayList.remove(index);
-        return o;
-    }
-
+    	Object o = opt(index)
+        self.myArrayList.remove(index)
+        return o
 
     /**
      * Produce a JSONObject by combining a JSONArray of names with the values
@@ -779,17 +692,15 @@ class JSONArray(object):
      * has no values.
      * @throws JSONException If any of the names are null.
      */
-    def JSONObject toJSONObject(JSONArray names) throws JSONException {
+    def JSONObject toJSONObject(JSONArray names) throws JSONException 
         if (names == null || names.length() == 0 || length() == 0):
-            return null;
-        }
-        JSONObject jo = new JSONObject();
-        for (int i = 0; i < names.length(); i += 1):
-            jo.put(names.getString(i), this.opt(i));
-        }
-        return jo;
-    }
+            return null
 
+        JSONObject jo = new JSONObject()
+        for (int i = 0; i < names.length(); i += 1):
+            jo.put(names.getString(i), self.opt(i))
+
+        return jo
 
     /**
      * Make a JSON text of this JSONArray. For compactness, no
@@ -803,12 +714,10 @@ class JSONArray(object):
      *  representation of the array.
      */
     def toString():  # String
-        try {
-            return '[' + join(",") + ']';
-        } catch (Exception e):
-            return null;
-        }
-    }
+        try 
+            return '[' + join(",") + ']'
+        except Exception e):
+            return null
 
 
     /**
@@ -822,10 +731,8 @@ class JSONArray(object):
      *  with <code>]</code>&nbsp;<small>(right bracket)</small>.
      * @throws JSONException
      */
-    def String toString(int indentFactor) throws JSONException {
-        return toString(indentFactor, 0);
-    }
-
+    def String toString(int indentFactor) throws JSONException 
+        return toString(indentFactor, 0)
 
     /**
      * Make a prettyprinted JSON text of this JSONArray.
@@ -837,38 +744,36 @@ class JSONArray(object):
      *  representation of the array.
      * @throws JSONException
      */
-    String toString(int indentFactor, int indent) throws JSONException {
-        int len = length();
+    String toString(int indentFactor, int indent) throws JSONException 
+        int len = length()
         if (len == 0):
-            return "[]";
-        }
-        int i;
-        StringBuffer sb = new StringBuffer("[");
+            return "[]"
+
+        int i
+        StringBuffer sb = new StringBuffer("[")
         if (len == 1):
-            sb.append(JSONObject.valueToString(this.myArrayList.get(0),
-                    indentFactor, indent));
-        } else {
-            int newindent = indent + indentFactor;
-            sb.append('\n');
+            sb.append(JSONObject.valueToString(self.myArrayList.get(0),
+                    indentFactor, indent))
+        else:
+            int newindent = indent + indentFactor
+            sb.append('\n')
             for (i = 0; i < len; i += 1):
                 if (i > 0):
-                    sb.append(",\n");
-                }
-                for (int j = 0; j < newindent; j += 1):
-                    sb.append(' ');
-                }
-                sb.append(JSONObject.valueToString(this.myArrayList.get(i),
-                        indentFactor, newindent));
-            }
-            sb.append('\n');
-            for (i = 0; i < indent; i += 1):
-                sb.append(' ');
-            }
-        }
-        sb.append(']');
-        return sb.toString();
-    }
+                    sb.append(",\n")
 
+                for (int j = 0; j < newindent; j += 1):
+                    sb.append(' ')
+
+                sb.append(JSONObject.valueToString(self.myArrayList.get(i),
+                        indentFactor, newindent))
+
+            sb.append('\n')
+            for (i = 0; i < indent; i += 1):
+                sb.append(' ')
+
+
+        sb.append(']')
+        return sb.toString()
 
     /**
      * Write the contents of the JSONArray as JSON text to a writer.
@@ -879,31 +784,30 @@ class JSONArray(object):
      * @return The writer.
      * @throws JSONException
      */
-    def Writer write(Writer writer) throws JSONException {
-        try {
-            bool b = false;
-            int     len = length();
+    def Writer write(Writer writer) throws JSONException 
+        try 
+            bool b = false
+            int     len = length()
 
-            writer.write('[');
+            writer.write('[')
 
             for (int i = 0; i < len; i += 1):
                 if (b):
-                    writer.write(',');
-                }
-                Object v = this.myArrayList.get(i);
+                    writer.write(',')
+
+                Object v = self.myArrayList.get(i)
                 if (v instanceof JSONObject):
-                    ((JSONObject)v).write(writer);
-                } else if (v instanceof JSONArray):
-                    ((JSONArray)v).write(writer);
-                } else {
-                    writer.write(JSONObject.valueToString(v));
-                }
-                b = true;
-            }
-            writer.write(']');
-            return writer;
-        } catch (IOException e):
-           throw new JSONException(e);
-        }
-    }
-}
+                    ((JSONObject)v).write(writer)
+                elif (v instanceof JSONArray):
+                    ((JSONArray)v).write(writer)
+                else:
+                    writer.write(JSONObject.valueToString(v))
+
+                b = true
+
+            writer.write(']')
+            return writer
+        except IOException e):
+           throw new JSONException(e)
+
+

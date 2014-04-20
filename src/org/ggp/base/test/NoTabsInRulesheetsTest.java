@@ -1,48 +1,45 @@
-package org.ggp.base.test;
+package org.ggp.base.test
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileFilter
+import java.io.FileWriter
+import java.io.IOException
 
-import org.ggp.base.util.files.FileUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.ggp.base.util.files.FileUtils
+import org.junit.Assert
+import org.junit.Test
 
 
 class NoTabsInRulesheetsTest(Assert):
     // Check that GGP-Base's games use spaces, not tabs.
     @Test
     def void testNoTabsInRulesheets():
-        File testGamesFolder = new File("games", "test");
-        assertTrue(testGamesFolder.isDirectory());
+        File testGamesFolder = new File("games", "test")
+        assertTrue(testGamesFolder.isDirectory())
 
         for (File gameFile : testGamesFolder.listFiles(new KifFileFilter())):
-            String fileContents = FileUtils.readFileAsString(gameFile);
-            assertFalse("The game "+gameFile+" contains tabs. Run the main method in NoTabsInRulesheetsTest to fix this.", fileContents.contains("\t"));
-        }
-    }
+            String fileContents = FileUtils.readFileAsString(gameFile)
+            assertFalse("The game "+gameFile+" contains tabs. Run the main method in NoTabsInRulesheetsTest to fix self.", fileContents.contains("\t"))
+
 
     // Modify the test games to use spaces instead of tabs.
-    def void main(String[] args) throws Exception {
-        File testGamesFolder = new File("games", "test");
-        assertTrue(testGamesFolder.isDirectory());
+    def void main(String[] args) throws Exception 
+        File testGamesFolder = new File("games", "test")
+        assertTrue(testGamesFolder.isDirectory())
 
         for (File gameFile : testGamesFolder.listFiles(new KifFileFilter())):
-            String fileContents = FileUtils.readFileAsString(gameFile);
+            String fileContents = FileUtils.readFileAsString(gameFile)
             String newContents = fileContents.replaceAll("\t", "    "); //four spaces
-            overwriteFileWithString(gameFile, newContents);
-        }
-    }
+            overwriteFileWithString(gameFile, newContents)
 
-    static void overwriteFileWithString(File file, String newContents) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.append(newContents);
-        writer.close();
-    }
+
+    static void overwriteFileWithString(File file, String newContents) throws IOException 
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file))
+        writer.append(newContents)
+        writer.close()
 
     static class KifFileFilter(FileFilter):
 		    def bool accept(File pathname):
-	        return pathname.getName().endsWith(".kif");
-	    }
+	        return pathname.getName().endsWith(".kif")
+

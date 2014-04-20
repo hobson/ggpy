@@ -1,6 +1,6 @@
-package org.ggp.base.apps.consoles;
+package org.ggp.base.apps.consoles
 
-import org.python.util.PythonInterpreter;
+import org.python.util.PythonInterpreter
 
 /**
  * PythonConsole is a Jython-based app that lets you interact with a Python
@@ -27,9 +27,8 @@ import org.python.util.PythonInterpreter;
  */
 class PythonConsole(object):
     def void main(String[] args):
-        PythonInterpreter interpreter = new PythonInterpreter();
-        interpreter.exec("from scripts import *");
-        interpreter.exec("import external.JythonConsole.console");
-        interpreter.exec("external.JythonConsole.console.main(locals())");
-    }
-}
+        PythonInterpreter interpreter = new PythonInterpreter()
+        interpreter.exec("from scripts import *")
+        interpreter.exec("import external.JythonConsole.console")
+        interpreter.exec("external.JythonConsole.console.main(locals())")
+

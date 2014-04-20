@@ -1,21 +1,21 @@
-package org.ggp.base.util.gdl.grammar;
+package org.ggp.base.util.gdl.grammar
 
-import java.util.List;
+import java.util.List
 
 def abstract class GdlSentence(GdlLiteral):
-{
 
-    def abstract int arity();
 
-    def abstract GdlTerm get(int index);
+    def abstract int arity()
 
-    def abstract GdlConstant getName();
+    def abstract GdlTerm get(int index)
 
-    def abstract bool isGround();
+    def abstract GdlConstant getName()
 
-    def abstract String toString();
+    def abstract bool isGround()
 
-    def abstract GdlTerm toTerm();
+    def abstract String toString()
 
-    def abstract List<GdlTerm> getBody();
+    def abstract GdlTerm toTerm()
+
+    def abstract List<GdlTerm> getBody()
 

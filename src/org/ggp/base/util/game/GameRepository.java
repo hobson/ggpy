@@ -1,8 +1,8 @@
-package org.ggp.base.util.game;
+package org.ggp.base.util.game
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.HashMap
+import java.util.Map
+import java.util.Set
 
 /**
  * Game repositories contain games, and provide two main services: you can
@@ -15,33 +15,29 @@ import java.util.Set;
  *
  * @author Sam
  */
-def abstract class GameRepository {
+def abstract class GameRepository 
     def GameRepository getDefaultRepository():
-        return new CloudGameRepository("games.ggp.org/base");
-    }
+        return new CloudGameRepository("games.ggp.org/base")
 
     def Game getGame(String theKey):
         if (!theGames.containsKey(theKey)):
-            Game theGame = getUncachedGame(theKey);
+            Game theGame = getUncachedGame(theKey)
             if (theGame != null):
-                theGames.put(theKey, theGame);
-            }
-        }
-        return theGames.get(theKey);
-    }
+                theGames.put(theKey, theGame)
+
+
+        return theGames.get(theKey)
 
     def Set<String> getGameKeys():
         if (theGameKeys == null):
-            theGameKeys = getUncachedGameKeys();
-        }
-        return theGameKeys;
-    }
+            theGameKeys = getUncachedGameKeys()
+
+        return theGameKeys
 
     // Abstract methods, for implementation classes.
-    protected abstract Game getUncachedGame(String theKey);
-    protected abstract Set<String> getUncachedGameKeys();
+    protected abstract Game getUncachedGame(String theKey)
+    protected abstract Set<String> getUncachedGameKeys()
 
     // Cached values, lazily filled.
     theGameKeys = Set<String>()
-    private Map<String, Game> theGames = new HashMap<String, Game>();
-}
+    private Map<String, Game> theGames = new HashMap<String, Game>()

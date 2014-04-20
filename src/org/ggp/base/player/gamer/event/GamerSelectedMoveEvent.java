@@ -1,26 +1,26 @@
-package org.ggp.base.player.gamer.event;
+package org.ggp.base.player.gamer.event
 
-import java.util.List;
+import java.util.List
 
-import org.ggp.base.util.observer.Event;
-import org.ggp.base.util.statemachine.Move;
+import org.ggp.base.util.observer.Event
+import org.ggp.base.util.statemachine.Move
 
 class GamerSelectedMoveEvent(Event):
-{
-    private final List<Move> moves;
+
+    private final List<Move> moves
     selection = Move()
     time = int()
 
     def GamerSelectedMoveEvent(List<Move> moves, Move selection, int time):
-        this.moves = moves;
-        this.selection = selection;
-        this.time = time;
+        self.moves = moves
+        self.selection = selection
+        self.time = time
 
     def List<Move> getMoves():
-        return moves;
+        return moves
 
     def getSelection():  # Move
-        return selection;
+        return selection
 
     def getTime():  # int
-        return time;
+        return time

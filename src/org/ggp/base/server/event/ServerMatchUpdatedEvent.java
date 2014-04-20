@@ -1,7 +1,7 @@
-package org.ggp.base.server.event;
+package org.ggp.base.server.event
 
-import org.ggp.base.util.match.Match;
-import org.ggp.base.util.observer.Event;
+import org.ggp.base.util.match.Match
+import org.ggp.base.util.observer.Event
 
 class ServerMatchUpdatedEvent(Event):
     match = Match()
@@ -9,15 +9,15 @@ class ServerMatchUpdatedEvent(Event):
     externalFilename = ''
 
     def ServerMatchUpdatedEvent(match=Match(), String externalPublicationKey, String externalFilename):
-        this.match = match;
-        this.externalFilename = externalFilename;
-        this.externalPublicationKey = externalPublicationKey;
+        self.match = match
+        self.externalFilename = externalFilename
+        self.externalPublicationKey = externalPublicationKey
 
     def getMatch():  # Match
-        return match;
+        return match
 
     def getExternalFilename():  # String
-        return externalFilename;
+        return externalFilename
 
     def getExternalPublicationKey():  # String
-        return externalPublicationKey;
+        return externalPublicationKey

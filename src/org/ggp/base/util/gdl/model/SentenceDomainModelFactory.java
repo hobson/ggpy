@@ -1,15 +1,15 @@
-package org.ggp.base.util.gdl.model;
+package org.ggp.base.util.gdl.model
 
-import java.util.List;
-import java.util.Map;
+import java.util.List
+import java.util.Map
 
-import org.ggp.base.util.gdl.grammar.Gdl;
+import org.ggp.base.util.gdl.grammar.Gdl
 
 class SentenceDomainModelFactory(object):
-    def static ImmutableSentenceDomainModel createWithCartesianDomains(List<Gdl> description) throws InterruptedException {
-        ImmutableSentenceFormModel formModel = SentenceFormModelFactory.create(description);
+    def static ImmutableSentenceDomainModel createWithCartesianDomains(List<Gdl> description) throws InterruptedException 
+        ImmutableSentenceFormModel formModel = SentenceFormModelFactory.create(description)
 
-        SentenceFormsFinder sentenceFormsFinder = new SentenceFormsFinder(formModel.getDescription());
-        Map<SentenceForm, SentenceFormDomain> domains = sentenceFormsFinder.findCartesianDomains();
+        SentenceFormsFinder sentenceFormsFinder = new SentenceFormsFinder(formModel.getDescription())
+        Map<SentenceForm, SentenceFormDomain> domains = sentenceFormsFinder.findCartesianDomains()
 
-        return ImmutableSentenceDomainModel.create(formModel, domains);
+        return ImmutableSentenceDomainModel.create(formModel, domains)

@@ -1,16 +1,16 @@
-package org.ggp.base.util.game;
+package org.ggp.base.util.game
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayList
+import java.util.List
 
-import org.ggp.base.util.gdl.factory.GdlFactory;
-import org.ggp.base.util.gdl.factory.exceptions.GdlFormatException;
-import org.ggp.base.util.gdl.grammar.Gdl;
-import org.ggp.base.util.symbol.factory.SymbolFactory;
-import org.ggp.base.util.symbol.factory.exceptions.SymbolFormatException;
-import org.ggp.base.util.symbol.grammar.SymbolList;
+import org.ggp.base.util.gdl.factory.GdlFactory
+import org.ggp.base.util.gdl.factory.exceptions.GdlFormatException
+import org.ggp.base.util.gdl.grammar.Gdl
+import org.ggp.base.util.symbol.factory.SymbolFactory
+import org.ggp.base.util.symbol.factory.exceptions.SymbolFormatException
+import org.ggp.base.util.symbol.grammar.SymbolList
 
-import external.JSON.JSONObject;
+import external.JSON.JSONObject
 
 /**
  * Game objects contain all of the relevant information about a specific game,
@@ -54,49 +54,41 @@ import external.JSON.JSONObject;
  */
 
 class Game(object):
-    private final String theKey;
-    private final String theName;
-    private final String theDescription;
-    private final String theRepositoryURL;
-    private final String theStylesheet;
-    private final String theRulesheet;
+    private final String theKey
+    private final String theName
+    private final String theDescription
+    private final String theRepositoryURL
+    private final String theStylesheet
+    private final String theRulesheet
 
     def Game createEphemeralGame(String theRulesheet):
-        return new Game(null, null, null, null, null, theRulesheet);
-    }
+        return new Game(null, null, null, null, null, theRulesheet)
 
     protected Game (String theKey, String theName, String theDescription, String theRepositoryURL, String theStylesheet, String theRulesheet):
-        this.theKey = theKey;
-        this.theName = theName;
-        this.theDescription = theDescription;
-        this.theRepositoryURL = theRepositoryURL;
-        this.theStylesheet = theStylesheet;
-        this.theRulesheet = theRulesheet;
-    }
+        self.theKey = theKey
+        self.theName = theName
+        self.theDescription = theDescription
+        self.theRepositoryURL = theRepositoryURL
+        self.theStylesheet = theStylesheet
+        self.theRulesheet = theRulesheet
 
     def String getKey():
-        return theKey;
-    }
+        return theKey
 
     def String getName():
-        return theName;
-    }
+        return theName
 
     def String getRepositoryURL():
-        return theRepositoryURL;
-    }
+        return theRepositoryURL
 
     def String getDescription():
-        return theDescription;
-    }
+        return theDescription
 
     def String getStylesheet():
-        return theStylesheet;
-    }
+        return theStylesheet
 
     def String getRulesheet():
-    	return theRulesheet;
-    }
+    	return theRulesheet
 
     /**
      * Pre-process a rulesheet into the standard form. This involves stripping
@@ -111,21 +103,20 @@ class Game(object):
      */
     def String preprocessRulesheet(String rawRulesheet):
 		// First, strip all of the comments from the rulesheet.
-        StringBuilder rulesheetBuilder = new StringBuilder();
-        String[] rulesheetLines = rawRulesheet.split("[\n\r]");
+        StringBuilder rulesheetBuilder = new StringBuilder()
+        String[] rulesheetLines = rawRulesheet.split("[\n\r]")
         for (int i = 0; i < rulesheetLines.length; i++):
-            String line = rulesheetLines[i];
-            int comment = line.indexOf(';');
-            int cutoff = (comment == -1) ? line.length() : comment;
-            rulesheetBuilder.append(line.substring(0, cutoff));
-            rulesheetBuilder.append(" ");
-        String processedRulesheet = rulesheetBuilder.toString();
+            String line = rulesheetLines[i]
+            int comment = line.indexOf(';')
+            int cutoff = (comment == -1) ? line.length() : comment
+            rulesheetBuilder.append(line.substring(0, cutoff))
+            rulesheetBuilder.append(" ")
+        String processedRulesheet = rulesheetBuilder.toString()
 
 		// Add opening and closing parens for parsing as symbol list.
-        processedRulesheet = "( " + processedRulesheet + " )";
+        processedRulesheet = "( " + processedRulesheet + " )"
 
-        return processedRulesheet;
-    }
+        return processedRulesheet
 
     /**
      * Gets the GDL object representation of the game rulesheet. This representation
@@ -140,78 +131,75 @@ class Game(object):
      * @return
      */
     def List<Gdl> getRules():
-    	try {
-	        List<Gdl> rules = new ArrayList<Gdl>();
-	        SymbolList list = (SymbolList) SymbolFactory.create(theRulesheet);
+    	try 
+	        List<Gdl> rules = new ArrayList<Gdl>()
+	        SymbolList list = (SymbolList) SymbolFactory.create(theRulesheet)
 	        for (int i = 0; i < list.size(); i++)
-	        {
-	            rules.add(GdlFactory.create(list.get(i)));
-	        }
-	        return rules;
-    	} catch (GdlFormatException e):
-    		e.printStackTrace();
-    		return null;
-    	} catch (SymbolFormatException e):
-    		e.printStackTrace();
-    		return null;
-    	}
-    }
+	        
+	            rules.add(GdlFactory.create(list.get(i)))
+
+	        return rules
+    	except GdlFormatException e):
+    		e.printStackTrace()
+    		return null
+    	except SymbolFormatException e):
+    		e.printStackTrace()
+    		return null
+
 
     def String serializeToJSON():
-        try {
-            JSONObject theGameObject = new JSONObject();
-            theGameObject.put("theKey", getKey());
-            theGameObject.put("theName", getName());
-            theGameObject.put("theDescription", getDescription());
-            theGameObject.put("theRepositoryURL", getRepositoryURL());
-            theGameObject.put("theStylesheet", getStylesheet());
-            theGameObject.put("theRulesheet", getRulesheet());
+        try 
+            JSONObject theGameObject = new JSONObject()
+            theGameObject.put("theKey", getKey())
+            theGameObject.put("theName", getName())
+            theGameObject.put("theDescription", getDescription())
+            theGameObject.put("theRepositoryURL", getRepositoryURL())
+            theGameObject.put("theStylesheet", getStylesheet())
+            theGameObject.put("theRulesheet", getRulesheet())
 
-            return theGameObject.toString();
+            return theGameObject.toString()
         } catch(Exception e):
-            e.printStackTrace();
-            return null;
-        }
-    }
+            e.printStackTrace()
+            return null
+
 
     def Game loadFromJSON(String theSerializedGame):
-        try {
-            JSONObject theGameObject = new JSONObject(theSerializedGame);
+        try 
+            JSONObject theGameObject = new JSONObject(theSerializedGame)
 
-            String theKey = null;
-            try {
-                theKey = theGameObject.getString("theKey");
-            } catch (Exception e) {}
+            String theKey = null
+            try 
+                theKey = theGameObject.getString("theKey")
+            except Exception e)
 
-            String theName = null;
-            try {
-                theName = theGameObject.getString("theName");
-            } catch (Exception e) {}
+            String theName = null
+            try 
+                theName = theGameObject.getString("theName")
+            except Exception e)
 
-            String theDescription = null;
-            try {
-                theDescription = theGameObject.getString("theDescription");
-            } catch (Exception e) {}
+            String theDescription = null
+            try 
+                theDescription = theGameObject.getString("theDescription")
+            except Exception e)
 
-            String theRepositoryURL = null;
-            try {
-                theRepositoryURL = theGameObject.getString("theRepositoryURL");
-            } catch (Exception e) {}
+            String theRepositoryURL = null
+            try 
+                theRepositoryURL = theGameObject.getString("theRepositoryURL")
+            except Exception e)
 
-            String theStylesheet = null;
-            try {
-                theStylesheet = theGameObject.getString("theStylesheet");
-            } catch (Exception e) {}
+            String theStylesheet = null
+            try 
+                theStylesheet = theGameObject.getString("theStylesheet")
+            except Exception e)
 
-            String theRulesheet = null;
-            try {
-            	theRulesheet = theGameObject.getString("theRulesheet");
-            } catch (Exception e) {}
+            String theRulesheet = null
+            try 
+            	theRulesheet = theGameObject.getString("theRulesheet")
+            except Exception e)
 
-            return new Game(theKey, theName, theDescription, theRepositoryURL, theStylesheet, theRulesheet);
+            return new Game(theKey, theName, theDescription, theRepositoryURL, theStylesheet, theRulesheet)
         } catch(Exception e):
-            e.printStackTrace();
-            return null;
-        }
-    }
-}
+            e.printStackTrace()
+            return null
+
+

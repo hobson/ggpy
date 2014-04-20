@@ -1,8 +1,8 @@
-package org.ggp.base.util.propnet.architecture;
+package org.ggp.base.util.propnet.architecture
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable
+import java.util.HashSet
+import java.util.Set
 
 /**
  * The root class of the Component hierarchy, which is designed to represent
@@ -11,22 +11,21 @@ import java.util.Set;
  */
 
 def abstract class Component implements Serializable
-{
+
 
     serialVersionUID = 352524175700224447L  # int 
     /** The inputs to the component. */
-    private final Set<Component> inputs;
+    private final Set<Component> inputs
     /** The outputs of the component. */
-    private final Set<Component> outputs;
+    private final Set<Component> outputs
 
     /**
      * Creates a new Component with no inputs or outputs.
      */
     def Component()
-    {
-        this.inputs = new HashSet<Component>();
-        this.outputs = new HashSet<Component>();
-    }
+    
+        self.inputs = new HashSet<Component>()
+        self.outputs = new HashSet<Component>()
 
     /**
      * Adds a new input.
@@ -35,27 +34,24 @@ def abstract class Component implements Serializable
      *            A new input.
      */
     def void addInput(Component input)
-    {
-        inputs.add(input);
-    }
+    
+        inputs.add(input)
 
     def void removeInput(Component input)
-    {
-    	inputs.remove(input);
-    }
+    
+    	inputs.remove(input)
 
     def void removeOutput(Component output)
-    {
-    	outputs.remove(output);
-    }
+    
+    	outputs.remove(output)
 
     def void removeAllInputs()
-    {
-        inputs.clear();
+    
+        inputs.clear()
 
     def void removeAllOutputs()
-	{
-        outputs.clear();
+	
+        outputs.clear()
 
     /**
      * Adds a new output.
@@ -64,9 +60,8 @@ def abstract class Component implements Serializable
      *            A new output.
      */
     def void addOutput(Component output)
-    {
-        outputs.add(output);
-    }
+    
+        outputs.add(output)
 
     /**
      * Getter method.
@@ -74,9 +69,8 @@ def abstract class Component implements Serializable
      * @return The inputs to the component.
      */
     def Set<Component> getInputs()
-    {
-        return inputs;
-    }
+    
+        return inputs
 
     /**
      * A convenience method, to get a single input.
@@ -86,9 +80,8 @@ def abstract class Component implements Serializable
      * @return The single input to the component.
      */
     def Component getSingleInput():
-        assert inputs.size() == 1;
-        return inputs.iterator().next();
-    }
+        assert inputs.size() == 1
+        return inputs.iterator().next()
 
     /**
      * Getter method.
@@ -96,9 +89,8 @@ def abstract class Component implements Serializable
      * @return The outputs of the component.
      */
     def Set<Component> getOutputs()
-    {
-        return outputs;
-    }
+    
+        return outputs
 
     /**
      * A convenience method, to get a single output.
@@ -108,23 +100,22 @@ def abstract class Component implements Serializable
      * @return The single output to the component.
      */
     def Component getSingleOutput():
-        assert outputs.size() == 1;
-        return outputs.iterator().next();
-    }
+        assert outputs.size() == 1
+        return outputs.iterator().next()
 
     /**
      * Returns the value of the Component.
      *
      * @return The value of the Component.
      */
-    def abstract bool getValue();
+    def abstract bool getValue()
 
     /**
      * Returns a representation of the Component in .dot format.
      *
      * @see java.lang.Object#toString()
      */
-    def abstract String toString();
+    def abstract String toString()
 
     /**
      * Returns a configurable representation of the Component in .dot format.
@@ -138,16 +129,13 @@ def abstract class Component implements Serializable
      * @return A representation of the Component in .dot format.
      */
     protected String toDot(String shape, String fillcolor, String label)
-    {
-        StringBuilder sb = new StringBuilder();
+    
+        StringBuilder sb = new StringBuilder()
 
-        sb.append("\"@" + Integer.toHexString(hashCode()) + "\"[shape=" + shape + ", style= filled, fillcolor=" + fillcolor + ", label=\"" + label + "\"]; ");
+        sb.append("\"@" + Integer.toHexString(hashCode()) + "\"[shape=" + shape + ", style= filled, fillcolor=" + fillcolor + ", label=\"" + label + "\"]; ")
         for ( Component component : getOutputs() )
-        {
-            sb.append("\"@" + Integer.toHexString(hashCode()) + "\"->" + "\"@" + Integer.toHexString(component.hashCode()) + "\"; ");
-        }
+        
+            sb.append("\"@" + Integer.toHexString(hashCode()) + "\"->" + "\"@" + Integer.toHexString(component.hashCode()) + "\"; ")
 
-        return sb.toString();
-    }
+        return sb.toString()
 
-}

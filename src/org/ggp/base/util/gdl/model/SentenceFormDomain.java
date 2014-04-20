@@ -1,9 +1,9 @@
-package org.ggp.base.util.gdl.model;
+package org.ggp.base.util.gdl.model
 
-import java.util.Set;
+import java.util.Set
 
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlSentence;
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlSentence
 
 /**
  * A SentenceFormDomain contains information about the possible
@@ -15,10 +15,10 @@ def interface SentenceFormDomain(Iterable<GdlSentence>):
 	/**
 	 * Returns the SentenceForm associated with this domain.
 	 */
-    SentenceForm getForm();
+    SentenceForm getForm()
 
 	/**
 	 * Returns a set containing every constant that can appear in
 	 * the given slot index in the sentence form.
 	 */
-    Set<GdlConstant> getDomainForSlot(int slotIndex);
+    Set<GdlConstant> getDomainForSlot(int slotIndex)

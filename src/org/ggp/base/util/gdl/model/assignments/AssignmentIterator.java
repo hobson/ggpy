@@ -1,11 +1,11 @@
-package org.ggp.base.util.gdl.model.assignments;
+package org.ggp.base.util.gdl.model.assignments
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Collection
+import java.util.Iterator
+import java.util.Map
 
-import org.ggp.base.util.gdl.grammar.GdlConstant;
-import org.ggp.base.util.gdl.grammar.GdlVariable;
+import org.ggp.base.util.gdl.grammar.GdlConstant
+import org.ggp.base.util.gdl.grammar.GdlVariable
 
 
 def interface AssignmentIterator(Iterator<Map<GdlVariable, GdlConstant>>):
@@ -15,5 +15,5 @@ def interface AssignmentIterator(Iterator<Map<GdlVariable, GdlConstant>>):
 	 * of the listed variables from its current assignment.
 	 */
     void changeOneInNext(Collection<GdlVariable> varsToChange,
-            Map<GdlVariable, GdlConstant> assignment);
+            Map<GdlVariable, GdlConstant> assignment)
 
