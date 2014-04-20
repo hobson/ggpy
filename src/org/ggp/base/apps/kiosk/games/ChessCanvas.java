@@ -9,7 +9,7 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_Chessboard;
 
 
 class ChessCanvas(GameCanvas_Chessboard):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Chess"; }
     protected String getGameKey() { return "chess"; }

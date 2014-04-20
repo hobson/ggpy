@@ -18,7 +18,7 @@ class GdlRenderer_Test(TestCase):
 	 * an identical rendering as if you had called the toString() method
 	 * on a Gdl object.
 	 */
-    public void testSimpleRendering():
+    def void testSimpleRendering():
     	GdlRenderer renderer = new GdlRenderer();
     	GameRepository repo = GameRepository.getDefaultRepository();
     	for (String gameKey : repo.getGameKeys()):

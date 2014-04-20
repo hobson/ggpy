@@ -104,10 +104,10 @@ class AssignmentFunction(object):
                     ImmutableList.copyOf(queryInputIndices),
                     ImmutableMap.copyOf(function));
 
-	    def functional():  # boolean
+	    def functional():  # bool
             return (function != null);
 
-        private static void gatherVars(List<GdlTerm> body, List<GdlTerm> terms):
+        def void gatherVars(List<GdlTerm> body, List<GdlTerm> terms):
             for(GdlTerm term : body):
                 if(term instanceof GdlConstant || term instanceof GdlVariable)
                     terms.add(term);

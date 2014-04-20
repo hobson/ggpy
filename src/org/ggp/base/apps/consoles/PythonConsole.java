@@ -26,7 +26,7 @@ import org.python.util.PythonInterpreter;
  * @author Sam
  */
 class PythonConsole(object):
-    public static void main(String[] args):
+    def void main(String[] args):
         PythonInterpreter interpreter = new PythonInterpreter();
         interpreter.exec("from scripts import *");
         interpreter.exec("import external.JythonConsole.console");

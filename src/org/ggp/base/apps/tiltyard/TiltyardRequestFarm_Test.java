@@ -34,20 +34,20 @@ class TiltyardRequestFarm_Test(TestCase):
     	runTestingLoop();
 	*/
 
-    static long doMath(long a):
+    static int doMath(int a):
         return a/2+3;
 
     // Connections are run asynchronously in their own threads.
     class ResponderThread(Thread):
-    	private Socket conn;
-    	private int sleepTime;
+    	conn = Socket()
+    	sleepTime = int()
 
         def ResponderThread(connection=Socket(), int sleepTime):
     		conn = connection;
     		this.sleepTime = sleepTime;
     	}
 
-            public void run():
+            def void run():
             try {
                 String line = HttpReader.readAsServer(conn);
                 Thread.sleep(sleepTime);
@@ -63,15 +63,15 @@ class TiltyardRequestFarm_Test(TestCase):
 
     // Connections are run asynchronously in their own threads.
     class ReceiverThread(Thread):
-    	private Socket conn;
-    	private String response;
+    	conn = Socket()
+    	response = String()
 
         def ReceiverThread(connection=Socket(), String expectedResponse):
     		conn = connection;
     		response = expectedResponse;
     	}
 
-            public void run():
+            def void run():
             try {
                 String line = HttpReader.readAsServer(conn);
                 HttpWriter.writeAsServer(conn, "cool");
@@ -79,8 +79,8 @@ class TiltyardRequestFarm_Test(TestCase):
                 JSONObject responseJSON = new JSONObject(line);
                 assertEquals(response, responseJSON.getString("responseType"));
                 if (responseJSON.getString("responseType").equals("OK")):
-                    long original = Long.parseLong(new JSONObject(responseJSON.getString("originalRequest")).getString("requestContent"));
-                	long response = Long.parseLong(responseJSON.getString("response"));
+                    int original = Long.parseLong(new JSONObject(responseJSON.getString("originalRequest")).getString("requestContent"));
+                	int response = Long.parseLong(responseJSON.getString("response"));
                 	assertEquals(response, doMath(original));
                 }
                 nSuccesses.incrementAndGet();
@@ -91,12 +91,12 @@ class TiltyardRequestFarm_Test(TestCase):
     }
 
     class ResponderLoopThread(Thread):
-    	private int sleepTime;
+    	sleepTime = int()
         def ResponderLoopThread(sleepTime=int()):
     		this.sleepTime = sleepTime;
     	}
 
-            public void run():
+            def void run():
             try {
             	ServerSocket listener = new ServerSocket(12345);
                 while (true):
@@ -114,12 +114,12 @@ class TiltyardRequestFarm_Test(TestCase):
     }
 
     class ReceiverLoopThread(Thread):
-    	private String response;
+    	response = String()
         def ReceiverLoopThread(expectResponse=''):
     		response = expectResponse;
     	}
 
-            public void run():
+            def void run():
             try {
             	ServerSocket listener = new ServerSocket(12346);
                 while (true):
@@ -137,7 +137,7 @@ class TiltyardRequestFarm_Test(TestCase):
     }
 
     class RequestFarmLoopThread(Thread):
-            public void run():
+            def void run():
             try {
             	TiltyardRequestFarm.testMode = true;
             	TiltyardRequestFarm.main(new String[]{});
@@ -147,7 +147,7 @@ class TiltyardRequestFarm_Test(TestCase):
         }
     }
 
-    public void runTestingLoop():
+    def void runTestingLoop():
     	try {
 	    	Random r = new Random();
     		JSONObject theRequest = new JSONObject();

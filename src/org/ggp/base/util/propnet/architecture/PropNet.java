@@ -249,7 +249,7 @@ class PropNet
      *
      * @param filename the name of the file to output to
      */
-    public void renderToFile(String filename):
+    def void renderToFile(String filename):
         try {
             File f = new File(filename);
             FileOutputStream fos = new FileOutputStream(f);

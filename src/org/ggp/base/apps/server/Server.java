@@ -70,7 +70,7 @@ class Server(JPanel implements ActionListener):
                 createAndShowGUI(serverPanel, "Game Server");
 		});
 
-    private Game theGame;
+    theGame = Game()
 
     managerPanel = JPanel()
     matchesTabbedPane = JTabbedPane()
@@ -184,7 +184,7 @@ class Server(JPanel implements ActionListener):
             add(schedulingPanel, new GridBagConstraints(0, 0, 1, 1, 2.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 5, 5));
             add(leaderboardPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 5, 5));
 
-    public void actionPerformed(ActionEvent e):
+    def void actionPerformed(ActionEvent e):
         if (e.getSource() == gameSelector.getGameList()):
             theGame = gameSelector.getSelectedGame();
 

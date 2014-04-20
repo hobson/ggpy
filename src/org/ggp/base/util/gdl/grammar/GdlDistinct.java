@@ -21,7 +21,7 @@ class GdlDistinct(GdlLiteral):
 	{
         return arg2;
 
-    def boolean isGround()
+    def bool isGround()
 	{
         if (ground == null)
 		{

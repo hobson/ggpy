@@ -19,7 +19,7 @@ class GdlRelation(GdlSentence):
 	{
         return body.size();
 
-    private boolean computeGround()
+    private bool computeGround()
 	{
         for (GdlTerm term : body)
 		{
@@ -37,7 +37,7 @@ class GdlRelation(GdlSentence):
 	{
         return name;
 
-    def boolean isGround()
+    def bool isGround()
 	{
         if (ground == null)
 		{

@@ -26,15 +26,15 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
 import com.google.common.collect.ImmutableList;
 
 
-class BasesInputsValidator implements GameValidator {
-    private static final GdlConstant BASE = GdlPool.getConstant("base");
-    private static final GdlConstant INPUT = GdlPool.getConstant("input");
-    private static final GdlConstant TRUE = GdlPool.getConstant("true");
-    private static final GdlConstant LEGAL = GdlPool.getConstant("legal");
-    private static final GdlVariable X = GdlPool.getVariable("?x");
-    private static final GdlVariable Y = GdlPool.getVariable("?y");
+class BasesInputsValidator(GameValidator):
+    BASE = GdlPool.getConstant("base")  # GdlConstant 
+    INPUT = GdlPool.getConstant("input")  # GdlConstant 
+    TRUE = GdlPool.getConstant("true")  # GdlConstant 
+    LEGAL = GdlPool.getConstant("legal")  # GdlConstant 
+    X = GdlPool.getVariable("?x")  # GdlVariable 
+    Y = GdlPool.getVariable("?y")  # GdlVariable 
 
-    private int millisecondsToTest;
+    millisecondsToTest = int()
     def BasesInputsValidator(millisecondsToTest=int()):
         this.millisecondsToTest = millisecondsToTest;
 
@@ -66,7 +66,7 @@ class BasesInputsValidator implements GameValidator {
 
             MachineState initialState = sm.getInitialState();
             MachineState state = initialState;
-            long startTime = System.currentTimeMillis();
+            int startTime = System.currentTimeMillis();
             while (System.currentTimeMillis() < startTime + millisecondsToTest):
 				//Check state against bases, inputs
                 if (!truesFromBases.isEmpty()):

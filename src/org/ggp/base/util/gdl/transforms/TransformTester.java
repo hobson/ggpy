@@ -16,7 +16,7 @@ import org.ggp.base.util.statemachine.verifier.StateMachineVerifier;
 class TransformTester(object):
     def static void main(String args[]) throws InterruptedException {
 
-	    final boolean showDiffs = false;
+	    final bool showDiffs = false;
         final ProverStateMachine theReference = new ProverStateMachine();
         final ProverStateMachine theMachine = new ProverStateMachine();
 

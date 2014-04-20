@@ -9,7 +9,7 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_Chessboard;
 
 
 class ConnectFiveCanvas(GameCanvas_Chessboard):
-    public static final long serialVersionUID = 0x1;
+    serialVersionUID = 0x1  # int 
 
     def String getGameName() { return "Connect Five"; }
     protected String getGameKey() { return "connect5"; }

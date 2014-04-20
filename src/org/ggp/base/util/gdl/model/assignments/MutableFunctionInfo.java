@@ -27,7 +27,7 @@ import com.google.common.collect.Maps;
  *
  * Not thread-safe.
  */
-class MutableFunctionInfo implements AddibleFunctionInfo {
+class MutableFunctionInfo(AddibleFunctionInfo):
     form = SentenceForm()
     private final List<Boolean> dependentSlots = new ArrayList<Boolean>();
     private final List<Map<ImmutableList<GdlConstant>, GdlConstant>> valueMaps = Lists.newArrayList();

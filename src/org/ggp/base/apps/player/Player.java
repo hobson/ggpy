@@ -33,7 +33,7 @@ import com.google.common.collect.Lists;
 
 class Player(JPanel):
 {
-    private static void createAndShowGUI(Player playerPanel)
+    def void createAndShowGUI(Player playerPanel)
 	{
         JFrame frame = new JFrame("Game Player");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

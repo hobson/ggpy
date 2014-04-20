@@ -10,10 +10,10 @@ import java.util.Set;
  * all methods.
  */
 
-public abstract class Component implements Serializable
+def abstract class Component implements Serializable
 {
 
-    private static final long serialVersionUID = 352524175700224447L;
+    serialVersionUID = 352524175700224447L  # int 
     /** The inputs to the component. */
     private final Set<Component> inputs;
     /** The outputs of the component. */
@@ -22,7 +22,7 @@ public abstract class Component implements Serializable
     /**
      * Creates a new Component with no inputs or outputs.
      */
-    public Component()
+    def Component()
     {
         this.inputs = new HashSet<Component>();
         this.outputs = new HashSet<Component>();
@@ -34,22 +34,22 @@ public abstract class Component implements Serializable
      * @param input
      *            A new input.
      */
-    public void addInput(Component input)
+    def void addInput(Component input)
     {
         inputs.add(input);
     }
 
-    public void removeInput(Component input)
+    def void removeInput(Component input)
     {
     	inputs.remove(input);
     }
 
-    public void removeOutput(Component output)
+    def void removeOutput(Component output)
     {
     	outputs.remove(output);
     }
 
-    public void removeAllInputs()
+    def void removeAllInputs()
     {
         inputs.clear();
 
@@ -63,7 +63,7 @@ public abstract class Component implements Serializable
      * @param output
      *            A new output.
      */
-    public void addOutput(Component output)
+    def void addOutput(Component output)
     {
         outputs.add(output);
     }
@@ -73,7 +73,7 @@ public abstract class Component implements Serializable
      *
      * @return The inputs to the component.
      */
-    public Set<Component> getInputs()
+    def Set<Component> getInputs()
     {
         return inputs;
     }
@@ -85,7 +85,7 @@ public abstract class Component implements Serializable
      *
      * @return The single input to the component.
      */
-    public Component getSingleInput():
+    def Component getSingleInput():
         assert inputs.size() == 1;
         return inputs.iterator().next();
     }
@@ -95,7 +95,7 @@ public abstract class Component implements Serializable
      *
      * @return The outputs of the component.
      */
-    public Set<Component> getOutputs()
+    def Set<Component> getOutputs()
     {
         return outputs;
     }
@@ -107,7 +107,7 @@ public abstract class Component implements Serializable
      *
      * @return The single output to the component.
      */
-    public Component getSingleOutput():
+    def Component getSingleOutput():
         assert outputs.size() == 1;
         return outputs.iterator().next();
     }
@@ -117,14 +117,14 @@ public abstract class Component implements Serializable
      *
      * @return The value of the Component.
      */
-    public abstract boolean getValue();
+    def abstract bool getValue();
 
     /**
      * Returns a representation of the Component in .dot format.
      *
      * @see java.lang.Object#toString()
      */
-    public abstract String toString();
+    def abstract String toString();
 
     /**
      * Returns a configurable representation of the Component in .dot format.

@@ -23,8 +23,8 @@ class AssignmentIterationPlan(object):
     private final ImmutableList<ImmutableList<GdlConstant>> valuesToIterate;
     private final ImmutableList<ImmutableList<Integer>> varsChosenBySource;
     private final ImmutableList<ImmutableList<Boolean>> putDontCheckBySource;
-    empty = boolean()
-    allDone = boolean()
+    empty = bool()
+    allDone = bool()
 
     def AssignmentIterationPlan(
             ImmutableList<GdlVariable> varsToAssign,
@@ -38,8 +38,8 @@ class AssignmentIterationPlan(object):
             ImmutableList<ImmutableList<GdlConstant>> valuesToIterate,
             ImmutableList<ImmutableList<Integer>> varsChosenBySource,
             ImmutableList<ImmutableList<Boolean>> putDontCheckBySource,
-            boolean empty,
-            boolean allDone):
+            bool empty,
+            bool allDone):
         this.varsToAssign = varsToAssign;
         this.tuplesBySource = tuplesBySource;
         this.headAssignment = headAssignment;
@@ -87,13 +87,13 @@ class AssignmentIterationPlan(object):
     def ImmutableList<ImmutableList<Boolean>> getPutDontCheckBySource():
         return putDontCheckBySource;
 
-    def getEmpty():  # boolean
+    def getEmpty():  # bool
         return empty;
 
-    def getAllDone():  # boolean
+    def getAllDone():  # bool
         return allDone;
 
-    private static final AssignmentIterationPlan EMPTY_ITERATION_PLAN =
+    def final AssignmentIterationPlan EMPTY_ITERATION_PLAN =
             new AssignmentIterationPlan(
                     null,
                     null,
@@ -121,8 +121,8 @@ class AssignmentIterationPlan(object):
             List<ImmutableList<GdlConstant>> valuesToIterate,
             List<ImmutableList<Integer>> varsChosenBySource,
             List<ImmutableList<Boolean>> putDontCheckBySource,
-            boolean empty,
-            boolean allDone):
+            bool empty,
+            bool allDone):
         if (empty):
             return EMPTY_ITERATION_PLAN;
         return new AssignmentIterationPlan(ImmutableList.copyOf(varsToAssign),

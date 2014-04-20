@@ -11,8 +11,8 @@ import org.ggp.base.util.statemachine.StateMachine;
 
 
 class StateMachineVerifier(object):
-    public static boolean checkMachineConsistency(StateMachine theReference, StateMachine theSubject, long timeToSpend):
-        long startTime = System.currentTimeMillis();
+    def bool checkMachineConsistency(StateMachine theReference, StateMachine theSubject, int timeToSpend):
+        int startTime = System.currentTimeMillis();
 
         GamerLogger.log("StateMachine", "Performing automatic consistency testing on " + theSubject.getClass().getName() + " using " + theReference.getClass().getName() + " as a reference.");
 

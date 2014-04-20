@@ -5,13 +5,13 @@ import org.ggp.base.util.observer.Event;
 class PlayerTimeEvent(Event):
 {
 
-    time = long()
+    time = int()
 
-    def PlayerTimeEvent(time=long())
+    def PlayerTimeEvent(time=int())
 	{
         this.time = time;
 
-    def long getTime()
+    def int getTime()
 	{
         return time;
 

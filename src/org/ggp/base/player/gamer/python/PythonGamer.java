@@ -31,7 +31,7 @@ import org.python.util.PythonInterpreter;
  * @author Sam
  * @author evancox
  */
-public abstract class PythonGamer(Gamer):
+def abstract class PythonGamer(Gamer):
 {
     Gamer thePythonGamer;
 
@@ -64,7 +64,7 @@ public abstract class PythonGamer(Gamer):
     // subclass of this class is a Java-implementation stub for the actual real
     // Python implementation.
 
-    public final void preview(Game game, long timeout) throws GamePreviewException {
+    def final void preview(Game game, int timeout) throws GamePreviewException {
     	lazilyLoadGamerStub();
         try {
             thePythonGamer.preview(game, timeout);
@@ -74,7 +74,7 @@ public abstract class PythonGamer(Gamer):
         }
     }
 
-    public final void metaGame(long timeout) throws MetaGamingException {
+    def final void metaGame(int timeout) throws MetaGamingException {
     	lazilyLoadGamerStub();
         thePythonGamer.setMatch(getMatch());
         thePythonGamer.setRoleName(getRoleName());
@@ -86,7 +86,7 @@ public abstract class PythonGamer(Gamer):
         }
     }
 
-    public final GdlTerm selectMove(long timeout) throws MoveSelectionException {
+    def final GdlTerm selectMove(int timeout) throws MoveSelectionException {
     	lazilyLoadGamerStub();
         thePythonGamer.setMatch(getMatch());
         thePythonGamer.setRoleName(getRoleName());
@@ -99,7 +99,7 @@ public abstract class PythonGamer(Gamer):
         }
     }
 
-    public final void stop():
+    def final void stop():
     	lazilyLoadGamerStub();
     	thePythonGamer.setMatch(getMatch());
         thePythonGamer.setRoleName(getRoleName());
@@ -111,7 +111,7 @@ public abstract class PythonGamer(Gamer):
         }
     }
 
-    public final void abort():
+    def final void abort():
     	lazilyLoadGamerStub();
     	thePythonGamer.setMatch(getMatch());
         thePythonGamer.setRoleName(getRoleName());
@@ -123,7 +123,7 @@ public abstract class PythonGamer(Gamer):
         }
     }
 
-    public final String getName():
+    def final String getName():
     	return getPythonGamerName();
     }
 }

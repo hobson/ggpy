@@ -29,8 +29,8 @@ import org.xhtmlrenderer.render.BlockBox;
 import org.xhtmlrenderer.simple.extend.FormSubmissionListener;
 import org.xhtmlrenderer.swing.ImageReplacedElement;
 
-class SVGReplacedElementFactory implements ReplacedElementFactory {
-    public ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight):
+class SVGReplacedElementFactory(ReplacedElementFactory):
+    def ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight):
         Element element = box.getElement();
         if("svg".equals(element.getNodeName())):
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -55,7 +55,7 @@ class SVGReplacedElementFactory implements ReplacedElementFactory {
         return null;
     }
 
-    public static BufferedImage rasterize(Document dom, int width) throws IOException {
+    def BufferedImage rasterize(Document dom, int width) throws IOException {
 
         final BufferedImage[] imagePointer = new BufferedImage[1];
 
@@ -89,11 +89,11 @@ class SVGReplacedElementFactory implements ReplacedElementFactory {
 
             ImageTranscoder t = new ImageTranscoder():
 
-                            public BufferedImage createImage(int w, int h):
+                            def BufferedImage createImage(int w, int h):
                     return new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
                 }
 
-                            public void writeImage(BufferedImage image, TranscoderOutput out)
+                            def void writeImage(BufferedImage image, TranscoderOutput out)
                         throws TranscoderException {
                     int wd = image.getWidth() / 2;
                     int ht = image.getHeight() / 2;
@@ -122,12 +122,12 @@ class SVGReplacedElementFactory implements ReplacedElementFactory {
 
         return imagePointer[0];
     }
-    public void reset():
+    def void reset():
     }
 
-    public void remove(Element e):
+    def void remove(Element e):
     }
 
-    public void setFormSubmissionListener(FormSubmissionListener listener):
+    def void setFormSubmissionListener(FormSubmissionListener listener):
     }
 }

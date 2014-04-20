@@ -33,7 +33,7 @@ class HistoryPanel(JPanel implements Observer):
         historyTable = new JZebraTable(new DefaultTableModel())
 		{
 
-        		    def boolean isCellEditable(int rowIndex, int colIndex)
+        		    def bool isCellEditable(int rowIndex, int colIndex)
 			{
                 return false;
 		};

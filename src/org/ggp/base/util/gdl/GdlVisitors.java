@@ -39,11 +39,11 @@ class GdlVisitors(object):
     def static void visitAll(Collection<?(Gdl> collection, GdlVisitor visitor)):
         for (Gdl gdl : collection):
             visitAll(gdl, visitor);
-    private static void visitRule(GdlRule rule, GdlVisitor visitor):
+    def void visitRule(GdlRule rule, GdlVisitor visitor):
         visitor.visitRule(rule);
         visitAll(rule.getHead(), visitor);
         visitAll(rule.getBody(), visitor);
-    private static void visitLiteral(GdlLiteral literal, GdlVisitor visitor):
+    def void visitLiteral(GdlLiteral literal, GdlVisitor visitor):
         visitor.visitLiteral(literal);
         if (literal instanceof GdlSentence):
             visitSentence((GdlSentence) literal, visitor);
@@ -55,18 +55,18 @@ class GdlVisitors(object):
             visitDistinct((GdlDistinct) literal, visitor);
 		} else {
             throw new RuntimeException("Unexpected GdlLiteral type " + literal.getClass());
-    private static void visitDistinct(GdlDistinct distinct, GdlVisitor visitor):
+    def void visitDistinct(GdlDistinct distinct, GdlVisitor visitor):
         visitor.visitDistinct(distinct);
         visitAll(distinct.getArg1(), visitor);
         visitAll(distinct.getArg2(), visitor);
-    private static void visitOr(GdlOr or, GdlVisitor visitor):
+    def void visitOr(GdlOr or, GdlVisitor visitor):
         visitor.visitOr(or);
         for (int i = 0; i < or.arity(); i++):
             visitAll(or.get(i), visitor);
-    private static void visitNot(GdlNot not, GdlVisitor visitor):
+    def void visitNot(GdlNot not, GdlVisitor visitor):
         visitor.visitNot(not);
         visitAll(not.getBody(), visitor);
-    private static void visitSentence(GdlSentence sentence, GdlVisitor visitor):
+    def void visitSentence(GdlSentence sentence, GdlVisitor visitor):
         visitor.visitSentence(sentence);
         if (sentence instanceof GdlProposition):
             visitProposition((GdlProposition) sentence, visitor);
@@ -74,15 +74,15 @@ class GdlVisitors(object):
             visitRelation((GdlRelation) sentence, visitor);
 		} else {
             throw new RuntimeException("Unexpected GdlSentence type " + sentence.getClass());
-    private static void visitRelation(GdlRelation relation, GdlVisitor visitor):
+    def void visitRelation(GdlRelation relation, GdlVisitor visitor):
         visitor.visitRelation(relation);
         visitAll(relation.getName(), visitor);
         visitAll(relation.getBody(), visitor);
-    private static void visitProposition(GdlProposition proposition,
+    def void visitProposition(GdlProposition proposition,
             GdlVisitor visitor):
         visitor.visitProposition(proposition);
         visitAll(proposition.getName(), visitor);
-    private static void visitTerm(GdlTerm term, GdlVisitor visitor):
+    def void visitTerm(GdlTerm term, GdlVisitor visitor):
         visitor.visitTerm(term);
         if (term instanceof GdlConstant):
             visitor.visitConstant((GdlConstant) term);
@@ -92,7 +92,7 @@ class GdlVisitors(object):
             visitFunction((GdlFunction) term, visitor);
 		} else {
             throw new RuntimeException("Unexpected GdlTerm type " + term.getClass());
-    private static void visitFunction(GdlFunction function, GdlVisitor visitor):
+    def void visitFunction(GdlFunction function, GdlVisitor visitor):
         visitor.visitFunction(function);
         visitAll(function.getName(), visitor);
         visitAll(function.getBody(), visitor);

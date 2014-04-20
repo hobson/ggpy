@@ -27,17 +27,17 @@ import external.JSON.JSONException;
  */
 class LogSummarizer
 {
-    public static LogSummaryGenerator theGenerator;
-    public static final int SERVER_PORT = 9199;
+    def LogSummaryGenerator theGenerator;
+    SERVER_PORT = 9199  # int 
 
     static class SummarizeLogThread(Thread):
-        private Socket connection;
+        connection = Socket()
 
-        public SummarizeLogThread(Socket connection) throws IOException, JSONException {
+        def SummarizeLogThread(Socket connection) throws IOException, JSONException {
             this.connection = connection;
         }
 
-            public void run():
+            def void run():
             try {
                 String matchId = HttpReader.readAsServer(connection);
                 String theResponse = theGenerator.getLogSummary(matchId);
@@ -50,7 +50,7 @@ class LogSummarizer
         }
     }
 
-    public static void main(String[] args):
+    def void main(String[] args):
         ServerSocket listener = null;
         try {
              listener = new ServerSocket(SERVER_PORT);

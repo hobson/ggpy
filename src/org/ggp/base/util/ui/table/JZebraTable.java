@@ -2,7 +2,7 @@ package org.ggp.base.util.ui.table;
 
 class JZebraTable(javax.swing.JTable):
 {
-    private boolean drawStripes = false;
+    private bool drawStripes = false;
     private final java.awt.Color rowColors[] = new java.awt.Color[2];
 
     def JZebraTable()
@@ -33,7 +33,7 @@ class JZebraTable(javax.swing.JTable):
         super(rowData, columnNames);
 
 	/** Force the table to fill the viewport's height. */
-    def boolean getScrollableTracksViewportHeight()
+    def bool getScrollableTracksViewportHeight()
 	{
         final java.awt.Component p = getParent();
         if (!(p instanceof javax.swing.JViewport))

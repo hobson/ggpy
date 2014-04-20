@@ -9,7 +9,7 @@ import java.util.Formatter;
 class BaseHashing(object):
     // Computes the SHA1 hash of a given input string, and represents
     // that hash as a hexadecimal string.
-    public static String computeSHA1Hash(String theData):
+    def String computeSHA1Hash(String theData):
         try {
             MessageDigest SHA1 = MessageDigest.getInstance("SHA1");
             DigestInputStream theDigestStream = new DigestInputStream(

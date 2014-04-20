@@ -27,18 +27,18 @@ import org.ggp.base.util.statemachine.implementation.prover.query.ProverQueryBui
 
 class SamplePropNetStateMachine(StateMachine):
     /** The underlying proposition network  */
-    private PropNet propNet;
+    propNet = PropNet()
     /** The topological ordering of the propositions */
-    private List<Proposition> ordering;
+    ordering = List<Proposition>()
     /** The player roles */
-    private List<Role> roles;
+    roles = List<Role>()
 
     /**
      * Initializes the PropNetStateMachine. You should compute the topological
      * ordering here. Additionally you may compute the initial state here, at
      * your discretion.
      */
-    public void initialize(List<Gdl> description):
+    def void initialize(List<Gdl> description):
         propNet = PropNetFactory.create(description);
         roles = propNet.getRoles();
         ordering = getOrdering();
@@ -48,7 +48,7 @@ class SamplePropNetStateMachine(StateMachine):
 	 * Computes if the state is terminal. Should return the value
 	 * of the terminal proposition for the state.
 	 */
-    def boolean isTerminal(MachineState state):
+    def bool isTerminal(MachineState state):
 		// TODO: Compute whether the MachineState is terminal.
         return false;
 

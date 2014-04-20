@@ -8,7 +8,7 @@ import org.ggp.base.util.propnet.architecture.Component;
 class Constant(Component):
 {
 	/** The value of the constant. */
-    value = boolean()
+    value = bool()
 
 	/**
 	 * Creates a new Constant with value <tt>value</tt>.
@@ -16,7 +16,7 @@ class Constant(Component):
 	 * @param value
 	 *            The value of the Constant.
 	 */
-    def Constant(value=boolean())
+    def Constant(value=bool())
 	{
         this.value = value;
 
@@ -25,7 +25,7 @@ class Constant(Component):
 	 *
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
-    def boolean getValue()
+    def bool getValue()
 	{
         return value;
 

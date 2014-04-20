@@ -22,9 +22,9 @@ class PlayRequestThread(RequestThread):
     match = Match()
     role = Role()
 
-    private Move move;
+    move = Move()
 
-    def PlayRequestThread(gameServer=GameServer(), Match match, List<Move> previousMoves, List<Move> legalMoves, Role role, String host, int port, String playerName, boolean unlimitedTime)
+    def PlayRequestThread(gameServer=GameServer(), Match match, List<Move> previousMoves, List<Move> legalMoves, Role role, String host, int port, String playerName, bool unlimitedTime)
 	{
         super(gameServer, role, host, port, playerName, unlimitedTime ? -1 : (match.getPlayClock() * 1000 + 1000), RequestBuilder.getPlayRequest(match.getMatchId(), previousMoves, match.getGdlScrambler()));
         this.gameServer = gameServer;

@@ -12,11 +12,11 @@ class SentenceForms(object):
     private SentenceForms() {}
 
     def static final Predicate<SentenceForm> TRUE_PRED = new Predicate<SentenceForm>():
-    	    def boolean apply(SentenceForm input):
+    	    def bool apply(SentenceForm input):
             return input.getName() == GdlPool.TRUE;
 	};
     def static final Predicate<SentenceForm> DOES_PRED = new Predicate<SentenceForm>():
-    	    def boolean apply(SentenceForm input):
+    	    def bool apply(SentenceForm input):
             return input.getName() == GdlPool.DOES;
 	};
 

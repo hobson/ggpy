@@ -28,7 +28,7 @@ class ProverStateMachineTests(Assert):
     protected final GdlConstant C100 = GdlPool.getConstant("100");
 
     @Test
-    public void testProverOnTicTacToe() throws Exception {
+    def void testProverOnTicTacToe() throws Exception {
         List<Gdl> ticTacToeDesc = new TestGameRepository().getGame("ticTacToe").getRules();
         sm.initialize(ticTacToeDesc);
         MachineState state = sm.getInitialState();
@@ -85,7 +85,7 @@ class ProverStateMachineTests(Assert):
     }
 
     @Test
-    public void testCase1A() throws Exception {
+    def void testCase1A() throws Exception {
         List<Gdl> desc = new TestGameRepository().getGame("test_case_1a").getRules();
         sm.initialize(desc);
         MachineState state = sm.getInitialState();
@@ -100,7 +100,7 @@ class ProverStateMachineTests(Assert):
     }
 
     @Test
-    public void testCase3C() throws Exception {
+    def void testCase3C() throws Exception {
         List<Gdl> desc = new TestGameRepository().getGame("test_case_3c").getRules();
         sm.initialize(desc);
         MachineState state = sm.getInitialState();
@@ -115,7 +115,7 @@ class ProverStateMachineTests(Assert):
     }
 
     @Test
-    public void testCase5A() throws Exception {
+    def void testCase5A() throws Exception {
         List<Gdl> desc = new TestGameRepository().getGame("test_case_5a").getRules();
         sm.initialize(desc);
         MachineState state = sm.getInitialState();
@@ -130,7 +130,7 @@ class ProverStateMachineTests(Assert):
     }
 
     @Test
-    public void testCase5B() throws Exception {
+    def void testCase5B() throws Exception {
         List<Gdl> desc = new TestGameRepository().getGame("test_case_5b").getRules();
         sm.initialize(desc);
         MachineState state = sm.getInitialState();
@@ -143,7 +143,7 @@ class ProverStateMachineTests(Assert):
     }
 
     @Test
-    public void testCase5C() throws Exception {
+    def void testCase5C() throws Exception {
         List<Gdl> desc = new TestGameRepository().getGame("test_case_5c").getRules();
         sm.initialize(desc);
         MachineState state = sm.getInitialState();

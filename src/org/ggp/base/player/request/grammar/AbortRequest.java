@@ -19,7 +19,7 @@ class AbortRequest(Request):
     def getMatchId():  # String
         return matchId;
 
-    def String process(long receptionTime)
+    def String process(int receptionTime)
 	{
         // First, check to ensure that this abort request is for the match
         // we're currently playing. If we're not playing a match, or we're

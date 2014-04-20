@@ -45,7 +45,7 @@ import org.ggp.base.util.symbol.grammar.SymbolPool;
  *
  * This class is not necessary, unless you are interested in adding another
  * layer of bullet-proofing to your player in preparation for a tournament
- * or for running your player for long periods of time.
+ * or for running your player for int periods of time.
  *
  * There are advantages and disadvantages to this approach. The advantages are:
  *
@@ -70,25 +70,25 @@ import org.ggp.base.util.symbol.grammar.SymbolPool;
 class ProxyGamePlayer(Thread implements Subject):
 {
     gamerName = ''
-    private ServerSocket listener;
-    private ServerSocket clientListener;
+    listener = ServerSocket()
+    clientListener = ServerSocket()
     private final List<Observer> observers;
-    private ClientManager theClientManager;
-    private Gamer theDefaultGamer;
+    theClientManager = ClientManager()
+    theDefaultGamer = Gamer()
 
     private class ClientManager(Thread):
-	    private Process theClientProcess;
-	    private Socket theClientConnection;
-	    private PrintStream theOutput;
-	    private BufferedReader theInput;
+	    theClientProcess = Process()
+	    theClientConnection = Socket()
+	    theOutput = PrintStream()
+	    theInput = BufferedReader()
 
 	    private StreamConnector outConnector, errConnector;
 
-	    public volatile boolean pleaseStop = false;
-	    public volatile boolean expectStop = false;
-	    private Thread parentThread;
+	    def volatile bool pleaseStop = false;
+	    def volatile bool expectStop = false;
+	    parentThread = Thread()
 
-	    public ClientManager(Thread parentThread):
+	    def ClientManager(Thread parentThread):
 	        this.parentThread = parentThread;
 
 	        String command = GamerConfiguration.getCommandForJava();
@@ -131,17 +131,17 @@ class ProxyGamePlayer(Thread implements Subject):
 
 	    // TODO: remove this class if nothing is being sent over it
 	    private class StreamConnector(Thread):
-	        private InputStream theInput;
-	        private PrintStream theOutput;
+	        theInput = InputStream()
+	        theOutput = PrintStream()
 
-	        public volatile boolean pleaseStop = false;
+	        def volatile bool pleaseStop = false;
 
-	        public StreamConnector(InputStream theInput, PrintStream theOutput):
+	        def StreamConnector(InputStream theInput, PrintStream theOutput):
 	            this.theInput = theInput;
 	            this.theOutput = theOutput;
 	        }
 
-	        public boolean isPrintableChar( char c ):
+	        def bool isPrintableChar( char c ):
 	            if(!Character.isDefined(c)) return false;
 	            if(Character.isIdentifierIgnorable(c)) return false;
 	            return true;
@@ -167,7 +167,7 @@ class ProxyGamePlayer(Thread implements Subject):
 	        }
 	    }
 
-	    public void sendMessage(ProxyMessage theMessage):
+	    def void sendMessage(ProxyMessage theMessage):
             if(theOutput != null):
                 theMessage.writeTo(theOutput);
                 GamerLogger.log("Proxy", "[PROXY] Wrote message to client: " + theMessage);
@@ -201,7 +201,7 @@ class ProxyGamePlayer(Thread implements Subject):
             }
 	    }
 
-	    public void closeClient():
+	    def void closeClient():
 	        try {
                 outConnector.pleaseStop = true;
                 errConnector.pleaseStop = true;
@@ -263,9 +263,9 @@ class ProxyGamePlayer(Thread implements Subject):
             observer.observe(event);
 
     private Random theRandomGenerator = new Random();
-    private long currentMoveCode = 0L;
-    private boolean receivedClientMove = false;
-    private boolean needRestart = false;
+    private int currentMoveCode = 0L;
+    private bool receivedClientMove = false;
+    private bool needRestart = false;
 
     def void run()
 	{
@@ -290,7 +290,7 @@ class ProxyGamePlayer(Thread implements Subject):
                 ProxyMessage nextMessage = inputQueue.take();
                 Socket connection = inputConnectionQueue.take();
                 String in = nextMessage.theMessage;
-                long receptionTime = nextMessage.receptionTime;
+                int receptionTime = nextMessage.receptionTime;
                 notifyObservers(new PlayerReceivedMessageEvent(in));
                 GamerLogger.log("Proxy", "[PROXY] Got incoming message:" + in);
 
@@ -366,8 +366,8 @@ class ProxyGamePlayer(Thread implements Subject):
 	                GdlPool.drainPool();
 	                SymbolPool.drainPool();
 
-                    long usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                    double usedMemoryInMegs = usedMemory / 1024.0 / 1024.0;
+                    int usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                    float usedMemoryInMegs = usedMemory / 1024.0 / 1024.0;
                     GamerLogger.log("Proxy", "[PROXY] Before collection, using " + usedMemoryInMegs + "mb of memory as proxy.");
 
 	                // Okay, seriously garbage collect please. As it turns out,
@@ -393,18 +393,18 @@ class ProxyGamePlayer(Thread implements Subject):
 			    GamerLogger.logStackTrace("Proxy", e);
 			    notifyObservers(new PlayerDroppedPacketEvent());
 
-    def static final long METAGAME_BUFFER = Gamer.PREFERRED_METAGAME_BUFFER + 100;
-    def static final long PLAY_BUFFER = Gamer.PREFERRED_PLAY_BUFFER + 100;
+    def static final int METAGAME_BUFFER = Gamer.PREFERRED_METAGAME_BUFFER + 100;
+    def static final int PLAY_BUFFER = Gamer.PREFERRED_PLAY_BUFFER + 100;
 
-    private void proxyProcessRequest(Request theRequest, long receptionTime):
-        long startSleeping = System.currentTimeMillis();
-        long timeToFinish = receptionTime;
-        long timeToSleep = 0L;
+    private void proxyProcessRequest(Request theRequest, int receptionTime):
+        int startSleeping = System.currentTimeMillis();
+        int timeToFinish = receptionTime;
+        int timeToSleep = 0L;
 
 	    try {
     	    if(theRequest instanceof PlayRequest):
     	    	if (theDefaultGamer.getMatch() != null):
-                  // They have this long to play
+                  // They have this int to play
                   timeToFinish = receptionTime + theDefaultGamer.getMatch().getPlayClock() * 1000 - PLAY_BUFFER;
                 } else {
                   // Respond immediately if we're not tracking this match (and so don't know the play clock).
@@ -418,7 +418,7 @@ class ProxyGamePlayer(Thread implements Subject):
 
     	        System.out.println("Started playing " + theDefaultGamer.getMatch().getMatchId() + ".");
 
-    	        // They have this long to metagame
+    	        // They have this int to metagame
     	        timeToFinish = receptionTime + theDefaultGamer.getMatch().getStartClock() * 1000 - METAGAME_BUFFER;
                 timeToSleep = timeToFinish - System.currentTimeMillis();
                 if(timeToSleep > 0)
@@ -434,7 +434,7 @@ class ProxyGamePlayer(Thread implements Subject):
 
 	    GamerLogger.log("Proxy", "[PROXY] Proxy slept for " + (System.currentTimeMillis() - startSleeping) + ", and woke up " + (System.currentTimeMillis() - timeToFinish) + "ms late (started " + (startSleeping - receptionTime) + "ms after receiving message).");
 
-    private String latestProxiedResponse;
+    latestProxiedResponse = String()
     private void processClientResponse(ProxyMessage in, Thread toWakeUp):
 	    String theirTag = in.theMessage.substring(0,5);
 	    String theirMessage = in.theMessage.substring(5);
@@ -459,8 +459,8 @@ class ProxyGamePlayer(Thread implements Subject):
 	    }
     }
 
-    private BlockingQueue<ProxyMessage> inputQueue;
-    private BlockingQueue<Socket> inputConnectionQueue;
+    inputQueue = BlockingQueue<ProxyMessage>()
+    inputConnectionQueue = BlockingQueue<Socket>()
     private class QueueListenerThread(Thread):
 		    def run():  # void
 	        while(true):
@@ -468,7 +468,7 @@ class ProxyGamePlayer(Thread implements Subject):
                     // First, read a message from the server.
                     Socket connection = listener.accept();
                     String in = HttpReader.readAsServer(connection).replace('\n', ' ').replace('\r', ' ');
-                    long receptionTime = System.currentTimeMillis();
+                    int receptionTime = System.currentTimeMillis();
                     if(inputQueue.remainingCapacity() > 0):
                         inputQueue.add(new ProxyMessage(in, 0L, receptionTime));
                         inputConnectionQueue.add(connection);

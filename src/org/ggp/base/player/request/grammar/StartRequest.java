@@ -32,7 +32,7 @@ class StartRequest(Request):
     def getMatchId():  # String
         return matchId;
 
-    def String process(long receptionTime)
+    def String process(int receptionTime)
 	{
 	    // Ensure that we aren't already playing a match. If we are,
 	    // ignore the message, saying that we're busy.

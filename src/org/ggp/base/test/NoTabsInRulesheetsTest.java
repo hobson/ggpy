@@ -14,7 +14,7 @@ import org.junit.Test;
 class NoTabsInRulesheetsTest(Assert):
     // Check that GGP-Base's games use spaces, not tabs.
     @Test
-    public void testNoTabsInRulesheets():
+    def void testNoTabsInRulesheets():
         File testGamesFolder = new File("games", "test");
         assertTrue(testGamesFolder.isDirectory());
 
@@ -25,7 +25,7 @@ class NoTabsInRulesheetsTest(Assert):
     }
 
     // Modify the test games to use spaces instead of tabs.
-    public static void main(String[] args) throws Exception {
+    def void main(String[] args) throws Exception {
         File testGamesFolder = new File("games", "test");
         assertTrue(testGamesFolder.isDirectory());
 
@@ -42,7 +42,7 @@ class NoTabsInRulesheetsTest(Assert):
         writer.close();
     }
 
-    static class KifFileFilter implements FileFilter {
-		    public boolean accept(File pathname):
+    static class KifFileFilter(FileFilter):
+		    def bool accept(File pathname):
 	        return pathname.getName().endsWith(".kif");
 	    }

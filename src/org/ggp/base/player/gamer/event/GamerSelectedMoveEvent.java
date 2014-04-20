@@ -9,9 +9,9 @@ class GamerSelectedMoveEvent(Event):
 {
     private final List<Move> moves;
     selection = Move()
-    time = long()
+    time = int()
 
-    def GamerSelectedMoveEvent(List<Move> moves, Move selection, long time):
+    def GamerSelectedMoveEvent(List<Move> moves, Move selection, int time):
         this.moves = moves;
         this.selection = selection;
         this.time = time;
@@ -22,5 +22,5 @@ class GamerSelectedMoveEvent(Event):
     def getSelection():  # Move
         return selection;
 
-    def getTime():  # long
+    def getTime():  # int
         return time;

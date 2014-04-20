@@ -41,9 +41,9 @@ import external.JSON.JSONObject;
 class CloudGameRepository(GameRepository):
     private final String theRepoURL;
     private final File theCacheDirectory;
-    private static boolean needsRefresh = true;
+    def bool needsRefresh = true;
 
-    public CloudGameRepository(String theURL):
+    def CloudGameRepository(String theURL):
         theRepoURL = RemoteGameRepository.properlyFormatURL(theURL);
 
         // Generate a unique hash of the repository URL, to use as the
@@ -112,12 +112,12 @@ class CloudGameRepository(GameRepository):
         RemoteGameRepository theRepository;
         String theKey;
 
-        public RefreshCacheForGameThread(RemoteGameRepository a, String b):
+        def RefreshCacheForGameThread(RemoteGameRepository a, String b):
             theRepository = a;
             theKey = b;
         }
 
-            public void run():
+            def void run():
             try {
                 String theGameURL = theRepository.getGameURL(theKey);
                 JSONObject theMetadata = RemoteGameRepository.getGameMetadataFromRepository(theGameURL);
@@ -145,11 +145,11 @@ class CloudGameRepository(GameRepository):
     class RefreshCacheThread(Thread):
         String theRepoURL;
 
-        public RefreshCacheThread(String theRepoURL):
+        def RefreshCacheThread(String theRepoURL):
             this.theRepoURL = theRepoURL;
         }
 
-            public void run():
+            def void run():
             try {
                 // Sleep for the first two seconds after which the cache is loaded,
                 // so that we don't interfere with the user interface startup.
@@ -162,7 +162,7 @@ class CloudGameRepository(GameRepository):
             RemoteGameRepository remoteRepository = new RemoteGameRepository(theRepoURL);
 
             System.out.println("Updating the game cache...");
-            long beginTime = System.currentTimeMillis();
+            int beginTime = System.currentTimeMillis();
 
             // Since games are immutable, we can guarantee that the games listed
             // by the repository server includes the games in the local cache, so
@@ -216,7 +216,7 @@ class CloudGameRepository(GameRepository):
                 }
             }
 
-            long endTime = System.currentTimeMillis();
+            int endTime = System.currentTimeMillis();
             System.out.println("Updating the game cache took: " + (endTime - beginTime) + "ms.");
         }
     }
@@ -263,7 +263,7 @@ class CloudGameRepository(GameRepository):
         return Game.loadFromJSON(theLine);
     }
 
-    private synchronized long getCacheEntryAge(String theKey):
+    private synchronized int getCacheEntryAge(String theKey):
     	File theGameFile = new File(theCacheDirectory, theKey + ".zip");
     	if (theGameFile.exists()):
     		return System.currentTimeMillis() - theGameFile.lastModified();
@@ -273,10 +273,10 @@ class CloudGameRepository(GameRepository):
 
     // ================================================================
 
-    public static void main(String[] args):
+    def void main(String[] args):
         GameRepository theRepository = new CloudGameRepository("games.ggp.org/base");
 
-        long beginTime = System.currentTimeMillis();
+        int beginTime = System.currentTimeMillis();
 
         Map<String, Game> theGames = new HashMap<String, Game>();
         for(String gameKey : theRepository.getGameKeys()):
@@ -284,7 +284,7 @@ class CloudGameRepository(GameRepository):
         }
         System.out.println("Games: " + theGames.size());
 
-        long endTime = System.currentTimeMillis();
+        int endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime - beginTime) + "ms.");
     }
 }

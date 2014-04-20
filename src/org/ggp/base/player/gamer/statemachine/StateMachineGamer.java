@@ -30,7 +30,7 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  * @author evancox
  * @author Sam
  */
-public abstract class StateMachineGamer(Gamer):
+def abstract class StateMachineGamer(Gamer):
 {
     // =====================================================================
     // First, the abstract methods which need to be overriden by subclasses.
@@ -41,7 +41,7 @@ public abstract class StateMachineGamer(Gamer):
      * Defines which state machine this gamer will use.
      * @return
      */
-    public abstract StateMachine getInitialStateMachine();
+    def abstract StateMachine getInitialStateMachine();
 
     /**
      * Defines the metagaming action taken by a player during the START_CLOCK
@@ -50,7 +50,7 @@ public abstract class StateMachineGamer(Gamer):
      * @throws MoveDefinitionException
      * @throws GoalDefinitionException
      */
-    public abstract void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException;
+    def abstract void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException;
 
     /**
      * Defines the algorithm that the player uses to select their move.
@@ -60,17 +60,17 @@ public abstract class StateMachineGamer(Gamer):
      * @throws MoveDefinitionException
      * @throws GoalDefinitionException
      */
-    public abstract Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException;
+    def abstract Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException;
 
     /**
      * Defines any actions that the player takes upon the game cleanly ending.
      */
-    public abstract void stateMachineStop();
+    def abstract void stateMachineStop();
 
     /**
      * Defines any actions that the player takes upon the game abruptly ending.
      */
-    public abstract void stateMachineAbort();
+    def abstract void stateMachineAbort();
 
     // =====================================================================
     // Next, methods which can be used by subclasses to get information about
@@ -158,7 +158,7 @@ public abstract class StateMachineGamer(Gamer):
 	 * initializes the state machine and role using the match description, and
 	 * then calls stateMachineMetaGame.
 	 */
-    def final void metaGame(long timeout) throws MetaGamingException
+    def final void metaGame(int timeout) throws MetaGamingException
 	{
         try
 		{
@@ -180,7 +180,7 @@ public abstract class StateMachineGamer(Gamer):
 	 * and then calls stateMachineSelectMove to select a move based on that
 	 * current state.
 	 */
-    def final GdlTerm selectMove(long timeout) throws MoveSelectionException
+    def final GdlTerm selectMove(int timeout) throws MoveSelectionException
 	{
         try
 		{
@@ -234,7 +234,7 @@ public abstract class StateMachineGamer(Gamer):
             throw new AbortingException(e);
 
     // Internal state about the current state of the state machine.
-    private Role role;
-    private MachineState currentState;
-    private StateMachine stateMachine;
+    role = Role()
+    currentState = MachineState()
+    stateMachine = StateMachine()
 }

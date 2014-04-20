@@ -10,10 +10,10 @@ import org.ggp.base.util.prover.aima.substitution.Substitution;
 class Unifier
 {
 
-    public static Substitution unify(GdlSentence x, GdlSentence y)
+    def Substitution unify(GdlSentence x, GdlSentence y)
     {
         Substitution theta = new Substitution();
-        boolean isGood = unifyTerm(x.toTerm(), y.toTerm(), theta);
+        bool isGood = unifyTerm(x.toTerm(), y.toTerm(), theta);
 
         if(isGood)
             return theta;
@@ -21,7 +21,7 @@ class Unifier
             return null;
     }
 
-    private static boolean unifyTerm(GdlTerm x, GdlTerm y, Substitution theta)
+    def bool unifyTerm(GdlTerm x, GdlTerm y, Substitution theta)
     {
     	if(x.equals(y))
     		return true;
@@ -64,7 +64,7 @@ class Unifier
         return true;
     }
 
-    private static boolean unifyVariable(GdlVariable var, GdlTerm x, Substitution theta)
+    def bool unifyVariable(GdlVariable var, GdlTerm x, Substitution theta)
     {
         if (theta.contains(var))
         {

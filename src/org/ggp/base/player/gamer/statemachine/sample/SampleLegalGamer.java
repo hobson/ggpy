@@ -14,7 +14,7 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  *
  * For your first players, you should extend the class SampleGamer
  * The only function that you are required to override is :
- * public Move stateMachineSelectMove(long timeout)
+ * def Move stateMachineSelectMove(int timeout)
  *
  */
 class SampleLegalGamer(SampleGamer):
@@ -25,10 +25,10 @@ class SampleLegalGamer(SampleGamer):
 	 * before the timeout.
 	 *
 	 */
-    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 		// We get the current start time
-        long start = System.currentTimeMillis();
+        int start = System.currentTimeMillis();
 
 		/**
 		 * We put in memory the list of legal moves from the
@@ -43,7 +43,7 @@ class SampleLegalGamer(SampleGamer):
 
 		// We get the end time
 		// It is mandatory that stop<timeout
-        long stop = System.currentTimeMillis();
+        int stop = System.currentTimeMillis();
 
 		/**
 		 * These are functions used by other parts of the GGP codebase

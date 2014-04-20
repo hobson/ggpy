@@ -36,38 +36,38 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
  * @author Ethan Dreyfuss
  */
 class PropNetAnnotater(object):
-    private List<Gdl> description;
+    description = List<Gdl>()
 //  private List<GdlRelation> relations = new ArrayList<GdlRelation>();
     private Set<GdlRelation> baseRelations = new HashSet<GdlRelation>();
     private Set<GdlConstant> universe = new HashSet<GdlConstant>();
     private GdlFunction universalDom = null;
 
     private class Domain {
-        public Domain(Location loc) {this.loc = loc;}
-        public Set<GdlConstant> values = new HashSet<GdlConstant>();
-        public Set<Set<Domain>> functionRefs = new HashSet<Set<Domain>>();
-        public Location loc;
+        def Domain(Location loc) {this.loc = loc;}
+        def Set<GdlConstant> values = new HashSet<GdlConstant>();
+        def Set<Set<Domain>> functionRefs = new HashSet<Set<Domain>>();
+        def Location loc;
 
-            public String toString()
+            def String toString()
         {
             return "Name: "+loc.name+" index: "+loc.idx+"\nvalues: "+values+"\nfunctionRefs: "+functionRefs;
         }
     }
 
     private class Location {
-        public GdlConstant name;
-        public Integer idx;
+        def GdlConstant name;
+        def Integer idx;
 
-        public Location()
+        def Location()
         {}
 
-                public Location(Location other)
+                def Location(Location other)
         {
             name = other.name;
             idx = other.idx;
         }
 
-            public boolean equals(Object other)
+            def bool equals(Object other)
         {
             if(!(other instanceof Location))
                 return false;
@@ -75,7 +75,7 @@ class PropNetAnnotater(object):
             return Objects.equals(idx, rhs.idx) && name.toString().equals(rhs.name.toString());
         }
 
-            public int hashCode()
+            def int hashCode()
         {
             byte[] bytes = name.toString().getBytes();
             BigInteger bigInt = new BigInteger(bytes);
@@ -83,7 +83,7 @@ class PropNetAnnotater(object):
             return val+idx;
         }
 
-            public String toString()
+            def String toString()
         {
             return name.toString()+"("+idx+")";
         }
@@ -91,12 +91,12 @@ class PropNetAnnotater(object):
 
     HashMap<Location,Domain> domains = new HashMap<Location, Domain>();
 
-    public PropNetAnnotater(List<Gdl> description)
+    def PropNetAnnotater(List<Gdl> description)
     {
         this.description = description;
     }
 
-    public List<Gdl> getAnnotations()
+    def List<Gdl> getAnnotations()
     {
         //Find universe and initial domains
         for(Gdl gdl : description)
@@ -594,7 +594,7 @@ class PropNetAnnotater(object):
 
     void updateDomains()
     {
-        boolean changedSomething = true;
+        bool changedSomething = true;
         while(changedSomething)
         {
             changedSomething = false;
@@ -655,12 +655,12 @@ class PropNetAnnotater(object):
         instantiateBaseProps(template);
     }
 
-    public List<Gdl> getAugmentedDescription()
+    def List<Gdl> getAugmentedDescription()
     {
         List<Gdl> rval = new ArrayList<Gdl>();
         for(Gdl gdl : description)
         {
-            boolean notBase = true;
+            bool notBase = true;
             if(gdl instanceof GdlRelation)
             {
                 GdlRelation rel = (GdlRelation)gdl;
@@ -677,7 +677,7 @@ class PropNetAnnotater(object):
     /**
      * @param args
      */
-    public static void main(String[] args):
+    def void main(String[] args):
         List<Gdl> description = GameRepository.getDefaultRepository().getGame("conn4").getRules();;
 
         PropNetAnnotater aa = new PropNetAnnotater(description);

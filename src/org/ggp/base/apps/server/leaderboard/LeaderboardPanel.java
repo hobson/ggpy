@@ -40,7 +40,7 @@ class LeaderboardPanel(JPanel implements Observer):
 
         leaderTable = new JTable(model)
 		{
-        		    def boolean isCellEditable(int rowIndex, int colIndex)
+        		    def bool isCellEditable(int rowIndex, int colIndex)
 			{
                 return false;
         		    def Class<?> getColumnClass(int colIndex):

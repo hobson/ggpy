@@ -9,15 +9,15 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
 
 
 class TTCC4SmallCanvas(GameCanvas_FancyGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "TTCC4 (Small)"; }
     protected String getGameKey() { return "ttcc4_2player_small"; }
     protected int getGridHeight() { return 5; }
     protected int getGridWidth() { return 5; }
 
-    protected final boolean useGridVisualization() { return false; }
-    protected final boolean coordinatesStartAtOne() { return true; }
+    protected final bool useGridVisualization() { return false; }
+    protected final bool coordinatesStartAtOne() { return true; }
 
     protected final void renderCellBackground(Graphics g, int xCell, int yCell):
         int width = g.getClipBounds().width;

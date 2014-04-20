@@ -24,9 +24,9 @@ import org.ggp.base.util.statemachine.implementation.prover.result.ProverResultP
 
 class ProverStateMachine(StateMachine):
 {
-    private MachineState initialState;
-    private Prover prover;
-    private List<Role> roles;
+    initialState = MachineState()
+    prover = Prover()
+    roles = List<Role>()
 
 	/**
 	 * Initialize must be called before using the StateMachine
@@ -95,7 +95,7 @@ class ProverStateMachine(StateMachine):
 	{
         return roles;
 
-    def boolean isTerminal(MachineState state)
+    def bool isTerminal(MachineState state)
 	{
         return prover.prove(ProverQueryBuilder.getTerminalQuery(), ProverQueryBuilder.getContext(state));
 }

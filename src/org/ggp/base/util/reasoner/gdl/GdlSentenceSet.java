@@ -50,7 +50,7 @@ class GdlSentenceSet(object):
 	/**
 	 * Returns true iff the given sentence is in this set of sentences.
 	 */
-    def boolean containsSentence(SentenceForm form, GdlSentence sentence):
+    def bool containsSentence(SentenceForm form, GdlSentence sentence):
         return sentences.containsEntry(form, sentence);
 
     def void putAll(Multimap<SentenceForm, GdlSentence> newSentences):

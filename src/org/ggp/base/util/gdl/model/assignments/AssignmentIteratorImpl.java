@@ -16,15 +16,15 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
 import com.google.common.collect.ImmutableList;
 
 // Not thread-safe
-class AssignmentIteratorImpl implements AssignmentIterator {
+class AssignmentIteratorImpl(AssignmentIterator):
         private List<Integer> sourceTupleIndices = null;
 		//This time we just have integers to deal with
         private List<Integer> valueIndices = null;
         private List<GdlConstant> nextAssignment = new ArrayList<GdlConstant>();
         private Map<GdlVariable, GdlConstant> assignmentMap = new HashMap<GdlVariable, GdlConstant>();
 
-        private boolean headOnly = false;
-        private boolean done = false;
+        private bool headOnly = false;
+        private bool done = false;
 	    plan = AssignmentIterationPlan()
 
 	    def AssignmentIteratorImpl(plan=AssignmentIterationPlan()):
@@ -173,7 +173,7 @@ class AssignmentIteratorImpl implements AssignmentIterator {
                 List<Boolean> putDontCheckTuple = plan.getPutDontCheckBySource().get(s);
                 for(int i = 0; i < tuple.size(); i++):
                     GdlConstant value = tuple.get(i);
-                    boolean putDontCheck = putDontCheckTuple.get(i);
+                    bool putDontCheck = putDontCheckTuple.get(i);
                     int varSlotChosen = varsChosen.get(i);
                     if(putDontCheck):
                         nextAssignment.set(varSlotChosen, value);
@@ -247,7 +247,7 @@ class AssignmentIteratorImpl implements AssignmentIterator {
             changeOneInNext(varsToChange);
 
 
-    	    def hasNext():  # boolean
+    	    def hasNext():  # bool
             if (plan.getEmpty()):
                 return false;
             if (headOnly):

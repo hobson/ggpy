@@ -15,7 +15,7 @@ import org.ggp.base.util.match.Match;
  * @author Sam
  */
 class PythonGamer_Test(TestCase):
-    public void testPythonGamer():
+    def void testPythonGamer():
         try {
             Gamer g = new SamplePythonGamerStub();
             assertEquals("SamplePythonGamer", g.getName());

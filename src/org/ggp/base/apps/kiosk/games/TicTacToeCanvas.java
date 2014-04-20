@@ -15,7 +15,7 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
  * @author Sam Schreiber
  */
 class TicTacToeCanvas(GameCanvas_FancyGrid):
-    public static final long serialVersionUID = 0x1;
+    serialVersionUID = 0x1  # int 
 
     def String getGameName() { return "Tic-Tac-Toe"; }
     protected String getGameKey() { return "ticTacToe"; }

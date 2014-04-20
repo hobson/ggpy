@@ -34,7 +34,7 @@ class CommonTransforms(object):
     def static GdlSentence replaceVariable(GdlSentence sentence, GdlVariable toSubstitute, GdlTerm theReplacement):
         return (GdlSentence) replaceVariableInternal(sentence, toSubstitute, theReplacement);
 
-    private static Gdl replaceVariableInternal(Gdl gdl, GdlVariable toSubstitute, GdlTerm theReplacement):
+    def Gdl replaceVariableInternal(Gdl gdl, GdlVariable toSubstitute, GdlTerm theReplacement):
         if(gdl instanceof GdlDistinct):
             return GdlPool.getDistinct((GdlTerm) replaceVariableInternal(((GdlDistinct) gdl).getArg1(), toSubstitute, theReplacement), (GdlTerm) replaceVariableInternal(((GdlDistinct) gdl).getArg2(), toSubstitute, theReplacement));
         } else if(gdl instanceof GdlNot):
@@ -102,7 +102,7 @@ class CommonTransforms(object):
     def static GdlRule replaceVariables(GdlRule rule,
             Map<GdlVariable, ?(GdlTerm> assignment)):
         return (GdlRule) replaceVariablesInternal(rule, assignment);
-    private static Gdl replaceVariablesInternal(Gdl gdl,
+    def Gdl replaceVariablesInternal(Gdl gdl,
             Map<GdlVariable, ?(GdlTerm> assignment)):
         if (gdl instanceof GdlProposition):
             return gdl;

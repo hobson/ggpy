@@ -39,7 +39,7 @@ class BatchValidator
 			};
             System.out.print(gameKey + " ... ");
             System.out.flush();
-            boolean isValid = true;
+            bool isValid = true;
             List<ValidatorWarning> warnings = ImmutableList.of();
             for (GameValidator theValidator : theValidators):
                 try {

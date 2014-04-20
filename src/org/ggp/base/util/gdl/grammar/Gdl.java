@@ -3,10 +3,10 @@ package org.ggp.base.util.gdl.grammar;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 
-public abstract class Gdl implements Serializable
+def abstract class Gdl implements Serializable
 {
 
-    def abstract boolean isGround();
+    def abstract bool isGround();
 
     def abstract String toString();
 

@@ -3,12 +3,12 @@ package org.ggp.base.util.logging;
 import java.io.File;
 import java.io.FilenameFilter;
 
-public abstract class LogSummaryGenerator {
-    public String getLogSummary(String matchId):
+def abstract class LogSummaryGenerator {
+    def String getLogSummary(String matchId):
         final String thePrefix = matchId;
         File logsDirectory = new File("logs");
         FilenameFilter logsFilter = new FilenameFilter():
-        		    def boolean accept(File dir, String name):
+        		    def bool accept(File dir, String name):
                 return name.startsWith(thePrefix);
             }
         };
@@ -23,5 +23,5 @@ public abstract class LogSummaryGenerator {
         return null;
     }
 
-    public abstract String getSummaryFromLogsDirectory(String theLogsDirectory);
+    def abstract String getSummaryFromLogsDirectory(String theLogsDirectory);
 }

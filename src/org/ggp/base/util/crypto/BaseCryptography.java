@@ -19,12 +19,12 @@ import external.JSON.JSONException;
 import external.JSON.JSONObject;
 
 class BaseCryptography(object):
-    public static void main(String args[]):
+    def void main(String args[]):
         EncodedKeyPair k = generateKeys();
         System.out.println("{\"PK\":\"" + k.thePublicKey + "\", \"SK\":\"" + k.thePrivateKey + "\"}");
     }
 
-    public static EncodedKeyPair generateKeys():
+    def EncodedKeyPair generateKeys():
         try {
             // Generate a 2048-bit RSA key pair
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
@@ -38,7 +38,7 @@ class BaseCryptography(object):
         }
     }
 
-    public static String signData(String thePrivateKey, String theData):
+    def String signData(String thePrivateKey, String theData):
         PrivateKey theSK = decodePrivateKey(thePrivateKey);
         if (theSK == null) return null;
 
@@ -55,9 +55,9 @@ class BaseCryptography(object):
         return null;
     }
 
-    public static boolean verifySignature(String thePublicKey, String theSignature, String theData) throws SignatureException, NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
+    def bool verifySignature(String thePublicKey, String theSignature, String theData) throws SignatureException, NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         PublicKey thePK = decodePublicKey(thePublicKey);
-        if (thePK == null) throw new SignatureException("Could not reconstruct public key.");
+        if (thePK == null) throw new SignatureException("Could not reconstruct def key.");
 
         byte[] theSigBytes = decodeSignature(theSignature);
         if (theSigBytes == null) throw new SignatureException("Could not reconstruct signature.");
@@ -69,32 +69,32 @@ class BaseCryptography(object):
     }
 
     /* Class to hold a pair of string-encoded keys */
-    public static class EncodedKeyPair {
-        public final String thePublicKey;
-        public final String thePrivateKey;
+    def class EncodedKeyPair {
+        def final String thePublicKey;
+        def final String thePrivateKey;
 
-        public EncodedKeyPair(PublicKey thePK, PrivateKey theSK):
+        def EncodedKeyPair(PublicKey thePK, PrivateKey theSK):
             thePublicKey = encodeKey(thePK);
             thePrivateKey = encodeKey(theSK);
         }
-        public EncodedKeyPair(String theKeyJSON) throws JSONException {
+        def EncodedKeyPair(String theKeyJSON) throws JSONException {
             JSONObject theJSON = new JSONObject(theKeyJSON);
             thePublicKey = theJSON.getString("PK");
             thePrivateKey = theJSON.getString("SK");
         }
     }
 
-    /* Functions for encoding and decoding public and private keys */
-    private static String encodeKey(PublicKey thePK):
+    /* Functions for encoding and decoding def and private keys */
+    def String encodeKey(PublicKey thePK):
         return theCryptographyPrefix + encodeBytes(thePK.getEncoded());
     }
-    private static String encodeKey(PrivateKey theSK):
+    def String encodeKey(PrivateKey theSK):
         return theCryptographyPrefix + encodeBytes(theSK.getEncoded());
     }
-    private static String encodeSignature(byte[] theSignatureBytes):
+    def String encodeSignature(byte[] theSignatureBytes):
         return theCryptographyPrefix + encodeBytes(theSignatureBytes);
     }
-    private static PublicKey decodePublicKey(String thePK):
+    def PublicKey decodePublicKey(String thePK):
         if (!thePK.startsWith(theCryptographyPrefix)) return null;
         thePK = thePK.replaceFirst(theCryptographyPrefix, "");
 
@@ -107,7 +107,7 @@ class BaseCryptography(object):
             return null;
         }
     }
-    private static PrivateKey decodePrivateKey(String theSK):
+    def PrivateKey decodePrivateKey(String theSK):
         if (!theSK.startsWith(theCryptographyPrefix)) return null;
         theSK = theSK.replaceFirst(theCryptographyPrefix, "");
 
@@ -120,7 +120,7 @@ class BaseCryptography(object):
             return null;
         }
     }
-    private static byte[] decodeSignature(String theSig):
+    def byte[] decodeSignature(String theSig):
         if (!theSig.startsWith(theCryptographyPrefix)) return null;
         theSig = theSig.replaceFirst(theCryptographyPrefix, "");
 
@@ -130,10 +130,10 @@ class BaseCryptography(object):
     static final String theCryptographyPrefix = "0";
 
     /* Functions for encoding/decoding arrays of bytes */
-    private static String encodeBytes(byte[] theBytes):
+    def String encodeBytes(byte[] theBytes):
         return new String(Base64Coder.encode(theBytes));
     }
-    private static byte[] decodeBytes(String theString):
+    def byte[] decodeBytes(String theString):
         return Base64Coder.decode(theString);
     }
 }

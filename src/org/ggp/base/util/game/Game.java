@@ -61,7 +61,7 @@ class Game(object):
     private final String theStylesheet;
     private final String theRulesheet;
 
-    public static Game createEphemeralGame(String theRulesheet):
+    def Game createEphemeralGame(String theRulesheet):
         return new Game(null, null, null, null, null, theRulesheet);
     }
 
@@ -74,27 +74,27 @@ class Game(object):
         this.theRulesheet = theRulesheet;
     }
 
-    public String getKey():
+    def String getKey():
         return theKey;
     }
 
-    public String getName():
+    def String getName():
         return theName;
     }
 
-    public String getRepositoryURL():
+    def String getRepositoryURL():
         return theRepositoryURL;
     }
 
-    public String getDescription():
+    def String getDescription():
         return theDescription;
     }
 
-    public String getStylesheet():
+    def String getStylesheet():
         return theStylesheet;
     }
 
-    public String getRulesheet():
+    def String getRulesheet():
     	return theRulesheet;
     }
 
@@ -109,7 +109,7 @@ class Game(object):
      * @param raw rulesheet
      * @return processed rulesheet
      */
-    public static String preprocessRulesheet(String rawRulesheet):
+    def String preprocessRulesheet(String rawRulesheet):
 		// First, strip all of the comments from the rulesheet.
         StringBuilder rulesheetBuilder = new StringBuilder();
         String[] rulesheetLines = rawRulesheet.split("[\n\r]");
@@ -139,7 +139,7 @@ class Game(object):
      *
      * @return
      */
-    public List<Gdl> getRules():
+    def List<Gdl> getRules():
     	try {
 	        List<Gdl> rules = new ArrayList<Gdl>();
 	        SymbolList list = (SymbolList) SymbolFactory.create(theRulesheet);
@@ -157,7 +157,7 @@ class Game(object):
     	}
     }
 
-    public String serializeToJSON():
+    def String serializeToJSON():
         try {
             JSONObject theGameObject = new JSONObject();
             theGameObject.put("theKey", getKey());
@@ -174,7 +174,7 @@ class Game(object):
         }
     }
 
-    public static Game loadFromJSON(String theSerializedGame):
+    def Game loadFromJSON(String theSerializedGame):
         try {
             JSONObject theGameObject = new JSONObject(theSerializedGame);
 

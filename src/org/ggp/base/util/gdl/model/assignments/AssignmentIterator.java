@@ -8,7 +8,7 @@ import org.ggp.base.util.gdl.grammar.GdlConstant;
 import org.ggp.base.util.gdl.grammar.GdlVariable;
 
 
-public interface AssignmentIterator(Iterator<Map<GdlVariable, GdlConstant>>):
+def interface AssignmentIterator(Iterator<Map<GdlVariable, GdlConstant>>):
 
 	/**
 	 * Request that the next assignment change at least one

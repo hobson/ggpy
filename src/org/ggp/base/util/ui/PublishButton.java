@@ -10,20 +10,20 @@ import org.ggp.base.server.GameServer;
 
 
 class PublishButton(JButton implements ActionListener):
-    private GameServer theServer;
+    theServer = GameServer()
 
-    public PublishButton(String theName):
+    def PublishButton(String theName):
         super(theName);
         this.addActionListener(this);
         this.setEnabled(false);
     }
 
-    public void setServer(GameServer theServer):
+    def void setServer(GameServer theServer):
         this.theServer = theServer;
         this.setEnabled(true);
     }
 
-    public void actionPerformed(ActionEvent e):
+    def void actionPerformed(ActionEvent e):
         if (e.getSource() == this):
             if (theServer != null):
                 if (!theServer.getMatch().getGame().getRepositoryURL().contains("127.0.0.1")):

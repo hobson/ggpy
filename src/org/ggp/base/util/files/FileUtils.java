@@ -12,7 +12,7 @@ class FileUtils(object):
     /**
      * @param filePath the name of the file to open.
      */
-    public static String readFileAsString(File file):
+    def String readFileAsString(File file):
         try {
         	BufferedReader reader = new BufferedReader(new FileReader(file));
             StringBuilder fileData = new StringBuilder(10000);
@@ -30,7 +30,7 @@ class FileUtils(object):
             return null;
     }
 
-    public static void writeStringToFile(File file, String s) throws IOException {
+    def void writeStringToFile(File file, String s) throws IOException {
         PrintStream out = new PrintStream(new FileOutputStream(file, false));
         try {
             out.print(s);

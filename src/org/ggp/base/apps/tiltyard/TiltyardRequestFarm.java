@@ -24,7 +24,7 @@ import external.JSON.JSONObject;
  * The Tiltyard Request Farm is a multi-threaded web server that opens network
  * connections, makes requests, and reports back responses on behalf of a remote
  * client. It serves as a backend for intermediary systems that, due to various
- * restrictions, cannot make long-lived HTTP connections themselves.
+ * restrictions, cannot make int-lived HTTP connections themselves.
  *
  * This is the backend for the continuously-running online GGP.org Tiltyard,
  * which schedules matches between players around the world and aggregates stats
@@ -49,13 +49,13 @@ import external.JSON.JSONObject;
  */
 class TiltyardRequestFarm
 {
-    public static final int SERVER_PORT = 9125;
-    private static final String registrationURL = "http://tiltyard.ggp.org/backends/register/farm";
+    SERVER_PORT = 9125  # int 
+    registrationURL = "http://tiltyard.ggp.org/backends/register/farm"  # String 
 
-    private static final Object ongoingRequestsLock = new Object();
-    private static int ongoingRequests = 0;
+    ongoingRequestsLock = new Object()  # Object 
+    def int ongoingRequests = 0;
 
-    public static boolean testMode = false;
+    def bool testMode = false;
 
     static EncodedKeyPair getKeyPair(String keyPairString):
     	if (keyPairString == null)
@@ -66,8 +66,8 @@ class TiltyardRequestFarm
             return null;
         }
     }
-    public static final EncodedKeyPair theBackendKeys = getKeyPair(FileUtils.readFileAsString(new File("src/org/ggp/base/apps/tiltyard/BackendKeys.json")));
-    public static String generateSignedPing():
+    theBackendKeys = getKeyPair(FileUtils.readFileAsString(new File("src/org/ggp/base/apps/tiltyard/BackendKeys.json")))  # EncodedKeyPair 
+    def String generateSignedPing():
     	String zone = null;
    		try {
             zone = RemoteResourceLoader.loadRaw("http://metadata/computeMetadata/v1beta1/instance/zone");
@@ -90,10 +90,10 @@ class TiltyardRequestFarm
     static class RunRequestThread(Thread):
     	String targetHost, requestContent, forPlayerName, callbackURL, originalRequest;
     	int targetPort, timeoutClock;
-    	boolean fastReturn;
+    	bool fastReturn;
     	Set<String> activeRequests;
 
-        public RunRequestThread(Socket connection, Set<String> activeRequests) throws IOException, JSONException {
+        def RunRequestThread(Socket connection, Set<String> activeRequests) throws IOException, JSONException {
             String line = HttpReader.readAsServer(connection);
             System.out.println("On " + new Date() + ", client has requested: " + line);
 
@@ -131,13 +131,13 @@ class TiltyardRequestFarm
             connection.close();
         }
 
-            public void run():
+            def void run():
             if (originalRequest != null):
             	synchronized (ongoingRequestsLock):
             		ongoingRequests++;
             	}
                 System.out.println("On " + new Date() + ", starting request. There are now " + ongoingRequests + " ongoing requests.");
-                long startTime = System.currentTimeMillis();
+                int startTime = System.currentTimeMillis();
                 JSONObject responseJSON = new JSONObject();
                 try {
                 	responseJSON.put("originalRequest", originalRequest);
@@ -156,7 +156,7 @@ class TiltyardRequestFarm
                 } catch (JSONException je):
                 	throw new RuntimeException(je);
                 }
-                long timeSpent = System.currentTimeMillis() - startTime;
+                int timeSpent = System.currentTimeMillis() - startTime;
                 if (!fastReturn && timeSpent < timeoutClock):
                 	try {
                         Thread.sleep(timeoutClock - timeSpent);
@@ -193,7 +193,7 @@ class TiltyardRequestFarm
     }
 
     static class TiltyardRegistration(Thread):
-            public void run():
+            def void run():
             // Send a registration ping to Tiltyard every five minutes.
             while (true):
                 try {
@@ -210,7 +210,7 @@ class TiltyardRequestFarm
        }
     }
 
-    public static void main(String[] args):
+    def void main(String[] args):
         ServerSocket listener = null;
         try {
              listener = new ServerSocket(SERVER_PORT);

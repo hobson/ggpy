@@ -202,7 +202,7 @@ class CondensationIsolator(object):
                 newDescription.add(curRule);
         return newDescription;
 
-        private static void saveKif(List<Gdl> description):
+        def void saveKif(List<Gdl> description):
 		//Save the description in a new file
 		//Useful for debugging chains of condensations to see
 		//which cause decreased performance
@@ -227,7 +227,7 @@ class CondensationIsolator(object):
                     out.close();
 			} catch (IOException e) {}
 
-    private static boolean isRecursive(GdlRule rule):
+    def bool isRecursive(GdlRule rule):
         for(GdlLiteral literal : rule.getBody())
             if(literal instanceof GdlSentence)
                 if(((GdlSentence) literal).getName().equals(rule.getHead().getName()))
@@ -235,7 +235,7 @@ class CondensationIsolator(object):
                     return true;
         return false;
 
-    private static class UnusedSentenceNameSource {
+    def class UnusedSentenceNameSource {
         private final Set<String> allNamesSoFar;
 
 	    def UnusedSentenceNameSource(Collection<String> initialNames):
@@ -252,7 +252,7 @@ class CondensationIsolator(object):
                     allNamesSoFar.add(candidateName);
                     return GdlPool.getConstant(candidateName);
 
-    private static List<GdlRule> applyCondensation(
+    def List<GdlRule> applyCondensation(
             Set<GdlLiteral> condensationSet, GdlRule rule,
             UnusedSentenceNameSource sentenceNameSource):
 
@@ -300,7 +300,7 @@ class CondensationIsolator(object):
         newRules.add(modifiedRule);
         return newRules;
 
-    private static Set<GdlLiteral> getCondensationSet(GdlRule rule,
+    def Set<GdlLiteral> getCondensationSet(GdlRule rule,
             SentenceDomainModel model,
             ConstantChecker checker,
             UnusedSentenceNameSource sentenceNameSource) throws InterruptedException {
@@ -356,7 +356,7 @@ class CondensationIsolator(object):
 
         return null;
 
-    private static boolean goodCondensationSetByHeuristic(
+    def bool goodCondensationSetByHeuristic(
             Set<GdlLiteral> minSet, GdlRule rule, SentenceDomainModel model,
             ConstantChecker checker,
             UnusedSentenceNameSource sentenceNameSource) throws InterruptedException {
@@ -379,7 +379,7 @@ class CondensationIsolator(object):
 
 		//Heuristic for the rule as-is:
 
-        long assignments = AssignmentsImpl.getNumAssignmentsEstimate(rule,
+        int assignments = AssignmentsImpl.getNumAssignmentsEstimate(rule,
                 SentenceDomainModels.getVarDomains(rule, model, VarDomainOpts.INCLUDE_HEAD),
                 checker);
         int literals = rule.arity();
@@ -388,7 +388,7 @@ class CondensationIsolator(object):
 		//Note that even though constants will be factored out, we're concerned here
 		//with getting through them in a reasonable amount of time, so we do want to
 		//count them. TODO: Not sure if they should be counted in L, though...
-        long curRuleHeuristic = assignments * literals;
+        int curRuleHeuristic = assignments * literals;
 		//And if we split them up...
         List<GdlRule> newRules = applyCondensation(minSet, rule, sentenceNameSource);
         GdlRule r1 = newRules.get(0), r2 = newRules.get(1);
@@ -396,18 +396,18 @@ class CondensationIsolator(object):
 		//Augment the model
         SentenceDomainModel newModel = augmentModelWithNewForm(model, newRules);
 
-        long a1 = AssignmentsImpl.getNumAssignmentsEstimate(r1,
+        int a1 = AssignmentsImpl.getNumAssignmentsEstimate(r1,
                 SentenceDomainModels.getVarDomains(r1, newModel, VarDomainOpts.INCLUDE_HEAD), checker);
-        long a2 = AssignmentsImpl.getNumAssignmentsEstimate(r2,
+        int a2 = AssignmentsImpl.getNumAssignmentsEstimate(r2,
                 SentenceDomainModels.getVarDomains(r2, newModel, VarDomainOpts.INCLUDE_HEAD), checker);
         int l1 = r1.arity(); if(l1 > 1) l1++;
         int l2 = r2.arity(); if(l2 > 1) l2++;
 
 		//Whether we split or not depends on what the two heuristics say
-        long newRulesHeuristic = a1 * l1 + a2 * l2;
+        int newRulesHeuristic = a1 * l1 + a2 * l2;
         return newRulesHeuristic < curRuleHeuristic;
 
-    private static SentenceDomainModel augmentModelWithNewForm(
+    def SentenceDomainModel augmentModelWithNewForm(
             final SentenceDomainModel oldModel, List<GdlRule> newRules):
         final SentenceForm newForm = SimpleSentenceForm.create(newRules.get(0).getHead());
         final SentenceFormDomain newFormDomain = getNewFormDomain(newRules.get(0), oldModel, newForm);
@@ -435,7 +435,7 @@ class CondensationIsolator(object):
                 throw new UnsupportedOperationException();
 		};
 
-    private static SentenceFormDomain getNewFormDomain(GdlRule condensingRule,
+    def SentenceFormDomain getNewFormDomain(GdlRule condensingRule,
             SentenceDomainModel oldModel, SentenceForm newForm):
         Map<GdlVariable, Set<GdlConstant>> varDomains = SentenceDomainModels.getVarDomains(
                 condensingRule, oldModel, VarDomainOpts.BODY_ONLY);

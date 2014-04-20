@@ -41,7 +41,7 @@ class GdlRule(Gdl):
 	{
         return body;
 
-    def boolean isGround()
+    def bool isGround()
 	{
         if (ground == null)
 		{

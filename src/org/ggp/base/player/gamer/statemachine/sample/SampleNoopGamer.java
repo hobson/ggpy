@@ -14,7 +14,7 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  */
 class SampleNoopGamer(SampleGamer):
 {
-    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
         return new Move(GdlPool.getConstant("NOOP"));
 

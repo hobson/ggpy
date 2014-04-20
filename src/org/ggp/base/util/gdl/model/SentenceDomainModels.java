@@ -57,7 +57,7 @@ class SentenceDomainModels(object):
 		} else {
             return rule.getBody();
 
-    private static Map<GdlVariable, Set<GdlConstant>> combineDomains(
+    def Map<GdlVariable, Set<GdlConstant>> combineDomains(
             Multimap<GdlVariable, Set<GdlConstant>> varDomainsByVar):
         return ImmutableMap.copyOf(Maps.transformValues(varDomainsByVar.asMap(),
                 new Function<Collection<Set<GdlConstant>>, Set<GdlConstant>>():

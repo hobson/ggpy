@@ -13,15 +13,15 @@ import org.xhtmlrenderer.layout.LayoutContext;
 import org.xhtmlrenderer.render.BlockBox;
 import org.xhtmlrenderer.simple.extend.FormSubmissionListener;
 
-class ChainingReplacedElementFactory implements ReplacedElementFactory {
+class ChainingReplacedElementFactory(ReplacedElementFactory):
     private List<ReplacedElementFactory> replacedElementFactories = new ArrayList<ReplacedElementFactory>();
 
-    public void addReplacedElementFactory(ReplacedElementFactory replacedElementFactory):
+    def void addReplacedElementFactory(ReplacedElementFactory replacedElementFactory):
     replacedElementFactories.add(0, replacedElementFactory);
     }
 
 
-    public ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight):
+    def ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight):
     for(ReplacedElementFactory replacedElementFactory : replacedElementFactories):
 	    ReplacedElement element = replacedElementFactory.createReplacedElement(c, box, uac, cssWidth, cssHeight);
 	    if(element != null):
@@ -30,17 +30,17 @@ class ChainingReplacedElementFactory implements ReplacedElementFactory {
     return null;
     }
 
-    public void reset():
+    def void reset():
     for(ReplacedElementFactory replacedElementFactory : replacedElementFactories):
 	    replacedElementFactory.reset();
     }
 
-    public void remove(Element e):
+    def void remove(Element e):
     for(ReplacedElementFactory replacedElementFactory : replacedElementFactories):
 	    replacedElementFactory.remove(e);
     }
 
-    public void setFormSubmissionListener(FormSubmissionListener listener):
+    def void setFormSubmissionListener(FormSubmissionListener listener):
     for(ReplacedElementFactory replacedElementFactory : replacedElementFactories):
 	    replacedElementFactory.setFormSubmissionListener(listener);
     }

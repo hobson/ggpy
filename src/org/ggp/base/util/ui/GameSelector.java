@@ -25,7 +25,7 @@ import org.ggp.base.util.game.LocalGameRepository;
  *
  * @author Sam Schreiber
  */
-class GameSelector implements ActionListener {
+class GameSelector(ActionListener):
     JComboBox<NamedItem> theGameList;
     JComboBox<String> theRepositoryList;
 
@@ -33,10 +33,10 @@ class GameSelector implements ActionListener {
     Map<String, GameRepository> theCachedRepositories;
 
     class NamedItem {
-        public final String theKey;
-        public final String theName;
+        def final String theKey;
+        def final String theName;
 
-        public NamedItem(String theKey, String theName):
+        def NamedItem(String theKey, String theName):
             this.theKey = theKey;
             this.theName = theName;
         }
@@ -46,7 +46,7 @@ class GameSelector implements ActionListener {
         }
     }
 
-    public GameSelector():
+    def GameSelector():
         theGameList = new JComboBox<NamedItem>();
         theGameList.addActionListener(this);
 
@@ -60,7 +60,7 @@ class GameSelector implements ActionListener {
         theRepositoryList.addItem("Local Game Repository");
     }
 
-    public void actionPerformed(ActionEvent e):
+    def void actionPerformed(ActionEvent e):
         if (e.getSource() == theRepositoryList):
             String theRepositoryName = theRepositoryList.getSelectedItem().toString();
             if (theCachedRepositories.containsKey(theRepositoryName)):
@@ -77,11 +77,11 @@ class GameSelector implements ActionListener {
         }
     }
 
-    public GameRepository getSelectedGameRepository():
+    def GameRepository getSelectedGameRepository():
         return theSelectedRepository;
     }
 
-    public void repopulateGameList():
+    def void repopulateGameList():
         GameRepository theRepository = getSelectedGameRepository();
         List<String> theKeyList = new ArrayList<String>(theRepository.getGameKeys());
         Collections.sort(theKeyList);
@@ -101,15 +101,15 @@ class GameSelector implements ActionListener {
         }
     }
 
-    public JComboBox<String> getRepositoryList():
+    def JComboBox<String> getRepositoryList():
         return theRepositoryList;
     }
 
-    public JComboBox<NamedItem> getGameList():
+    def JComboBox<NamedItem> getGameList():
         return theGameList;
     }
 
-    public Game getSelectedGame():
+    def Game getSelectedGame():
         try {
             return getSelectedGameRepository().getGame(((NamedItem)theGameList.getSelectedItem()).theKey);
         } catch(Exception e):

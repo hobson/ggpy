@@ -77,8 +77,8 @@ import org.ggp.base.util.statemachine.MachineState;
  *
  * @author Sam Schreiber
  */
-public abstract class GameCanvas_FancyGrid(GameCanvas_SimpleGrid):
-    private static final long serialVersionUID = 1L;
+def abstract class GameCanvas_FancyGrid(GameCanvas_SimpleGrid):
+    serialVersionUID = 1L  # int 
 
     protected abstract Set<String> getFactsAboutCell(int xCell, int yCell);
     protected abstract Set<String> getLegalMovesForCell(int xCell, int yCell);
@@ -99,15 +99,15 @@ public abstract class GameCanvas_FancyGrid(GameCanvas_SimpleGrid):
         }
     }
 
-    protected boolean useGridVisualization() { return true; }
+    protected bool useGridVisualization() { return true; }
 
-    protected final boolean isSelectedCell(int xCell, int yCell):
+    protected final bool isSelectedCell(int xCell, int yCell):
         return (yCell == selectedRow && xCell == selectedColumn);
     }
 
     private int selectedRow = -1;
     private int selectedColumn = -1;
-    private String currentSelectedMove;
+    currentSelectedMove = String()
     private Iterator<String> possibleSelectedMoves = null;
     protected final void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin):
         if(selectedRow != yCell || selectedColumn != xCell || !possibleSelectedMoves.hasNext()):

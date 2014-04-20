@@ -19,7 +19,7 @@ class GdlFunction(GdlTerm):
 	{
         return body.size();
 
-    private boolean computeGround()
+    private bool computeGround()
 	{
         for (GdlTerm term : body)
 		{
@@ -41,7 +41,7 @@ class GdlFunction(GdlTerm):
 	{
         return body;
 
-    def boolean isGround()
+    def bool isGround()
 	{
         if (ground == null)
 		{

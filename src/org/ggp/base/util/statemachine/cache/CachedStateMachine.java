@@ -78,7 +78,7 @@ class CachedStateMachine(StateMachine):
 
             return entry.nexts.get(moves);
 
-    def boolean isTerminal(MachineState state)
+    def bool isTerminal(MachineState state)
 	{
         Entry entry = getEntry(state);
         synchronized (entry)

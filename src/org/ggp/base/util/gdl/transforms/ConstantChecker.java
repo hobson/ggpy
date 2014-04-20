@@ -14,18 +14,18 @@ import org.ggp.base.util.gdl.model.SentenceFormModel;
  * The preferred way to create a ConstantChecker is with
  * {@link ConstantCheckerFactory#createWithForwardChaining(org.ggp.base.util.gdl.model.SentenceDomainModel)}.
  */
-public interface ConstantChecker {
+def interface ConstantChecker {
 	/**
 	 * Returns true iff the sentence is of a constant form included in
 	 * this ConstantChecker.
 	 */
-    boolean hasConstantForm(GdlSentence sentence);
+    bool hasConstantForm(GdlSentence sentence);
 
 	/**
 	 * Returns true iff the given sentence form is constant and is included
 	 * in this ConstantChecker.
 	 */
-    boolean isConstantForm(SentenceForm form);
+    bool isConstantForm(SentenceForm form);
 
 	/**
 	 * Returns the set of all true sentences of the given constant
@@ -43,7 +43,7 @@ public interface ConstantChecker {
 	 * Returns true iff the given sentence is of a constant
 	 * sentence form and is always true.
 	 */
-    boolean isTrueConstant(GdlSentence sentence);
+    bool isTrueConstant(GdlSentence sentence);
 
 	/**
 	 * Returns the sentence form model that the constant checker is based on.

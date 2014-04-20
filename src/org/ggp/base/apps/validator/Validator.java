@@ -29,7 +29,7 @@ import org.ggp.base.validator.StaticValidator;
 
 class Validator(JPanel implements ActionListener):
 {
-    private static void createAndShowGUI(Validator validatorPanel)
+    def void createAndShowGUI(Validator validatorPanel)
 	{
 	    JFrame frame = new JFrame("Gdl Validator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,7 +52,7 @@ class Validator(JPanel implements ActionListener):
                 createAndShowGUI(validatorPanel);
 		});
 
-    private Game theGame;
+    theGame = Game()
     validateButton = JButton()
     maxDepthTextField = JTextField()
     simulationsTextField = JTextField()
@@ -107,7 +107,7 @@ class Validator(JPanel implements ActionListener):
         gameSelector.getGameList().addActionListener(this);
         gameSelector.repopulateGameList();
 
-    public void actionPerformed(ActionEvent e):
+    def void actionPerformed(ActionEvent e):
         if (e.getSource() == gameSelector.getGameList()):
             theGame = gameSelector.getSelectedGame();
             validateButton.setEnabled(theGame != null);

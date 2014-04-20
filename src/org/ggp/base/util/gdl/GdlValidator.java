@@ -31,7 +31,7 @@ class GdlValidator
 	 *            The Symbol to validate.
 	 * @return True if the Symbol passes validation; false otherwise.
 	 */
-    def boolean validate(Symbol symbol)
+    def bool validate(Symbol symbol)
 	{
         if ( symbol instanceof SymbolAtom )
 		{
@@ -54,7 +54,7 @@ class GdlValidator
 	 *            The Symbol to validate.
 	 * @return True if the Symbol passes validation; false otherwise.
 	 */
-    private boolean containsAnonymousList(Symbol symbol)
+    private bool containsAnonymousList(Symbol symbol)
 	{
         if ( symbol instanceof SymbolAtom )
 		{
@@ -82,7 +82,7 @@ class GdlValidator
 	 *            The Symbol to validate.
 	 * @return True if the Symbol passes validation; false otherwise.
 	 */
-    private boolean containsOr(Symbol symbol)
+    private bool containsOr(Symbol symbol)
 	{
         if ( symbol instanceof SymbolAtom )
 		{

@@ -12,7 +12,7 @@ import org.ggp.base.util.crypto.BaseCryptography.EncodedKeyPair;
  * @author Sam
  */
 class Test_BaseCryptography(TestCase):
-    public void testSimpleCryptography() throws Exception {
+    def void testSimpleCryptography() throws Exception {
         // Not an ideal unit test because generating the key takes a while,
         // but it's useful to have test coverage at all so we'll make due.
         EncodedKeyPair theKeys = BaseCryptography.generateKeys();

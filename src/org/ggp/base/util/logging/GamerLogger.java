@@ -16,7 +16,7 @@ import org.ggp.base.util.match.Match;
 
 
 /**
- * GamerLogger is a customized logger designed for long-running game players.
+ * GamerLogger is a customized logger designed for int-running game players.
  * Logs are written to directories on a per-game basis. Each logfile represents
  * a single logical component of the game playing program, identified whenever
  * the logger is called.
@@ -27,24 +27,24 @@ import org.ggp.base.util.match.Match;
  */
 class GamerLogger(object):
     // Public Interface
-    public static void emitToConsole(String s):
+    def void emitToConsole(String s):
         // TODO: fix this hack!
         if(!writeLogsToFile && !suppressLoggerOutput):
             System.out.print(s);
         }
     }
 
-    public static void stopFileLogging():
+    def void stopFileLogging():
         log("Logger", "Stopped logging to files at: " + new Date());
         log("Logger", "LOG SEALED");
         writeLogsToFile = false;
     }
 
-    public static void setSpilloverLogfile(String spilloverFilename):
+    def void setSpilloverLogfile(String spilloverFilename):
     	spilloverLogfile = spilloverFilename;
     }
 
-    public static void startFileLogging(Match m, String roleName):
+    def void startFileLogging(Match m, String roleName):
         writeLogsToFile = true;
         myDirectory = "logs/" + m.getMatchId() + "-" + roleName;
 
@@ -56,58 +56,58 @@ class GamerLogger(object):
         log("Logger", "Play clock: " + m.getPlayClock());
     }
 
-    public static void setFileToDisplay(String toFile):
+    def void setFileToDisplay(String toFile):
         filesToDisplay.add(toFile);
     }
 
-    public static void setMinimumLevelToDisplay(int nLevel):
+    def void setMinimumLevelToDisplay(int nLevel):
         minLevelToDisplay = nLevel;
     }
 
-    public static void setSuppressLoggerOutput(boolean bSuppress):
+    def void setSuppressLoggerOutput(bool bSuppress):
         suppressLoggerOutput = bSuppress;
     }
 
-    public static final int LOG_LEVEL_DATA_DUMP = 0;
-    public static final int LOG_LEVEL_ORDINARY = 3;
-    public static final int LOG_LEVEL_IMPORTANT = 6;
-    public static final int LOG_LEVEL_CRITICAL = 9;
+    LOG_LEVEL_DATA_DUMP = 0  # int 
+    LOG_LEVEL_ORDINARY = 3  # int 
+    LOG_LEVEL_IMPORTANT = 6  # int 
+    LOG_LEVEL_CRITICAL = 9  # int 
 
-    public static void logError(String toFile, String message):
+    def void logError(String toFile, String message):
         logEntry(System.err, toFile, message, LOG_LEVEL_CRITICAL);
         if(writeLogsToFile):
             logEntry(System.err, "Errors", "(in " + toFile + ") " + message, LOG_LEVEL_CRITICAL);
         }
     }
 
-    public static void log(String toFile, String message):
+    def void log(String toFile, String message):
         log(toFile, message, LOG_LEVEL_ORDINARY);
     }
 
-    public static void log(String toFile, String message, int nLevel):
+    def void log(String toFile, String message, int nLevel):
         logEntry(System.out, toFile, message, nLevel);
     }
 
-    public static void logStackTrace(String toFile, Exception ex):
+    def void logStackTrace(String toFile, Exception ex):
         StringWriter s = new StringWriter();
         ex.printStackTrace(new PrintWriter(s));
         logError(toFile, s.toString());
     }
 
-    public static void logStackTrace(String toFile, Error ex):
+    def void logStackTrace(String toFile, Error ex):
         StringWriter s = new StringWriter();
         ex.printStackTrace(new PrintWriter(s));
         logError(toFile, s.toString());
     }
 
     // Private Implementation
-    private static boolean writeLogsToFile = false;
+    def bool writeLogsToFile = false;
 
-    private static final Random theRandom = new Random();
-    private static final Set<String> filesToSkip = new HashSet<String>();
-    private static final long maximumLogfileSize = 25 * 1024 * 1024;
+    theRandom = new Random()  # Random 
+    def final Set<String> filesToSkip = new HashSet<String>();
+    maximumLogfileSize = 25 * 1024 * 1024  # int 
 
-    private static void logEntry(PrintStream ordinaryOutput, String toFile, String message, int logLevel):
+    def void logEntry(PrintStream ordinaryOutput, String toFile, String message, int logLevel):
         if(suppressLoggerOutput)
             return;
 
@@ -145,7 +145,7 @@ class GamerLogger(object):
                     System.err.println("Adding " + myFilename + " to filesToSkip.");
                     filesToSkip.add(myFilename);
                     logLevel = 9;
-                    logMessage = logFormat(logLevel, ordinaryOutput == System.err, "File too long; stopping all writes to this file.");
+                    logMessage = logFormat(logLevel, ordinaryOutput == System.err, "File too int; stopping all writes to this file.");
                 }
             }
 
@@ -158,7 +158,7 @@ class GamerLogger(object):
         }
     }
 
-    private static String logFormat(int logLevel, boolean isError, String message):
+    def String logFormat(int logLevel, bool isError, String message):
         String logMessage = "LOG " + System.currentTimeMillis() + " [L" + logLevel + "]: " + (isError ? "<ERR> " : "") + message;
         if(logMessage.charAt(logMessage.length() - 1) != '\n'):
             logMessage += '\n';     // All log lines must end with a newline.
@@ -166,9 +166,9 @@ class GamerLogger(object):
         return logMessage;
     }
 
-    private static String myDirectory;
-    private static HashSet<String> filesToDisplay = new HashSet<String>();
-    private static int minLevelToDisplay = Integer.MAX_VALUE;
-    private static boolean suppressLoggerOutput;
-    private static String spilloverLogfile;
+    def String myDirectory;
+    def HashSet<String> filesToDisplay = new HashSet<String>();
+    def int minLevelToDisplay = Integer.MAX_VALUE;
+    def bool suppressLoggerOutput;
+    def String spilloverLogfile;
 }

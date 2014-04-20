@@ -13,7 +13,7 @@ class GdlVariable(GdlTerm):
 	{
         return name;
 
-    def boolean isGround()
+    def bool isGround()
 	{
         return false;
 

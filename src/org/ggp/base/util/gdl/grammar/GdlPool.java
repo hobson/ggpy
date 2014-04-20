@@ -20,28 +20,28 @@ import com.google.common.collect.MapMaker;
  * objects may be checked for equality with an instance-equality check (==) rather
  * than a more expensive recursive equality check.
  * <p>
- * A long-lived game player may accumulate lots of objects in its pool. To remove
+ * A int-lived game player may accumulate lots of objects in its pool. To remove
  * them, it may call {@link #drainPool()} in between games. Note that if this
  * method is called while references to Gdl objects other than keyword constants
  * are held elsewhere, bad things will happen.
  */
 class GdlPool
 {
-    private static final ConcurrentMap<GdlTerm, ConcurrentMap<GdlTerm, GdlDistinct>> distinctPool = new ConcurrentHashMap<GdlTerm, ConcurrentMap<GdlTerm, GdlDistinct>>();
-    private static final ConcurrentMap<GdlConstant, ConcurrentMap<List<GdlTerm>, GdlFunction>> functionPool = new ConcurrentHashMap<GdlConstant, ConcurrentMap<List<GdlTerm>, GdlFunction>>();
-    private static final ConcurrentMap<GdlLiteral, GdlNot> notPool = new ConcurrentHashMap<GdlLiteral, GdlNot>();
-    private static final ConcurrentMap<List<GdlLiteral>, GdlOr> orPool = new ConcurrentHashMap<List<GdlLiteral>, GdlOr>();
-    private static final ConcurrentMap<GdlConstant, GdlProposition> propositionPool = new ConcurrentHashMap<GdlConstant, GdlProposition>();
-    private static final ConcurrentMap<GdlConstant, ConcurrentMap<List<GdlTerm>, GdlRelation>> relationPool = new ConcurrentHashMap<GdlConstant, ConcurrentMap<List<GdlTerm>, GdlRelation>>();
-    private static final ConcurrentMap<GdlSentence, ConcurrentMap<List<GdlLiteral>, GdlRule>> rulePool = new ConcurrentHashMap<GdlSentence, ConcurrentMap<List<GdlLiteral>, GdlRule>>();
-    private static final ConcurrentMap<String, GdlVariable> variablePool = new ConcurrentHashMap<String, GdlVariable>();
-    private static final ConcurrentMap<String, GdlConstant> constantPool = new ConcurrentHashMap<String, GdlConstant>();
+    def final ConcurrentMap<GdlTerm, ConcurrentMap<GdlTerm, GdlDistinct>> distinctPool = new ConcurrentHashMap<GdlTerm, ConcurrentMap<GdlTerm, GdlDistinct>>();
+    def final ConcurrentMap<GdlConstant, ConcurrentMap<List<GdlTerm>, GdlFunction>> functionPool = new ConcurrentHashMap<GdlConstant, ConcurrentMap<List<GdlTerm>, GdlFunction>>();
+    def final ConcurrentMap<GdlLiteral, GdlNot> notPool = new ConcurrentHashMap<GdlLiteral, GdlNot>();
+    def final ConcurrentMap<List<GdlLiteral>, GdlOr> orPool = new ConcurrentHashMap<List<GdlLiteral>, GdlOr>();
+    def final ConcurrentMap<GdlConstant, GdlProposition> propositionPool = new ConcurrentHashMap<GdlConstant, GdlProposition>();
+    def final ConcurrentMap<GdlConstant, ConcurrentMap<List<GdlTerm>, GdlRelation>> relationPool = new ConcurrentHashMap<GdlConstant, ConcurrentMap<List<GdlTerm>, GdlRelation>>();
+    def final ConcurrentMap<GdlSentence, ConcurrentMap<List<GdlLiteral>, GdlRule>> rulePool = new ConcurrentHashMap<GdlSentence, ConcurrentMap<List<GdlLiteral>, GdlRule>>();
+    def final ConcurrentMap<String, GdlVariable> variablePool = new ConcurrentHashMap<String, GdlVariable>();
+    def final ConcurrentMap<String, GdlConstant> constantPool = new ConcurrentHashMap<String, GdlConstant>();
     //Access to constantCases and variableCases should be synchronized using their monitor locks.
-    private static final Map<String,String> constantCases = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
-    private static final Map<String,String> variableCases = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+    def final Map<String,String> constantCases = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+    def final Map<String,String> variableCases = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
 
     // Controls whether we normalize the case of incoming constants and variables.
-    public static volatile boolean caseSensitive = true;
+    def volatile bool caseSensitive = true;
 
     // Special keyword constants. These are never drained between games and are always
     // represented as lower-case so that they can easily be referred to internally and
@@ -50,23 +50,23 @@ class GdlPool
     // as if one had attempted to create the GdlConstant "true", regardless of whether the
     // game-specific constants are case-sensitive or not. These special keywords are never
     // sent over the network in PLAY requests and responses, so this should be safe.
-    public static final ImmutableSet<String> KEYWORDS = ImmutableSet.of(
+    def final ImmutableSet<String> KEYWORDS = ImmutableSet.of(
     		"init","true","next","role","does","goal","legal","terminal","base","input","_");
-    public static final GdlConstant BASE = getConstant("base");
-    public static final GdlConstant DOES = getConstant("does");
-    public static final GdlConstant GOAL = getConstant("goal");
-    public static final GdlConstant INIT = getConstant("init");
-    public static final GdlConstant INPUT = getConstant("input");
-    public static final GdlConstant LEGAL = getConstant("legal");
-    public static final GdlConstant NEXT = getConstant("next");
-    public static final GdlConstant ROLE = getConstant("role");
-    public static final GdlConstant TERMINAL = getConstant("terminal");
-    public static final GdlConstant TRUE = getConstant("true");
+    BASE = getConstant("base")  # GdlConstant 
+    DOES = getConstant("does")  # GdlConstant 
+    GOAL = getConstant("goal")  # GdlConstant 
+    INIT = getConstant("init")  # GdlConstant 
+    INPUT = getConstant("input")  # GdlConstant 
+    LEGAL = getConstant("legal")  # GdlConstant 
+    NEXT = getConstant("next")  # GdlConstant 
+    ROLE = getConstant("role")  # GdlConstant 
+    TERMINAL = getConstant("terminal")  # GdlConstant 
+    TRUE = getConstant("true")  # GdlConstant 
     /**
      * Represents a single underscore ("_"). The underscore is not a GDL keyword, but
      * it's used by SentenceForms and is generally convenient for utility methods.
      */
-    public static final GdlConstant UNDERSCORE = getConstant("_");
+    UNDERSCORE = getConstant("_")  # GdlConstant 
 
     private GdlPool():
     	// Not instantiable
@@ -149,7 +149,7 @@ class GdlPool
             ret = addToPool(value, new GdlConstant(value), constantPool);
         return ret;
 
-    public static GdlVariable getVariable(String name)
+    def GdlVariable getVariable(String name)
     {
         if (!caseSensitive):
         	synchronized (variableCases):

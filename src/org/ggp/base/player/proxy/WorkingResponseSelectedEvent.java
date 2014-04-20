@@ -3,13 +3,13 @@ package org.ggp.base.player.proxy;
 import org.ggp.base.util.observer.Event;
 
 class WorkingResponseSelectedEvent(Event):
-    private String theResponse;
+    theResponse = String()
 
-    public WorkingResponseSelectedEvent(String theResponse):
+    def WorkingResponseSelectedEvent(String theResponse):
         this.theResponse = theResponse;
     }
 
-    public String getWorkingResponse():
+    def String getWorkingResponse():
         return theResponse;
     }
 }

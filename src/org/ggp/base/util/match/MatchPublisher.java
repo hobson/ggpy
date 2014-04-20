@@ -10,7 +10,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 class MatchPublisher(object):
-    public static String publishToSpectatorServer(String spectatorURL, Match theMatch) throws IOException {
+    def String publishToSpectatorServer(String spectatorURL, Match theMatch) throws IOException {
         if (theMatch.getGameRepositoryURL().isEmpty()):
             throw new IOException("Match doesn't have appropriate metadata for publication to a spectator server: " + theMatch);
         } else {
@@ -18,7 +18,7 @@ class MatchPublisher(object):
         }
     }
 
-    public static String performPOST(String theURL, String theAuth, String theData) throws IOException {
+    def String performPOST(String theURL, String theAuth, String theData) throws IOException {
         String message = URLEncoder.encode(theData, "UTF-8");
 
         try {
@@ -46,15 +46,15 @@ class MatchPublisher(object):
     }
 
     static class MatchPublisherThread(Thread):
-        private Match theMatch;
-        private String spectatorURL;
+        theMatch = Match()
+        spectatorURL = String()
 
-        public MatchPublisherThread(String spectatorURL, Match theMatch):
+        def MatchPublisherThread(String spectatorURL, Match theMatch):
             this.theMatch = theMatch;
             this.spectatorURL = spectatorURL;
         }
 
-            public void run():
+            def void run():
             try {
                 MatchPublisher.publishToSpectatorServer(spectatorURL, theMatch);
             } catch (IOException e):
@@ -63,7 +63,7 @@ class MatchPublisher(object):
         }
     }
 
-    public static void publishToSpectatorServerAsync(String spectatorURL, Match theMatch) throws IOException {
+    def void publishToSpectatorServerAsync(String spectatorURL, Match theMatch) throws IOException {
         MatchPublisherThread theThread = new MatchPublisherThread(spectatorURL, theMatch);
         theThread.start();
     }

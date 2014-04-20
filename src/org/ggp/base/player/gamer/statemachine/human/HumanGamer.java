@@ -33,7 +33,7 @@ class HumanGamer(StateMachineGamer):
 	 * Selects the default move as the first legal move, and then waits
 	 * while the Human sets their move. This is done via the HumanDetailPanel.
 	 */
-    def synchronized Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def synchronized Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
         List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
         move = moves.get(0);
@@ -47,17 +47,17 @@ class HumanGamer(StateMachineGamer):
 
         return move;
 
-    private Move move;
+    move = Move()
     def void setMove(Move move):
         this.move = move;
 
     def getDetailPanel():  # DetailPanel
         return new HumanDetailPanel();
 
-    def void preview(Game g, long timeout) throws GamePreviewException {
+    def void preview(Game g, int timeout) throws GamePreviewException {
 		// Human gamer does no game previewing.
 
-    def void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 		// Human gamer does no metagaming at the beginning of the match.
 
@@ -70,6 +70,6 @@ class HumanGamer(StateMachineGamer):
     def getInitialStateMachine():  # StateMachine
         return new CachedStateMachine(new ProverStateMachine());
 
-    def isComputerPlayer():  # boolean
+    def isComputerPlayer():  # bool
         return false;
 }

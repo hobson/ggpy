@@ -28,11 +28,11 @@ class SampleMonteCarloGamer(SampleGamer):
 	/**
 	 * Employs a simple sample "Monte Carlo" algorithm.
 	 */
-    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 	    StateMachine theMachine = getStateMachine();
-        long start = System.currentTimeMillis();
-        long finishBy = timeout - 1000;
+        int start = System.currentTimeMillis();
+        int finishBy = timeout - 1000;
 
         List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole());
         Move selection = moves.get(0);
@@ -52,14 +52,14 @@ class SampleMonteCarloGamer(SampleGamer):
     		}
 
     		// Compute the expected score for each move.
-    		double[] moveExpectedPoints = new double[moves.size()];
+    		float[] moveExpectedPoints = new float[moves.size()];
     		for (int i = 0; i < moves.size(); i++):
-    		    moveExpectedPoints[i] = (double)moveTotalPoints[i] / moveTotalAttempts[i];
+    		    moveExpectedPoints[i] = (float)moveTotalPoints[i] / moveTotalAttempts[i];
     		}
 
     		// Find the move with the best expected score.
     		int bestMove = 0;
-    		double bestMoveScore = moveExpectedPoints[0];
+    		float bestMoveScore = moveExpectedPoints[0];
     		for (int i = 1; i < moves.size(); i++):
     		    if (moveExpectedPoints[i] > bestMoveScore):
     		        bestMoveScore = moveExpectedPoints[i];
@@ -68,7 +68,7 @@ class SampleMonteCarloGamer(SampleGamer):
     		}
     		selection = moves.get(bestMove);
 
-        long stop = System.currentTimeMillis();
+        int stop = System.currentTimeMillis();
 
         notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
         return selection;

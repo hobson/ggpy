@@ -23,7 +23,7 @@ class Pair <L, R> {
         result = prime * result + ((right == null) ? 0 : right.hashCode());
         return result;
 
-    def boolean equals(Object obj):
+    def bool equals(Object obj):
         if (this == obj)
             return true;
         if (obj == null)

@@ -25,8 +25,8 @@ import org.ggp.base.util.statemachine.StateMachine;
 import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
 
 
-public abstract class GameCanvas(JPanel implements Subject):
-    public static final long serialVersionUID = 0x1;
+def abstract class GameCanvas(JPanel implements Subject):
+    serialVersionUID = 0x1  # int 
 
     // Store the information about the current state of the game
     protected StateMachine stateMachine;
@@ -34,13 +34,13 @@ public abstract class GameCanvas(JPanel implements Subject):
     protected Role myRole;
 
     // Cache the location of the last click
-    private int lastClickX;
-    private int lastClickY;
+    lastClickX = int()
+    lastClickY = int()
 
     // Border constant
-    private static final int BORDER_SIZE = 10;
+    BORDER_SIZE = 10  # int 
 
-    public GameCanvas():
+    def GameCanvas():
         super();
         setFocusable(true);
 
@@ -80,11 +80,11 @@ public abstract class GameCanvas(JPanel implements Subject):
         });
     }
 
-    public void setStateMachine(StateMachine s):
+    def void setStateMachine(StateMachine s):
     	stateMachine = s;
     }
 
-    public void setRole(Role r):
+    def void setRole(Role r):
         myRole = r;
     }
 
@@ -111,11 +111,11 @@ public abstract class GameCanvas(JPanel implements Subject):
     // Subject boilerplate
     private Set<Observer> theObservers = new HashSet<Observer>();
 
-    public void addObserver(Observer observer):
+    def void addObserver(Observer observer):
         theObservers.add(observer);
     }
 
-    public void notifyObservers(Event event):
+    def void notifyObservers(Event event):
         for(Observer theObserver : theObservers)
             theObserver.observe(event);
     }
@@ -128,7 +128,7 @@ public abstract class GameCanvas(JPanel implements Subject):
         notifyObservers(new MoveSelectedEvent(theMove, true));
     }
 
-    public void updateGameState(MachineState gameState):
+    def void updateGameState(MachineState gameState):
         this.gameState = gameState;
         clearMoveSelection();
 
@@ -157,7 +157,7 @@ public abstract class GameCanvas(JPanel implements Subject):
     }
 
     /* ---------- Convenience methods ---------- */
-    protected boolean gameStateHasFact(String fact):
+    protected bool gameStateHasFact(String fact):
         String trueFact = "( true " + fact + " )";
         for(GdlSentence aFact : gameState.getContents()):
             if(aFact.toString().equals(trueFact))
@@ -181,7 +181,7 @@ public abstract class GameCanvas(JPanel implements Subject):
         return theMatches;
     }
 
-    protected boolean gameStateHasLegalMove(String move):
+    protected bool gameStateHasLegalMove(String move):
         try {
             List<Move> legalMoves = stateMachine.getLegalMoves(gameState, myRole);
             for(Move aMove : legalMoves):
@@ -239,7 +239,7 @@ public abstract class GameCanvas(JPanel implements Subject):
 
     /* ---------- For overriding! -------------- */
 
-    public abstract String getGameName();
+    def abstract String getGameName();
 
     protected abstract String getGameKey();
 
@@ -255,5 +255,5 @@ public abstract class GameCanvas(JPanel implements Subject):
         ;
     }
 
-    public abstract void clearMoveSelection();
+    def abstract void clearMoveSelection();
 }

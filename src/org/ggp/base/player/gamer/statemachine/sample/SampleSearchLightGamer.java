@@ -45,7 +45,7 @@ class SampleSearchLightGamer(StateMachineGamer):
 	/**
 	 * Does nothing
 	 */
-    def void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 		// Do nothing.
 
@@ -62,11 +62,11 @@ class SampleSearchLightGamer(StateMachineGamer):
 	 * 	<li> Otherwise select the move </li>
 	 * </ol>
 	 */
-    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 	    StateMachine theMachine = getStateMachine();
-        long start = System.currentTimeMillis();
-        long finishBy = timeout - 1000;
+        int start = System.currentTimeMillis();
+        int finishBy = timeout - 1000;
 
         List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole());
         Move selection = (moves.get(new Random().nextInt(moves.size())));
@@ -89,7 +89,7 @@ class SampleSearchLightGamer(StateMachineGamer):
 		// We will also continue considering moves for two seconds, in case we can stumble
 		// upon a move which would cause us to win: if we find such a move, we will just
 		// immediately take it.
-        boolean reasonableMoveFound = false;
+        bool reasonableMoveFound = false;
         int maxGoal = 0;
         for(Move moveUnderConsideration : movesInRandomOrder):
 		    // Check to see if there's time to continue.
@@ -133,7 +133,7 @@ class SampleSearchLightGamer(StateMachineGamer):
 		    // play zero-sum game, in which this is the opponent's move and they are trying
 		    // to make us lose, and so if they are offered any move that will make us lose
 		    // they will take it.
-		    boolean forcedLoss = false;
+		    bool forcedLoss = false;
 		    for(List<Move> jointMove : theMachine.getLegalJointMoves(nextState)):
 		        MachineState nextNextState = theMachine.getNextState(nextState, jointMove);
 		        if(theMachine.isTerminal(nextNextState)):
@@ -157,7 +157,7 @@ class SampleSearchLightGamer(StateMachineGamer):
 		        reasonableMoveFound = true;
 		    }
 
-        long stop = System.currentTimeMillis();
+        int stop = System.currentTimeMillis();
 
         notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
         return selection;
@@ -175,7 +175,7 @@ class SampleSearchLightGamer(StateMachineGamer):
     def getDetailPanel():  # DetailPanel
         return new SimpleDetailPanel();
 
-    def void preview(Game g, long timeout) throws GamePreviewException {
+    def void preview(Game g, int timeout) throws GamePreviewException {
 		// Do nothing.
 
     def stateMachineAbort():  # void

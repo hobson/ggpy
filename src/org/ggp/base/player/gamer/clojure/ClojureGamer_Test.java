@@ -15,7 +15,7 @@ import org.ggp.base.util.match.Match;
  * @author Sam
  */
 class ClojureGamer_Test(TestCase):
-    public void testClojureGamer():
+    def void testClojureGamer():
         try {
             Gamer g = new SampleClojureGamerStub();
             assertEquals("SampleClojureGamer", g.getName());

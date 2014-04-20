@@ -29,7 +29,7 @@ class VizContainerPanel(JPane1):
 		    ex.printStackTrace();
 
     private byte[] compressed = null;
-    private boolean imageWritten = false;
+    private bool imageWritten = false;
 
     protected void paintComponent(Graphics g):
         super.paintComponent(g);

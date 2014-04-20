@@ -19,9 +19,9 @@ import org.ggp.base.util.symbol.grammar.SymbolPool;
  */
 
 class InfoResponse(object):
-    private String name;
-    private String status;
-    private String species;
+    name = String()
+    status = String()
+    species = String()
 
     def InfoResponse():
 		;

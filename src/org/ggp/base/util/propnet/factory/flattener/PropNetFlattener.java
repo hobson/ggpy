@@ -41,29 +41,29 @@ import org.ggp.base.util.logging.GamerLogger;
  */
 class PropNetFlattener(object):
 
-    private List<Gdl> description;
+    description = List<Gdl>()
 
     private class Assignment(ArrayList<GdlConstant>):
-        private static final long serialVersionUID = 1L;
+        serialVersionUID = 1L  # int 
     }
 
     private class Assignments(HashSet<Assignment>):
-        private static final long serialVersionUID = 1L;
+        serialVersionUID = 1L  # int 
     }
 
     private class Index(HashMap<GdlConstant, Assignments>):
-        private static final long serialVersionUID = 1L;
+        serialVersionUID = 1L  # int 
     }
 
     private class Condition {
-        public Condition(GdlTerm template)
+        def Condition(GdlTerm template)
         {
             this.template = getConstantAndVariableList(template);
             key = findGenericForm(template);
             updateDom();
         }
 
-        public void updateDom()
+        def void updateDom()
         {
             if(!domains.containsKey(key))
                 dom = null;
@@ -71,32 +71,32 @@ class PropNetFlattener(object):
                 dom = domains.get(key);
         }
 
-        public List<GdlTerm> template;
-        public Domain dom;
+        def List<GdlTerm> template;
+        def Domain dom;
         GdlTerm key;
 
-            public String toString()
+            def String toString()
         {
             return template.toString();
         }
     }
 
     private class RuleReference {
-        public List<GdlTerm> productionTemplate; //The template from the rule head, contains only variables and constants
-        public List<Condition> conditions = new ArrayList<Condition>(); //the conditions (right hand side of the rule)
-        public Gdl originalRule;
+        def List<GdlTerm> productionTemplate; //The template from the rule head, contains only variables and constants
+        def List<Condition> conditions = new ArrayList<Condition>(); //the conditions (right hand side of the rule)
+        def Gdl originalRule;
 
-        public RuleReference(GdlRule originalRule)
+        def RuleReference(GdlRule originalRule)
         {
             this.originalRule = originalRule;
         }
 
-            public String toString()
+            def String toString()
         {
             return "\n\tProduction: "+(productionTemplate!=null ? productionTemplate.toString() : "null")+" conditions: "+(conditions!=null ? conditions.toString() : "null");
         }
 
-            public boolean equals(Object other)
+            def bool equals(Object other)
         {
             if(!(other instanceof RuleReference))
                 return false;
@@ -104,27 +104,27 @@ class PropNetFlattener(object):
             return rhs.productionTemplate==this.productionTemplate && rhs.conditions.equals(this.conditions);
         }
 
-            public int hashCode()
+            def int hashCode()
         {
             return productionTemplate.hashCode()+conditions.hashCode();
         }
     }
 
     private class Domain {
-        public Domain(GdlTerm name, GdlTerm name2) {this.name = name; this.name2 = name2;}
+        def Domain(GdlTerm name, GdlTerm name2) {this.name = name; this.name2 = name2;}
 
-        public Assignments assignments = new Assignments();
-        public List<Index> indices = new ArrayList<Index>();
-        public Set<RuleReference> ruleRefs = new HashSet<RuleReference>();
+        def Assignments assignments = new Assignments();
+        def List<Index> indices = new ArrayList<Index>();
+        def Set<RuleReference> ruleRefs = new HashSet<RuleReference>();
 
-                public GdlTerm name, name2;
+                def GdlTerm name, name2;
 
-            public String toString()
+            def String toString()
         {
             return "\nName: "+name+"\nvalues: "+assignments;//+"\nruleRefs: "+ruleRefs;
         }
 
-        public void buildIndices():
+        def void buildIndices():
             for(Assignment assignment : assignments)
             {
                 addAssignmentToIndex(assignment);
@@ -145,7 +145,7 @@ class PropNetFlattener(object):
             }
         }
 
-        public void addAssignmentToIndex(Assignment assignment):
+        def void addAssignmentToIndex(Assignment assignment):
             for(int i=0; i<assignment.size(); i++)
             {
                 GdlConstant c = assignment.get(i);
@@ -167,12 +167,12 @@ class PropNetFlattener(object):
 
     private List<RuleReference> extraRefs = new ArrayList<RuleReference>();
 
-    public PropNetFlattener(List<Gdl> description)
+    def PropNetFlattener(List<Gdl> description)
     {
         this.description = description;
     }
 
-    public List<GdlRule> flatten()
+    def List<GdlRule> flatten()
     {
         //Find universe and initial domains
         for(Gdl gdl : description)
@@ -480,7 +480,7 @@ class PropNetFlattener(object):
 
     private List<List<GdlLiteral>> deOr2(List<List<GdlLiteral>> rhsList):
         List<List<GdlLiteral>> rval = new ArrayList<List<GdlLiteral>>();
-        boolean expandedSomething = false;
+        bool expandedSomething = false;
         for(List<GdlLiteral> rhs : rhsList)
         {
             int i=0;
@@ -603,7 +603,7 @@ class PropNetFlattener(object):
 
     void updateDomains()
     {
-        boolean changedSomething = true;
+        bool changedSomething = true;
         int itrNum = 0;
         Set<Domain> lastUpdatedDomains = new HashSet<Domain>(domains.values());
         while(changedSomething)
@@ -617,7 +617,7 @@ class PropNetFlattener(object):
 
                 for(RuleReference ruleRef : d.ruleRefs)
                 {
-                    boolean containsUpdatedDomain = false;
+                    bool containsUpdatedDomain = false;
                     for(Condition c : ruleRef.conditions)
                         if(lastUpdatedDomains.contains(c.dom))
                         {
@@ -655,7 +655,7 @@ class PropNetFlattener(object):
                     { //There might just be no variables in the rule
                         Assignment a = new Assignment();
                         findSatisfyingInstantiations(ruleRef); //just for debugging
-                        boolean isVar = false;
+                        bool isVar = false;
                         for(GdlTerm t : ruleRef.productionTemplate)
                         {
                             if(t instanceof GdlConstant)
@@ -771,7 +771,7 @@ class PropNetFlattener(object):
     /**
      * @param args
      */
-    public static void main(String[] args):
+    def void main(String[] args):
         List<Gdl> description = GameRepository.getDefaultRepository().getGame("conn4").getRules();
 
         PropNetFlattener flattener = new PropNetFlattener(description);

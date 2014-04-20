@@ -31,13 +31,13 @@ import external.JSON.JSONObject;
  * @author Sam
  */
 class LocalGameRepository(GameRepository):
-    private static final int REPO_SERVER_PORT = 9140;
-    private static HttpServer theLocalRepoServer = null;
-    private static String theLocalRepoURL = "http://127.0.0.1:" + REPO_SERVER_PORT;
+    REPO_SERVER_PORT = 9140  # int 
+    def HttpServer theLocalRepoServer = null;
+    def String theLocalRepoURL = "http://127.0.0.1:" + REPO_SERVER_PORT;
 
-    private static RemoteGameRepository theRealRepo;
+    def RemoteGameRepository theRealRepo;
 
-    public LocalGameRepository():
+    def LocalGameRepository():
     	synchronized (LocalGameRepository.class):
     		if (theLocalRepoServer == null):
     			try {
@@ -54,7 +54,7 @@ class LocalGameRepository(GameRepository):
         theRealRepo = new RemoteGameRepository(theLocalRepoURL);
     }
 
-    public void cleanUp()
+    def void cleanUp()
     {
         if (theLocalRepoServer != null):
         	theLocalRepoServer.stop(0);
@@ -71,7 +71,7 @@ class LocalGameRepository(GameRepository):
 
     // ========================
 
-    class LocalRepoServer implements HttpHandler {
+    class LocalRepoServer(HttpHandler):
     	    def void handle(HttpExchange t) throws IOException {
             String theURI = t.getRequestURI().toString();
             byte[] response = BaseRepository.getResponseBytesForURI(theURI);
@@ -89,15 +89,15 @@ class LocalGameRepository(GameRepository):
     }
 
     static class BaseRepository {
-        public static final String repositoryRootDirectory = theLocalRepoURL;
+        repositoryRootDirectory = theLocalRepoURL  # String 
 
-        public static boolean shouldIgnoreFile(String fileName):
+        def bool shouldIgnoreFile(String fileName):
         	if (fileName.startsWith(".")) return true;
         	if (fileName.contains(" ")) return true;
         	return false;
         }
 
-        public static byte[] getResponseBytesForURI(String reqURI) throws IOException {
+        def byte[] getResponseBytesForURI(String reqURI) throws IOException {
             // Files not under /games/games/ aren't versioned,
             // and can just be accessed directly.
             if (!reqURI.startsWith("/games/")):
@@ -171,7 +171,7 @@ class LocalGameRepository(GameRepository):
 
         // When the user requests a particular version, the metadata should always be for that version.
         // When the user requests the latest version, the metadata should always indicate the most recent version.
-        public static byte[] adjustMetadataJSON(String reqURI, byte[] theMetaBytes, Integer nExplicitVersion, int nMaxVersion) throws IOException {
+        def byte[] adjustMetadataJSON(String reqURI, byte[] theMetaBytes, Integer nExplicitVersion, int nMaxVersion) throws IOException {
             try {
                 JSONObject theMetaJSON = new JSONObject(new String(theMetaBytes));
                 if (nExplicitVersion == null):
@@ -187,7 +187,7 @@ class LocalGameRepository(GameRepository):
             }
         }
 
-        private static int getMaxVersionForDirectory(File theDir):
+        def int getMaxVersionForDirectory(File theDir):
             if (!theDir.exists() || !theDir.isDirectory()):
                 return -1;
             }
@@ -206,7 +206,7 @@ class LocalGameRepository(GameRepository):
             return maxVersion;
         }
 
-        private static byte[] getBytesForVersionedFile(String thePrefix, int theVersion, String theSuffix):
+        def byte[] getBytesForVersionedFile(String thePrefix, int theVersion, String theSuffix):
             if (theVersion == 0):
                 return getBytesForFile(new File("games", thePrefix + "/" + theSuffix));
             } else {
@@ -214,7 +214,7 @@ class LocalGameRepository(GameRepository):
             }
         }
 
-        private static byte[] getBytesForFile(File theFile):
+        def byte[] getBytesForFile(File theFile):
             try {
                 if (!theFile.exists()):
                     return null;
@@ -235,12 +235,12 @@ class LocalGameRepository(GameRepository):
             }
         }
 
-        private static String transformXSL(String theContent):
+        def String transformXSL(String theContent):
             // Special case override for XSLT
             return "<!DOCTYPE stylesheet [<!ENTITY ROOT \""+repositoryRootDirectory+"\">]>\n\n" + theContent;
         }
 
-        private static String transformJS(String theContent) throws IOException {
+        def String transformJS(String theContent) throws IOException {
             // Horrible hack; fix this later. Right now this is used to
             // let games share a common board user interface, but this should
             // really be handled in a cleaner, more general way with javascript
@@ -252,7 +252,7 @@ class LocalGameRepository(GameRepository):
             return theContent;
         }
 
-        private static String readDirectory(File theDirectory) throws IOException {
+        def String readDirectory(File theDirectory) throws IOException {
             StringBuilder response = new StringBuilder();
             // Show contents of the directory, using JSON notation.
             response.append("[");
@@ -271,7 +271,7 @@ class LocalGameRepository(GameRepository):
             return response.toString();
         }
 
-        public static String readFile(File rootFile) throws IOException {
+        def String readFile(File rootFile) throws IOException {
             // Show contents of the file.
             FileReader fr = new FileReader(rootFile);
             BufferedReader br = new BufferedReader(fr);
@@ -288,7 +288,7 @@ class LocalGameRepository(GameRepository):
             }
         }
 
-        private static byte[] readBinaryFile(File rootFile) throws IOException {
+        def byte[] readBinaryFile(File rootFile) throws IOException {
             InputStream in = new FileInputStream(rootFile);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
 

@@ -112,10 +112,10 @@ class OptimizingPropNetFactory(object):
     def static PropNet create(List<Gdl> description) throws InterruptedException {
         return create(description, false);
 
-    def static PropNet create(List<Gdl> description, boolean verbose) throws InterruptedException {
+    def static PropNet create(List<Gdl> description, bool verbose) throws InterruptedException {
         System.out.println("Building propnet...");
 
-        long startTime = System.currentTimeMillis();
+        int startTime = System.currentTimeMillis();
 
         description = GdlCleaner.run(description);
         description = DeORer.run(description);
@@ -145,8 +145,8 @@ class OptimizingPropNetFactory(object):
             System.out.println("Done setting constants");
 
         Set<String> sentenceFormNames = SentenceForms.getNames(model.getSentenceForms());
-        boolean usingBase = sentenceFormNames.contains("base");
-        boolean usingInput = sentenceFormNames.contains("input");
+        bool usingBase = sentenceFormNames.contains("base");
+        bool usingInput = sentenceFormNames.contains("input");
 
 
 		//For now, we're going to build this to work on those with a
@@ -241,10 +241,10 @@ class OptimizingPropNetFactory(object):
         return propnet;
 
 
-    private static void removeUselessBasePropositions(
+    def void removeUselessBasePropositions(
             Map<GdlSentence, Component> components, Map<GdlSentence, Component> negations, Constant trueComponent,
             Constant falseComponent) throws InterruptedException {
-        boolean changedSomething = false;
+        bool changedSomething = false;
         for(Entry<GdlSentence, Component> entry : components.entrySet()):
             if(entry.getKey().getName() == TRUE):
                 Component comp = entry.getValue();
@@ -265,7 +265,7 @@ class OptimizingPropNetFactory(object):
 	 *
 	 * @param componentSet
 	 */
-    private static void normalizePropositions(Set<Component> componentSet):
+    def void normalizePropositions(Set<Component> componentSet):
         for(Component component : componentSet):
             if(component instanceof Proposition):
                 Proposition p = (Proposition) component;
@@ -275,7 +275,7 @@ class OptimizingPropNetFactory(object):
                     if(relation.getName().equals(NEXT)):
                         p.setName(GdlPool.getProposition(GdlPool.getConstant("anon")));
 
-    private static void addFormToCompletedValues(
+    def void addFormToCompletedValues(
             SentenceForm form,
             Map<SentenceForm, Collection<GdlSentence>> completedSentenceFormValues,
             ConstantChecker constantChecker):
@@ -285,7 +285,7 @@ class OptimizingPropNetFactory(object):
         completedSentenceFormValues.put(form, sentences);
 
 
-    private static void addFormToCompletedValues(
+    def void addFormToCompletedValues(
             SentenceForm form,
             Map<SentenceForm, Collection<GdlSentence>> completedSentenceFormValues,
             Map<GdlSentence, Component> components) throws InterruptedException {
@@ -301,12 +301,12 @@ class OptimizingPropNetFactory(object):
         completedSentenceFormValues.put(form, sentences);
 
 
-    private static void addConstantsToFunctionInfo(SentenceForm form,
+    def void addConstantsToFunctionInfo(SentenceForm form,
             ConstantChecker constantChecker, Map<SentenceForm, FunctionInfo> functionInfoMap) throws InterruptedException {
         functionInfoMap.put(form, FunctionInfoImpl.create(form, constantChecker));
 
 
-    private static void processTemporaryComponents(
+    def void processTemporaryComponents(
             Map<GdlSentence, Component> temporaryComponents,
             Map<GdlSentence, Component> temporaryNegations,
             Map<GdlSentence, Component> components,
@@ -353,21 +353,21 @@ class OptimizingPropNetFactory(object):
 	 * component from the propnet entirely.
 	 * @throws InterruptedException
 	 */
-    private static void optimizeAwayTrueAndFalse(Map<GdlSentence, Component> components, Map<GdlSentence, Component> negations, Component trueComponent, Component falseComponent) throws InterruptedException {
+    def void optimizeAwayTrueAndFalse(Map<GdlSentence, Component> components, Map<GdlSentence, Component> negations, Component trueComponent, Component falseComponent) throws InterruptedException {
 	    while(hasNonessentialChildren(trueComponent) || hasNonessentialChildren(falseComponent)):
 	    	ConcurrencyUtils.checkForInterruption();
             optimizeAwayTrue(components, negations, null, trueComponent, falseComponent);
             optimizeAwayFalse(components, negations, null, trueComponent, falseComponent);
         }
 
-    private static void optimizeAwayTrueAndFalse(PropNet pn, Component trueComponent, Component falseComponent):
+    def void optimizeAwayTrueAndFalse(PropNet pn, Component trueComponent, Component falseComponent):
 	    while(hasNonessentialChildren(trueComponent) || hasNonessentialChildren(falseComponent)):
 	        optimizeAwayTrue(null, null, pn, trueComponent, falseComponent);
 	        optimizeAwayFalse(null, null, pn, trueComponent, falseComponent);
 	    }
 
 	//TODO: Create a version with just a set of components that we can share with post-optimizations
-    private static void optimizeAwayFalse(
+    def void optimizeAwayFalse(
             Map<GdlSentence, Component> components, Map<GdlSentence, Component> negations, PropNet pn, Component trueComponent,
             Component falseComponent):
         assert((components != null && negations != null) || pn != null);
@@ -460,7 +460,7 @@ class OptimizingPropNetFactory(object):
                 System.err.println("Fix optimizeAwayFalse's case for Transitions");
 
 
-    private static boolean isLegalOrGoalProposition(Component comp):
+    def bool isLegalOrGoalProposition(Component comp):
         if (!(comp instanceof Proposition)):
             return false;
 
@@ -468,7 +468,7 @@ class OptimizingPropNetFactory(object):
         GdlSentence name = prop.getName();
         return name.getName() == GdlPool.LEGAL || name.getName() == GdlPool.GOAL;
 
-    private static void optimizeAwayTrue(
+    def void optimizeAwayTrue(
             Map<GdlSentence, Component> components, Map<GdlSentence, Component> negations, PropNet pn, Component trueComponent,
             Component falseComponent):
 	    assert((components != null && negations != null) || pn != null);
@@ -556,7 +556,7 @@ class OptimizingPropNetFactory(object):
                 System.err.println("Fix optimizeAwayTrue's case for Transitions");
 
 
-    private static boolean hasNonessentialChildren(Component trueComponent):
+    def bool hasNonessentialChildren(Component trueComponent):
         for(Component child : trueComponent.getOutputs()):
             if(child instanceof Transition)
                 continue;
@@ -568,7 +568,7 @@ class OptimizingPropNetFactory(object):
         return false;
 
 
-    private static boolean isEssentialProposition(Component component):
+    def bool isEssentialProposition(Component component):
         if(!(component instanceof Proposition))
             return false;
 
@@ -582,7 +582,7 @@ class OptimizingPropNetFactory(object):
 				|| name.equals(INIT) || name.equals(TERMINAL);
 
 
-    private static void completeComponentSet(Set<Component> componentSet):
+    def void completeComponentSet(Set<Component> componentSet):
         Set<Component> newComponents = new HashSet<Component>();
         Set<Component> componentsToTry = new HashSet<Component>(componentSet);
         while(!componentsToTry.isEmpty()):
@@ -598,7 +598,7 @@ class OptimizingPropNetFactory(object):
             newComponents = new HashSet<Component>();
 
 
-    private static void addTransitions(Map<GdlSentence, Component> components):
+    def void addTransitions(Map<GdlSentence, Component> components):
         for(Entry<GdlSentence, Component> entry : components.entrySet()):
             GdlSentence sentence = entry.getKey();
 
@@ -621,7 +621,7 @@ class OptimizingPropNetFactory(object):
 	//TODO: Replace with version using constantChecker only
 	//TODO: This can give problematic results if interpreted in
 	//the standard way (see test_case_3d)
-    private static void setUpInit(Map<GdlSentence, Component> components,
+    def void setUpInit(Map<GdlSentence, Component> components,
             Constant trueComponent, Constant falseComponent):
         Proposition initProposition = new Proposition(GdlPool.getProposition(INIT_CAPS));
         for(Entry<GdlSentence, Component> entry : components.entrySet()):
@@ -661,7 +661,7 @@ class OptimizingPropNetFactory(object):
 	 * Adds an or gate connecting the inputs to produce the output.
 	 * Handles special optimization cases like a true/false input.
 	 */
-    private static void orify(Collection<Component> inputs, Component output, Constant falseProp):
+    def void orify(Collection<Component> inputs, Component output, Constant falseProp):
 		//TODO: Look for already-existing ors with the same inputs?
 		//Or can this be handled with a GDL transformation?
 
@@ -702,9 +702,9 @@ class OptimizingPropNetFactory(object):
 
 	//TODO: This code is currently used by multiple classes, so perhaps it should be
 	//factored out into the SentenceModel.
-    private static List<SentenceForm> getTopologicalOrdering(
+    def List<SentenceForm> getTopologicalOrdering(
             Set<SentenceForm> forms,
-            Multimap<SentenceForm, SentenceForm> dependencyGraph, boolean usingBase, boolean usingInput) throws InterruptedException {
+            Multimap<SentenceForm, SentenceForm> dependencyGraph, bool usingBase, bool usingInput) throws InterruptedException {
 		//We want each form as a key of the dependency graph to
 		//follow all the forms in the dependency graph, except maybe itself
         Queue<SentenceForm> queue = new LinkedList<SentenceForm>(forms);
@@ -712,7 +712,7 @@ class OptimizingPropNetFactory(object):
         Set<SentenceForm> alreadyOrdered = new HashSet<SentenceForm>();
         while(!queue.isEmpty()):
             SentenceForm curForm = queue.remove();
-            boolean readyToAdd = true;
+            bool readyToAdd = true;
 			//Don't add if there are dependencies
             for(SentenceForm dependency : dependencyGraph.get(curForm)):
                 if(!dependency.equals(curForm) && !alreadyOrdered.contains(dependency)):
@@ -739,11 +739,11 @@ class OptimizingPropNetFactory(object):
             ConcurrencyUtils.checkForInterruption();
         return ordering;
 
-    private static void addSentenceForm(SentenceForm form, SentenceDomainModel model,
+    def void addSentenceForm(SentenceForm form, SentenceDomainModel model,
             Map<GdlSentence, Component> components,
             Map<GdlSentence, Component> negations,
             Constant trueComponent, Constant falseComponent,
-            boolean usingBase, boolean usingInput,
+            bool usingBase, bool usingInput,
             Set<SentenceForm> recursionForms,
             Map<GdlSentence, Component> temporaryComponents, Map<GdlSentence, Component> temporaryNegations,
             Map<SentenceForm, FunctionInfo> functionInfoMap, ConstantChecker constantChecker,
@@ -799,7 +799,7 @@ class OptimizingPropNetFactory(object):
             Set<GdlVariable> varsInLiveConjuncts = getVarsInLiveConjuncts(rule, constantChecker.getConstantSentenceForms());
             varsInLiveConjuncts.addAll(GdlUtils.getVariables(rule.getHead()));
             Set<GdlVariable> varsInRule = new HashSet<GdlVariable>(GdlUtils.getVariables(rule));
-            boolean preventDuplicatesFromConstants =
+            bool preventDuplicatesFromConstants =
 				(varsInRule.size() > varsInLiveConjuncts.size());
 
 			//Do we just pass those to the Assignments class in that case?
@@ -966,7 +966,7 @@ class OptimizingPropNetFactory(object):
 
 
 
-    private static Set<GdlVariable> getVarsInLiveConjuncts(
+    def Set<GdlVariable> getVarsInLiveConjuncts(
             GdlRule rule, Set<SentenceForm> constantSentenceForms):
         Set<GdlVariable> result = new HashSet<GdlVariable>();
         for(GdlLiteral literal : rule.getBody()):
@@ -980,24 +980,24 @@ class OptimizingPropNetFactory(object):
                     result.addAll(GdlUtils.getVariables(literal));
         return result;
 
-    private static boolean isThisConstant(Component conj, Constant constantComponent):
+    def bool isThisConstant(Component conj, Constant constantComponent):
         if(conj == constantComponent)
             return true;
         return (conj instanceof Proposition && conj.getInputs().size() == 1 && conj.getSingleInput() == constantComponent);
 
 
-    private static Not getNotOutput(Component positive):
+    def Not getNotOutput(Component positive):
         for(Component c : positive.getOutputs()):
             if(c instanceof Not):
                 return (Not) c;
         return null;
 
 
-    private static List<GdlVariable> getVarsInConjunct(GdlLiteral literal):
+    def List<GdlVariable> getVarsInConjunct(GdlLiteral literal):
         return GdlUtils.getVariables(literal);
 
 
-    private static void andify(List<Component> inputs, Component output, Constant trueProp):
+    def void andify(List<Component> inputs, Component output, Constant trueProp):
 		//Special case: If the inputs include false, connect false to thisComponent
         for(Component c : inputs):
             if(c instanceof Constant && !c.getValue()):
@@ -1035,18 +1035,18 @@ class OptimizingPropNetFactory(object):
 	 * or neither value. Used by
 	 * {@link OptimizingPropNetFactory#removeUnreachableBasesAndInputs(PropNet, Set)}.
 	 */
-    private static enum Type { NEITHER(false, false),
+    def enum Type { NEITHER(false, false),
                         TRUE(true, false),
                         FALSE(false, true),
                         BOTH(true, true);
-	    hasTrue = boolean()
-	    hasFalse = boolean()
+	    hasTrue = bool()
+	    hasFalse = bool()
 
-        Type(boolean hasTrue, boolean hasFalse):
+        Type(bool hasTrue, bool hasFalse):
             this.hasTrue = hasTrue;
             this.hasFalse = hasFalse;
 
-	    def boolean includes(Type other):
+	    def bool includes(Type other):
             switch (other):
             case BOTH:
                 return hasTrue && hasFalse;
@@ -1165,7 +1165,7 @@ class OptimizingPropNetFactory(object):
     		//We want to send only the new addition to our children,
     		//for consistency in our parent-true and parent-false
     		//counts.
-    		//Make sure we don't double-apply a type.
+    		//Make sure we don't float-apply a type.
 
     		Type typeToAdd = Type.NEITHER; // Any new values that we discover we can have this iteration.
     		if (curComp instanceof Proposition):

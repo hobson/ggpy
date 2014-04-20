@@ -44,7 +44,7 @@ class ConstantCheckerFactory(object):
         return ImmutableConstantChecker.create(model,
                 Multimaps.filterKeys(sentencesByForm.getSentences(), Predicates.in(model.getConstantSentenceForms())));
 
-    private static void addSentencesTrueByRulesDifferentially(
+    def void addSentencesTrueByRulesDifferentially(
             GdlSentenceSet sentencesByForm,
             SentenceDomainModel domainModel, GdlChainingReasoner reasoner) throws InterruptedException {
         SentenceFormModel model = domainModel;
@@ -68,7 +68,7 @@ class ConstantCheckerFactory(object):
                         newlyTrueSentences = reasoner.getUnion(newlyTrueSentences, ruleResults);
 
 			// Now a lot of differential passes to deal with recursion efficiently
-            boolean somethingChanged = true;
+            bool somethingChanged = true;
             while (somethingChanged):
                 somethingChanged = false;
                 GdlSentenceSet newStuffInThisPass = GdlSentenceSet.create();
@@ -97,7 +97,7 @@ class ConstantCheckerFactory(object):
         addSentencesTrueByRules(sentencesByForm, model);
         return ImmutableConstantChecker.create(model, sentencesByForm);
 
-    private static void addSentencesTrueByRules(
+    def void addSentencesTrueByRules(
             Multimap<SentenceForm, GdlSentence> sentencesByForm,
             SentenceFormModel model) throws InterruptedException {
         AimaProver prover = new AimaProver(model.getDescription());
@@ -106,11 +106,11 @@ class ConstantCheckerFactory(object):
             for (GdlSentence result : prover.askAll(query, ImmutableSet.<GdlSentence>of())):
                 ConcurrencyUtils.checkForInterruption();
 				//Variables may end up being replaced with functions, which is not
-				//what we want here, so we have to double-check that the form is correct.
+				//what we want here, so we have to float-check that the form is correct.
                 if (form.matches(result)):
                     sentencesByForm.put(form, result);
 
-    private static List<?(GdlTerm> getVariablesTuple(int tupleSize)):
+    def List<?(GdlTerm> getVariablesTuple(int tupleSize)):
         List<GdlVariable> varsTuple = Lists.newArrayList();
         for (int i = 0; i < tupleSize; i++):
             varsTuple.add(GdlPool.getVariable("?" + i));

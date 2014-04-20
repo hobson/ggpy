@@ -9,21 +9,21 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
 
 
 class BlockerCanvas(GameCanvas_FancyGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Blocker"; }
     protected String getGameKey() { return "blocker"; }
     protected int getGridHeight() { return 6; }
     protected int getGridWidth() { return 6; }
 
-    protected boolean coordinatesStartAtOne() { return false; }
+    protected bool coordinatesStartAtOne() { return false; }
 
     protected void renderCellBackground(Graphics g, int xCell, int yCell):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
-        boolean isBlue = (yCell == 0) || (yCell == 5);
-        boolean isBlack = ((xCell == 0) || (xCell == 5)) && !isBlue;
+        bool isBlue = (yCell == 0) || (yCell == 5);
+        bool isBlack = ((xCell == 0) || (xCell == 5)) && !isBlue;
 
         if(isBlue):
             CommonGraphics.drawBubbles(g, xCell*11+yCell);

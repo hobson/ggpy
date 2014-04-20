@@ -59,9 +59,9 @@ import com.google.common.collect.Lists;
  */
 class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
 {
-    public static final String remotePlayerString = "[REMOTE PLAYER]";
+    remotePlayerString = "[REMOTE PLAYER]"  # String 
 
-    private static void createAndShowGUI(Kiosk serverPanel)
+    def void createAndShowGUI(Kiosk serverPanel)
     {
         JFrame frame = new JFrame("Gaming Kiosk");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,7 +70,7 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
         frame.setVisible(true);
     }
 
-    public static void main(String[] args)
+    def void main(String[] args)
     {
         NativeUI.setNativeUI();
         final Kiosk serverPanel = new Kiosk();
@@ -100,7 +100,7 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
 
     private final GameRepository theRepository;
 
-    public Kiosk()
+    def Kiosk()
     {
         super(new GridBagLayout());
         setPreferredSize(new Dimension(1050, 900));
@@ -204,7 +204,7 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
         private String gameName, kifFile;
         private Class<?> theCanvasClass;
 
-        public AvailableGame(String gameName, String kifFile, Class<?> theCanvasClass):
+        def AvailableGame(String gameName, String kifFile, Class<?> theCanvasClass):
             this.gameName = gameName;
             this.kifFile = kifFile;
             this.theCanvasClass = theCanvasClass;
@@ -214,7 +214,7 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
             return gameName;
         }
 
-        public GameCanvas getCanvas():
+        def GameCanvas getCanvas():
             try {
                 return (GameCanvas)theCanvasClass.newInstance();
             } catch (InstantiationException e):
@@ -233,7 +233,7 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
 					+ ((gameName == null) ? 0 : gameName.hashCode());
             return result;
 
-    	    def boolean equals(Object obj):
+    	    def bool equals(Object obj):
             if (this == obj)
                 return true;
             if (obj == null)
@@ -250,7 +250,7 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
                 return false;
             return true;
 
-            public int compareTo(AvailableGame o):
+            def int compareTo(AvailableGame o):
             return gameName.compareTo(o.gameName);
         }
 
@@ -260,14 +260,14 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
 
     private GamePlayer theComputerPlayer = null;
     private GamePlayer theHumanPlayer = null;
-    private KioskGamer theHumanGamer;
+    theHumanGamer = KioskGamer()
 
     private GameServer kioskServer = null;
 
-    private static final int DEFAULT_HUMAN_PORT = 3333;
-    private static final int DEFAULT_COMPUTER_PORT = 3334;
+    DEFAULT_HUMAN_PORT = 3333  # int 
+    DEFAULT_COMPUTER_PORT = 3334  # int 
 
-    public void actionPerformed(ActionEvent e):
+    def void actionPerformed(ActionEvent e):
         if(e.getSource() == runButton):
             if (kioskServer != null && !kioskServer.getMatch().isCompleted()):
             	// When a match is started while another match is still running,
@@ -378,7 +378,7 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
         }
     }
 
-    public void itemStateChanged(ItemEvent e):
+    def void itemStateChanged(ItemEvent e):
         if(e.getSource() == playerComboBox):
             if(playerComboBox.getSelectedItem().equals(remotePlayerString)):
                 computerAddress.setVisible(true);
@@ -389,7 +389,7 @@ class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
         }
     }
 
-    public void observe(Event event):
+    def void observe(Event event):
         if(event instanceof ServerIllegalMoveEvent):
             ServerIllegalMoveEvent x = (ServerIllegalMoveEvent)event;
             System.err.println("Got illegal move [" + x.getMove() + "] by role [" + x.getRole() + "].");

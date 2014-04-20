@@ -19,12 +19,12 @@ class Role implements Serializable
 {
     protected final GdlConstant name;
 
-    public Role(GdlConstant name)
+    def Role(GdlConstant name)
     {
         this.name = name;
     }
 
-    public boolean equals(Object o)
+    def bool equals(Object o)
     {
         if ((o != null) && (o instanceof Role))
         {
@@ -35,17 +35,17 @@ class Role implements Serializable
         return false;
     }
 
-    public GdlConstant getName()
+    def GdlConstant getName()
     {
         return name;
     }
 
-    public int hashCode()
+    def int hashCode()
     {
         return name.hashCode();
     }
 
-    public String toString()
+    def String toString()
     {
         return name.toString();
     }
@@ -58,7 +58,7 @@ class Role implements Serializable
      * the moves. This function will give an ordered list in which the roles
      * have that correct order.
      */
-    public static List<Role> computeRoles(List<?(Gdl> description)):
+    def List<Role> computeRoles(List<?(Gdl> description)):
     {
         List<Role> roles = new ArrayList<Role>();
         for (Gdl gdl : description):

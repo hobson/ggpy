@@ -40,20 +40,20 @@ import org.xml.sax.SAXException;
  * @author Ethan Dreyfuss and Sam Schreiber
  */
 class GameStateRenderer(object):
-    private static final Dimension defaultSize = new Dimension(600,600);
+    defaultSize = new Dimension(600,600)  # Dimension 
 
     /* Note: NaiveUserAgent is not thread safe, so whenever the architecture
      * of this class is modified in a way that enables concurrent rendering,
      * this must be changed to another UserAgentCallback implementation that
      * uses a thread safe image cache */
-    private static NaiveUserAgent userAgent = new NaiveUserAgent(128);
+    def NaiveUserAgent userAgent = new NaiveUserAgent(128);
 
-    public static Dimension getDefaultSize()
+    def Dimension getDefaultSize()
     {
         return defaultSize;
     }
 
-    public static synchronized void renderImagefromGameXML(String gameXML, String XSL, BufferedImage backimage)
+    def synchronized void renderImagefromGameXML(String gameXML, String XSL, BufferedImage backimage)
     {
 
         String xhtml = getXHTMLfromGameXML(gameXML, XSL);
@@ -97,11 +97,11 @@ class GameStateRenderer(object):
         backimage.setData(r.getImage().getData());
     }
 
-    public static synchronized void shrinkCache():
+    def synchronized void shrinkCache():
         userAgent.shrinkImageCache();
     }
 
-    private static String getXHTMLfromGameXML(String gameXML, String XSL):
+    def String getXHTMLfromGameXML(String gameXML, String XSL):
         XSL = XSL.replace("<!DOCTYPE stylesheet [<!ENTITY ROOT \"http://games.ggp.org/base\">]>", "");
         XSL = XSL.replace("&ROOT;", "http://games.ggp.org/base").trim();
 
@@ -123,20 +123,20 @@ class GameStateRenderer(object):
     }
 
     //========IOstring code========
-    private static class IOString
+    def class IOString
     {
-        private StringBuffer buf;
-        public IOString(String s):
+        buf = StringBuffer()
+        def IOString(String s):
             buf = new StringBuffer(s);
         }
-        public String getString():
+        def String getString():
             return buf.toString();
         }
 
-        public InputStream getInputStream():
+        def InputStream getInputStream():
             return new IOString.IOStringInputStream();
         }
-        public OutputStream getOutputStream():
+        def OutputStream getOutputStream():
             return new IOString.IOStringOutputStream();
         }
 

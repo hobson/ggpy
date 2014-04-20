@@ -16,12 +16,12 @@ class Move implements Serializable
 {
     protected final GdlTerm contents;
 
-    public Move(GdlTerm contents)
+    def Move(GdlTerm contents)
     {
         this.contents = contents;
     }
 
-    public boolean equals(Object o)
+    def bool equals(Object o)
     {
         if ((o != null) && (o instanceof Move)):
             Move move = (Move) o;
@@ -31,17 +31,17 @@ class Move implements Serializable
         return false;
     }
 
-    public GdlTerm getContents()
+    def GdlTerm getContents()
     {
         return contents;
     }
 
-    public int hashCode()
+    def int hashCode()
     {
         return contents.hashCode();
     }
 
-    public String toString()
+    def String toString()
     {
         return contents.toString();
     }

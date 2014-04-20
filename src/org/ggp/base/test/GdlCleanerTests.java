@@ -17,7 +17,7 @@ import org.junit.Test;
 class GdlCleanerTests(object):
 
     @Test
-    public void testCleanNotDistinct() throws Exception {
+    def void testCleanNotDistinct() throws Exception {
     	List<Gdl> description = new TestGameRepository().getGame("test_clean_not_distinct").getRules();
         description = GdlCleaner.run(description);
 

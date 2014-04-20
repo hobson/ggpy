@@ -11,7 +11,7 @@ import org.ggp.base.util.gdl.grammar.GdlSentence;
  * words, it captures information about which constants can be
  * in which positions in the SentenceForm.
  */
-public interface SentenceFormDomain(Iterable<GdlSentence>):
+def interface SentenceFormDomain(Iterable<GdlSentence>):
 	/**
 	 * Returns the SentenceForm associated with this domain.
 	 */

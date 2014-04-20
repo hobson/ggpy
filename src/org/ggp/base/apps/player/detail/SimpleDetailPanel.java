@@ -30,7 +30,7 @@ class SimpleDetailPanel(DetailPanel):
         model.addColumn("Selected Move");
 
         moveTable = new JZebraTable(model):
-        		    def boolean isCellEditable(int rowIndex, int colIndex):
+        		    def bool isCellEditable(int rowIndex, int colIndex):
                 return false;
 		};
         moveTable.setShowHorizontalLines(true);

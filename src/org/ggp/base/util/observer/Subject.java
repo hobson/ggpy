@@ -1,6 +1,6 @@
 package org.ggp.base.util.observer;
 
-public interface Subject
+def interface Subject
 {
 
     def void addObserver(Observer observer);

@@ -21,7 +21,7 @@ import com.google.common.collect.Multimap;
  * The recommended way of creating a SentenceFormModel is via
  * {@link SentenceFormModelFactory#create(List)}.
  */
-public interface SentenceFormModel {
+def interface SentenceFormModel {
 	/**
 	 * Returns the set of sentence forms that are independent; that is,
 	 * the truth values of the sentences of these forms may depend on

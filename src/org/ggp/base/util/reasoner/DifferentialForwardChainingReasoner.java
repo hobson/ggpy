@@ -8,7 +8,7 @@ import org.ggp.base.util.gdl.transforms.VariableConstrainer;
  * just the consequences of a rule that result from a particular input.
  * This can be a much more efficient way of handling recursive rules.
  */
-public interface DifferentialForwardChainingReasoner<Rule, Sentences>
+def interface DifferentialForwardChainingReasoner<Rule, Sentences>
                         extends ForwardChainingReasoner<Rule, Sentences> {
 	/**
 	 * Given a rule, all sentences known to be true, and a set of new sentences,

@@ -5,7 +5,7 @@ import java.util.List;
 import org.ggp.base.util.gdl.grammar.GdlConstant;
 import org.ggp.base.util.gdl.grammar.GdlSentence;
 
-public interface AddibleFunctionInfo(FunctionInfo):
+def interface AddibleFunctionInfo(FunctionInfo):
 	/**
 	 * Convenience method, equivalent to addTuple.
 	 */

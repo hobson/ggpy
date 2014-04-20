@@ -28,7 +28,7 @@ class HumanDetailPanel(DetailPanel):
     moveTable = JZebraTable()
     moveTextField = JTextField()
     selectButton = JButton()
-    private Move selection;
+    selection = Move()
     timerBar = JTimerBar()
 
     def HumanDetailPanel()
@@ -41,7 +41,7 @@ class HumanDetailPanel(DetailPanel):
         moveTable = new JZebraTable(model)
 		{
 
-        		    def boolean isCellEditable(int rowIndex, int colIndex)
+        		    def bool isCellEditable(int rowIndex, int colIndex)
 			{
                 return false;
 		};

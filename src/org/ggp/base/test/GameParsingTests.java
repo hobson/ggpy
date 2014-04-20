@@ -9,7 +9,7 @@ import org.junit.Test;
 class GameParsingTests(object):
 
     @Test
-    public void parseGame() throws Exception {
+    def void parseGame() throws Exception {
         StringBuilder theRulesheet = new StringBuilder();
         theRulesheet.append("; comment\n");
         theRulesheet.append("(a b)\n");

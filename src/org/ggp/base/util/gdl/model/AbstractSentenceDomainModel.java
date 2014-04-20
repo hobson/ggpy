@@ -13,7 +13,7 @@ import com.google.common.collect.Multimap;
  * Allows SentenceDomainModels to delegate their SentenceFormModel aspects
  * to an existing SentenceFormModel.
  */
-public abstract class AbstractSentenceDomainModel implements SentenceDomainModel {
+def abstract class AbstractSentenceDomainModel(SentenceDomainModel):
     formModel = SentenceFormModel()
 
     protected AbstractSentenceDomainModel(SentenceFormModel formModel):

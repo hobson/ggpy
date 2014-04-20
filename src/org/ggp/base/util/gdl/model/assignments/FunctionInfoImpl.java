@@ -21,8 +21,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 //Represents information about a sentence form that is constant.
-class FunctionInfoImpl implements FunctionInfo {
-    private SentenceForm form;
+class FunctionInfoImpl(FunctionInfo):
+    form = SentenceForm()
 
 	//True iff the slot has at most one value given the other slots' values
     private List<Boolean> dependentSlots = new ArrayList<Boolean>();
@@ -36,7 +36,7 @@ class FunctionInfoImpl implements FunctionInfo {
         for(int i = 0; i < numSlots; i++):
 			//We want to establish whether or not this is a constant...
             Map<ImmutableList<GdlConstant>, GdlConstant> functionMap = Maps.newHashMap();
-            boolean functional = true;
+            bool functional = true;
             for (GdlSentence sentence : trueSentences):
                 ConcurrencyUtils.checkForInterruption();
                 List<GdlConstant> tuple = GdlUtils.getTupleFromGroundSentence(sentence);

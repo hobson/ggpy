@@ -28,19 +28,19 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
 class KioskGamer(StateMachineGamer implements Observer):
     private BlockingQueue<Move> theQueue = new ArrayBlockingQueue<Move>(25);
 
-    private GameGUI theGUI;
-    private JPanel theGUIPanel;
-    public KioskGamer(JPanel theGUIPanel):
+    theGUI = GameGUI()
+    theGUIPanel = JPanel()
+    def KioskGamer(JPanel theGUIPanel):
         this.theGUIPanel = theGUIPanel;
         theGUIPanel.setLayout(new BorderLayout());
     }
 
     private GameCanvas theCanvas = null;
-    public void setCanvas(GameCanvas theCanvas):
+    def void setCanvas(GameCanvas theCanvas):
         this.theCanvas = theCanvas;
     }
 
-    public void stateMachineMetaGame(long timeout)
+    def void stateMachineMetaGame(int timeout)
             throws TransitionDefinitionException, MoveDefinitionException,
             GoalDefinitionException {
         if(theCanvas == null)
@@ -63,7 +63,7 @@ class KioskGamer(StateMachineGamer implements Observer):
         theGUIPanel.repaint();
     }
 
-    public Move stateMachineSelectMove(long timeout)
+    def Move stateMachineSelectMove(int timeout)
             throws TransitionDefinitionException, MoveDefinitionException,
             GoalDefinitionException {
     	theGUI.beginPlay();
@@ -77,17 +77,17 @@ class KioskGamer(StateMachineGamer implements Observer):
         }
     }
 
-    public StateMachine getInitialStateMachine():
+    def StateMachine getInitialStateMachine():
         return new ProverStateMachine();
     }
 
-    public String getName():
+    def String getName():
         return "GraphicalHumanGamer";
     }
 
-    private MachineState stateFromServer;
+    stateFromServer = MachineState()
 
-    public void observe(Event event):
+    def void observe(Event event):
         if(event instanceof MoveSelectedEvent):
             Move theMove = ((MoveSelectedEvent)event).getMove();
             if(theQueue.size() < 2):
@@ -127,9 +127,9 @@ class KioskGamer(StateMachineGamer implements Observer):
         theQueue.add(new Move(GdlPool.getConstant("ABORT")));
         theGUI.showFinalMessage("Aborted");
 
-    def isComputerPlayer():  # boolean
+    def isComputerPlayer():  # bool
         return false;
 
-    def void preview(Game g, long timeout) throws GamePreviewException {
+    def void preview(Game g, int timeout) throws GamePreviewException {
 		;
 }

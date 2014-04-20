@@ -8,7 +8,7 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
 
 //TODO: Get rid of this class in some way...
 //Or, just remake into AssignmentIterationPlan
-public interface Assignments(Iterable<Map<GdlVariable, GdlConstant>>):
+def interface Assignments(Iterable<Map<GdlVariable, GdlConstant>>):
 
     AssignmentIterator getIterator();
 

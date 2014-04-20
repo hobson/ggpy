@@ -18,7 +18,7 @@ import clojure.lang.Var;
  * @author Sam
  */
 class ClojureConsole(object):
-    public static void main(String[] args):
+    def void main(String[] args):
         Symbol CLOJURE_MAIN = Symbol.intern("clojure.main");
         Var REQUIRE = RT.var("clojure.core", "require");
         Var MAIN = RT.var("clojure.main", "main");

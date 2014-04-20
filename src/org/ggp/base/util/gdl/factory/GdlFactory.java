@@ -42,18 +42,18 @@ class GdlFactory
             createGdl(symbol);
             throw new GdlFormatException(symbol);
 
-    private static GdlConstant createConstant(SymbolAtom atom)
+    def GdlConstant createConstant(SymbolAtom atom)
 	{
         return GdlPool.getConstant(atom.getValue());
 
-    private static GdlDistinct createDistinct(SymbolList list)
+    def GdlDistinct createDistinct(SymbolList list)
 	{
         GdlTerm arg1 = createTerm(list.get(1));
         GdlTerm arg2 = createTerm(list.get(2));
 
         return GdlPool.getDistinct(arg1, arg2);
 
-    private static GdlFunction createFunction(SymbolList list)
+    def GdlFunction createFunction(SymbolList list)
 	{
         GdlConstant name = createConstant((SymbolAtom) list.get(0));
 
@@ -64,7 +64,7 @@ class GdlFactory
 
         return GdlPool.getFunction(name, body);
 
-    private static Gdl createGdl(Symbol symbol)
+    def Gdl createGdl(Symbol symbol)
 	{
         if (symbol instanceof SymbolList)
 		{
@@ -77,7 +77,7 @@ class GdlFactory
 
         return createSentence(symbol);
 
-    private static GdlLiteral createLiteral(Symbol symbol)
+    def GdlLiteral createLiteral(Symbol symbol)
 	{
         if (symbol instanceof SymbolList)
 		{
@@ -96,11 +96,11 @@ class GdlFactory
 
         return createSentence(symbol);
 
-    private static GdlNot createNot(SymbolList list)
+    def GdlNot createNot(SymbolList list)
 	{
         return GdlPool.getNot(createLiteral(list.get(1)));
 
-    private static GdlOr createOr(SymbolList list)
+    def GdlOr createOr(SymbolList list)
 	{
         List<GdlLiteral> disjuncts = new ArrayList<GdlLiteral>();
         for (int i = 1; i < list.size(); i++)
@@ -109,11 +109,11 @@ class GdlFactory
 
         return GdlPool.getOr(disjuncts);
 
-    private static GdlProposition createProposition(SymbolAtom atom)
+    def GdlProposition createProposition(SymbolAtom atom)
 	{
         return GdlPool.getProposition(createConstant(atom));
 
-    private static GdlRelation createRelation(SymbolList list)
+    def GdlRelation createRelation(SymbolList list)
 	{
         GdlConstant name = createConstant((SymbolAtom) list.get(0));
 
@@ -124,7 +124,7 @@ class GdlFactory
 
         return GdlPool.getRelation(name, body);
 
-    private static GdlRule createRule(SymbolList list)
+    def GdlRule createRule(SymbolList list)
 	{
         GdlSentence head = createSentence(list.get(1));
 
@@ -135,7 +135,7 @@ class GdlFactory
 
         return GdlPool.getRule(head, body);
 
-    private static GdlSentence createSentence(Symbol symbol)
+    def GdlSentence createSentence(Symbol symbol)
 	{
         if (symbol instanceof SymbolAtom)
 		{
@@ -163,7 +163,7 @@ class GdlFactory
 		{
             return createFunction((SymbolList) symbol);
 
-    private static GdlVariable createVariable(SymbolAtom atom)
+    def GdlVariable createVariable(SymbolAtom atom)
 	{
         return GdlPool.getVariable(atom.getValue());
 

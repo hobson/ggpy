@@ -57,7 +57,7 @@ class SchedulingPanel(JPanel implements Observer, ListSelectionListener, TableMo
 
         queueTable = new JTable(model)
 		{
-        		    def boolean isCellEditable(int rowIndex, int colIndex)
+        		    def bool isCellEditable(int rowIndex, int colIndex)
 			{
                 return false;
 		};
@@ -89,7 +89,7 @@ class SchedulingPanel(JPanel implements Observer, ListSelectionListener, TableMo
         add(new JScrollPane(queueTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-    private Scheduler scheduler;
+    scheduler = Scheduler()
     def void setScheduler(Scheduler scheduler):
         this.scheduler = scheduler;
 
@@ -209,13 +209,13 @@ class SchedulingPanel(JPanel implements Observer, ListSelectionListener, TableMo
         model.addRow(new Object[]{match.getMatchId(),match.getGame().getKey(),match.getStartClock() + "," + match.getPlayClock(),"starting",getLinebreakString(match.getPlayerNamesFromHost()),"","",0});
         queueTable.setRowHeight(model.getRowCount()-1, match.getPlayerNamesFromHost().size()*20);
 
-    private static List<String> getNamesForPlayers(List<PlayerPresence> players):
+    def List<String> getNamesForPlayers(List<PlayerPresence> players):
         List<String> playerNames = new ArrayList<String>();
         for (PlayerPresence player : players):
             playerNames.add(player.getName());
         return playerNames;
 
-    private static String getLinebreakString(List<?> objects):
+    def String getLinebreakString(List<?> objects):
         String renderedString = "<html>";
         for (Object object : objects):
             renderedString += (object == null ? "?" : object.toString()) + "<br>";

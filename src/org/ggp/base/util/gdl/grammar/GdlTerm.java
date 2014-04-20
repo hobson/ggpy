@@ -1,9 +1,9 @@
 package org.ggp.base.util.gdl.grammar;
 
-public abstract class GdlTerm(Gdl):
+def abstract class GdlTerm(Gdl):
 {
 
-    def abstract boolean isGround();
+    def abstract bool isGround();
 
     def abstract GdlSentence toSentence();
 

@@ -7,7 +7,7 @@ import java.net.Socket;
 
 /**
  * HttpRequest is a helper class that encapsulates all of the code necessary
- * for a match host to issue a long-lived HTTP request to a player, wait for
+ * for a match host to issue a int-lived HTTP request to a player, wait for
  * the response, and return it. This is a key part of the GGP gaming protocol.
  *
  * @author schreib

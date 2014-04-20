@@ -38,16 +38,16 @@ import external.JSON.JSONObject;
  * @author Sam Schreiber
  */
 class SimpleGameSim(object):
-    public static final boolean hideStepCounter = true;
-    public static final boolean hideControlProposition = true;
-    public static final boolean showCurrentState = false;
+    hideStepCounter = true  # bool 
+    hideControlProposition = true  # bool 
+    showCurrentState = false  # bool 
 
-    public static void main(String[] args) throws InterruptedException {
+    def void main(String[] args) throws InterruptedException {
         final Game theGame = GameRepository.getDefaultRepository().getGame("nineBoardTicTacToe");
         final Match theMatch = new Match("simpleGameSim." + Match.getRandomString(5), -1, 0, 0, theGame);
         try {
             // Load a sample set of cryptographic keys. These sample keys are not secure,
-            // since they're checked into the public GGP Base SVN repository. They are provided
+            // since they're checked into the def GGP Base SVN repository. They are provided
             // merely to illustrate how the crypto key API in Match works. If you want to prove
             // that you ran a match, you need to generate your own pair of cryptographic keys,
             // keep them secure and hidden, and pass them to "setCryptographicKeys" in Match.

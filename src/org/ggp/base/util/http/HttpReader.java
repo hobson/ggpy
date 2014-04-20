@@ -11,13 +11,13 @@ class HttpReader
 {
     // Wrapper methods to support socket timeouts for reading requests/responses.
 
-    public static String readAsClient(Socket socket, int timeout) throws IOException, SocketTimeoutException
+    def String readAsClient(Socket socket, int timeout) throws IOException, SocketTimeoutException
     {
         socket.setSoTimeout(timeout);
         return readAsClient(socket);
     }
 
-    public static String readAsServer(Socket socket, int timeout) throws IOException, SocketTimeoutException
+    def String readAsServer(Socket socket, int timeout) throws IOException, SocketTimeoutException
     {
         socket.setSoTimeout(timeout);
         return readAsServer(socket);
@@ -63,7 +63,7 @@ class HttpReader
 
         return message;
 
-    private static String readContentFromPOST(BufferedReader br) throws IOException {
+    def String readContentFromPOST(BufferedReader br) throws IOException {
 	    String line;
         int theContentLength = -1;
         StringBuilder theContent = new StringBuilder();

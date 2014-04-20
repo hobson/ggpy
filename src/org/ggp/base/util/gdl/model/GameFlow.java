@@ -42,15 +42,15 @@ import com.google.common.collect.Multimap;
  * @author Alex Landau
  */
 class GameFlow(object):
-    private static final GdlConstant INIT = GdlPool.getConstant("init");
-    private static final GdlConstant TRUE = GdlPool.getConstant("true");
-    private static final GdlConstant NEXT = GdlPool.getConstant("next");
+    INIT = GdlPool.getConstant("init")  # GdlConstant 
+    TRUE = GdlPool.getConstant("true")  # GdlConstant 
+    NEXT = GdlPool.getConstant("next")  # GdlConstant 
 
     private int turnAfterLast; //We end with a loop
     private List<Set<GdlSentence>> sentencesTrueByTurn = new ArrayList<Set<GdlSentence>>(); //The non-constant ones
-    private Set<SentenceForm> formsControlledByFlow;
-    private Set<SentenceForm> constantForms;
-    private ConstantChecker constantChecker;
+    formsControlledByFlow = Set<SentenceForm>()
+    constantForms = Set<SentenceForm>()
+    constantChecker = ConstantChecker()
 
     def GameFlow(List<Gdl> description) throws InterruptedException {
         description = GdlCleaner.run(description);
@@ -130,7 +130,7 @@ class GameFlow(object):
                 AssignmentIterator asnItr = assignments.getIterator();
                 while(asnItr.hasNext()):
                     Map<GdlVariable, GdlConstant> assignment = asnItr.next();
-                    boolean isGoodAssignment = true;
+                    bool isGoodAssignment = true;
 
                     GdlSentence transformedHead = CommonTransforms.replaceVariables(head, assignment);
                     if(trueFlowSentences.contains(transformedHead))
@@ -182,7 +182,7 @@ class GameFlow(object):
     def getNumTurns():  # int
         return sentencesTrueByTurn.size();
 
-    private static List<SentenceForm> getTopologicalOrdering(
+    def List<SentenceForm> getTopologicalOrdering(
             Set<SentenceForm> forms,
             Multimap<SentenceForm, SentenceForm> dependencyGraph):
 		//We want each form as a key of the dependency graph to
@@ -192,7 +192,7 @@ class GameFlow(object):
         Set<SentenceForm> alreadyOrdered = new HashSet<SentenceForm>();
         while(!queue.isEmpty()):
             SentenceForm curForm = queue.remove();
-            boolean readyToAdd = true;
+            bool readyToAdd = true;
 			//Don't add if there are dependencies
             for(SentenceForm dependency : dependencyGraph.get(curForm)):
                 if(!dependency.equals(curForm) && !alreadyOrdered.contains(dependency)):

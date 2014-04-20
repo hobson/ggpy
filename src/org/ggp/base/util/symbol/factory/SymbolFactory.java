@@ -13,7 +13,7 @@ import org.ggp.base.util.symbol.grammar.SymbolPool;
 
 class SymbolFactory
 {
-    public static Symbol create(String string) throws SymbolFormatException
+    def Symbol create(String string) throws SymbolFormatException
     {
         try
         {
@@ -29,7 +29,7 @@ class SymbolFactory
 
     /* Private, implementation-specific methods below here */
 
-    private static Symbol convert(LinkedList<String> tokens)
+    def Symbol convert(LinkedList<String> tokens)
 	{
         if (tokens.getFirst().equals("("))
 		{
@@ -38,11 +38,11 @@ class SymbolFactory
 		{
             return convertAtom(tokens);
 
-    private static SymbolAtom convertAtom(LinkedList<String> tokens)
+    def SymbolAtom convertAtom(LinkedList<String> tokens)
 	{
         return SymbolPool.getAtom(tokens.removeFirst());
 
-    private static SymbolList convertList(LinkedList<String> tokens)
+    def SymbolList convertList(LinkedList<String> tokens)
 	{
         List<Symbol> contents = new ArrayList<Symbol>();
 
@@ -54,7 +54,7 @@ class SymbolFactory
 
         return SymbolPool.getList(contents);
 
-    private static List<String> lex(String string)
+    def List<String> lex(String string)
 	{
         List<String> tokens = new ArrayList<String>();
         for (String token : string.split(" "))
@@ -63,7 +63,7 @@ class SymbolFactory
 
         return tokens;
 
-    private static String preprocess(String string)
+    def String preprocess(String string)
 	{
         string = string.replaceAll("\\(", " ( ");
         string = string.replaceAll("\\)", " ) ");

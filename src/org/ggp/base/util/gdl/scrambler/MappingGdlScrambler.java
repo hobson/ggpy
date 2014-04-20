@@ -14,13 +14,13 @@ import org.ggp.base.util.gdl.grammar.GdlPool;
 import org.ggp.base.util.gdl.grammar.GdlVariable;
 import org.ggp.base.util.symbol.factory.exceptions.SymbolFormatException;
 
-class MappingGdlScrambler implements GdlScrambler {
+class MappingGdlScrambler(GdlScrambler):
     private Map<String,String> scrambleMapping;
     private Map<String,String> unscrambleMapping;
-    private Random random;
+    random = Random()
 
-    private int scrambledPrefix;
-    private Stack<String> scrambledTokens;
+    scrambledPrefix = int()
+    scrambledTokens = Stack<String>()
 
     def MappingGdlScrambler(theRandom=Random()):
         random = theRandom;
@@ -50,7 +50,7 @@ class MappingGdlScrambler implements GdlScrambler {
     def Gdl unscramble(String x) throws SymbolFormatException, GdlFormatException {
         return GdlFactory.create(new UnscramblingRenderer().renderGdl(GdlFactory.create(x)));
 
-    def scrambles():  # boolean
+    def scrambles():  # bool
         return true;
 
     private String scrambleWord(String realWord):
@@ -80,7 +80,7 @@ class MappingGdlScrambler implements GdlScrambler {
             scrambledPrefix++;
         return scrambledTokens.pop();
 
-    private static boolean shouldMap(String token):
+    def bool shouldMap(String token):
         if (GdlPool.KEYWORDS.contains(token.toLowerCase())):
             return false;
         try {

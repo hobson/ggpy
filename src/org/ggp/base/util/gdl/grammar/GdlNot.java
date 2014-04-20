@@ -15,7 +15,7 @@ class GdlNot(GdlLiteral):
 	{
         return body;
 
-    def boolean isGround()
+    def bool isGround()
 	{
         if (ground == null)
 		{

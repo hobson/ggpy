@@ -39,7 +39,7 @@ class AimaProver implements Prover
         description = DistinctAndNotMover.run(description);
         knowledgeBase = new KnowledgeBase(Sets.newHashSet(description));
 
-    private Set<GdlSentence> ask(GdlSentence query, Set<GdlSentence> context, boolean askOne)
+    private Set<GdlSentence> ask(GdlSentence query, Set<GdlSentence> context, bool askOne)
 	{
         LinkedList<GdlLiteral> goals = new LinkedList<GdlLiteral>();
         goals.add(query);
@@ -56,7 +56,7 @@ class AimaProver implements Prover
         return results;
 
 	// Returns true iff the result is constant across all possible states of the game.
-    private boolean ask(LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private bool ask(LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, bool askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
         if (goals.size() == 0)
 		{
@@ -67,7 +67,7 @@ class AimaProver implements Prover
             GdlLiteral literal = goals.removeFirst();
             GdlLiteral qPrime = Substituter.substitute(literal, theta);
 
-            boolean isConstant;
+            bool isConstant;
 
             if (qPrime instanceof GdlDistinct)
 			{
@@ -94,7 +94,7 @@ class AimaProver implements Prover
         return ask(query, context, false);
 
 	// Returns true iff the result is constant across all possible states of the game.
-    private boolean askDistinct(GdlDistinct distinct, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private bool askDistinct(GdlDistinct distinct, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, bool askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
         if (!distinct.getArg1().equals(distinct.getArg2()))
 		{
@@ -102,13 +102,13 @@ class AimaProver implements Prover
         return true;
 
 	// Returns true iff the result is constant across all possible states of the game.
-    private boolean askNot(GdlNot not, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private bool askNot(GdlNot not, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, bool askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
         LinkedList<GdlLiteral> notGoals = new LinkedList<GdlLiteral>();
         notGoals.add(not.getBody());
 
         Set<Substitution> notResults = new HashSet<Substitution>();
-        boolean isConstant = true;
+        bool isConstant = true;
         isConstant &= ask(notGoals, context, theta, cache, renamer, true, notResults, alreadyAsking);
 
         if (notResults.size() == 0)
@@ -122,9 +122,9 @@ class AimaProver implements Prover
         return (results.size() > 0) ? results.iterator().next() : null;
 
 	// Returns true iff the result is constant across all possible states of the game.
-    private boolean askOr(GdlOr or, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private bool askOr(GdlOr or, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, bool askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
-        boolean isConstant = true;
+        bool isConstant = true;
         for (int i = 0; i < or.arity(); i++)
 		{
             goals.addFirst(or.get(i));
@@ -137,7 +137,7 @@ class AimaProver implements Prover
         return isConstant;
 
 	// Returns true iff the result is constant across all possible states of the game.
-    private boolean askSentence(GdlSentence sentence, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private bool askSentence(GdlSentence sentence, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, bool askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
         GdlSentence varRenamedSentence = new VariableRenamer().rename(sentence);
         if (!fixedAnswerCache.contains(varRenamedSentence) && !cache.contains(varRenamedSentence))
@@ -149,7 +149,7 @@ class AimaProver implements Prover
             List<GdlRule> candidates = new ArrayList<GdlRule>();
             candidates.addAll(knowledgeBase.fetch(sentence));
             candidates.addAll(context.fetch(sentence));
-            boolean isConstant = !isTrueOrDoesSentence(sentence);
+            bool isConstant = !isTrueOrDoesSentence(sentence);
 
             Set<Substitution> sentenceResults = new HashSet<Substitution>();
             for (GdlRule rule : candidates)
@@ -174,7 +174,7 @@ class AimaProver implements Prover
             alreadyAsking.remove(sentence);
 
         List<Substitution> cachedResults = fixedAnswerCache.get(sentence, varRenamedSentence);
-        boolean isConstant = (cachedResults != null);
+        bool isConstant = (cachedResults != null);
         if (cachedResults == null):
             cachedResults = cache.get(sentence, varRenamedSentence);
         for (Substitution thetaPrime : cachedResults)
@@ -185,11 +185,11 @@ class AimaProver implements Prover
                 break;
         return isConstant;
 
-    private boolean isTrueOrDoesSentence(GdlSentence sentence):
+    private bool isTrueOrDoesSentence(GdlSentence sentence):
         GdlConstant name = sentence.getName();
         return name == GdlPool.TRUE || name == GdlPool.DOES;
 
-    def boolean prove(GdlSentence query, Set<GdlSentence> context)
+    def bool prove(GdlSentence query, Set<GdlSentence> context)
 	{
         return askOne(query, context) != null;
 

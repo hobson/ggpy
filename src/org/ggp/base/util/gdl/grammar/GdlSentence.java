@@ -2,7 +2,7 @@ package org.ggp.base.util.gdl.grammar;
 
 import java.util.List;
 
-public abstract class GdlSentence(GdlLiteral):
+def abstract class GdlSentence(GdlLiteral):
 {
 
     def abstract int arity();
@@ -11,7 +11,7 @@ public abstract class GdlSentence(GdlLiteral):
 
     def abstract GdlConstant getName();
 
-    def abstract boolean isGround();
+    def abstract bool isGround();
 
     def abstract String toString();
 

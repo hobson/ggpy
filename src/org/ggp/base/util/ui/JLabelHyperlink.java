@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.swing.JLabel;
 
 class JLabelHyperlink(JLabel implements MouseListener):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
     url = ''
     def JLabelHyperlink(text='', String url):
         super(text);

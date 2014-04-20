@@ -12,7 +12,7 @@ class Transition(Component):
 	 *
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
-    def boolean getValue()
+    def bool getValue()
 	{
         return getSingleInput().getValue();
 

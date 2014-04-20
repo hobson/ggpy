@@ -19,7 +19,7 @@ import external.JSON.JSONObject;
 class RemoteGameRepository(GameRepository):
     private final String theRepoURL;
 
-    public RemoteGameRepository(String theURL):
+    def RemoteGameRepository(String theURL):
         theRepoURL = properlyFormatURL(theURL);
     }
 
@@ -40,7 +40,7 @@ class RemoteGameRepository(GameRepository):
         return loadSingleGame(getGameURL(theKey));
     }
 
-    public static Game loadSingleGame(String theGameURL):
+    def Game loadSingleGame(String theGameURL):
         String[] theSplitURL = theGameURL.split("/");
         String theKey = theSplitURL[theSplitURL.length-1];
 
@@ -100,7 +100,7 @@ class RemoteGameRepository(GameRepository):
         return theGameURL + "v" + theVersion + "/";
     }
 
-    protected static boolean isVersioned(String theGameURL, int theVersion):
+    protected static bool isVersioned(String theGameURL, int theVersion):
         return theGameURL.endsWith("/v" + theVersion + "/");
     }
 

@@ -12,7 +12,7 @@ import javax.swing.UIManager;
  * @author Sam Schreiber
  */
 class NativeUI(object):
-    public static void setNativeUI():
+    def void setNativeUI():
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e):

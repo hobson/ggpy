@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 
-class ImmutableSentenceFormModel implements SentenceFormModel {
+class ImmutableSentenceFormModel(SentenceFormModel):
     private final ImmutableList<Gdl> gameDescription;
     private final ImmutableSet<SentenceForm> sentenceForms;
     private final ImmutableSet<SentenceForm> constantSentenceForms;

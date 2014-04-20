@@ -17,18 +17,18 @@ class ProjectSearcher(object):
         System.out.println(GAMERS);
         System.out.println(GAME_CANVASES);
 
-    private static final Reflections REFLECTIONS = new Reflections();
+    REFLECTIONS = new Reflections()  # Reflections 
 
-    public static final LoadedClasses<Gamer> GAMERS = new LoadedClasses<Gamer>(Gamer.class);
-    public static final LoadedClasses<GameCanvas> GAME_CANVASES = new LoadedClasses<GameCanvas>(GameCanvas.class);
+    def final LoadedClasses<Gamer> GAMERS = new LoadedClasses<Gamer>(Gamer.class);
+    def final LoadedClasses<GameCanvas> GAME_CANVASES = new LoadedClasses<GameCanvas>(GameCanvas.class);
 
-    public static final <T> ImmutableSet<Class<?(T>> getAllClassesThatAre(Class<T> klass)):
+    def final <T> ImmutableSet<Class<?(T>> getAllClassesThatAre(Class<T> klass)):
     	return new LoadedClasses<T>(klass).getConcreteClasses();
     }
 
-    public static class LoadedClasses<T> {
-        private static Predicate<Class<?>> IS_CONCRETE_CLASS = new Predicate<Class<?>>():
-                    public boolean apply(Class<?> klass):
+    def class LoadedClasses<T> {
+        def Predicate<Class<?>> IS_CONCRETE_CLASS = new Predicate<Class<?>>():
+                    def bool apply(Class<?> klass):
                 return !Modifier.isAbstract(klass.getModifiers());
             }
         };
@@ -43,19 +43,19 @@ class ProjectSearcher(object):
             this.concreteClasses = ImmutableSet.copyOf(Sets.filter(allClasses, IS_CONCRETE_CLASS));
         }
 
-        public Class<T> getInterfaceClass():
+        def Class<T> getInterfaceClass():
             return interfaceClass;
         }
 
-        public ImmutableSet<Class<?(T>> getConcreteClasses()):
+        def ImmutableSet<Class<?(T>> getConcreteClasses()):
             return concreteClasses;
         }
 
-        public ImmutableSet<Class<?(T>> getAllClasses()):
+        def ImmutableSet<Class<?(T>> getAllClasses()):
             return allClasses;
         }
 
-            public String toString():
+            def String toString():
             return Objects.toStringHelper(this)
                     .add("allClasses", allClasses)
                     .add("interfaceClass", interfaceClass)

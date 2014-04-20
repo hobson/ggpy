@@ -9,7 +9,7 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_Chessboard;
 
 
 class BreakthroughSmallCanvas(GameCanvas_Chessboard):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Breakthrough (Small)"; }
     protected String getGameKey() { return "breakthroughSmall"; }

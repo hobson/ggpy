@@ -17,7 +17,7 @@ class GdlOr(GdlLiteral):
 	{
         return disjuncts.size();
 
-    private boolean computeGround()
+    private bool computeGround()
 	{
         for (GdlLiteral literal : disjuncts)
 		{
@@ -31,7 +31,7 @@ class GdlOr(GdlLiteral):
 	{
         return disjuncts.get(index);
 
-    def boolean isGround()
+    def bool isGround()
 	{
         if (ground == null)
 		{

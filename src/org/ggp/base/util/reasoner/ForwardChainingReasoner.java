@@ -13,7 +13,7 @@ import org.ggp.base.util.reasoner.gdl.GdlChainingReasoner;
  *
  * See {@link GdlChainingReasoner} for one such implementation.
  */
-public interface ForwardChainingReasoner<Rule, Sentences> {
+def interface ForwardChainingReasoner<Rule, Sentences> {
 	/**
 	 * Returns a set of sentences that are always true, which can be
 	 * used as a basis and added to via getUnion. This includes all
@@ -44,4 +44,4 @@ public interface ForwardChainingReasoner<Rule, Sentences> {
 	/**
 	 * Returns true iff newSentences is a subset of oldSentences.
 	 */
-    boolean isSubsetOf(Sentences oldSentences, Sentences newSentences);
+    bool isSubsetOf(Sentences oldSentences, Sentences newSentences);

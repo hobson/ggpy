@@ -34,7 +34,7 @@ class VisualizationPanel(JPanel implements Observer):
     private final JTimerBar timerBar;
     private final RenderThread rt;
 
-    public VisualizationPanel(Game theGame)
+    def VisualizationPanel(Game theGame)
     {
         super(new GridBagLayout());
         this.theGame = theGame;
@@ -64,35 +64,35 @@ class VisualizationPanel(JPanel implements Observer):
     private class RenderThread(Thread):
 	    private final LinkedBlockingQueue<VizJob> queue;
 
-	    public RenderThread():
+	    def RenderThread():
 	        this.queue = new LinkedBlockingQueue<>();
 	    }
 
 	    private abstract class VizJob{
-	        public abstract boolean stop();
-	        public void render() {}
+	        def abstract bool stop();
+	        def void render() {}
 	    };
 
 	    private final class StopJob(VizJob):
-                    public boolean stop():
+                    def bool stop():
                 return true;
             }
 	    }
 
 	    private final class RenderJob(VizJob):
-	        private MachineState state;
-	        private int stepNum;
+	        state = MachineState()
+	        stepNum = int()
 
-	        public RenderJob(MachineState state, int stepNum):
+	        def RenderJob(MachineState state, int stepNum):
 	            this.state = state;
 	            this.stepNum = stepNum;
 	        }
 
-	    	        public boolean stop():
+	    	        def bool stop():
 	            return false;
 	        }
 
-	    	        public void render():
+	    	        def void render():
 	            JPanel newPanel = null;
 	            try {
 	                String XML = Match.renderStateXML(state.getContents());
@@ -105,7 +105,7 @@ class VisualizationPanel(JPanel implements Observer):
 	            }
 
 	            if(newPanel != null):
-	                boolean atEnd = (tabs.getSelectedIndex() == tabs.getTabCount()-1);
+	                bool atEnd = (tabs.getSelectedIndex() == tabs.getTabCount()-1);
 	                try {
 	                    for(int i = tabs.getTabCount(); i < stepNum; i++)
 	                        tabs.add(new Integer(i+1).toString(), new JPanel());
@@ -122,16 +122,16 @@ class VisualizationPanel(JPanel implements Observer):
 	        }
 	    }
 
-	    public void submit(MachineState state, int stepNum):
+	    def void submit(MachineState state, int stepNum):
 	        queue.add(new RenderJob(state, stepNum));
 	    }
 
-	    public void finish():
+	    def void finish():
 	        queue.add(new StopJob());
 	    }
 
-		    public void run():
-	        boolean running = true;
+		    def void run():
+	        bool running = true;
 	        int interrupted = 0;
 	        while (running):
 	            try {

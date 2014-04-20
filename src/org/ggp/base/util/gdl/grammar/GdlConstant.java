@@ -13,7 +13,7 @@ class GdlConstant(GdlTerm):
 	{
         return value;
 
-    def boolean isGround()
+    def bool isGround()
 	{
         return true;
 

@@ -71,21 +71,21 @@ class SentenceDomainModelOptimizer(object):
 		 * in other sentence forms to become unneeded or impossible, so we make multiple passes
 		 * until everything is stable.
 		 */
-        boolean somethingChanged = true;
+        bool somethingChanged = true;
         while (somethingChanged):
             somethingChanged = removeUnneededConstants(neededAndPossibleConstantsByForm, oldModel);
             somethingChanged |= removeImpossibleConstants(neededAndPossibleConstantsByForm, oldModel);
 
         return toSentenceDomainModel(neededAndPossibleConstantsByForm, oldModel);
 
-    private static void addDomain(
+    def void addDomain(
             SetMultimap<Integer, GdlConstant> setMultimap,
             SentenceFormDomain domain,
             SentenceForm form):
         for (int i = 0; i < form.getTupleSize(); i++):
             setMultimap.putAll(i, domain.getDomainForSlot(i));
 
-    private static boolean removeImpossibleConstants(
+    def bool removeImpossibleConstants(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             SentenceFormModel model) throws InterruptedException {
         Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newPossibleConstantsByForm = Maps.newHashMap();
@@ -93,13 +93,13 @@ class SentenceDomainModelOptimizer(object):
             newPossibleConstantsByForm.put(form, HashMultimap.<Integer, GdlConstant>create());
         populateInitialPossibleConstants(newPossibleConstantsByForm, curDomains, model);
 
-        boolean somethingChanged = true;
+        bool somethingChanged = true;
         while (somethingChanged):
             somethingChanged = propagatePossibleConstants(newPossibleConstantsByForm, curDomains, model);
 
         return retainNewDomains(curDomains, newPossibleConstantsByForm);
 
-    private static void populateInitialPossibleConstants(
+    def void populateInitialPossibleConstants(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newPossibleConstantsByForm,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             SentenceFormModel model) throws InterruptedException {
@@ -113,13 +113,13 @@ class SentenceDomainModelOptimizer(object):
             for (GdlSentence sentence : model.getSentencesListedAsTrue(form)):
                 addConstantsFromSentenceIfInOldDomain(newPossibleConstantsByForm, curDomains, model, sentence);
 
-    private static boolean propagatePossibleConstants(
+    def bool propagatePossibleConstants(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newPossibleConstantsByForm,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomain,
             SentenceFormModel model) throws InterruptedException {
 		//Injection: Go from the intersections of variable values in rules to the
 		//values in their heads
-        boolean somethingChanged = false;
+        bool somethingChanged = false;
 
         for (GdlRule rule : getRules(model.getDescription())):
             GdlSentence head = rule.getHead();
@@ -137,11 +137,11 @@ class SentenceDomainModelOptimizer(object):
 
         return somethingChanged;
 
-    private static boolean applyLanguageBasedInjections(
+    def bool applyLanguageBasedInjections(
             GdlConstant curName,
             GdlConstant resultingName,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newPossibleConstantsByForm) throws InterruptedException {
-        boolean somethingChanged = false;
+        bool somethingChanged = false;
         for (SentenceForm form : newPossibleConstantsByForm.keySet()):
             ConcurrencyUtils.checkForInterruption();
             if (form.getName() == curName):
@@ -153,7 +153,7 @@ class SentenceDomainModelOptimizer(object):
                 somethingChanged |= resultingFormDomain.putAll(curFormDomain);
         return somethingChanged;
 
-    private static Set<GdlConstant> getVarDomainInRuleBody(
+    def Set<GdlConstant> getVarDomainInRuleBody(
             GdlVariable varInHead,
             GdlRule rule,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newPossibleConstantsByForm,
@@ -168,7 +168,7 @@ class SentenceDomainModelOptimizer(object):
 		} catch (RuntimeException e):
             throw new RuntimeException("Error in rule " + rule + " for variable " + varInHead, e);
 
-    private static Set<GdlConstant> getVarDomainInSentence(
+    def Set<GdlConstant> getVarDomainInSentence(
             GdlVariable var,
             GdlSentence conjunct,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newPossibleConstantsByForm,
@@ -184,7 +184,7 @@ class SentenceDomainModelOptimizer(object):
                 domains.add(curDomain.get(form).get(i));
         return getIntersection(domains);
 
-    private static Set<GdlConstant> getIntersection(
+    def Set<GdlConstant> getIntersection(
             List<Set<GdlConstant>> domains):
         if (domains.isEmpty()):
             throw new IllegalArgumentException("Unsafe rule has no positive conjuncts");
@@ -194,7 +194,7 @@ class SentenceDomainModelOptimizer(object):
             intersection.retainAll(curDomain);
         return intersection;
 
-    private static boolean removeUnneededConstants(
+    def bool removeUnneededConstants(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             SentenceFormModel model) throws InterruptedException {
         Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newNeededConstantsByForm = Maps.newHashMap();
@@ -202,26 +202,26 @@ class SentenceDomainModelOptimizer(object):
             newNeededConstantsByForm.put(form, HashMultimap.<Integer, GdlConstant>create());
         populateInitialNeededConstants(newNeededConstantsByForm, curDomains, model);
 
-        boolean somethingChanged = true;
+        bool somethingChanged = true;
         while (somethingChanged):
             somethingChanged = propagateNeededConstants(newNeededConstantsByForm, curDomains, model);
 
         return retainNewDomains(curDomains, newNeededConstantsByForm);
 
-    private static boolean retainNewDomains(
+    def bool retainNewDomains(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newDomains):
-        boolean somethingChanged = false;
+        bool somethingChanged = false;
         for (SentenceForm form : curDomains.keySet()):
             SetMultimap<Integer, GdlConstant> newDomain = newDomains.get(form);
             somethingChanged |= curDomains.get(form).entries().retainAll(newDomain.entries());
         return somethingChanged;
 
-    private static boolean propagateNeededConstants(
+    def bool propagateNeededConstants(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> neededConstantsByForm,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             SentenceFormModel model) throws InterruptedException {
-        boolean somethingChanged = false;
+        bool somethingChanged = false;
 
         somethingChanged |= applyRuleHeadPropagation(neededConstantsByForm, curDomains, model);
         somethingChanged |= applyRuleBodyOnlyPropagation(neededConstantsByForm, curDomains, model);
@@ -229,11 +229,11 @@ class SentenceDomainModelOptimizer(object):
         return somethingChanged;
 
 
-    private static boolean applyRuleBodyOnlyPropagation(
+    def bool applyRuleBodyOnlyPropagation(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> neededConstantsByForm,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             SentenceFormModel model) throws InterruptedException {
-        boolean somethingChanged = false;
+        bool somethingChanged = false;
 		//If a variable does not appear in the head of a variable,
 		//then all the values that are in the intersections of all the
 		//domains from the positive conjuncts containing the variable
@@ -255,7 +255,7 @@ class SentenceDomainModelOptimizer(object):
                                 addPossibleValuesToConjunct(neededConstants, conjunct, var, neededConstantsByForm, model);
         return somethingChanged;
 
-    private static Map<GdlVariable, Set<GdlConstant>> getVarDomains(
+    def Map<GdlVariable, Set<GdlConstant>> getVarDomains(
             GdlRule rule,
             final Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             final SentenceFormModel model):
@@ -275,11 +275,11 @@ class SentenceDomainModelOptimizer(object):
 				};
 			}}, VarDomainOpts.INCLUDE_HEAD);
 
-    private static boolean applyRuleHeadPropagation(
+    def bool applyRuleHeadPropagation(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> neededConstantsByForm,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             SentenceFormModel model) throws InterruptedException {
-        boolean somethingChanged = false;
+        bool somethingChanged = false;
 		//If a term that is a variable in the head of a rule needs a
 		//particular value, AND that variable is possible (i.e. in the
 		//current domain) in every appearance of the variable in
@@ -307,7 +307,7 @@ class SentenceDomainModelOptimizer(object):
                         somethingChanged |= addPossibleValuesToConjunct(neededAndPossibleConstants, conjunct, curVar, neededConstantsByForm, model);
         return somethingChanged;
 
-    private static boolean addPossibleValuesToConjunct(
+    def bool addPossibleValuesToConjunct(
             Set<GdlConstant> neededAndPossibleConstants,
             GdlLiteral conjunct,
             GdlVariable curVar,
@@ -325,14 +325,14 @@ class SentenceDomainModelOptimizer(object):
 		} else {
             throw new IllegalArgumentException("Unexpected literal type " + conjunct.getClass() + " for literal " + conjunct);
 
-    private static boolean addPossibleValuesToSentence(
+    def bool addPossibleValuesToSentence(
             Set<GdlConstant> neededAndPossibleConstants,
             GdlSentence sentence,
             GdlVariable curVar,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> neededConstantsByForm,
             SentenceFormModel model) throws InterruptedException {
         ConcurrencyUtils.checkForInterruption();
-        boolean somethingChanged = false;
+        bool somethingChanged = false;
 
         SentenceForm form = model.getSentenceForm(sentence);
         List<GdlTerm> tuple = GdlUtils.getTupleFromSentence(sentence);
@@ -345,9 +345,9 @@ class SentenceDomainModelOptimizer(object):
                 somethingChanged |= neededConstantsByForm.get(form).putAll(i, neededAndPossibleConstants);
         return somethingChanged;
 
-    private static Iterable<GdlSentence> getPositiveConjuncts(List<GdlLiteral> body):
+    def Iterable<GdlSentence> getPositiveConjuncts(List<GdlLiteral> body):
         return Iterables.transform(Iterables.filter(body, new Predicate<GdlLiteral>():
-        		    def boolean apply(GdlLiteral input):
+        		    def bool apply(GdlLiteral input):
                 return input instanceof GdlSentence;
 		}), new Function<GdlLiteral, GdlSentence>():
         		    def GdlSentence apply(GdlLiteral input):
@@ -355,7 +355,7 @@ class SentenceDomainModelOptimizer(object):
 		});
 
 	// Unlike getPositiveConjuncts, this also returns sentences inside NOT literals.
-    private static List<GdlSentence> getAllSentencesInBody(List<GdlLiteral> body):
+    def List<GdlSentence> getAllSentencesInBody(List<GdlLiteral> body):
         final List<GdlSentence> sentences = Lists.newArrayList();
         GdlVisitors.visitAll(body, new GdlVisitor():
         		    def void visitSentence(GdlSentence sentence):
@@ -363,16 +363,16 @@ class SentenceDomainModelOptimizer(object):
 		});
         return sentences;
 
-    private static Iterable<GdlRule> getRules(List<Gdl> description):
+    def Iterable<GdlRule> getRules(List<Gdl> description):
         return Iterables.transform(Iterables.filter(description, new Predicate<Gdl>():
-        		    def boolean apply(Gdl input):
+        		    def bool apply(Gdl input):
                 return input instanceof GdlRule;
 		}), new Function<Gdl, GdlRule>():
         		    def GdlRule apply(Gdl input):
                 return (GdlRule) input;
 		});
 
-    private static final ImmutableSet<GdlConstant> ALWAYS_NEEDED_SENTENCE_NAMES = ImmutableSet.of(
+    def final ImmutableSet<GdlConstant> ALWAYS_NEEDED_SENTENCE_NAMES = ImmutableSet.of(
             GdlPool.NEXT,
             GdlPool.GOAL,
             GdlPool.LEGAL,
@@ -382,7 +382,7 @@ class SentenceDomainModelOptimizer(object):
             GdlPool.INPUT,
             GdlPool.TRUE,
             GdlPool.DOES);
-    private static void populateInitialNeededConstants(
+    def void populateInitialNeededConstants(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newNeededConstantsByForm,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> curDomains,
             SentenceFormModel model) throws InterruptedException {
@@ -401,7 +401,7 @@ class SentenceDomainModelOptimizer(object):
             for (GdlSentence sentence : getAllSentencesInBody(rule.getBody())):
                 addConstantsFromSentenceIfInOldDomain(newNeededConstantsByForm, curDomains, model, sentence);
 
-    private static void addConstantsFromSentenceIfInOldDomain(
+    def void addConstantsFromSentenceIfInOldDomain(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> newConstantsByForm,
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> oldDomain,
             SentenceFormModel model, GdlSentence sentence) throws InterruptedException {
@@ -419,7 +419,7 @@ class SentenceDomainModelOptimizer(object):
                 if (oldDomainForTerm.contains(term)):
                     newConstantsByForm.get(form).put(i, (GdlConstant) term);
 
-    private static ImmutableSentenceDomainModel toSentenceDomainModel(
+    def ImmutableSentenceDomainModel toSentenceDomainModel(
             Map<SentenceForm, SetMultimap<Integer, GdlConstant>> neededAndPossibleConstantsByForm,
             SentenceFormModel formModel) throws InterruptedException {
         Map<SentenceForm, SentenceFormDomain> domains = Maps.newHashMap();

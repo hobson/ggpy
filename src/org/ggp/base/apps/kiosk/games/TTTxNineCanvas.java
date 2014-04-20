@@ -9,14 +9,14 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_SimpleGrid;
 
 
 class TTTxNineCanvas(GameCanvas_SimpleGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Nine Board Tic Tac Toe"; }
     protected String getGameKey() { return "nineBoardTicTacToe"; }
     protected int getGridHeight() { return 9; }
     protected int getGridWidth() { return 9; }
 
-    protected boolean coordinatesStartAtOne() { return false; }
+    protected bool coordinatesStartAtOne() { return false; }
 
     private int xSelectedBoard = 0;
     private int ySelectedBoard = 0;
@@ -87,7 +87,7 @@ class TTTxNineCanvas(GameCanvas_SimpleGrid):
         }
     }
 
-    public void clearMoveSelection():
+    def void clearMoveSelection():
         submitWorkingMove(null);
         xSelectedSpot = 0;
         ySelectedSpot = 0;
@@ -97,14 +97,14 @@ class TTTxNineCanvas(GameCanvas_SimpleGrid):
 
 /*
 class TTTxNineCanvas(GameCanvas_SimpleGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
-    public String getGameName() { return "Nine Board Tic Tac Toe"; }
+    def String getGameName() { return "Nine Board Tic Tac Toe"; }
     protected String getGameKey() { return "tictactoex9"; }
     protected int getGridHeight() { return 9; }
     protected int getGridWidth() { return 9; }
 
-    protected boolean coordinatesStartAtOne() { return false; }
+    protected bool coordinatesStartAtOne() { return false; }
 
     private int xSelectedBoard = 0;
     private int ySelectedBoard = 0;
@@ -175,7 +175,7 @@ class TTTxNineCanvas(GameCanvas_SimpleGrid):
         }
     }
 
-    public void clearMoveSelection():
+    def void clearMoveSelection():
         submitWorkingMove(null);
         xSelectedSpot = 0;
         ySelectedSpot = 0;

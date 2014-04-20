@@ -32,7 +32,7 @@ class GdlCleaner(object):
             description = newDescription;
         return description;
 
-    private static List<Gdl> runOnce(List<Gdl> description):
+    def List<Gdl> runOnce(List<Gdl> description):
         List<Gdl> newDescription = new ArrayList<Gdl>();
 
 		//First: Clean up all rules with zero-element bodies
@@ -78,7 +78,7 @@ class GdlCleaner(object):
 		//See e.g. current version of Qyshinsu on the Dresden server
         description = newDescription;
         newDescription = new ArrayList<Gdl>();
-        boolean removeBaseSentences = false;
+        bool removeBaseSentences = false;
         for (Gdl gdl : description):
             if (gdl instanceof GdlRelation):
                 GdlRelation relation = (GdlRelation) gdl;
@@ -99,14 +99,14 @@ class GdlCleaner(object):
 
         return newDescription;
 
-    private static GdlRule removeNotDistinctLiterals(GdlRule rule):
+    def GdlRule removeNotDistinctLiterals(GdlRule rule):
         while(rule != null && getNotDistinctLiteral(rule) != null):
             rule = removeNotDistinctLiteral(rule, getNotDistinctLiteral(rule));
         }
         return rule;
     }
 
-    private static GdlNot getNotDistinctLiteral(GdlRule rule):
+    def GdlNot getNotDistinctLiteral(GdlRule rule):
         for(GdlLiteral literal : rule.getBody()):
             if(literal instanceof GdlNot):
                 GdlNot not = (GdlNot) literal;
@@ -124,7 +124,7 @@ class GdlCleaner(object):
     }
 
     //Returns null if the rule is useless.
-    private static GdlRule removeNotDistinctLiteral(GdlRule rule, GdlNot notDistinctLiteral):
+    def GdlRule removeNotDistinctLiteral(GdlRule rule, GdlNot notDistinctLiteral):
         //Figure out the substitution we want...
         //If we have two constants: Either remove one or
         //maybe get rid of the ___?
@@ -160,14 +160,14 @@ class GdlCleaner(object):
         throw new UnsupportedOperationException("We can't currently handle (not (distinct <function> <function>)).");
     }
 
-    private static GdlRule cleanParentheses(GdlRule rule):
+    def GdlRule cleanParentheses(GdlRule rule):
         GdlSentence cleanedHead = cleanParentheses(rule.getHead());
         List<GdlLiteral> cleanedBody = new ArrayList<GdlLiteral>();
         for(GdlLiteral literal : rule.getBody())
             cleanedBody.add(cleanParentheses(literal));
         return GdlPool.getRule(cleanedHead, cleanedBody);
 
-    private static GdlLiteral cleanParentheses(GdlLiteral literal):
+    def GdlLiteral cleanParentheses(GdlLiteral literal):
         if(literal instanceof GdlSentence):
             return cleanParentheses((GdlSentence)literal);
 		} else if(literal instanceof GdlDistinct):
@@ -186,7 +186,7 @@ class GdlCleaner(object):
             return GdlPool.getOr(disjuncts);
         throw new RuntimeException("Unexpected literal type in GdlCleaner");
 
-    private static GdlSentence cleanParentheses(GdlSentence sentence):
+    def GdlSentence cleanParentheses(GdlSentence sentence):
         if(sentence instanceof GdlProposition)
             return sentence;
         List<GdlTerm> cleanedBody = new ArrayList<GdlTerm>();
@@ -197,7 +197,7 @@ class GdlCleaner(object):
 		} else {
             return GdlPool.getRelation(sentence.getName(), cleanedBody);
 
-    private static GdlTerm cleanParentheses(GdlTerm term):
+    def GdlTerm cleanParentheses(GdlTerm term):
         if(term instanceof GdlConstant || term instanceof GdlVariable)
             return term;
         if(term instanceof GdlFunction):

@@ -31,16 +31,16 @@ class ProxyGamePlayerClient(Thread implements Subject, Observer):
     gamer = Gamer()
     private final List<Observer> observers;
 
-    private Socket theConnection;
-    private BufferedReader theInput;
-    private PrintStream theOutput;
+    theConnection = Socket()
+    theInput = BufferedReader()
+    theOutput = PrintStream()
 
     /**
      * @param args
      * Command line arguments:
      *  ProxyGamePlayerClient gamer port
      */
-    public static void main(String[] args):
+    def void main(String[] args):
         GamerLogger.setSpilloverLogfile("spilloverLog");
         GamerLogger.log("Proxy", "Starting the ProxyGamePlayerClient program.");
 
@@ -110,7 +110,7 @@ class ProxyGamePlayerClient(Thread implements Subject, Observer):
 		{
             observer.observe(event);
 
-    private long theCode;
+    theCode = int()
 
     def void run()
 	{
@@ -122,7 +122,7 @@ class ProxyGamePlayerClient(Thread implements Subject, Observer):
 			    GamerLogger.log("Proxy", "[ProxyClient] Got message: " + theMessage);
 			    String in = theMessage.theMessage;
 			    theCode = theMessage.messageCode;
-			    long receptionTime = theMessage.receptionTime;
+			    int receptionTime = theMessage.receptionTime;
                 notifyObservers(new PlayerReceivedMessageEvent(in));
 
                 Request request = new RequestFactory().create(gamer, in);

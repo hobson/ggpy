@@ -26,20 +26,20 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
 class FailsafeStateMachine(StateMachine):
 {
     private StateMachine theBackingMachine = null;
-    private List<Gdl> gameDescription;
+    gameDescription = List<Gdl>()
 
-    public FailsafeStateMachine (StateMachine theInitialMachine):
+    def FailsafeStateMachine (StateMachine theInitialMachine):
         theBackingMachine = theInitialMachine;
     }
 
-    public String getName():
+    def String getName():
         if(theBackingMachine != null):
             return "Failsafe(" + theBackingMachine.getName() + ")";
         }
         return "Failsafe(null)";
     }
 
-    public synchronized void initialize(List<Gdl> description):
+    def synchronized void initialize(List<Gdl> description):
         this.gameDescription = description;
 
         if(attemptLoadingInitialMachine())
@@ -69,7 +69,7 @@ class FailsafeStateMachine(StateMachine):
         GamerLogger.logError("StateMachine", "Failsafe Machine: online failure for regular prover. Cannot recover.");
     }
 
-    private boolean attemptLoadingInitialMachine():
+    private bool attemptLoadingInitialMachine():
         try {
             theBackingMachine.initialize(gameDescription);
             GamerLogger.log("StateMachine", "Failsafe Machine: successfully activated initial state machine for use!");
@@ -82,7 +82,7 @@ class FailsafeStateMachine(StateMachine):
         return false;
     }
 
-    private boolean attemptLoadingProverMachine():
+    private bool attemptLoadingProverMachine():
         try {
             StateMachine theStateMachine = new ProverStateMachine();
             theStateMachine.initialize(gameDescription);
@@ -99,7 +99,7 @@ class FailsafeStateMachine(StateMachine):
         return false;
     }
 
-    public int getGoal(MachineState state, Role role) throws GoalDefinitionException {
+    def int getGoal(MachineState state, Role role) throws GoalDefinitionException {
         if(theBackingMachine == null)
             return 0;
 
@@ -120,7 +120,7 @@ class FailsafeStateMachine(StateMachine):
         return getGoal(state, role);
     }
 
-    public MachineState getInitialState():
+    def MachineState getInitialState():
         if(theBackingMachine == null)
             return null;
 
@@ -139,7 +139,7 @@ class FailsafeStateMachine(StateMachine):
         return getInitialState();
     }
 
-    public List<Move> getLegalMoves(MachineState state, Role role) throws MoveDefinitionException {
+    def List<Move> getLegalMoves(MachineState state, Role role) throws MoveDefinitionException {
         if(theBackingMachine == null)
             return null;
 
@@ -160,7 +160,7 @@ class FailsafeStateMachine(StateMachine):
         return getLegalMoves(state, role);
     }
 
-    public Move getRandomMove(MachineState state, Role role) throws MoveDefinitionException {
+    def Move getRandomMove(MachineState state, Role role) throws MoveDefinitionException {
         if(theBackingMachine == null)
             return null;
 
@@ -181,7 +181,7 @@ class FailsafeStateMachine(StateMachine):
         return getRandomMove(state, role);
     }
 
-    public MachineState getMachineStateFromSentenceList(Set<GdlSentence> sentenceList):
+    def MachineState getMachineStateFromSentenceList(Set<GdlSentence> sentenceList):
         if(theBackingMachine == null)
             return null;
 
@@ -200,7 +200,7 @@ class FailsafeStateMachine(StateMachine):
         return getMachineStateFromSentenceList(sentenceList);
     }
 
-    public Move getMoveFromTerm(GdlTerm term):
+    def Move getMoveFromTerm(GdlTerm term):
         if(theBackingMachine == null)
             return null;
 
@@ -219,7 +219,7 @@ class FailsafeStateMachine(StateMachine):
         return getMoveFromTerm(term);
     }
 
-    public MachineState getNextState(MachineState state, List<Move> moves) throws TransitionDefinitionException {
+    def MachineState getNextState(MachineState state, List<Move> moves) throws TransitionDefinitionException {
         if(theBackingMachine == null)
             return null;
 
@@ -240,7 +240,7 @@ class FailsafeStateMachine(StateMachine):
         return getNextState(state, moves);
     }
 
-    public MachineState getNextStateDestructively(MachineState state, List<Move> moves) throws TransitionDefinitionException {
+    def MachineState getNextStateDestructively(MachineState state, List<Move> moves) throws TransitionDefinitionException {
         if(theBackingMachine == null)
             return null;
 
@@ -261,7 +261,7 @@ class FailsafeStateMachine(StateMachine):
         return getNextStateDestructively(state, moves);
     }
 
-    public Role getRoleFromConstant(GdlConstant constant):
+    def Role getRoleFromConstant(GdlConstant constant):
         if(theBackingMachine == null)
             return null;
 
@@ -280,7 +280,7 @@ class FailsafeStateMachine(StateMachine):
         return getRoleFromConstant(constant);
     }
 
-    public List<Role> getRoles():
+    def List<Role> getRoles():
         if(theBackingMachine == null)
             return null;
 
@@ -299,7 +299,7 @@ class FailsafeStateMachine(StateMachine):
         return getRoles();
     }
 
-    public boolean isTerminal(MachineState state):
+    def bool isTerminal(MachineState state):
         if(theBackingMachine == null)
             return false;
 
@@ -318,7 +318,7 @@ class FailsafeStateMachine(StateMachine):
         return isTerminal(state);
     }
 
-    public MachineState performDepthCharge(MachineState state, int[] theDepth) throws TransitionDefinitionException, MoveDefinitionException {
+    def MachineState performDepthCharge(MachineState state, int[] theDepth) throws TransitionDefinitionException, MoveDefinitionException {
         if(theBackingMachine == null)
             return null;
 
@@ -341,7 +341,7 @@ class FailsafeStateMachine(StateMachine):
         return performDepthCharge(state, theDepth);
     }
 
-    public void getAverageDiscountedScoresFromRepeatedDepthCharges(MachineState state, double[] avgScores, double[] avgDepth, double discountFactor, int repetitions) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
+    def void getAverageDiscountedScoresFromRepeatedDepthCharges(MachineState state, float[] avgScores, float[] avgDepth, float discountFactor, int repetitions) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
         if(theBackingMachine == null)
             return;
 
@@ -367,7 +367,7 @@ class FailsafeStateMachine(StateMachine):
         getAverageDiscountedScoresFromRepeatedDepthCharges(state, avgScores, avgDepth, discountFactor, repetitions);
     }
 
-    public void updateRoot(MachineState theState):
+    def void updateRoot(MachineState theState):
         if(theBackingMachine == null)
             return;
 
@@ -387,7 +387,7 @@ class FailsafeStateMachine(StateMachine):
         updateRoot(theState);
     }
 
-    public StateMachine getBackingMachine():
+    def StateMachine getBackingMachine():
         return theBackingMachine;
     }
 }

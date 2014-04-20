@@ -34,11 +34,11 @@ class Substituter
 	{
         return substituteRule(rule, theta);
 
-    private static GdlConstant substituteConstant(GdlConstant constant, Substitution theta)
+    def GdlConstant substituteConstant(GdlConstant constant, Substitution theta)
 	{
         return constant;
 
-    private static GdlDistinct substituteDistinct(GdlDistinct distinct, Substitution theta)
+    def GdlDistinct substituteDistinct(GdlDistinct distinct, Substitution theta)
 	{
         if (distinct.isGround())
 		{
@@ -50,7 +50,7 @@ class Substituter
 
             return GdlPool.getDistinct(arg1, arg2);
 
-    private static GdlFunction substituteFunction(GdlFunction function, Substitution theta)
+    def GdlFunction substituteFunction(GdlFunction function, Substitution theta)
 	{
         if (function.isGround())
 		{
@@ -66,7 +66,7 @@ class Substituter
 
             return GdlPool.getFunction(name, body);
 
-    private static GdlLiteral substituteLiteral(GdlLiteral literal, Substitution theta)
+    def GdlLiteral substituteLiteral(GdlLiteral literal, Substitution theta)
 	{
         if (literal instanceof GdlDistinct)
 		{
@@ -81,7 +81,7 @@ class Substituter
 		{
             return substituteSentence((GdlSentence) literal, theta);
 
-    private static GdlNot substituteNot(GdlNot not, Substitution theta)
+    def GdlNot substituteNot(GdlNot not, Substitution theta)
 	{
         if (not.isGround())
 		{
@@ -91,7 +91,7 @@ class Substituter
             GdlLiteral body = substituteLiteral(not.getBody(), theta);
             return GdlPool.getNot(body);
 
-    private static GdlOr substituteOr(GdlOr or, Substitution theta)
+    def GdlOr substituteOr(GdlOr or, Substitution theta)
 	{
         if (or.isGround())
 		{
@@ -105,11 +105,11 @@ class Substituter
 
             return GdlPool.getOr(disjuncts);
 
-    private static GdlProposition substituteProposition(GdlProposition proposition, Substitution theta)
+    def GdlProposition substituteProposition(GdlProposition proposition, Substitution theta)
 	{
         return proposition;
 
-    private static GdlRelation substituteRelation(GdlRelation relation, Substitution theta)
+    def GdlRelation substituteRelation(GdlRelation relation, Substitution theta)
 	{
         if (relation.isGround())
 		{
@@ -125,7 +125,7 @@ class Substituter
 
             return GdlPool.getRelation(name, body);
 
-    private static GdlSentence substituteSentence(GdlSentence sentence, Substitution theta)
+    def GdlSentence substituteSentence(GdlSentence sentence, Substitution theta)
 	{
         if (sentence instanceof GdlProposition)
 		{
@@ -134,7 +134,7 @@ class Substituter
 		{
             return substituteRelation((GdlRelation) sentence, theta);
 
-    private static GdlTerm substituteTerm(GdlTerm term, Substitution theta)
+    def GdlTerm substituteTerm(GdlTerm term, Substitution theta)
 	{
         if (term instanceof GdlConstant)
 		{
@@ -146,7 +146,7 @@ class Substituter
 		{
             return substituteFunction((GdlFunction) term, theta);
 
-    private static GdlTerm substituteVariable(GdlVariable variable, Substitution theta)
+    def GdlTerm substituteVariable(GdlVariable variable, Substitution theta)
 	{
         if (!theta.contains(variable))
 		{
@@ -163,7 +163,7 @@ class Substituter
             theta.put(variable, result);
             return result;
 
-    private static GdlRule substituteRule(GdlRule rule, Substitution theta)
+    def GdlRule substituteRule(GdlRule rule, Substitution theta)
 	{
         GdlSentence head = substitute(rule.getHead(), theta);
 

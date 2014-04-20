@@ -11,7 +11,7 @@ import java.io.File;
 
 class ProjectConfiguration(object):
     /* Game rulesheet repository information */
-    private static final String gamesRootDirectoryPath = "games";
+    gamesRootDirectoryPath = "games"  # String 
 
-    public static final File gameImagesDirectory = new File(new File(gamesRootDirectoryPath, "resources"), "images");
+    gameImagesDirectory = new File(new File(gamesRootDirectoryPath, "resources"), "images")  # File 
 }

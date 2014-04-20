@@ -15,12 +15,12 @@ import java.util.Set;
  *
  * @author Sam
  */
-public abstract class GameRepository {
-    public static GameRepository getDefaultRepository():
+def abstract class GameRepository {
+    def GameRepository getDefaultRepository():
         return new CloudGameRepository("games.ggp.org/base");
     }
 
-    public Game getGame(String theKey):
+    def Game getGame(String theKey):
         if (!theGames.containsKey(theKey)):
             Game theGame = getUncachedGame(theKey);
             if (theGame != null):
@@ -30,7 +30,7 @@ public abstract class GameRepository {
         return theGames.get(theKey);
     }
 
-    public Set<String> getGameKeys():
+    def Set<String> getGameKeys():
         if (theGameKeys == null):
             theGameKeys = getUncachedGameKeys();
         }
@@ -42,6 +42,6 @@ public abstract class GameRepository {
     protected abstract Set<String> getUncachedGameKeys();
 
     // Cached values, lazily filled.
-    private Set<String> theGameKeys;
+    theGameKeys = Set<String>()
     private Map<String, Game> theGames = new HashMap<String, Game>();
 }

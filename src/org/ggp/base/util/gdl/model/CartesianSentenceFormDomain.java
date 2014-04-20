@@ -23,7 +23,7 @@ import com.google.common.collect.Sets;
  * This is a more compact representation than a {@link FullSentenceFormDomain},
  * but has less expressive power.
  */
-class CartesianSentenceFormDomain implements SentenceFormDomain {
+class CartesianSentenceFormDomain(SentenceFormDomain):
     form = SentenceForm()
     private final ImmutableList<ImmutableSet<GdlConstant>> domainsForSlots;
 

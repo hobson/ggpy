@@ -23,14 +23,14 @@ import external.JSON.JSONArray;
 import external.JSON.JSONException;
 import external.JSON.JSONObject;
 
-class PlayerPresenceManager implements Subject {
+class PlayerPresenceManager(Subject):
     private Map<String,PlayerPresence> monitoredPlayers;
 
     def class PlayerPresenceChanged(Event {}):
     def class PlayerPresenceAdded(Event {}):
     def class PlayerPresenceRemoved(Event {}):
 
-    def static boolean isDifferent(String a, String b):
+    def static bool isDifferent(String a, String b):
         return !Objects.equals(a, b);
 
     def static final int INFO_PING_PERIOD_IN_SECONDS = 1;
@@ -111,7 +111,7 @@ class PlayerPresenceManager implements Subject {
         for (Observer observer : observers):
             observer.observe(event);
 
-    private static final String playerListFilename = ".ggpserver-playerlist.json";
+    playerListFilename = ".ggpserver-playerlist.json"  # String 
     private void savePlayersJSON():
         try {
             JSONObject playerListJSON = new JSONObject();

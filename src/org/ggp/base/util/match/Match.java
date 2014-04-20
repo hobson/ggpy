@@ -63,14 +63,14 @@ class Match
     private final List<Set<GdlSentence>> stateHistory;
     private final List<List<String>> errorHistory;
     private final List<Date> stateTimeHistory;
-    private boolean isCompleted;
-    private boolean isAborted;
+    isCompleted = bool()
+    isAborted = bool()
     private final List<Integer> goalValues;
     numRoles = int()
 
-    private EncodedKeyPair theCryptographicKeys;
-    private List<String> thePlayerNamesFromHost;
-    private List<Boolean> isPlayerHuman;
+    theCryptographicKeys = EncodedKeyPair()
+    thePlayerNamesFromHost = List<String>()
+    isPlayerHuman = List<Boolean>()
 
     private GdlScrambler theGdlScrambler = new NoOpGdlScrambler();
 
@@ -179,7 +179,7 @@ class Match
             }
         } catch (JSONException e) {}
 
-        // TODO: Add a way to recover cryptographic public keys and signatures.
+        // TODO: Add a way to recover cryptographic def keys and signatures.
         // Or, perhaps loading a match into memory for editing should strip those?
 
         if (theMatchObject.has("playerNamesFromHost")):
@@ -235,7 +235,7 @@ class Match
     def void appendErrors(List<String> errors):
 	    errorHistory.add(errors);
 
-    public void appendNoErrors():
+    def void appendNoErrors():
         List<String> theNoErrors = new ArrayList<String>();
         for (int i = 0; i < this.numRoles; i++):
             theNoErrors.add("");
@@ -254,7 +254,7 @@ class Match
 
 	/* Complex accessors */
 
-    public String toJSON():
+    def String toJSON():
         JSONObject theJSON = new JSONObject();
 
         try {
@@ -306,7 +306,7 @@ class Match
         return theJSON.toString();
     }
 
-    public String toXML():
+    def String toXML():
     	try {
     		JSONObject theJSON = new JSONObject(toJSON());
 
@@ -336,19 +336,19 @@ class Match
     	}
     }
 
-    public List<GdlTerm> getMostRecentMoves():
+    def List<GdlTerm> getMostRecentMoves():
         if (moveHistory.size() == 0)
             return null;
         return moveHistory.get(moveHistory.size()-1);
     }
 
-    public Set<GdlSentence> getMostRecentState():
+    def Set<GdlSentence> getMostRecentState():
         if (stateHistory.size() == 0)
             return null;
         return stateHistory.get(stateHistory.size()-1);
     }
 
-    public String getGameRepositoryURL():
+    def String getGameRepositoryURL():
         return getGame().getRepositoryURL();
     }
 
@@ -358,15 +358,15 @@ class Match
 
 	/* Simple accessors */
 
-    public String getMatchId():
+    def String getMatchId():
         return matchId;
     }
 
-    public String getRandomToken():
+    def String getRandomToken():
         return randomToken;
     }
 
-    public String getSpectatorAuthToken():
+    def String getSpectatorAuthToken():
         return spectatorAuthToken;
     }
 
@@ -376,19 +376,19 @@ class Match
     def List<List<GdlTerm>> getMoveHistory():
         return moveHistory;
 
-    public List<Set<GdlSentence>> getStateHistory():
+    def List<Set<GdlSentence>> getStateHistory():
         return stateHistory;
     }
 
-    public List<Date> getStateTimeHistory():
+    def List<Date> getStateTimeHistory():
         return stateTimeHistory;
     }
 
-    public List<List<String>> getErrorHistory():
+    def List<List<String>> getErrorHistory():
         return errorHistory;
     }
 
-    public int getPreviewClock():
+    def int getPreviewClock():
     	return previewClock;
     }
 
@@ -401,10 +401,10 @@ class Match
     def getStartTime():  # Date
 	    return startTime;
 
-    def isCompleted():  # boolean
+    def isCompleted():  # bool
 	    return isCompleted;
 
-    def isAborted():  # boolean
+    def isAborted():  # bool
 	    return isAborted;
 
     def List<Integer> getGoalValues():
@@ -415,7 +415,7 @@ class Match
 
 	/* Static methods */
 
-    public static final String getRandomString(int nLength):
+    def final String getRandomString(int nLength):
         Random theGenerator = new Random();
         String theString = "";
         for (int i = 0; i < nLength; i++):
@@ -429,7 +429,7 @@ class Match
 
     /* JSON rendering methods */
 
-    private static final String renderArrayAsJSON(List<?> theList, boolean useQuotes):
+    def final String renderArrayAsJSON(List<?> theList, bool useQuotes):
         String s = "[";
         for (int i = 0; i < theList.size(); i++):
             Object o = theList.get(i);
@@ -446,7 +446,7 @@ class Match
         return s + "]";
     }
 
-    private static final List<String> renderStateHistory(List<Set<GdlSentence>> stateHistory):
+    def final List<String> renderStateHistory(List<Set<GdlSentence>> stateHistory):
         List<String> renderedStates = new ArrayList<String>();
         for (Set<GdlSentence> aState : stateHistory):
             renderedStates.add(renderStateAsSymbolList(aState));
@@ -454,7 +454,7 @@ class Match
         return renderedStates;
     }
 
-    private static final List<String> renderMoveHistory(List<List<GdlTerm>> moveHistory):
+    def final List<String> renderMoveHistory(List<List<GdlTerm>> moveHistory):
         List<String> renderedMoves = new ArrayList<String>();
         for (List<GdlTerm> aMove : moveHistory):
             renderedMoves.add(renderArrayAsJSON(aMove, true));
@@ -462,7 +462,7 @@ class Match
         return renderedMoves;
     }
 
-    private static final List<String> renderErrorHistory(List<List<String>> errorHistory):
+    def final List<String> renderErrorHistory(List<List<String>> errorHistory):
         List<String> renderedErrors = new ArrayList<String>();
         for (List<String> anError : errorHistory):
             renderedErrors.add(renderArrayAsJSON(anError, true));
@@ -470,7 +470,7 @@ class Match
         return renderedErrors;
     }
 
-    private static final String renderStateAsSymbolList(Set<GdlSentence> theState):
+    def final String renderStateAsSymbolList(Set<GdlSentence> theState):
         // Strip out the TRUE proposition, since those are implied for states.
         String s = "( ";
         for (GdlSentence sent : theState):
@@ -482,11 +482,11 @@ class Match
 
     /* XML Rendering methods -- these are horribly inefficient and are included only for legacy/standards compatibility */
 
-    private static final String renderLeafXML(String tagName, Object value):
+    def final String renderLeafXML(String tagName, Object value):
     	return "<" + tagName + ">" + value.toString() + "</" + tagName + ">";
     }
 
-    private static final String renderMoveHistoryXML(List<List<GdlTerm>> moveHistory):
+    def final String renderMoveHistoryXML(List<List<GdlTerm>> moveHistory):
     	StringBuilder theXML = new StringBuilder();
         theXML.append("<history>");
         for (List<GdlTerm> move : moveHistory):
@@ -498,7 +498,7 @@ class Match
         return theXML.toString();
     }
 
-    private static final String renderErrorHistoryXML(List<List<String>> errorHistory):
+    def final String renderErrorHistoryXML(List<List<String>> errorHistory):
     	StringBuilder theXML = new StringBuilder();
         theXML.append("<errorHistory>");
         for (List<String> errors : errorHistory):
@@ -510,7 +510,7 @@ class Match
         return theXML.toString();
     }
 
-    private static final String renderStateHistoryXML(List<Set<GdlSentence>> stateHistory):
+    def final String renderStateHistoryXML(List<Set<GdlSentence>> stateHistory):
     	StringBuilder theXML = new StringBuilder();
         theXML.append("<herstory>");
         for (Set<GdlSentence> state : stateHistory):
@@ -519,7 +519,7 @@ class Match
         return theXML.toString();
     }
 
-    public static final String renderStateXML(Set<GdlSentence> state):
+    def final String renderStateXML(Set<GdlSentence> state):
     	StringBuilder theXML = new StringBuilder();
         theXML.append("<state>");
         for (GdlSentence sentence : state):
@@ -528,7 +528,7 @@ class Match
         return theXML.toString();
     }
 
-    private static final String renderArrayXML(String tag, JSONArray arr) throws JSONException {
+    def final String renderArrayXML(String tag, JSONArray arr) throws JSONException {
     	StringBuilder theXML = new StringBuilder();
     	for (int i = 0; i < arr.length(); i++):
     		theXML.append(renderLeafXML(tag, arr.get(i)));
@@ -536,7 +536,7 @@ class Match
         return theXML.toString();
     }
 
-    private static final String renderGdlToXML(Gdl gdl):
+    def final String renderGdlToXML(Gdl gdl):
         String rval = "";
         if(gdl instanceof GdlConstant):
             GdlConstant c = (GdlConstant)gdl;

@@ -28,10 +28,10 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 
 		//Information shared by the orderings
 		//Presumably, this will also be used to construct the iterator to be used...
-        private List<GdlVariable> varsToAssign;
-        private List<GdlSentence> sourceConjunctCandidates;
+        varsToAssign = List<GdlVariable>()
+        sourceConjunctCandidates = List<GdlSentence>()
         private List<Integer> sourceConjunctSizes; //same indexing as candidates
-        private List<GdlSentence> functionalSentences;
+        functionalSentences = List<GdlSentence>()
         private List<FunctionInfo> functionalSentencesInfo; //Indexing same as functionalSentences
         private Map<GdlVariable, Integer> varDomainSizes;
 
@@ -183,8 +183,8 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
             functionalConjunctIndices.add(functionalSentenceIndex);
             varSources.add(-1);
 
-	    def getHeuristicValue():  # long
-            long heuristic = 1;
+	    def getHeuristicValue():  # int
+            int heuristic = 1;
             for(int sourceIndex : sourceConjunctIndices):
                 heuristic *= sourceConjunctSizes.get(sourceIndex);
             for(int v = 0; v < varOrdering.size(); v++):
@@ -201,9 +201,9 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 
 //			System.out.println("Heuristic value is " + heuristic + " with functionalConjunctIndices " + functionalConjunctIndices);
             return heuristic;
-	    def isComplete():  # boolean
+	    def isComplete():  # bool
             return varOrdering.containsAll(varsToAssign);
-	    def List<IterationOrderCandidate> getChildren(boolean analyticFunctionOrdering):
+	    def List<IterationOrderCandidate> getChildren(bool analyticFunctionOrdering):
             List<IterationOrderCandidate> allChildren = new ArrayList<IterationOrderCandidate>();
             allChildren.addAll(getSourceConjunctChildren());
             allChildren.addAll(getFunctionAddedChildren(analyticFunctionOrdering));
@@ -226,7 +226,7 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
             for(int i = lastSourceConjunctIndex + 1; i < sourceConjunctCandidates.size(); i++):
                 children.add(new IterationOrderCandidate(this, i));
             return children;
-        private List<IterationOrderCandidate> getFunctionAddedChildren(boolean analyticFunctionOrdering):
+        private List<IterationOrderCandidate> getFunctionAddedChildren(bool analyticFunctionOrdering):
 			//We can't just add those functions that
 			//are "ready" to be added. We should be adding all those variables
 			//"leading up to" the functions and then applying the functions.
@@ -442,7 +442,7 @@ class IterationOrderCandidate implements Comparable<IterationOrderCandidate> {
 
 		//This class has a natural ordering that is inconsistent with equals.
     	    def int compareTo(IterationOrderCandidate o):
-            long diff = getHeuristicValue() - o.getHeuristicValue();
+            int diff = getHeuristicValue() - o.getHeuristicValue();
             if(diff < 0)
                 return -1;
             else if(diff == 0)

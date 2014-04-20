@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 
-class ImmutableConstantChecker implements ConstantChecker {
+class ImmutableConstantChecker(ConstantChecker):
     sentenceModel = ImmutableSentenceFormModel()
     private final ImmutableSetMultimap<SentenceForm, GdlSentence> sentencesByForm;
 
@@ -44,13 +44,13 @@ class ImmutableConstantChecker implements ConstantChecker {
         return new ImmutableConstantChecker(ImmutableSentenceFormModel.copyOf(sentenceModel),
                 ImmutableSetMultimap.copyOf(sentencesByForm));
 
-    def boolean hasConstantForm(GdlSentence sentence):
+    def bool hasConstantForm(GdlSentence sentence):
         for (SentenceForm form : getConstantSentenceForms()):
             if (form.matches(sentence)):
                 return true;
         return false;
 
-    def boolean isConstantForm(SentenceForm form):
+    def bool isConstantForm(SentenceForm form):
         return sentenceModel.getConstantSentenceForms().contains(form);
 
     def ImmutableSet<GdlSentence> getTrueSentences(SentenceForm form):
@@ -59,7 +59,7 @@ class ImmutableConstantChecker implements ConstantChecker {
     def ImmutableSet<SentenceForm> getConstantSentenceForms():
         return sentenceModel.getConstantSentenceForms();
 
-    def boolean isTrueConstant(GdlSentence sentence):
+    def bool isTrueConstant(GdlSentence sentence):
 		//TODO: This could be even more efficient; we don't need to bucket by form
         SentenceForm form = sentenceModel.getSentenceForm(sentence);
         return sentencesByForm.get(form).contains(sentence);

@@ -31,7 +31,7 @@ import clojure.lang.Var;
  *
  * @author Sam Schreiber
  */
-public abstract class ClojureGamer(Gamer):
+def abstract class ClojureGamer(Gamer):
 {
     Gamer theClojureGamer;
 
@@ -66,7 +66,7 @@ public abstract class ClojureGamer(Gamer):
     // subclass of this class is a Java-implementation stub for the actual real
     // Clojure implementation.
 
-    public final void preview(Game game, long timeout) throws GamePreviewException {
+    def final void preview(Game game, int timeout) throws GamePreviewException {
     	lazilyLoadGamerStub();
         try {
             theClojureGamer.preview(game, timeout);
@@ -76,7 +76,7 @@ public abstract class ClojureGamer(Gamer):
         }
     }
 
-    public final void metaGame(long timeout) throws MetaGamingException {
+    def final void metaGame(int timeout) throws MetaGamingException {
     	lazilyLoadGamerStub();
         theClojureGamer.setMatch(getMatch());
         theClojureGamer.setRoleName(getRoleName());
@@ -88,7 +88,7 @@ public abstract class ClojureGamer(Gamer):
         }
     }
 
-    public final GdlTerm selectMove(long timeout) throws MoveSelectionException {
+    def final GdlTerm selectMove(int timeout) throws MoveSelectionException {
     	lazilyLoadGamerStub();
         theClojureGamer.setMatch(getMatch());
         theClojureGamer.setRoleName(getRoleName());
@@ -101,7 +101,7 @@ public abstract class ClojureGamer(Gamer):
         }
     }
 
-    public final void stop():
+    def final void stop():
     	lazilyLoadGamerStub();
         theClojureGamer.setMatch(getMatch());
         theClojureGamer.setRoleName(getRoleName());
@@ -113,7 +113,7 @@ public abstract class ClojureGamer(Gamer):
         }
     }
 
-    public final void abort():
+    def final void abort():
     	lazilyLoadGamerStub();
         theClojureGamer.setMatch(getMatch());
         theClojureGamer.setRoleName(getRoleName());
@@ -125,7 +125,7 @@ public abstract class ClojureGamer(Gamer):
         }
     }
 
-    public final String getName():
+    def final String getName():
 	   return getClojureGamerName();
     }
 }

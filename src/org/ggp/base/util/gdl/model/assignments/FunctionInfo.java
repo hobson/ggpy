@@ -11,7 +11,7 @@ import org.ggp.base.util.gdl.model.SentenceForm;
 
 import com.google.common.collect.ImmutableList;
 
-public interface FunctionInfo {
+def interface FunctionInfo {
 	/**
 	 * Returns the SentenceForm that this functionality information
 	 * is defined for.
@@ -19,7 +19,7 @@ public interface FunctionInfo {
     SentenceForm getSentenceForm();
 
 	/**
-	 * Returns a list of boolean values indicating which slots in
+	 * Returns a list of bool values indicating which slots in
 	 * the given sentence form can be determined from the remaining
 	 * slots. (For example, in a successor function, either slot's
 	 * value would be uniquely determined by the other slot's, so

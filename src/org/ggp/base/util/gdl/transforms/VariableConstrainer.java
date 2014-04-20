@@ -62,7 +62,7 @@ class VariableConstrainer(object):
      * @param description A GDL game description.
      * @return A modified version of the same game.
      */
-    public static List<Gdl> replaceFunctionValuedVariables(List<Gdl> description) throws InterruptedException {
+    def List<Gdl> replaceFunctionValuedVariables(List<Gdl> description) throws InterruptedException {
         description = GdlCleaner.run(description);
         description = DeORer.run(description);
         SentenceFormModel model = SentenceFormModelFactory.create(description);
@@ -90,7 +90,7 @@ class VariableConstrainer(object):
      * assigned to variables. This requires adding or modifying rules to
      * account for the extra cases.
      */
-    private static class Ambiguity {
+    def class Ambiguity {
         private final SentenceForm original;
         private final ImmutableMap<Integer, GdlFunction> replacementsByOriginalTupleIndex;
         private final SentenceForm replacement;
@@ -110,7 +110,7 @@ class VariableConstrainer(object):
             this.replacement = replacement;
         }
 
-        public static Ambiguity create(SentenceForm original,
+        def Ambiguity create(SentenceForm original,
                 Map<Integer, GdlFunction> replacementsByOriginalTupleIndex,
                 SentenceForm replacement):
             return new Ambiguity(original,
@@ -118,15 +118,15 @@ class VariableConstrainer(object):
                     replacement);
         }
 
-        public SentenceForm getOriginal():
+        def SentenceForm getOriginal():
             return original;
         }
 
-        public SentenceForm getReplacement():
+        def SentenceForm getReplacement():
             return replacement;
         }
 
-            public String toString():
+            def String toString():
             return "Ambiguity [original=" + original
                     + ", replacementsByOriginalTupleIndex="
                     + replacementsByOriginalTupleIndex + ", replacement="
@@ -137,7 +137,7 @@ class VariableConstrainer(object):
          * Returns true iff the given sentence could correspond to a
          * sentence of the replacement form, for some variable assignment.
          */
-        public boolean applies(GdlSentence sentence):
+        def bool applies(GdlSentence sentence):
             if (!original.matches(sentence)):
                 return false;
             }
@@ -151,7 +151,7 @@ class VariableConstrainer(object):
             return true;
         }
 
-        public Map<GdlVariable, GdlTerm> getReplacementAssignment(GdlSentence sentence, UnusedVariableGenerator varGen):
+        def Map<GdlVariable, GdlTerm> getReplacementAssignment(GdlSentence sentence, UnusedVariableGenerator varGen):
             Preconditions.checkArgument(applies(sentence));
 
             Map<GdlVariable, GdlTerm> assignment = Maps.newHashMap();
@@ -166,7 +166,7 @@ class VariableConstrainer(object):
         }
     }
 
-    private static ListMultimap<SentenceForm, Ambiguity> getAmbiguitiesByOriginalForm(
+    def ListMultimap<SentenceForm, Ambiguity> getAmbiguitiesByOriginalForm(
             SentenceFormModel model) throws InterruptedException {
         ListMultimap<SentenceForm, Ambiguity> result = ArrayListMultimap.create();
         ListMultimap<GdlConstant, SentenceForm> formsByName = getFormsByName(model);
@@ -187,30 +187,30 @@ class VariableConstrainer(object):
         return result;
     }
 
-    private static ListMultimap<GdlConstant, SentenceForm> getFormsByName(
+    def ListMultimap<GdlConstant, SentenceForm> getFormsByName(
             SentenceFormModel model):
         return Multimaps.index(getAllSentenceForms(model), new Function<SentenceForm, GdlConstant>():
-                    public GdlConstant apply(SentenceForm input):
+                    def GdlConstant apply(SentenceForm input):
                 return input.getName();
             }
         });
     }
 
-    private static Set<SentenceForm> getAllSentenceForms(SentenceFormModel model):
+    def Set<SentenceForm> getAllSentenceForms(SentenceFormModel model):
         //The model may only have sentence forms for sentences that can actually be
         //true. It may be missing sentence forms that are used in the rules only,
         //with no actual corresponding sentences. We want to make sure these are
         //included.
         final Set<SentenceForm> forms = Sets.newHashSet(model.getSentenceForms());
         GdlVisitors.visitAll(model.getDescription(), new GdlVisitor():
-                    public void visitSentence(GdlSentence sentence):
+                    def void visitSentence(GdlSentence sentence):
                 forms.add(SimpleSentenceForm.create(sentence));
             }
         });
         return forms;
     }
 
-    private static List<Ambiguity> getAmbiguities(
+    def List<Ambiguity> getAmbiguities(
             SentenceForm original, List<SentenceForm> forms) throws InterruptedException {
         List<Ambiguity> result = Lists.newArrayList();
         for (SentenceForm form : forms):
@@ -226,7 +226,7 @@ class VariableConstrainer(object):
         return result;
     }
 
-    private static Optional<Ambiguity> findAmbiguity(SentenceForm original,
+    def Optional<Ambiguity> findAmbiguity(SentenceForm original,
             SentenceForm replacement) throws InterruptedException {
         Preconditions.checkArgument(original.getName() == replacement.getName());
         Preconditions.checkArgument(!original.equals(replacement));
@@ -239,7 +239,7 @@ class VariableConstrainer(object):
         GdlSentence replacementSentence =
                 replacement.getSentenceFromTuple(getNumberedTuple(replacement.getTupleSize()));
 
-        boolean success = findAmbiguity(originalSentence.getBody(), replacementSentence.getBody(),
+        bool success = findAmbiguity(originalSentence.getBody(), replacementSentence.getBody(),
                 replacementsByOriginalTupleIndex);
         if (success):
             return Optional.of(Ambiguity.create(original, replacementsByOriginalTupleIndex, replacement));
@@ -248,7 +248,7 @@ class VariableConstrainer(object):
         }
     }
 
-    private static boolean findAmbiguity(List<GdlTerm> originalBody,
+    def bool findAmbiguity(List<GdlTerm> originalBody,
             List<GdlTerm> replacementBody, Map<Integer, GdlFunction> replacementsByOriginalTupleIndex) throws InterruptedException {
         if (originalBody.size() != replacementBody.size()):
             return false;
@@ -273,7 +273,7 @@ class VariableConstrainer(object):
                         return false;
                     }
 
-                    boolean successSoFar = findAmbiguity(originalFunction.getBody(),
+                    bool successSoFar = findAmbiguity(originalFunction.getBody(),
                             replacementFunction.getBody(),
                             replacementsByOriginalTupleIndex);
                     if (!successSoFar):
@@ -289,7 +289,7 @@ class VariableConstrainer(object):
         return true;
     }
 
-    private static List<GdlVariable> getNumberedTuple(int tupleSize):
+    def List<GdlVariable> getNumberedTuple(int tupleSize):
         List<GdlVariable> result = Lists.newArrayList();
         for (int i = 0; i < tupleSize; i++):
             result.add(GdlPool.getVariable("?v" + Integer.toString(i)));
@@ -297,7 +297,7 @@ class VariableConstrainer(object):
         return result;
     }
 
-    private static List<Gdl> applyAmbiguitiesToRules(List<Gdl> description,
+    def List<Gdl> applyAmbiguitiesToRules(List<Gdl> description,
             ListMultimap<SentenceForm, Ambiguity> ambiguitiesByOriginalForm,
             SentenceFormModel model) throws InterruptedException {
         ImmutableList.Builder<Gdl> result = ImmutableList.builder();
@@ -313,7 +313,7 @@ class VariableConstrainer(object):
         return result.build();
     }
 
-    private static List<GdlRule> applyAmbiguities(GdlRule originalRule,
+    def List<GdlRule> applyAmbiguities(GdlRule originalRule,
             ListMultimap<SentenceForm, Ambiguity> ambiguitiesByOriginalForm,
             SentenceFormModel model) throws InterruptedException {
         List<GdlRule> rules = Lists.newArrayList(originalRule);
@@ -331,7 +331,7 @@ class VariableConstrainer(object):
         return rules;
     }
 
-    private static List<GdlRule> applyAmbiguitiesForLiteral(
+    def List<GdlRule> applyAmbiguitiesForLiteral(
             GdlLiteral literal, GdlRule rule,
             ListMultimap<SentenceForm, Ambiguity> ambiguitiesByOriginalForm,
             SentenceFormModel model) throws InterruptedException {
@@ -362,16 +362,16 @@ class VariableConstrainer(object):
         return results;
     }
 
-    private static abstract class UnusedVariableGenerator {
-        public GdlFunction replaceVariablesAndConstants(GdlFunction function):
+    def abstract class UnusedVariableGenerator {
+        def GdlFunction replaceVariablesAndConstants(GdlFunction function):
             Map<GdlVariable, GdlVariable> assignment = Maps.newHashMap();
 
             final Set<GdlTerm> termsToReplace = Sets.newHashSet();
             GdlVisitors.visitAll(function, new GdlVisitor():
-                            public void visitConstant(GdlConstant constant):
+                            def void visitConstant(GdlConstant constant):
                     termsToReplace.add(constant);
                 }
-                            public void visitVariable(GdlVariable variable):
+                            def void visitVariable(GdlVariable variable):
                     termsToReplace.add(variable);
                 }
             });
@@ -385,13 +385,13 @@ class VariableConstrainer(object):
         protected abstract GdlVariable getUnusedVariable();
     }
 
-    private static UnusedVariableGenerator getVariableGenerator(final GdlRule rule):
+    def UnusedVariableGenerator getVariableGenerator(final GdlRule rule):
         //Not thread-safe
         return new UnusedVariableGenerator():
             private int count = 1;
             private final Set<GdlVariable> originalVarsFromRule =
                     ImmutableSet.copyOf(GdlUtils.getVariables(rule));
-                    public GdlVariable getUnusedVariable():
+                    def GdlVariable getUnusedVariable():
                 GdlVariable curVar = GdlPool.getVariable("?a" + count);
                 count++;
                 while (originalVarsFromRule.contains(curVar)):
@@ -408,19 +408,19 @@ class VariableConstrainer(object):
      * sentence forms in the generated sentence model, so this is fairly easy.
      * @throws InterruptedException
      */
-    private static List<Gdl> cleanUpIrrelevantRules(List<Gdl> expandedRules) throws InterruptedException {
+    def List<Gdl> cleanUpIrrelevantRules(List<Gdl> expandedRules) throws InterruptedException {
         final ImmutableSentenceFormModel model = SentenceFormModelFactory.create(expandedRules);
         return ImmutableList.copyOf(Collections2.filter(expandedRules, new Predicate<Gdl>():
-                    public boolean apply(Gdl input):
+                    def bool apply(Gdl input):
                 if (!(input instanceof GdlRule)):
                     // If it's not a rule, leave it in
                     return true;
                 }
                 GdlRule rule = (GdlRule) input;
-                // Used just as a boolean we can change from the inner class
+                // Used just as a bool we can change from the inner class
                 final AtomicBoolean shouldRemove = new AtomicBoolean(false);
                 GdlVisitors.visitAll(rule, new GdlVisitor():
-                                    public void visitSentence(GdlSentence sentence):
+                                    def void visitSentence(GdlSentence sentence):
                         SentenceForm form = model.getSentenceForm(sentence);
                         if (!model.getSentenceForms().contains(form)):
                             shouldRemove.set(true);

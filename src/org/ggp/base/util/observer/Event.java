@@ -1,5 +1,5 @@
 package org.ggp.base.util.observer;
 
-public abstract class Event
+def abstract class Event
 {
 

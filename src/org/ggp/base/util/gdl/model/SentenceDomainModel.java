@@ -10,7 +10,7 @@ package org.ggp.base.util.gdl.model;
  * The recommended way to create a SentenceDomainModel is
  * via {@link SentenceDomainModelFactory#createWithCartesianDomains(java.util.List)}.
  */
-public interface SentenceDomainModel(SentenceFormModel):
+def interface SentenceDomainModel(SentenceFormModel):
 	/**
 	 * Gets the domain of a particular sentence form, which has
 	 * information about which particular sentences of the given

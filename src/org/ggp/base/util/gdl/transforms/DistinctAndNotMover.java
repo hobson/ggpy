@@ -44,12 +44,12 @@ class DistinctAndNotMover(object):
                 newRules.add(gdl);
         return newRules;
 
-    private static GdlRule reorderRule(GdlRule oldRule):
+    def GdlRule reorderRule(GdlRule oldRule):
         List<GdlLiteral> newBody = Lists.newArrayList(oldRule.getBody());
         rearrangeDistinctsAndNots(newBody);
         return GdlPool.getRule(oldRule.getHead(), newBody);
 
-    private static void rearrangeDistinctsAndNots(List<GdlLiteral> ruleBody):
+    def void rearrangeDistinctsAndNots(List<GdlLiteral> ruleBody):
         Integer oldIndex = findDistinctOrNotToMoveIndex(ruleBody);
         while (oldIndex != null):
             GdlLiteral literalToMove = ruleBody.get(oldIndex);
@@ -59,7 +59,7 @@ class DistinctAndNotMover(object):
             oldIndex = findDistinctOrNotToMoveIndex(ruleBody);
 
 	//Returns null if no distincts have to be moved.
-    private static Integer findDistinctOrNotToMoveIndex(List<GdlLiteral> ruleBody):
+    def Integer findDistinctOrNotToMoveIndex(List<GdlLiteral> ruleBody):
         Set<GdlVariable> setVars = Sets.newHashSet();
         for (int i = 0; i < ruleBody.size(); i++):
             GdlLiteral literal = ruleBody.get(i);
@@ -71,7 +71,7 @@ class DistinctAndNotMover(object):
                     return i;
         return null;
 
-    private static void reinsertLiteralInRightPlace(List<GdlLiteral> ruleBody,
+    def void reinsertLiteralInRightPlace(List<GdlLiteral> ruleBody,
             GdlLiteral literalToReinsert):
         Set<GdlVariable> setVars = Sets.newHashSet();
         for (int i = 0; i < ruleBody.size(); i++):
@@ -83,7 +83,7 @@ class DistinctAndNotMover(object):
                     ruleBody.add(i + 1, literalToReinsert);
                     return;
 
-    private static boolean allVarsInLiteralAlreadySet(GdlLiteral literal,
+    def bool allVarsInLiteralAlreadySet(GdlLiteral literal,
             Set<GdlVariable> setVars):
         List<GdlVariable> varsInLiteral = GdlUtils.getVariables(literal);
         for (GdlVariable varInLiteral : varsInLiteral):

@@ -24,7 +24,7 @@ class GdlProposition(GdlSentence):
 	{
         return name;
 
-    def boolean isGround()
+    def bool isGround()
 	{
         return name.isGround();
 

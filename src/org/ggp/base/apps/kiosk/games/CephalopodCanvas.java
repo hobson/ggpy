@@ -9,7 +9,7 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
 
 
 class CephalopodCanvas(GameCanvas_FancyGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Cephalopod"; }
     protected String getGameKey() { return "cephalopodMicro"; }
@@ -48,10 +48,10 @@ class CephalopodCanvas(GameCanvas_FancyGrid):
     }
 
     private void renderCaptureMask(Graphics g, int c):
-        boolean leftBit = (c == 3 || c == 5 || c == 7 || c == 9 || c == 11 || c == 13 || c == 15);
-        boolean rightBit = (c >= 9);
-        boolean topBit = (c == 3 || c == 6 || c == 7 || c == 10 || c == 11 || c == 14 || c == 15);
-        boolean bottomBit = (c == 5 || c == 6 || c == 7 || c >= 12);
+        bool leftBit = (c == 3 || c == 5 || c == 7 || c == 9 || c == 11 || c == 13 || c == 15);
+        bool rightBit = (c >= 9);
+        bool topBit = (c == 3 || c == 6 || c == 7 || c == 10 || c == 11 || c == 14 || c == 15);
+        bool bottomBit = (c == 5 || c == 6 || c == 7 || c >= 12);
 
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;

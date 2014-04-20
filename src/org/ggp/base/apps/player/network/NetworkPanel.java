@@ -31,7 +31,7 @@ class NetworkPanel(JPanel implements Observer):
 
         networkTable = new JZebraTable(model)
 		{
-        		    def boolean isCellEditable(int rowIndex, int colIndex)
+        		    def bool isCellEditable(int rowIndex, int colIndex)
 			{
                 return false;
 		};

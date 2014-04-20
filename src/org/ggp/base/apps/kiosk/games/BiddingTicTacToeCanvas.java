@@ -10,15 +10,15 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
 
 
 class BiddingTicTacToeCanvas(GameCanvas_FancyGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Tic-Tac-Toe (Bidding)"; }
     protected String getGameKey() { return "biddingTicTacToe"; }
     protected int getGridHeight() { return 5; }
     protected int getGridWidth() { return 7; }
 
-    protected boolean coordinatesStartAtOne() { return false; }
-    protected boolean useGridVisualization() { return false; }
+    protected bool coordinatesStartAtOne() { return false; }
+    protected bool useGridVisualization() { return false; }
 
     protected Set<String> getFactsAboutCell(int xCell, int yCell):
         if(onGrid(xCell, yCell)):
@@ -89,7 +89,7 @@ class BiddingTicTacToeCanvas(GameCanvas_FancyGrid):
         }
     }
 
-    private boolean onGrid(int xCell, int yCell):
+    private bool onGrid(int xCell, int yCell):
         return (xCell <= 3 && xCell >= 1 && yCell <= 3 && yCell >= 1);
     }
 

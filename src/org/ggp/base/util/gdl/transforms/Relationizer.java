@@ -98,14 +98,14 @@ class Relationizer(object):
                             newDescription.set(i, newRule);
         return newDescription;
 
-    private static List<GdlLiteral> replaceRelationInBody(
+    def List<GdlLiteral> replaceRelationInBody(
             List<GdlLiteral> body, SentenceForm trueForm):
         List<GdlLiteral> newBody = new ArrayList<GdlLiteral>();
         for(GdlLiteral literal : body):
             newBody.add(replaceRelationInLiteral(literal, trueForm));
         return newBody;
 
-    private static GdlLiteral replaceRelationInLiteral(GdlLiteral literal,
+    def GdlLiteral replaceRelationInLiteral(GdlLiteral literal,
             SentenceForm trueForm):
         if(literal instanceof GdlSentence):
             GdlSentence sentence = (GdlSentence) literal;

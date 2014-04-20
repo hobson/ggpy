@@ -14,7 +14,7 @@ class InfoRequest(Request):
     def getMatchId():  # String
         return null;
 
-    def String process(long receptionTime)
+    def String process(int receptionTime)
 	{
         InfoResponse info = new InfoResponse();
         info.setName(gamer.getName());

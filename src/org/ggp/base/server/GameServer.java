@@ -43,7 +43,7 @@ class GameServer(Thread implements Subject):
 {
     private final Match match;
     private final StateMachine stateMachine;
-    private MachineState currentState;
+    currentState = MachineState()
 
     private final List<String> hosts;
     private final List<Integer> ports;
@@ -51,16 +51,16 @@ class GameServer(Thread implements Subject):
     private final Boolean[] playerPlaysRandomly;
 
     private final List<Observer> observers;
-    private List<Move> previousMoves;
+    previousMoves = List<Move>()
 
     private Map<Role,String> mostRecentErrors;
 
-    private String saveToFilename;
-    private String spectatorServerURL;
-    private String spectatorServerKey;
-    private boolean forceUsingEntireClock;
+    saveToFilename = String()
+    spectatorServerURL = String()
+    spectatorServerKey = String()
+    forceUsingEntireClock = bool()
 
-    public GameServer(Match match, List<String> hosts, List<Integer> ports):
+    def GameServer(Match match, List<String> hosts, List<Integer> ports):
         this.match = match;
 
         this.hosts = hosts;
@@ -87,11 +87,11 @@ class GameServer(Thread implements Subject):
         forceUsingEntireClock = false;
     }
 
-    public void startSavingToFilename(String theFilename):
+    def void startSavingToFilename(String theFilename):
     	saveToFilename = theFilename;
     }
 
-    public String startPublishingToSpectatorServer(String theURL):
+    def String startPublishingToSpectatorServer(String theURL):
         spectatorServerURL = theURL;
         return publishWhenNecessary();
     }
@@ -100,7 +100,7 @@ class GameServer(Thread implements Subject):
         observers.add(observer);
     }
 
-    public List<Integer> getGoals() throws GoalDefinitionException {
+    def List<Integer> getGoals() throws GoalDefinitionException {
         List<Integer> goals = new ArrayList<Integer>();
         for (Role role : stateMachine.getRoles()):
             goals.add(stateMachine.getGoal(currentState, role));
@@ -109,7 +109,7 @@ class GameServer(Thread implements Subject):
         return goals;
     }
 
-    public StateMachine getStateMachine():
+    def StateMachine getStateMachine():
         return stateMachine;
     }
 
@@ -147,7 +147,7 @@ class GameServer(Thread implements Subject):
         mostRecentErrors.clear();
     }
 
-    public void run():
+    def void run():
         try {
         	if (match.getPreviewClock() >= 0):
         		sendPreviewRequests();
@@ -195,7 +195,7 @@ class GameServer(Thread implements Subject):
         }
     }
 
-    public void abort():
+    def void abort():
     	try {
     		match.markAborted();
     		interrupt();
@@ -248,7 +248,7 @@ class GameServer(Thread implements Subject):
     	}
     }
 
-    public String getSpectatorServerKey():
+    def String getSpectatorServerKey():
     	return spectatorServerKey;
     }
 
@@ -346,22 +346,22 @@ class GameServer(Thread implements Subject):
         interrupt();
     }
 
-    public void givePlayerUnlimitedTime(int i):
+    def void givePlayerUnlimitedTime(int i):
         playerGetsUnlimitedTime[i] = true;
     }
 
-    public void makePlayerPlayRandomly(int i):
+    def void makePlayerPlayRandomly(int i):
         playerPlaysRandomly[i] = true;
     }
 
     // Why would you want to force the game server to wait for the entire clock?
     // This can be used to rate-limit matches, so that you don't overload supporting
     // services like the repository server, spectator server, players, etc.
-    public void setForceUsingEntireClock():
+    def void setForceUsingEntireClock():
         forceUsingEntireClock = true;
     }
 
-    public Match getMatch():
+    def Match getMatch():
         return match;
     }
 

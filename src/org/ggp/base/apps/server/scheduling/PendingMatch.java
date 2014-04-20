@@ -13,13 +13,13 @@ class PendingMatch
     def final int previewClock;
     def final int startClock;
     def final int playClock;
-    def final boolean shouldScramble;
-    def final boolean shouldQueue;
-    def final boolean shouldDetail;
-    def final boolean shouldSave;
-    def final boolean shouldPublish;
+    def final bool shouldScramble;
+    def final bool shouldQueue;
+    def final bool shouldDetail;
+    def final bool shouldSave;
+    def final bool shouldPublish;
 
-    def PendingMatch(matchIdPrefix='', Game theGame, List<PlayerPresence> thePlayers, int previewClock, int startClock, int playClock, boolean shouldScramble, boolean shouldQueue, boolean shouldDetail, boolean shouldSave, boolean shouldPublish):
+    def PendingMatch(matchIdPrefix='', Game theGame, List<PlayerPresence> thePlayers, int previewClock, int startClock, int playClock, bool shouldScramble, bool shouldQueue, bool shouldDetail, bool shouldSave, bool shouldPublish):
         this.matchID = matchIdPrefix + "." + theGame.getKey() + "." + System.currentTimeMillis();
         this.theGame = theGame;
         this.thePlayers = thePlayers;

@@ -18,7 +18,7 @@ import org.ggp.base.util.gdl.grammar.GdlTerm;
  * SentenceForms, as well as a recommended implementation of
  * toString.
  */
-public interface SentenceForm {
+def interface SentenceForm {
 	/**
 	 * Returns the name of all sentences with this form.
 	 */
@@ -33,7 +33,7 @@ public interface SentenceForm {
 	/**
 	 * Returns true iff the given sentence is of this sentence form.
 	 */
-    boolean matches(GdlSentence relation);
+    bool matches(GdlSentence relation);
 
 	/**
 	 * Returns the number of constants and/or variables that a sentence

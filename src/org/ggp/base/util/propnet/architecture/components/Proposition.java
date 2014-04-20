@@ -9,9 +9,9 @@ import org.ggp.base.util.propnet.architecture.Component;
 class Proposition(Component):
 {
 	/** The name of the Proposition. */
-    private GdlSentence name;
+    name = GdlSentence()
 	/** The value of the Proposition. */
-    private boolean value;
+    value = bool()
 
 	/**
 	 * Creates a new Proposition with name <tt>name</tt>.
@@ -41,7 +41,7 @@ class Proposition(Component):
      *
      * @return The name of the Proposition.
      */
-    public void setName(GdlSentence newName)
+    def void setName(GdlSentence newName)
     {
         name = newName;
     }
@@ -51,7 +51,7 @@ class Proposition(Component):
 	 *
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
-    def boolean getValue()
+    def bool getValue()
 	{
         return value;
 
@@ -61,7 +61,7 @@ class Proposition(Component):
 	 * @param value
 	 *            The new value of the Proposition.
 	 */
-    def void setValue(boolean value)
+    def void setValue(bool value)
 	{
         this.value = value;
 

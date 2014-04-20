@@ -26,10 +26,10 @@ import org.ggp.base.util.observer.Subject;
  * pre-specified amount of time. The Gamer class is based on the <i>algorithm</i>
  * design pattern.
  */
-public abstract class Gamer implements Subject
+def abstract class Gamer implements Subject
 {
-    private Match match;
-    private GdlConstant roleName;
+    match = Match()
+    roleName = GdlConstant()
 
     def Gamer()
 	{
@@ -45,13 +45,13 @@ public abstract class Gamer implements Subject
 	 * for the minimum length of time to leave between the stated timeout
 	 * and when you actually return from metaGame and selectMove. They are
 	 * stored here so they can be shared amongst all Gamers. */
-    public static final long PREFERRED_METAGAME_BUFFER = 3900;
-    public static final long PREFERRED_PLAY_BUFFER = 1900;
+    PREFERRED_METAGAME_BUFFER = 3900  # int 
+    PREFERRED_PLAY_BUFFER = 1900  # int 
 
 	// ==== The Gaming Algorithms ====
-    def abstract void metaGame(long timeout) throws MetaGamingException;
+    def abstract void metaGame(int timeout) throws MetaGamingException;
 
-    def abstract GdlTerm selectMove(long timeout) throws MoveSelectionException;
+    def abstract GdlTerm selectMove(int timeout) throws MoveSelectionException;
 
 	/* Note that the match's goal values will not necessarily be known when
 	 * stop() is called, as we only know the final set of moves and haven't
@@ -62,13 +62,13 @@ public abstract class Gamer implements Subject
 
     def abstract void abort() throws AbortingException;  // Abruptly stop playing the match
 
-    def abstract void preview(Game g, long timeout) throws GamePreviewException;  // Preview a game
+    def abstract void preview(Game g, int timeout) throws GamePreviewException;  // Preview a game
 
 	// ==== Gamer Profile and Configuration ====
     def abstract String getName();
     def String getSpecies() { return null; }
 
-    def isComputerPlayer():  # boolean
+    def isComputerPlayer():  # bool
         return true;
 
     def getConfigPanel():  # ConfigPanel

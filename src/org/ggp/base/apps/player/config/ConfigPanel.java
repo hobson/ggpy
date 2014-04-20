@@ -4,7 +4,7 @@ import java.awt.LayoutManager;
 
 import javax.swing.JPanel;
 
-public abstract class ConfigPanel(JPanel):
+def abstract class ConfigPanel(JPanel):
 {
 
     def ConfigPanel(layoutManager=LayoutManager())

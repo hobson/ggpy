@@ -8,11 +8,11 @@ class JTimerBar(JProgressBar):
     private final class TimerThread(Thread):
 	{
 
-	    delta = long()
-        private long time;
-	    timeout = long()
+	    delta = int()
+        time = int()
+	    timeout = int()
 
-	    def TimerThread(delta=long(), long timeout)
+	    def TimerThread(delta=int(), int timeout)
 		{
             this.delta = delta;
             this.timeout = timeout;
@@ -31,7 +31,7 @@ class JTimerBar(JProgressBar):
 			{
 				// Do nothing.
 
-    private TimerThread timerThread;
+    timerThread = TimerThread()
 
     def JTimerBar()
 	{
@@ -56,7 +56,7 @@ class JTimerBar(JProgressBar):
 		{
             setIndeterminate(true);
 
-    def synchronized void time(long time, int divisions)
+    def synchronized void time(int time, int divisions)
 	{
         try
 		{

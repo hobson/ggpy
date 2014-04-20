@@ -16,7 +16,7 @@ import org.ggp.base.util.statemachine.MachineState;
 
 
 class BlokboxSimpleCanvas(GameCanvas_SimpleGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Blokbox Simple"; }
     protected String getGameKey() { return "blokbox_simple"; }
@@ -158,7 +158,7 @@ class BlokboxSimpleCanvas(GameCanvas_SimpleGrid):
 
     private int selectedRow = -1;
     private int selectedColumn = -1;
-    private String currentSelectedMove;
+    currentSelectedMove = String()
     private Iterator<String> possibleSelectedMoves = null;
     protected final void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin):
         if(xCell > 20 || yCell > 20) return;

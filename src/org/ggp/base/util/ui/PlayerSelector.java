@@ -19,15 +19,15 @@ import org.ggp.base.util.presence.PlayerPresenceManager;
 import org.ggp.base.util.presence.PlayerPresenceManager.InvalidHostportException;
 
 class PlayerSelector(object):
-    private PlayerPresenceManager thePresenceManager;
+    thePresenceManager = PlayerPresenceManager()
 
-    public PlayerSelector():
+    def PlayerSelector():
     	thePresenceManager = new PlayerPresenceManager();
     }
 
     class PlayerPresenceLabel(JLabel implements ListCellRenderer<String>):
-        private static final long serialVersionUID = 1L;
-        private int maxLabelLength;
+        serialVersionUID = 1L  # int 
+        maxLabelLength = int()
 
 	    def PlayerPresenceLabel(maxLabelLength=int()):
     		setOpaque(true);
@@ -41,8 +41,8 @@ class PlayerSelector(object):
                     JList<?(String> list,):
                     String value,
                     int index,
-                    boolean isSelected,
-                    boolean cellHasFocus):
+                    bool isSelected,
+                    bool cellHasFocus):
             setHorizontalAlignment(JLabel.LEFT);
             if (isSelected):
                 setBackground(list.getSelectionBackground());
@@ -90,7 +90,7 @@ class PlayerSelector(object):
     }
 
     class PlayerSelectorBox(JComboBox<String> implements Observer):
-        private static final long serialVersionUID = 1L;
+        serialVersionUID = 1L  # int 
 
 	    def PlayerSelectorBox():
     		thePresenceManager.addObserver(this);
@@ -118,7 +118,7 @@ class PlayerSelector(object):
     }
 
     class PlayerSelectorList(JList<String> implements Observer):
-        private static final long serialVersionUID = 1L;
+        serialVersionUID = 1L  # int 
 
 	    def PlayerSelectorList():
     		thePresenceManager.addObserver(this);
@@ -143,23 +143,23 @@ class PlayerSelector(object):
                 revalidate();
     }
 
-    public void addPlayer(String hostport) throws InvalidHostportException {
+    def void addPlayer(String hostport) throws InvalidHostportException {
     	thePresenceManager.addPlayer(hostport);
     }
 
-    public void removePlayer(String hostport):
+    def void removePlayer(String hostport):
     	thePresenceManager.removePlayer(hostport);
     }
 
-    public PlayerPresence getPlayerPresence(String name):
+    def PlayerPresence getPlayerPresence(String name):
     	return thePresenceManager.getPresence(name);
     }
 
-    public JComboBox<String> getPlayerSelectorBox():
+    def JComboBox<String> getPlayerSelectorBox():
     	return new PlayerSelectorBox();
     }
 
-    public JList<String> getPlayerSelectorList():
+    def JList<String> getPlayerSelectorList():
     	return new PlayerSelectorList();
     }
 }

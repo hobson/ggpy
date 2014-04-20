@@ -23,7 +23,7 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
 class VariableRenamer
 {
 
-    private int nextName;
+    nextName = int()
 
     def VariableRenamer()
 	{

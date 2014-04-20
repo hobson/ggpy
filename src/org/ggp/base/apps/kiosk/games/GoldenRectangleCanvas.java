@@ -8,7 +8,7 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_SimpleGrid;
 
 
 class GoldenRectangleCanvas(GameCanvas_SimpleGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Golden Rectangle"; }
     protected String getGameKey() { return "golden_rectangle"; }
@@ -51,7 +51,7 @@ class GoldenRectangleCanvas(GameCanvas_SimpleGrid):
         }
     }
 
-    public void clearMoveSelection():
+    def void clearMoveSelection():
         submitWorkingMove(null);
         selectedColumn = 0;
 

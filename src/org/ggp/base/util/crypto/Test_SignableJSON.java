@@ -15,7 +15,7 @@ import external.JSON.JSONObject;
  * @author Sam
  */
 class Test_SignableJSON(TestCase):
-    public void testSimpleSigning() throws JSONException {
+    def void testSimpleSigning() throws JSONException {
         EncodedKeyPair p = BaseCryptography.generateKeys();
 
         JSONObject x = new JSONObject("{3:{7:9,c:4,2:5,a:6},1:2,2:3,moves:14,states:21,alpha:'beta'}");

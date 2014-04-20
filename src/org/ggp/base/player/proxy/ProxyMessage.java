@@ -8,14 +8,14 @@ import java.net.SocketException;
 import org.ggp.base.util.logging.GamerLogger;
 
 
-class ProxyMessage implements Serializable {
-    private static final long serialVersionUID = 1237859L;
+class ProxyMessage(Serializable):
+    serialVersionUID = 1237859L  # int 
 
-    public final long messageCode;
-    public final long receptionTime;
-    public final String theMessage;
+    def final int messageCode;
+    def final int receptionTime;
+    def final String theMessage;
 
-    public ProxyMessage(String theMessage, long messageCode, long receptionTime):
+    def ProxyMessage(String theMessage, int messageCode, int receptionTime):
         this.theMessage = theMessage;
         this.messageCode = messageCode;
         this.receptionTime = receptionTime;
@@ -25,10 +25,10 @@ class ProxyMessage implements Serializable {
         return "ProxyMessage<" + messageCode + ", " + receptionTime + ">[\"" + theMessage + "\"]";
     }
 
-    public static ProxyMessage readFrom(BufferedReader theInput) throws SocketException {
+    def ProxyMessage readFrom(BufferedReader theInput) throws SocketException {
         try {
-            long messageCode = Long.parseLong(theInput.readLine());
-            long receptionTime = Long.parseLong(theInput.readLine());
+            int messageCode = Long.parseLong(theInput.readLine());
+            int receptionTime = Long.parseLong(theInput.readLine());
             String theMessage = theInput.readLine();
             return new ProxyMessage(theMessage, messageCode, receptionTime);
         } catch(SocketException se):
@@ -50,7 +50,7 @@ class ProxyMessage implements Serializable {
         }
     }
 
-    public void writeTo(PrintStream theOutput):
+    def void writeTo(PrintStream theOutput):
     	synchronized (theOutput):
     		theOutput.println(messageCode);
     		theOutput.println(receptionTime);

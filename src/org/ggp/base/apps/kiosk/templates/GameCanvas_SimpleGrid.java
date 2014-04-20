@@ -29,17 +29,17 @@ import org.ggp.base.apps.kiosk.GameCanvas;
  *
  * @author Sam Schreiber
  */
-public abstract class GameCanvas_SimpleGrid(GameCanvas):
-    public static final long serialVersionUID = 0x1;
+def abstract class GameCanvas_SimpleGrid(GameCanvas):
+    serialVersionUID = 0x1  # int 
 
     protected abstract int getGridWidth();
     protected abstract int getGridHeight();
     protected abstract void renderCell(Graphics g, int x, int y);
     protected abstract void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin);
 
-    protected boolean coordinatesStartAtOne() { return true; }
+    protected bool coordinatesStartAtOne() { return true; }
 
-    private Graphics mostRecentG;
+    mostRecentG = Graphics()
     protected final void paintGame(Graphics g):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;

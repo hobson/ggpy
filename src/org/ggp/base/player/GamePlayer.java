@@ -25,10 +25,10 @@ class GamePlayer(Thread implements Subject):
 {
     private final int port;
     private final Gamer gamer;
-    private ServerSocket listener;
+    listener = ServerSocket()
     private final List<Observer> observers;
 
-    public GamePlayer(int port, Gamer gamer) throws IOException
+    def GamePlayer(int port, Gamer gamer) throws IOException
     {
         observers = new ArrayList<Observer>();
         listener = null;

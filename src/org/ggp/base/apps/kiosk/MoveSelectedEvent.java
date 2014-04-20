@@ -4,23 +4,23 @@ import org.ggp.base.util.observer.Event;
 import org.ggp.base.util.statemachine.Move;
 
 class MoveSelectedEvent(Event):
-    private Move theMove;
-    private boolean isFinal = false;
+    theMove = Move()
+    private bool isFinal = false;
 
-    public MoveSelectedEvent(Move m):
+    def MoveSelectedEvent(Move m):
         theMove = m;
     }
 
-    public MoveSelectedEvent(Move m, boolean isFinal):
+    def MoveSelectedEvent(Move m, bool isFinal):
     	theMove = m;
     	this.isFinal = isFinal;
     }
 
-    public Move getMove():
+    def Move getMove():
         return theMove;
     }
 
-    public boolean isFinal():
+    def bool isFinal():
     	return isFinal;
     }
 }

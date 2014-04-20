@@ -25,7 +25,7 @@ class ProverCache
 	/**
 	 * NOTE: The given sentence must have been renamed with a VariableRenamer.
 	 */
-    def boolean contains(GdlSentence renamedSentence)
+    def bool contains(GdlSentence renamedSentence)
 	{
         return contents.containsKey(renamedSentence);
 

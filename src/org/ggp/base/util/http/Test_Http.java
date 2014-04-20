@@ -18,12 +18,12 @@ import junit.framework.TestCase;
  * @author Sam
  */
 class Test_Http(TestCase):
-    public void testSimpleEcho() throws IOException {
+    def void testSimpleEcho() throws IOException {
         SocketPair testPair = new SocketPair();
         doSimpleEchoCheck(testPair, "Hello World", "SamplePlayer");
     }
 
-    public void testPathologicalEchos() throws IOException {
+    def void testPathologicalEchos() throws IOException {
         SocketPair testPair = new SocketPair();
         doSimpleEchoCheck(testPair, "", "");
         doSimpleEchoCheck(testPair, "", "SamplePlayer");
@@ -34,7 +34,7 @@ class Test_Http(TestCase):
         doSimpleEchoCheck(testPair, "Test String", "abcdefgijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
 
-    public void testGenericPOSTs() throws IOException {
+    def void testGenericPOSTs() throws IOException {
         SocketPair testPair = new SocketPair();
         doClientEchoCheckOverPOST(testPair, "", "");
         doClientEchoCheckOverPOST(testPair, "Test String", "");
@@ -42,7 +42,7 @@ class Test_Http(TestCase):
         doClientEchoCheckOverPOST(testPair, "1234567890abcdefgijklmnopqrstuvwxyz!@#$%^&*()1234567890", "");
     }
 
-    public void testGenericGETs() throws IOException {
+    def void testGenericGETs() throws IOException {
         SocketPair testPair = new SocketPair();
         doClientEchoCheckOverGET(testPair, "", "");
         doClientEchoCheckOverGET(testPair, "Test String", "");
@@ -103,10 +103,10 @@ class Test_Http(TestCase):
     // Utility class to create a pair of client/server sockets
     // on the local machine that are connected to each other.
     private class SocketPair {
-        public Socket client;
-        public Socket server;
+        def Socket client;
+        def Socket server;
 
-        public SocketPair():
+        def SocketPair():
             // Create a server socket on the first available port.
             int defaultTestingPort = 13174;
             ServerSocket ss = null;

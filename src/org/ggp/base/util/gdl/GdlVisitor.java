@@ -24,10 +24,10 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
  *
  * @author Alex Landau
  */
-public abstract class GdlVisitor {
+def abstract class GdlVisitor {
     def void visitGdl(Gdl gdl):
 		// Do nothing; override in a subclass to do something.
-    public void visitTerm(GdlTerm term):
+    def void visitTerm(GdlTerm term):
 		// Do nothing; override in a subclass to do something.
     def void visitConstant(GdlConstant constant):
 		// Do nothing; override in a subclass to do something.

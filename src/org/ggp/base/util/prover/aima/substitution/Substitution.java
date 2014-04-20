@@ -25,11 +25,11 @@ class Substitution
 
         return result;
 
-    def boolean contains(GdlVariable variable)
+    def bool contains(GdlVariable variable)
 	{
         return contents.containsKey(variable);
 
-    def boolean equals(Object o)
+    def bool equals(Object o)
 	{
         if ((o != null) && (o instanceof Substitution))
 		{

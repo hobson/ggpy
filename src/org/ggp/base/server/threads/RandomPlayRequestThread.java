@@ -9,7 +9,7 @@ import org.ggp.base.util.statemachine.Move;
 
 class RandomPlayRequestThread(PlayRequestThread):
 {
-    private Move move;
+    move = Move()
 
     def RandomPlayRequestThread(match=Match(), List<Move> legalMoves)
 	{

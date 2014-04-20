@@ -34,7 +34,7 @@ class OutcomePanel(JPanel implements Observer):
 
         logTable = new JZebraTable(model)
 		{
-        		    def boolean isCellEditable(int rowIndex, int colIndex)
+        		    def bool isCellEditable(int rowIndex, int colIndex)
 			{
                 return false;
 		};

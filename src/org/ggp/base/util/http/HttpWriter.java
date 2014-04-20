@@ -7,7 +7,7 @@ import java.net.URLEncoder;
 
 class HttpWriter
 {
-    public static void writeAsClientGET(Socket socket, String hostField, String data, String playerName) throws IOException
+    def void writeAsClientGET(Socket socket, String hostField, String data, String playerName) throws IOException
     {
         PrintWriter pw = new PrintWriter(socket.getOutputStream());
 

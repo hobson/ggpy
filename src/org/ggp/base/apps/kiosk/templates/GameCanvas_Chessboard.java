@@ -12,14 +12,14 @@ import java.awt.Graphics;
  *
  * @author Sam Schreiber
  */
-public abstract class GameCanvas_Chessboard(GameCanvas_FancyGrid):
-    private static final long serialVersionUID = 1L;
+def abstract class GameCanvas_Chessboard(GameCanvas_FancyGrid):
+    serialVersionUID = 1L  # int 
 
     protected int getGridHeight() { return 8; }
     protected int getGridWidth() { return 8; }
 
-    protected final boolean useGridVisualization() { return true; }
-    protected final boolean coordinatesStartAtOne() { return true; }
+    protected final bool useGridVisualization() { return true; }
+    protected final bool coordinatesStartAtOne() { return true; }
 
     protected final void renderCellBackground(Graphics g, int xCell, int yCell):
         int width = g.getClipBounds().width;
@@ -33,7 +33,7 @@ public abstract class GameCanvas_Chessboard(GameCanvas_FancyGrid):
     }
 
     // This function only works properly when coordinates start at one.
-    public final static String coordinateToLetter(int x):
+    def final static String coordinateToLetter(int x):
         return "" + ((char) ('a' + x - 1));
     }
 }

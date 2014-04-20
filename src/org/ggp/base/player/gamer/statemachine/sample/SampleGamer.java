@@ -19,19 +19,19 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
  * for any gamer.
  *
  * If you want to quickly create a gamer of your own, extend this class and
- * add the last core function : public Move stateMachineSelectMove(long timeout)
+ * add the last core function : def Move stateMachineSelectMove(int timeout)
  */
 
-public abstract class SampleGamer(StateMachineGamer):
+def abstract class SampleGamer(StateMachineGamer):
 {
-    def void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 		// Sample gamers do no metagaming at the beginning of the match.
 
 
 
 	/** This will currently return "SampleGamer"
-	 * If you are working on : public abstract class MyGamer(SampleGamer):
+	 * If you are working on : def abstract class MyGamer(SampleGamer):
 	 * Then this function would return "MyGamer"
 	 */
     def getName():  # String
@@ -53,6 +53,6 @@ public abstract class SampleGamer(StateMachineGamer):
     def stateMachineAbort():  # void
 		// Sample gamers do no special cleanup when the match ends abruptly.
 
-    def void preview(Game g, long timeout) throws GamePreviewException {
+    def void preview(Game g, int timeout) throws GamePreviewException {
 		// Sample gamers do no game previewing.
 }

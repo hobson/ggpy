@@ -54,7 +54,7 @@ class SentenceFormModelFactory(object):
                 rulesByForm,
                 trueSentencesByForm);
 
-    private static ImmutableSet<SentenceForm> getIndependentSentenceForms(
+    def ImmutableSet<SentenceForm> getIndependentSentenceForms(
             ImmutableSet<SentenceForm> sentenceForms,
             ImmutableSetMultimap<SentenceForm, SentenceForm> dependencyGraph):
         SetMultimap<SentenceForm, SentenceForm> augmentedGraph = augmentGraphWithLanguageRules(dependencyGraph, sentenceForms);
@@ -63,7 +63,7 @@ class SentenceFormModelFactory(object):
                         SentenceForms.DOES_PRED);
         return ImmutableSet.copyOf(Sets.difference(sentenceForms, moveDependentSentenceForms));
 
-    private static ImmutableSet<SentenceForm> getConstantSentenceForms(
+    def ImmutableSet<SentenceForm> getConstantSentenceForms(
             ImmutableSet<SentenceForm> sentenceForms,
             ImmutableSetMultimap<SentenceForm, SentenceForm> dependencyGraph):
         SetMultimap<SentenceForm, SentenceForm> augmentedGraph = augmentGraphWithLanguageRules(dependencyGraph, sentenceForms);
@@ -77,7 +77,7 @@ class SentenceFormModelFactory(object):
 	 * that apply in a looser sense: TRUE forms depend on NEXT forms and DOES
 	 * forms depend on LEGAL forms.
 	 */
-    private static SetMultimap<SentenceForm, SentenceForm> augmentGraphWithLanguageRules(
+    def SetMultimap<SentenceForm, SentenceForm> augmentGraphWithLanguageRules(
             ImmutableSetMultimap<SentenceForm, SentenceForm> dependencyGraph, ImmutableSet<SentenceForm> sentenceForms):
         SetMultimap<SentenceForm, SentenceForm> newGraph = HashMultimap.create();
         newGraph.putAll(dependencyGraph);
@@ -92,7 +92,7 @@ class SentenceFormModelFactory(object):
                     newGraph.put(form, legalForm);
         return newGraph;
 
-    private static ImmutableSetMultimap<SentenceForm, SentenceForm> getDependencyGraph(
+    def ImmutableSetMultimap<SentenceForm, SentenceForm> getDependencyGraph(
             ImmutableSet<SentenceForm> sentenceForms,
             ImmutableSetMultimap<SentenceForm, GdlRule> rulesByForm):
         SetMultimap<SentenceForm, SentenceForm> dependencyGraph = HashMultimap.create();
@@ -103,7 +103,7 @@ class SentenceFormModelFactory(object):
                 dependencyGraph.putAll(head, getSentenceFormsInBody(bodyLiteral, sentenceForms));
         return ImmutableSetMultimap.copyOf(dependencyGraph);
 
-    private static Set<SentenceForm> getSentenceFormsInBody(
+    def Set<SentenceForm> getSentenceFormsInBody(
             GdlLiteral bodyLiteral, final ImmutableSet<SentenceForm> sentenceForms):
         final Set<SentenceForm> forms = new HashSet<SentenceForm>();
         GdlVisitors.visitAll(bodyLiteral, new GdlVisitor():
@@ -114,7 +114,7 @@ class SentenceFormModelFactory(object):
 		});
         return forms;
 
-    private static ImmutableSetMultimap<SentenceForm, GdlSentence> getTrueSentencesByForm(
+    def ImmutableSetMultimap<SentenceForm, GdlSentence> getTrueSentencesByForm(
             ImmutableList<Gdl> gameRules,
             ImmutableSet<SentenceForm> sentenceForms):
         ImmutableSetMultimap.Builder<SentenceForm, GdlSentence> builder =
@@ -130,7 +130,7 @@ class SentenceFormModelFactory(object):
 
         return builder.build();
 
-    private static ImmutableSetMultimap<SentenceForm, GdlRule> getRulesByForm(
+    def ImmutableSetMultimap<SentenceForm, GdlRule> getRulesByForm(
             ImmutableList<Gdl> gameRules,
             ImmutableSet<SentenceForm> sentenceForms):
         ImmutableSetMultimap.Builder<SentenceForm, GdlRule> builder =
@@ -146,6 +146,6 @@ class SentenceFormModelFactory(object):
 
         return builder.build();
 
-    private static ImmutableSet<SentenceForm> getSentenceForms(
+    def ImmutableSet<SentenceForm> getSentenceForms(
             ImmutableList<Gdl> gameRules) throws InterruptedException {
         return new SentenceFormsFinder(gameRules).findSentenceForms();

@@ -44,7 +44,7 @@ class SimpleSentenceForm(AbstractSentenceForm):
                 ImmutableMap.copyOf(functions),
                 tupleSize);
 
-    private static SimpleSentenceForm create(GdlFunction function):
+    def SimpleSentenceForm create(GdlFunction function):
         GdlConstant name = function.getName();
         int arity = function.arity();
         int tupleSize = 0;
@@ -81,7 +81,7 @@ class SimpleSentenceForm(AbstractSentenceForm):
                 functions,
                 tupleSize);
 
-    def boolean matches(GdlSentence sentence):
+    def bool matches(GdlSentence sentence):
         if (!sentence.getName().equals(name)):
             return false;
         if (sentence.arity() != arity):
@@ -99,7 +99,7 @@ class SimpleSentenceForm(AbstractSentenceForm):
                     return false;
         return true;
 
-    private boolean matches(GdlFunction function):
+    private bool matches(GdlFunction function):
         if (!function.getName().equals(name)):
             return false;
         if (function.arity() != arity):

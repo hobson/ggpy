@@ -10,7 +10,7 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_FancyGrid;
 
 // NOTE: I still don't fully understand how this game actually works. -Sam
 class ChickenTicTacToeCanvas(GameCanvas_FancyGrid):
-    public static final long serialVersionUID = 0x1;
+    serialVersionUID = 0x1  # int 
 
     def String getGameName() { return "Tic-Tac-Toe (Chicken)"; }
     protected String getGameKey() { return "chickentictactoe"; }

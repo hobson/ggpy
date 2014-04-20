@@ -49,7 +49,7 @@ class GdlUtils(object):
             addSentencesInLiteral(literal, result);
         return result;
 
-    private static void addSentencesInLiteral(GdlLiteral literal,
+    def void addSentencesInLiteral(GdlLiteral literal,
             Collection<GdlSentence> sentences):
         if(literal instanceof GdlSentence):
             sentences.add((GdlSentence) literal);
@@ -75,7 +75,7 @@ class GdlUtils(object):
 		} catch(RuntimeException e):
             throw new RuntimeException(e.getMessage() + "\nSentence was " + sentence);
         return tuple;
-    private static void addBodyToTuple(List<GdlTerm> body, List<GdlTerm> tuple):
+    def void addBodyToTuple(List<GdlTerm> body, List<GdlTerm> tuple):
         for(GdlTerm term : body):
             if(term instanceof GdlConstant):
                 tuple.add(term);
@@ -99,7 +99,7 @@ class GdlUtils(object):
 		} catch(RuntimeException e):
             throw new RuntimeException(e.getMessage() + "\nSentence was " + sentence);
         return tuple;
-    private static void addBodyToGroundTuple(List<GdlTerm> body, List<GdlConstant> tuple):
+    def void addBodyToGroundTuple(List<GdlTerm> body, List<GdlConstant> tuple):
         for(GdlTerm term : body):
             if(term instanceof GdlConstant):
                 tuple.add((GdlConstant) term);
@@ -124,7 +124,7 @@ class GdlUtils(object):
             return null;
         return assignment;
 
-    private static boolean fillAssignmentBody(
+    def bool fillAssignmentBody(
             Map<GdlVariable, GdlConstant> assignment, List<GdlTerm> leftBody,
             List<GdlTerm> rightBody):
 		//left body contains variables; right body shouldn't
@@ -155,12 +155,12 @@ class GdlUtils(object):
                     return false;
         return true;
 
-    def static boolean containsTerm(GdlSentence sentence, GdlTerm term):
+    def static bool containsTerm(GdlSentence sentence, GdlTerm term):
         if(sentence instanceof GdlProposition)
             return false;
         return containsTerm(sentence.getBody(), term);
 
-    private static boolean containsTerm(List<GdlTerm> body, GdlTerm term):
+    def bool containsTerm(List<GdlTerm> body, GdlTerm term):
         for(GdlTerm curTerm : body):
             if(curTerm.equals(term))
                 return true;

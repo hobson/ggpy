@@ -35,17 +35,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 
-class AssignmentsImpl implements Assignments {
-    private boolean empty;
-    private boolean allDone = false;
+class AssignmentsImpl(Assignments):
+    empty = bool()
+    private bool allDone = false;
 	//Contains all the assignments of variables we could make
     private Map<GdlVariable, GdlConstant> headAssignment;
 
-    private List<GdlVariable> varsToAssign;
-    private List<ImmutableList<GdlConstant>> valuesToIterate;
-    private List<AssignmentFunction> valuesToCompute;
+    varsToAssign = List<GdlVariable>()
+    valuesToIterate = List<ImmutableList<GdlConstant>>()
+    valuesToCompute = List<AssignmentFunction>()
     private List<Integer> indicesToChangeWhenNull; //See note below
-    private List<GdlDistinct> distincts;
+    distincts = List<GdlDistinct>()
     private List<GdlVariable> varsToChangePerDistinct; //indexing same as distincts
 
 	/*
@@ -297,7 +297,7 @@ class AssignmentsImpl implements Assignments {
     def AssignmentsImpl():
 		//The assignment is impossible; return nothing
         empty = true;
-	    public AssignmentsImpl(GdlRule rule, /*SentenceModel model,*/ Map<GdlVariable, Set<GdlConstant>> varDomains,
+	    def AssignmentsImpl(GdlRule rule, /*SentenceModel model,*/ Map<GdlVariable, Set<GdlConstant>> varDomains,
             Map<SentenceForm, ?(FunctionInfo> functionInfoMap,):
             Map<SentenceForm, ?(Collection<GdlSentence>> completedSentenceFormValues)):
         this(Collections.EMPTY_MAP, rule, varDomains, functionInfoMap, completedSentenceFormValues);
@@ -366,12 +366,12 @@ class AssignmentsImpl implements Assignments {
         return new AssignmentsImpl(headAssignment, rule, varDomains, functionInfoMap, completedSentenceFormValues);
 
 	//returns true if all variables were set successfully
-    private static boolean setVariablesInHead(GdlSentence head,
+    def bool setVariablesInHead(GdlSentence head,
             GdlSentence sentence, Map<GdlVariable, GdlConstant> assignment):
         if(head instanceof GdlProposition)
             return true;
         return setVariablesInHead(head.getBody(), sentence.getBody(), assignment);
-    private static boolean setVariablesInHead(List<GdlTerm> head,
+    def bool setVariablesInHead(List<GdlTerm> head,
             List<GdlTerm> sentence, Map<GdlVariable, GdlConstant> assignment):
         for(int i = 0; i < head.size(); i++):
             GdlTerm headTerm = head.get(i);
@@ -417,7 +417,7 @@ class AssignmentsImpl implements Assignments {
             Map<SentenceForm, ?(FunctionInfo> functionInfoMap,):
             Map<SentenceForm, Integer> completedSentenceFormSizes,
             Map<GdlVariable, GdlConstant> preassignment,
-            boolean analyticFunctionOrdering):
+            bool analyticFunctionOrdering):
 		//Here are the things we need to pass into the first IOC constructor
         List<GdlSentence> sourceConjunctCandidates = new ArrayList<GdlSentence>();
 		//What is a source conjunct candidate?
@@ -486,7 +486,7 @@ class AssignmentsImpl implements Assignments {
             searchQueue.addAll(curNode.getChildren(analyticFunctionOrdering));
         throw new RuntimeException("Found no complete iteration orderings");
 
-    private static Map<GdlVariable, Integer> getVarDomainSizes(/*GdlRule rule,
+    def Map<GdlVariable, Integer> getVarDomainSizes(/*GdlRule rule,
             SentenceModel model*/Map<GdlVariable, Set<GdlConstant>> varDomains):
         Map<GdlVariable, Integer> varDomainSizes = new HashMap<GdlVariable, Integer>();
 		//Map<GdlVariable, Set<GdlConstant>> varDomains = model.getVarDomains(rule);
@@ -494,7 +494,7 @@ class AssignmentsImpl implements Assignments {
             varDomainSizes.put(var, varDomains.get(var).size());
         return varDomainSizes;
 
-    def static long getNumAssignmentsEstimate(GdlRule rule, Map<GdlVariable, Set<GdlConstant>> varDomains, ConstantChecker checker) throws InterruptedException {
+    def static int getNumAssignmentsEstimate(GdlRule rule, Map<GdlVariable, Set<GdlConstant>> varDomains, ConstantChecker checker) throws InterruptedException {
 		//First we need the best iteration order
 		//Arguments we'll need to pass in:
 		//- A SentenceModel

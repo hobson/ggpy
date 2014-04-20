@@ -6,7 +6,7 @@ import java.util.Set;
 import org.ggp.base.util.gdl.grammar.GdlSentence;
 
 class MachineState(object):
-    public MachineState():
+    def MachineState():
         this.contents = null;
     }
 
@@ -16,7 +16,7 @@ class MachineState(object):
      * many cases this will do exactly what we want.
      */
     private final Set<GdlSentence> contents;
-    public MachineState(Set<GdlSentence> contents)
+    def MachineState(Set<GdlSentence> contents)
     {
         this.contents = contents;
     }
@@ -49,7 +49,7 @@ class MachineState(object):
     		return contents.toString();
     }
 
-    def boolean equals(Object o)
+    def bool equals(Object o)
     {
         if ((o != null) && (o instanceof MachineState))
         {

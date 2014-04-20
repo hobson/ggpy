@@ -8,7 +8,7 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_SimpleGrid;
 
 
 class ConnectFourCanvas(GameCanvas_SimpleGrid):
-    private static final long serialVersionUID = 1L;
+    serialVersionUID = 1L  # int 
 
     def String getGameName() { return "Connect Four"; }
     protected String getGameKey() { return "connectFour"; }
@@ -49,7 +49,7 @@ class ConnectFourCanvas(GameCanvas_SimpleGrid):
         }
     }
 
-    public void clearMoveSelection():
+    def void clearMoveSelection():
         submitWorkingMove(null);
         selectedColumn = 0;
 

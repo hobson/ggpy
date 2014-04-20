@@ -22,7 +22,7 @@ import org.ggp.base.util.statemachine.Role;
  *
  * @author schreib
  */
-public abstract class RequestThread(Thread):
+def abstract class RequestThread(Thread):
 {
     gameServer = GameServer()
     host = ''

@@ -16,7 +16,7 @@ class SignableJSON(object):
     // backwards compatibility.
     static final String theCanonicalizationPrefix = "A";
 
-    public static void signJSON(JSONObject theJSON, String thePK, String theSK) throws JSONException {
+    def void signJSON(JSONObject theJSON, String thePK, String theSK) throws JSONException {
         if (theJSON.has("matchHostPK") || theJSON.has("matchHostSignature"))
             throw new RuntimeException("Already signed JSON! Cannot sign again.");
 
@@ -25,13 +25,13 @@ class SignableJSON(object):
         theJSON.put("matchHostSignature", theCanonicalizationPrefix + theSignature);
     }
 
-    public static boolean isSignedJSON(JSONObject theJSON) throws JSONException {
+    def bool isSignedJSON(JSONObject theJSON) throws JSONException {
         if (theJSON.has("matchHostPK") && theJSON.has("matchHostSignature"))
             return true;
         return false;
     }
 
-    public static boolean verifySignedJSON(JSONObject theJSON) throws JSONException {
+    def bool verifySignedJSON(JSONObject theJSON) throws JSONException {
         if (!theJSON.has("matchHostPK") || !theJSON.has("matchHostSignature"))
             throw new RuntimeException("JSON not signed! Cannot verify.");
 

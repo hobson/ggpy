@@ -18,7 +18,7 @@ import com.google.common.collect.Lists;
  * A {@link SentenceFormDomain} implementation that stores every possible
  * version of the sentence.
  */
-class FullSentenceFormDomain implements SentenceFormDomain {
+class FullSentenceFormDomain(SentenceFormDomain):
     form = SentenceForm()
     private final ImmutableList<GdlSentence> domain;
     private final ImmutableList<ImmutableSet<GdlConstant>> domainsForSlots;

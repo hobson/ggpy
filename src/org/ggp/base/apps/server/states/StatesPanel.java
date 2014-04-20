@@ -51,7 +51,7 @@ class StatesPanel(JPanel implements Observer):
 	        // moved off into a new thread
 	        int stepNum = stepCount;
 	        stepCount++;
-	        boolean atEnd = (tabs.getSelectedIndex() == tabs.getTabCount()-1);
+	        bool atEnd = (tabs.getSelectedIndex() == tabs.getTabCount()-1);
 
 	        for(int i = tabs.getTabCount(); i < stepNum; i++)
 	        	tabs.add(new Integer(i+1).toString(), new JPanel());

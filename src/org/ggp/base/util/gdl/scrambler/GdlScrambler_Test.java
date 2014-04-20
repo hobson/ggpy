@@ -27,7 +27,7 @@ class GdlScrambler_Test(TestCase):
      * simply renders the Gdl and parses it in the naive way, without doing any
      * special modification. This is the trivial case of "scrambling".
      */
-    public void testNoOpScrambler() throws GdlFormatException, SymbolFormatException {
+    def void testNoOpScrambler() throws GdlFormatException, SymbolFormatException {
     	runScramblerTest(new NoOpGdlScrambler());
     }
 
@@ -37,7 +37,7 @@ class GdlScrambler_Test(TestCase):
      * with scrambled versions, drawing new random tokens first from a list of
      * English words, and appending suffixes when the original list is exhausted.
 	 */
-    public void testMappingScrambler() throws GdlFormatException, SymbolFormatException {
+    def void testMappingScrambler() throws GdlFormatException, SymbolFormatException {
     	runScramblerTest(new MappingGdlScrambler(new Random()));
     }
 
@@ -47,7 +47,7 @@ class GdlScrambler_Test(TestCase):
      * be used to scramble a specific match in the same way, even if it stored and
      * reloaded in the meantime.
      */
-    public void testMappingScramblerConsistency():
+    def void testMappingScramblerConsistency():
     	GdlScrambler aScrambler = new MappingGdlScrambler(new Random(123));
     	GdlScrambler bScrambler = new MappingGdlScrambler(new Random(123));
     	GdlScrambler cScrambler = new MappingGdlScrambler(new Random(234));

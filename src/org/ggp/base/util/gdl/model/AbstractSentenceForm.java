@@ -16,7 +16,7 @@ import com.google.common.collect.Lists;
  * methods. SentenceForm implementations should extend this class and should
  * not reimplement hashCode, equals, or toString.
  */
-public abstract class AbstractSentenceForm implements SentenceForm {
+def abstract class AbstractSentenceForm(SentenceForm):
     private final Supplier<GdlSentence> underscoreSentence =
             Suppliers.memoize(new Supplier<GdlSentence>():
             			    def get():  # GdlSentence
@@ -24,7 +24,7 @@ public abstract class AbstractSentenceForm implements SentenceForm {
                     return getSentenceFromTuple(underscores);
 			});
 
-    def boolean equals(Object obj):
+    def bool equals(Object obj):
         if (obj == null):
             return false;
         if (!(obj instanceof SentenceForm)):
@@ -36,7 +36,7 @@ public abstract class AbstractSentenceForm implements SentenceForm {
             return false;
         return o.matches(underscoreSentence.get());
 
-    private static List<GdlConstant> getNUnderscores(int numTerms):
+    def List<GdlConstant> getNUnderscores(int numTerms):
         GdlConstant underscore = GdlPool.UNDERSCORE;
         List<GdlConstant> terms = Lists.newArrayListWithCapacity(numTerms);
         for (int i = 0; i < numTerms; i++):

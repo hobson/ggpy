@@ -29,7 +29,7 @@ import com.google.common.collect.Sets;
 class SentenceFormsFinder(object):
     private final ImmutableList<Gdl> description;
     private final Map<NameAndArity, List<TermModel>> sentencesModel = Maps.newHashMap();
-    private boolean haveCreatedModel = false;
+    private bool haveCreatedModel = false;
 
     def SentenceFormsFinder(ImmutableList<Gdl> description):
         this.description = description;
@@ -135,7 +135,7 @@ class SentenceFormsFinder(object):
 
     private void applyRulesToModel() throws InterruptedException {
 		//Apply injections
-        boolean changeMade = true;
+        bool changeMade = true;
         while (changeMade):
             changeMade = false;
             for (Gdl gdl : description):
@@ -143,18 +143,18 @@ class SentenceFormsFinder(object):
                     changeMade |= addRule((GdlRule) gdl);
             changeMade |= applyLanguageRules();
 
-    private boolean applyLanguageRules() throws InterruptedException {
-        boolean changesMade = false;
+    private bool applyLanguageRules() throws InterruptedException {
+        bool changesMade = false;
         changesMade |= applyInjection(new NameAndArity(GdlPool.INIT, 1), new NameAndArity(GdlPool.TRUE, 1));
         changesMade |= applyInjection(new NameAndArity(GdlPool.NEXT, 1), new NameAndArity(GdlPool.TRUE, 1));
         changesMade |= applyInjection(new NameAndArity(GdlPool.LEGAL, 2), new NameAndArity(GdlPool.DOES, 2));
         return changesMade;
 
-    private boolean applyInjection(NameAndArity oldName,
+    private bool applyInjection(NameAndArity oldName,
             NameAndArity newName) throws InterruptedException {
         ConcurrencyUtils.checkForInterruption();
         Preconditions.checkArgument(oldName.getArity() == newName.getArity());
-        boolean changesMade = false;
+        bool changesMade = false;
         if (sentencesModel.containsKey(oldName)):
             List<TermModel> oldModel = sentencesModel.get(oldName);
             if (!sentencesModel.containsKey(newName)):
@@ -168,7 +168,7 @@ class SentenceFormsFinder(object):
                 changesMade |= newModel.get(i).mergeIn(oldModel.get(i));
         return changesMade;
 
-    private boolean addRule(GdlRule rule) throws InterruptedException {
+    private bool addRule(GdlRule rule) throws InterruptedException {
 		// Stuff can make it into the head sentence form either as part of
 		// the head of the rule as presented or due to a variable connected
 		// to the positive literals in the rule. (In the latter case, it
@@ -223,9 +223,9 @@ class SentenceFormsFinder(object):
             if (gdl instanceof GdlSentence):
                 addSentenceToModel((GdlSentence) gdl, ImmutableMap.<GdlVariable, TermModel>of());
 
-    private boolean addSentenceToModel(GdlSentence sentence, Map<GdlVariable, TermModel> varsToModelsMap) throws InterruptedException {
+    private bool addSentenceToModel(GdlSentence sentence, Map<GdlVariable, TermModel> varsToModelsMap) throws InterruptedException {
         ConcurrencyUtils.checkForInterruption();
-        boolean changesMade = false;
+        bool changesMade = false;
         NameAndArity sentenceName = new NameAndArity(sentence);
         if (!sentencesModel.containsKey(sentenceName)):
             changesMade = true;
@@ -233,14 +233,14 @@ class SentenceFormsFinder(object):
         changesMade |= addBodyToModel(sentencesModel.get(sentenceName), sentence.getBody(), varsToModelsMap);
         return changesMade;
 
-    private static List<TermModel> getNTermModels(int arity):
+    def List<TermModel> getNTermModels(int arity):
         List<TermModel> result = Lists.newArrayListWithCapacity(arity);
         for (int i = 0; i < arity; i++):
             result.add(new TermModel());
         return result;
 
-    private static boolean addBodyToModel(List<TermModel> model, List<GdlTerm> body, Map<GdlVariable, TermModel> varsToModelsMap):
-        boolean changesMade = false;
+    def bool addBodyToModel(List<TermModel> model, List<GdlTerm> body, Map<GdlVariable, TermModel> varsToModelsMap):
+        bool changesMade = false;
         if (model.size() != body.size()):
             throw new IllegalArgumentException("The term model and body sizes don't match: model is " + model + ", body is: " + body);
         for (int i = 0; i < model.size(); i++):
@@ -249,7 +249,7 @@ class SentenceFormsFinder(object):
             changesMade |= termModel.addTerm(term, varsToModelsMap);
         return changesMade;
 
-    private static class TermModel {
+    def class TermModel {
         private final Set<GdlConstant> possibleConstants = Sets.newHashSet();
         private final Map<NameAndArity, List<TermModel>> possibleFunctions = Maps.newHashMap();
 
@@ -262,8 +262,8 @@ class SentenceFormsFinder(object):
 	    def Map<NameAndArity, List<TermModel>> getPossibleFunctions():
             return possibleFunctions;
 
-	    def boolean mergeIn(TermModel other):
-            boolean changesMade = false;
+	    def bool mergeIn(TermModel other):
+            bool changesMade = false;
             changesMade |= possibleConstants.addAll(other.possibleConstants);
             for (NameAndArity key : other.possibleFunctions.keySet()):
                 List<TermModel> theirFunctionBodies = other.possibleFunctions.get(key);
@@ -280,8 +280,8 @@ class SentenceFormsFinder(object):
 
 	    def TermModel():
 
-	    def boolean addTerm(GdlTerm term, Map<GdlVariable, TermModel> varsToModelsMap):
-            boolean changesMade = false;
+	    def bool addTerm(GdlTerm term, Map<GdlVariable, TermModel> varsToModelsMap):
+            bool changesMade = false;
             if (term instanceof GdlConstant):
                 changesMade = possibleConstants.add((GdlConstant) term);
 			} else if (term instanceof GdlFunction):
@@ -306,7 +306,7 @@ class SentenceFormsFinder(object):
             termModel.mergeIn(originalTermModel);
             return termModel;
 
-    private static class NameAndArity {
+    def class NameAndArity {
 	    name = GdlConstant()
 	    arity = int()
 
@@ -335,7 +335,7 @@ class SentenceFormsFinder(object):
             result = prime * result + ((name == null) ? 0 : name.hashCode());
             return result;
 
-    	    def boolean equals(Object obj):
+    	    def bool equals(Object obj):
             if (this == obj)
                 return true;
             if (obj == null)

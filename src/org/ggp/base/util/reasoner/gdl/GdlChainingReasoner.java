@@ -67,7 +67,7 @@ class GdlChainingReasoner implements
         GdlSentenceSet sentencesToAdd = GdlSentenceSet.create();
         while (asnItr.hasNext()):
             Map<GdlVariable, GdlConstant> assignment = asnItr.next();
-            boolean allSatisfied = true;
+            bool allSatisfied = true;
             for (GdlLiteral literal : rule.getBody()):
                 ConcurrencyUtils.checkForInterruption();
                 if (!satisfies(assignment, literal, sentencesSoFar.getSentences())):
@@ -80,7 +80,7 @@ class GdlChainingReasoner implements
                 asnItr.changeOneInNext(GdlUtils.getVariables(head), assignment);
         return sentencesToAdd;
 
-    private boolean satisfies(Map<GdlVariable, GdlConstant> assignment,
+    private bool satisfies(Map<GdlVariable, GdlConstant> assignment,
             GdlLiteral literal, SetMultimap<SentenceForm, GdlSentence> sentencesSoFar):
         if (literal instanceof GdlSentence):
             return satisfiesSentence(assignment, (GdlSentence) literal, sentencesSoFar);
@@ -101,14 +101,14 @@ class GdlChainingReasoner implements
 		} else {
             throw new IllegalArgumentException("Unrecognized type of literal " + literal.getClass() + " for literal " + literal);
 
-    private boolean satisfiesSentence(Map<GdlVariable, GdlConstant> assignment,
+    private bool satisfiesSentence(Map<GdlVariable, GdlConstant> assignment,
             GdlSentence sentence,
             SetMultimap<SentenceForm, GdlSentence> sentencesSoFar):
         sentence = CommonTransforms.replaceVariables(sentence, assignment);
         SentenceForm form = model.getSentenceForm(sentence);
         return sentencesSoFar.get(form).contains(sentence);
 
-    private boolean satisfiesDistinct(Map<GdlVariable, GdlConstant> assignment,
+    private bool satisfiesDistinct(Map<GdlVariable, GdlConstant> assignment,
             GdlDistinct distinct):
         distinct = CommonTransforms.replaceVariables(distinct, assignment);
         return distinct.getArg1() != distinct.getArg2();
@@ -119,7 +119,7 @@ class GdlChainingReasoner implements
         oldSentences.putAll(newSentences.getSentences());
         return oldSentences;
 
-    def boolean isSubsetOf(
+    def bool isSubsetOf(
             GdlSentenceSet oldSentences,
             GdlSentenceSet newSentences):
         for (Entry<SentenceForm, GdlSentence> entry : newSentences.getSentences().entries()):
@@ -165,7 +165,7 @@ class GdlChainingReasoner implements
                 while (asnItr.hasNext()):
                     Map<GdlVariable, GdlConstant> assignment = asnItr.next();
 
-                    boolean allSatisfied = true;
+                    bool allSatisfied = true;
                     for (GdlLiteral literal : rule.getBody()):
                         if (literal == chosenLiteral):
 							//Already satisfied

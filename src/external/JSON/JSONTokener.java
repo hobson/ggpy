@@ -41,12 +41,12 @@ SOFTWARE.
 class JSONTokener(object):
 
     private int 	character;
-    private boolean eof;
+    eof = bool()
     private int 	index;
     private int 	line;
     private char 	previous;
     private Reader 	reader;
-    private boolean usePrevious;
+    usePrevious = bool()
 
 
     /**
@@ -54,7 +54,7 @@ class JSONTokener(object):
      *
      * @param reader     A reader.
      */
-    public JSONTokener(Reader reader):
+    def JSONTokener(Reader reader):
         this.reader = reader.markSupported() ?
         		reader : new BufferedReader(reader);
         this.eof = false;
@@ -69,7 +69,7 @@ class JSONTokener(object):
     /**
      * Construct a JSONTokener from an InputStream.
      */
-    public JSONTokener(InputStream inputStream) throws JSONException {
+    def JSONTokener(InputStream inputStream) throws JSONException {
         this(new InputStreamReader(inputStream));
     }
 
@@ -79,7 +79,7 @@ class JSONTokener(object):
      *
      * @param s     A source string.
      */
-    public JSONTokener(String s):
+    def JSONTokener(String s):
         this(new StringReader(s));
     }
 
@@ -89,7 +89,7 @@ class JSONTokener(object):
      * so that you can test for a digit or letter before attempting to parse
      * the next number or identifier.
      */
-    public void back() throws JSONException {
+    def void back() throws JSONException {
         if (usePrevious || index <= 0):
             throw new JSONException("Stepping back two steps is not supported");
         }
@@ -106,7 +106,7 @@ class JSONTokener(object):
      * between 'a' and 'f'.
      * @return  An int between 0 and 15, or -1 if c was not a hex digit.
      */
-    public static int dehexchar(char c):
+    def int dehexchar(char c):
         if (c >= '0' && c <= '9'):
             return c - '0';
         }
@@ -119,7 +119,7 @@ class JSONTokener(object):
         return -1;
     }
 
-    public boolean end():
+    def bool end():
     	return eof && !usePrevious;
     }
 
@@ -129,7 +129,7 @@ class JSONTokener(object):
      * can consume.
      * @return true if not yet at the end of the source.
      */
-    public boolean more() throws JSONException {
+    def bool more() throws JSONException {
         next();
         if (end()):
             return false;
@@ -144,7 +144,7 @@ class JSONTokener(object):
      *
      * @return The next character, or 0 if past the end of the source string.
      */
-    public char next() throws JSONException {
+    def char next() throws JSONException {
         int c;
         if (this.usePrevious):
         	this.usePrevious = false;
@@ -183,7 +183,7 @@ class JSONTokener(object):
      * @return The character.
      * @throws JSONException if the character does not match.
      */
-    public char next(char c) throws JSONException {
+    def char next(char c) throws JSONException {
         char n = next();
         if (n != c):
             throw syntaxError("Expected '" + c + "' and instead saw '" +
@@ -202,7 +202,7 @@ class JSONTokener(object):
      *   Substring bounds error if there are not
      *   n characters remaining in the source string.
      */
-     public String next(int n) throws JSONException {
+     def String next(int n) throws JSONException {
             if (n == 0):
              return "";
          }
@@ -226,7 +226,7 @@ class JSONTokener(object):
      * @throws JSONException
      * @return  A character, or 0 if there are no more characters.
      */
-    public char nextClean() throws JSONException {
+    def char nextClean() throws JSONException {
         for (;;):
             char c = next();
             if (c == 0 || c > ' '):
@@ -242,12 +242,12 @@ class JSONTokener(object):
      * allow strings in single quotes, but an implementation is allowed to
      * accept them.
      * @param quote The quoting character, either
-     *      <code>"</code>&nbsp;<small>(double quote)</small> or
+     *      <code>"</code>&nbsp;<small>(float quote)</small> or
      *      <code>'</code>&nbsp;<small>(single quote)</small>.
      * @return      A String.
      * @throws JSONException Unterminated string.
      */
-    public String nextString(char quote) throws JSONException {
+    def String nextString(char quote) throws JSONException {
         char c;
         StringBuffer sb = new StringBuffer();
         for (;;):
@@ -304,7 +304,7 @@ class JSONTokener(object):
      * @param  delimiter A delimiter character.
      * @return   A string.
      */
-    public String nextTo(char delimiter) throws JSONException {
+    def String nextTo(char delimiter) throws JSONException {
         StringBuffer sb = new StringBuffer();
         for (;;):
             char c = next();
@@ -325,7 +325,7 @@ class JSONTokener(object):
      * @param delimiters A set of delimiter characters.
      * @return A string, trimmed.
      */
-    public String nextTo(String delimiters) throws JSONException {
+    def String nextTo(String delimiters) throws JSONException {
         char c;
         StringBuffer sb = new StringBuffer();
         for (;;):
@@ -349,7 +349,7 @@ class JSONTokener(object):
      *
      * @return An object.
      */
-    public Object nextValue() throws JSONException {
+    def Object nextValue() throws JSONException {
         char c = nextClean();
         String string;
 
@@ -396,7 +396,7 @@ class JSONTokener(object):
      * @return The requested character, or zero if the requested character
      * is not found.
      */
-    public char skipTo(char to) throws JSONException {
+    def char skipTo(char to) throws JSONException {
         char c;
         try {
             int startIndex = this.index;
@@ -428,7 +428,7 @@ class JSONTokener(object):
      * @param message The error message.
      * @return  A JSONException object, suitable for throwing
      */
-    public JSONException syntaxError(String message):
+    def JSONException syntaxError(String message):
         return new JSONException(message + toString());
     }
 

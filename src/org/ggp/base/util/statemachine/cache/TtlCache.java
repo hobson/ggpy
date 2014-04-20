@@ -37,7 +37,7 @@ class TtlCache<K, V> implements Map<K,V>
             this.value = value;
             this.ttl = ttl;
 
-    		        public boolean equals(Object o):
+    		        def bool equals(Object o):
 		    if (o instanceof TtlCache.Entry):
 		        return ((Entry)o).value.equals(value);
 		    }
@@ -51,7 +51,7 @@ class TtlCache<K, V> implements Map<K,V>
         this.contents = new HashMap<K, Entry>();
         this.ttl = ttl;
 
-    def synchronized boolean containsKey(Object key)
+    def synchronized bool containsKey(Object key)
 	{
         return contents.containsKey(key);
 
@@ -94,11 +94,11 @@ class TtlCache<K, V> implements Map<K,V>
         contents.clear();
     }
 
-    def synchronized boolean containsValue(Object value):
+    def synchronized bool containsValue(Object value):
         return contents.containsValue(value);
     }
 
-    def synchronized boolean isEmpty():
+    def synchronized bool isEmpty():
         return contents.isEmpty();
     }
 
@@ -124,8 +124,8 @@ class TtlCache<K, V> implements Map<K,V>
     }
 
     private class entrySetMapEntry implements Map.Entry<K,V> {
-        private K key;
-        private V value;
+        key = K()
+        value = V()
 
         entrySetMapEntry(K k, V v):
             key = k;

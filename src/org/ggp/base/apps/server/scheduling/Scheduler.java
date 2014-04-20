@@ -32,9 +32,9 @@ class Scheduler implements Observer
 {
     def EncodedKeyPair signingKeys;
 
-    private JTabbedPane matchesTabbedPane;
-    private SchedulingPanel schedulingPanel;
-    private LeaderboardPanel leaderboardPanel;
+    matchesTabbedPane = JTabbedPane()
+    schedulingPanel = SchedulingPanel()
+    leaderboardPanel = LeaderboardPanel()
 
     private final List<PendingMatch> schedulingQueue;
     private final Set<String> activePlayers;
@@ -59,7 +59,7 @@ class Scheduler implements Observer
 		} else {
             doSchedule(spec);
 
-    private synchronized boolean canSchedule(PendingMatch spec):
+    private synchronized bool canSchedule(PendingMatch spec):
         for (PlayerPresence player : spec.thePlayers):
             if (!player.getStatus().equals("available")):
                 return false;

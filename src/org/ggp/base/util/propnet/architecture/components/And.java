@@ -12,7 +12,7 @@ class And(Component):
 	 *
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
-    def boolean getValue()
+    def bool getValue()
 	{
         for ( Component component : getInputs() )
 		{

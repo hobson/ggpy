@@ -8,7 +8,7 @@ import org.ggp.base.player.proxy.ProxyGamePlayer;
 
 class ProxiedPlayerRunner
 {
-    public static void main(String[] args) throws IOException
+    def void main(String[] args) throws IOException
     {
         Class<?(Gamer> toLaunch = RandomGamer.class;):
         ProxyGamePlayer player = new ProxyGamePlayer(9147, toLaunch);

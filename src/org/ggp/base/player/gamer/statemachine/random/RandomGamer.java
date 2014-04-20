@@ -26,14 +26,14 @@ class RandomGamer(StateMachineGamer):
     def getName():  # String
         return "Random";
 
-    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
-        long start = System.currentTimeMillis();
+        int start = System.currentTimeMillis();
 
         List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
         Move selection = (moves.get(new Random().nextInt(moves.size())));
 
-        long stop = System.currentTimeMillis();
+        int stop = System.currentTimeMillis();
 
         notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
         return selection;
@@ -41,10 +41,10 @@ class RandomGamer(StateMachineGamer):
     def getInitialStateMachine():  # StateMachine
         return new CachedStateMachine(new ProverStateMachine());
 
-    def void preview(Game g, long timeout) throws GamePreviewException {
+    def void preview(Game g, int timeout) throws GamePreviewException {
 		// Random gamer does no game previewing.
 
-    def void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def void stateMachineMetaGame(int timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 		// Random gamer does no metagaming at the beginning of the match.
 

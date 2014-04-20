@@ -6,7 +6,7 @@ import org.ggp.base.util.gdl.grammar.GdlSentence;
 
 
 class SentenceModelUtils(object):
-    def static boolean inSentenceFormGroup(GdlSentence sentence,
+    def static bool inSentenceFormGroup(GdlSentence sentence,
             Set<SentenceForm> forms):
         for(SentenceForm form : forms)
             if(form.matches(sentence))

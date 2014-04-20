@@ -29,7 +29,7 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
  * @author Ethan Dreyfuss
  */
 class DeORer(object):
-    public static List<Gdl> run(List<Gdl> description)
+    def List<Gdl> run(List<Gdl> description)
     {
         List<Gdl> newDesc = new ArrayList<Gdl>();
         for(Gdl gdl : description)
@@ -49,15 +49,15 @@ class DeORer(object):
         return newDesc;
     }
 
-    private static List<List<GdlLiteral>> deOr(List<GdlLiteral> rhs):
+    def List<List<GdlLiteral>> deOr(List<GdlLiteral> rhs):
         List<List<GdlLiteral>> wrapped = new ArrayList<List<GdlLiteral>>();
         wrapped.add(rhs);
         return deOr2(wrapped);
     }
 
-    private static List<List<GdlLiteral>> deOr2(List<List<GdlLiteral>> rhsList):
+    def List<List<GdlLiteral>> deOr2(List<List<GdlLiteral>> rhsList):
         List<List<GdlLiteral>> rval = new ArrayList<List<GdlLiteral>>();
-        boolean expandedSomething = false;
+        bool expandedSomething = false;
         for(List<GdlLiteral> rhs : rhsList)
         {
             int i=0;
@@ -100,7 +100,7 @@ class DeORer(object):
             return deOr2(rval);
     }
 
-    private static List<Gdl> expandFirstOr(Gdl gdl):
+    def List<Gdl> expandFirstOr(Gdl gdl):
         List<Gdl> rval;
         List<Gdl> expandedChild;
         if(gdl instanceof GdlDistinct)

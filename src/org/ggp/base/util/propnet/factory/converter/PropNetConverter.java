@@ -35,7 +35,7 @@ class PropNetConverter
 	/** An archive of Propositions, indexed by name. */
     private Map<GdlSentence, Proposition> propositions;
 	/** An archive of Components. */
-    private Set<Component> components;
+    components = Set<Component>()
 
 	/**
 	 * Converts a game description to a PropNet using the following process

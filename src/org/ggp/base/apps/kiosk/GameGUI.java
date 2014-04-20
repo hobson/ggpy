@@ -21,21 +21,21 @@ import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.Role;
 
 class GameGUI(JPanel implements Subject, Observer, ActionListener):
-    public static final long serialVersionUID = 0x1;
+    serialVersionUID = 0x1  # int 
 
-    private GameCanvas theCanvas;
-    private Move workingMove;
+    theCanvas = GameCanvas()
+    workingMove = Move()
 
-    private JLabel workingMoveLabel;
-    private JButton submitMoveButton;
-    private JButton clearSelectionButton;
+    workingMoveLabel = JLabel()
+    submitMoveButton = JButton()
+    clearSelectionButton = JButton()
 
-    private boolean gameOver = false;
+    private bool gameOver = false;
 
-    private boolean moveBeingSubmitted = false;
-    private boolean stillMetagaming = true;
+    private bool moveBeingSubmitted = false;
+    private bool stillMetagaming = true;
 
-    public GameGUI(GameCanvas theCanvas):
+    def GameGUI(GameCanvas theCanvas):
         super(new BorderLayout());
 
         this.theCanvas = theCanvas;
@@ -77,22 +77,22 @@ class GameGUI(JPanel implements Subject, Observer, ActionListener):
         updateControls();
     }
 
-    public void beginPlay():
+    def void beginPlay():
     	stillMetagaming = false;
     	updateControls();
     }
 
-    public void updateGameState(MachineState gameState):
+    def void updateGameState(MachineState gameState):
     	moveBeingSubmitted = false;
         theCanvas.updateGameState(gameState);
         updateControls();
     }
 
-    public void setRole(Role r):
+    def void setRole(Role r):
         theCanvas.setRole(r);
     }
 
-    public void observe(Event event):
+    def void observe(Event event):
         if(event instanceof MoveSelectedEvent):
             workingMove = ((MoveSelectedEvent)event).getMove();
             if(((MoveSelectedEvent)event).isFinal()):
@@ -119,7 +119,7 @@ class GameGUI(JPanel implements Subject, Observer, ActionListener):
         }
     }
 
-    public void showFinalMessage(String theMessage):
+    def void showFinalMessage(String theMessage):
         workingMoveLabel.setText(theMessage);
         workingMoveLabel.setForeground(Color.RED);
         gameOver = true;
@@ -129,7 +129,7 @@ class GameGUI(JPanel implements Subject, Observer, ActionListener):
         repaint();
     }
 
-    public void actionPerformed(ActionEvent e):
+    def void actionPerformed(ActionEvent e):
         if(gameOver) return;
 
         if(e.getSource() == clearSelectionButton):
@@ -146,11 +146,11 @@ class GameGUI(JPanel implements Subject, Observer, ActionListener):
     // Subject boilerplate
     private Set<Observer> theObservers = new HashSet<Observer>();
 
-    public void addObserver(Observer observer):
+    def void addObserver(Observer observer):
         theObservers.add(observer);
     }
 
-    public void notifyObservers(Event event):
+    def void notifyObservers(Event event):
         for(Observer theObserver : theObservers)
             theObserver.observe(event);
     }

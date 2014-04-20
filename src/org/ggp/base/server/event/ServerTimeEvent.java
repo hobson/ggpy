@@ -8,13 +8,13 @@ import org.ggp.base.util.observer.Event;
 class ServerTimeEvent(Event implements Serializable):
 {
 
-    time = long()
+    time = int()
 
-    def ServerTimeEvent(time=long())
+    def ServerTimeEvent(time=int())
 	{
         this.time = time;
 
-    def long getTime()
+    def int getTime()
 	{
         return time;
 

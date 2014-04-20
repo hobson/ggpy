@@ -6,11 +6,11 @@ import org.ggp.base.server.request.RequestBuilder;
 import org.ggp.base.util.http.HttpRequest;
 
 class PlayerPresence(object):
-    final private String host;
-    final private int port;
-    private String name;
-    private String status;
-    private long statusTime;
+    final host = String()
+    final port = int()
+    name = String()
+    status = String()
+    statusTime = int()
 
     PlayerPresence(String host, int port):
         this.host = host;
@@ -39,7 +39,7 @@ class PlayerPresence(object):
     def synchronized String getStatus():
         return status;
 
-    def synchronized long getStatusAge():
+    def synchronized int getStatusAge():
         return System.currentTimeMillis() - statusTime;
 
     def getHost():  # String

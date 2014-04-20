@@ -30,16 +30,16 @@ import java.io.FileReader;
 import java.net.InetAddress;
 
 class GamerConfiguration(object):
-    private static String strSystemOS;
-    private static String strProfileName;
-    private static int nMemoryForGamer;     // in MB
-    private static int nOperatingSystem;
+    def String strSystemOS;
+    def String strProfileName;
+    def int nMemoryForGamer;     // in MB
+    def int nOperatingSystem;
 
-    private static final int OS_WINDOWS = 1;
-    private static final int OS_MACOS = 2;
-    private static final int OS_LINUX = 3;
+    OS_WINDOWS = 1  # int 
+    OS_MACOS = 2  # int 
+    OS_LINUX = 3  # int 
 
-    public static void showConfiguration():
+    def void showConfiguration():
         String osType = "Unknown";
         if(runningOnLinux()) osType = "Linux";
         if(runningOnMacOS()) osType = "MacOS";
@@ -47,7 +47,7 @@ class GamerConfiguration(object):
         System.out.println(String.format("Configured according to the %s Profile, running on %s which is a variety of %s, allocating %d MB of memory to the gaming process.", strProfileName, strSystemOS, osType, nMemoryForGamer));
     }
 
-    private static String getComputerName():
+    def String getComputerName():
         try {
             return InetAddress.getLocalHost().getHostName().toLowerCase();
         } catch (Exception e):
@@ -58,7 +58,7 @@ class GamerConfiguration(object):
     static {
         strProfileName = getComputerName();
 
-        boolean foundProfile = false;
+        bool foundProfile = false;
         try {
             String line;
             BufferedReader in = new BufferedReader(new FileReader("src/org/ggp/base/util/configuration/gamerProfiles"));
@@ -104,7 +104,7 @@ class GamerConfiguration(object):
 
     // OS-neutral accessors
 
-    public static String getCommandForJava():
+    def String getCommandForJava():
         if(nOperatingSystem == OS_MACOS):
             return "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Commands/java";
         } else {
@@ -112,7 +112,7 @@ class GamerConfiguration(object):
         }
     }
 
-    public static String getCommandForJavac():
+    def String getCommandForJavac():
         if(nOperatingSystem == OS_MACOS):
             return "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Commands/javac";
         } else {
@@ -122,31 +122,31 @@ class GamerConfiguration(object):
 
     // Accessors
 
-    public static boolean runningOnLinux ():
+    def bool runningOnLinux ():
         return nOperatingSystem == OS_LINUX;
     }
 
-    public static boolean runningOnMacOS ():
+    def bool runningOnMacOS ():
         return nOperatingSystem == OS_MACOS;
     }
 
-    public static boolean runningOnWindows ():
+    def bool runningOnWindows ():
         return nOperatingSystem == OS_WINDOWS;
     }
 
-    public static String getOperatingSystemName():
+    def String getOperatingSystemName():
         return strSystemOS;
     }
 
-    public static String getProfileName():
+    def String getProfileName():
         return strProfileName;
     }
 
-    public static int getMemoryForGamer():
+    def int getMemoryForGamer():
         return nMemoryForGamer;
     }
 
-    public static void main(String args[]):
+    def void main(String args[]):
         System.out.println("Computer name: " + getComputerName());
         GamerConfiguration.showConfiguration();
     }

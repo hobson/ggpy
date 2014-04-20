@@ -15,11 +15,11 @@ import org.ggp.base.util.configuration.ProjectConfiguration;
 
 
 class CommonGraphics(object):
-    public static Image getImage(String imageName):
+    def Image getImage(String imageName):
         return getImage("", imageName);
     }
 
-    public static Image getImage(String dirName, String imageName):
+    def Image getImage(String dirName, String imageName):
         try {
             return ImageIO.read(new File(new File(ProjectConfiguration.gameImagesDirectory, dirName), imageName));
         } catch (IOException e):
@@ -28,7 +28,7 @@ class CommonGraphics(object):
         }
     }
 
-    public static void fillWithString(Graphics g, String theText, double sizeFactor):
+    def void fillWithString(Graphics g, String theText, float sizeFactor):
         int theHeight = g.getClipBounds().height;
         int theWidth = g.getClipBounds().width;
 
@@ -39,7 +39,7 @@ class CommonGraphics(object):
         g.drawString(theText, (theWidth - theMetric.stringWidth(theText)) / 2, theMetric.getAscent() + (theHeight - (theMetric.getDescent() + theMetric.getAscent())) / 2);
     }
 
-    public static void drawSelectionBox(Graphics g):
+    def void drawSelectionBox(Graphics g):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
@@ -47,7 +47,7 @@ class CommonGraphics(object):
         g.drawRect(3, 3, width-6, height-6);
     }
 
-    public static void drawCellBorder(Graphics g):
+    def void drawCellBorder(Graphics g):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
@@ -55,7 +55,7 @@ class CommonGraphics(object):
         g.drawRect(1, 1, width-2, height-2);
     }
 
-    public static void drawBubbles(Graphics g, int nCode):
+    def void drawBubbles(Graphics g, int nCode):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
@@ -73,7 +73,7 @@ class CommonGraphics(object):
         }
     }
 
-    public static void drawDisc(Graphics g):
+    def void drawDisc(Graphics g):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
@@ -84,7 +84,7 @@ class CommonGraphics(object):
         g.fillOval(6, 6, width-12, height-12);
     }
 
-    public static void drawCheckersPiece(Graphics g, String checkersPiece):
+    def void drawCheckersPiece(Graphics g, String checkersPiece):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
@@ -92,7 +92,7 @@ class CommonGraphics(object):
             return;
 
         Color theColor = ((checkersPiece.charAt(0) == 'b') ? Color.BLACK : Color.RED);
-        boolean isKing = (checkersPiece.charAt(1) == 'k');
+        bool isKing = (checkersPiece.charAt(1) == 'k');
 
         g.setColor(Color.DARK_GRAY);
         g.fillOval(4, 4, width-8, height-8);
@@ -107,7 +107,7 @@ class CommonGraphics(object):
         }
     }
 
-    public static void drawChessPiece(Graphics g, String chessPiece):
+    def void drawChessPiece(Graphics g, String chessPiece):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
@@ -138,7 +138,7 @@ class CommonGraphics(object):
         }
     }
 
-    private static void lazyLoadChessPieces():
+    def void lazyLoadChessPieces():
         blackPawnImage   = getImage("chess", "Black_Pawn.png");
         blackRookImage   = getImage("chess", "Black_Rook.png");
         blackBishopImage = getImage("chess", "Black_Bishop.png");
@@ -154,19 +154,19 @@ class CommonGraphics(object):
     }
 
     // Checkers images
-    private static Image theCrownImage;
+    def Image theCrownImage;
 
     // Chess images
-    private static Image blackPawnImage;
-    private static Image blackRookImage;
-    private static Image blackBishopImage;
-    private static Image blackKnightImage;
-    private static Image blackKingImage;
-    private static Image blackQueenImage;
-    private static Image whitePawnImage;
-    private static Image whiteRookImage;
-    private static Image whiteBishopImage;
-    private static Image whiteKnightImage;
-    private static Image whiteKingImage;
-    private static Image whiteQueenImage;
+    def Image blackPawnImage;
+    def Image blackRookImage;
+    def Image blackBishopImage;
+    def Image blackKnightImage;
+    def Image blackKingImage;
+    def Image blackQueenImage;
+    def Image whitePawnImage;
+    def Image whiteRookImage;
+    def Image whiteBishopImage;
+    def Image whiteKnightImage;
+    def Image whiteKingImage;
+    def Image whiteQueenImage;
 }

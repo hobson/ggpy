@@ -19,7 +19,7 @@ import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
  * @author Sam Schreiber
  */
 class TicTacToeCanvas_Reference(GameCanvas):
-    public static final long serialVersionUID = 0x1;
+    serialVersionUID = 0x1  # int 
 
     def getGameName():  # String
         return "Tic-Tac-Toe (Old Version)";
@@ -29,7 +29,7 @@ class TicTacToeCanvas_Reference(GameCanvas):
         return "ticTacToe";
     }
 
-    private Graphics mostRecentG;
+    mostRecentG = Graphics()
     protected void paintGame(Graphics g):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
