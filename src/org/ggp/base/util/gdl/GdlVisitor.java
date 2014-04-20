@@ -25,43 +25,29 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
  * @author Alex Landau
  */
 public abstract class GdlVisitor {
-	public void visitGdl(Gdl gdl) {
+    def void visitGdl(Gdl gdl):
 		// Do nothing; override in a subclass to do something.
-	}
-    public void visitTerm(GdlTerm term) {
+    public void visitTerm(GdlTerm term):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitConstant(GdlConstant constant) {
+    def void visitConstant(GdlConstant constant):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitVariable(GdlVariable variable) {
+    def void visitVariable(GdlVariable variable):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitFunction(GdlFunction function) {
+    def void visitFunction(GdlFunction function):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitLiteral(GdlLiteral literal) {
+    def void visitLiteral(GdlLiteral literal):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitSentence(GdlSentence sentence) {
+    def void visitSentence(GdlSentence sentence):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitRelation(GdlRelation relation) {
+    def void visitRelation(GdlRelation relation):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitProposition(GdlProposition proposition) {
+    def void visitProposition(GdlProposition proposition):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitNot(GdlNot not) {
+    def void visitNot(GdlNot not):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitDistinct(GdlDistinct distinct) {
+    def void visitDistinct(GdlDistinct distinct):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitOr(GdlOr or) {
+    def void visitOr(GdlOr or):
 		// Do nothing; override in a subclass to do something.
-	}
-	public void visitRule(GdlRule rule) {
+    def void visitRule(GdlRule rule):
 		// Do nothing; override in a subclass to do something.
-	}
-}

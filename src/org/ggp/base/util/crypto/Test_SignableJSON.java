@@ -14,7 +14,7 @@ import external.JSON.JSONObject;
  *
  * @author Sam
  */
-public class Test_SignableJSON extends TestCase {
+class Test_SignableJSON(TestCase):
     public void testSimpleSigning() throws JSONException {
         EncodedKeyPair p = BaseCryptography.generateKeys();
 

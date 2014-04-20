@@ -25,8 +25,7 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
 import org.ggp.base.util.statemachine.implementation.prover.query.ProverQueryBuilder;
 
 
-@SuppressWarnings("unused")
-public class SamplePropNetStateMachine extends StateMachine {
+class SamplePropNetStateMachine(StateMachine):
     /** The underlying proposition network  */
     private PropNet propNet;
     /** The topological ordering of the propositions */
@@ -39,8 +38,7 @@ public class SamplePropNetStateMachine extends StateMachine {
      * ordering here. Additionally you may compute the initial state here, at
      * your discretion.
      */
-    @Override
-    public void initialize(List<Gdl> description) {
+    public void initialize(List<Gdl> description):
         propNet = PropNetFactory.create(description);
         roles = propNet.getRoles();
         ordering = getOrdering();
@@ -50,11 +48,9 @@ public class SamplePropNetStateMachine extends StateMachine {
 	 * Computes if the state is terminal. Should return the value
 	 * of the terminal proposition for the state.
 	 */
-	@Override
-	public boolean isTerminal(MachineState state) {
+    def boolean isTerminal(MachineState state):
 		// TODO: Compute whether the MachineState is terminal.
-		return false;
-	}
+        return false;
 
 	/**
 	 * Computes the goal for a role in the current state.
@@ -63,43 +59,35 @@ public class SamplePropNetStateMachine extends StateMachine {
 	 * proposition true for that role, then you should throw a
 	 * GoalDefinitionException because the goal is ill-defined.
 	 */
-	@Override
-	public int getGoal(MachineState state, Role role)
-	throws GoalDefinitionException {
+    def int getGoal(MachineState state, Role role)
+    throws GoalDefinitionException {
 		// TODO: Compute the goal for role in state.
-		return -1;
-	}
+        return -1;
 
 	/**
 	 * Returns the initial state. The initial state can be computed
 	 * by only setting the truth value of the INIT proposition to true,
 	 * and then computing the resulting state.
 	 */
-	@Override
-	public MachineState getInitialState() {
+    def getInitialState():  # MachineState
 		// TODO: Compute the initial state.
-		return null;
-	}
+        return null;
 
 	/**
 	 * Computes the legal moves for role in state.
 	 */
-	@Override
-	public List<Move> getLegalMoves(MachineState state, Role role)
-	throws MoveDefinitionException {
+    def List<Move> getLegalMoves(MachineState state, Role role)
+    throws MoveDefinitionException {
 		// TODO: Compute legal moves.
-		return null;
-	}
+        return null;
 
 	/**
 	 * Computes the next state given state and the list of moves.
 	 */
-	@Override
-	public MachineState getNextState(MachineState state, List<Move> moves)
-	throws TransitionDefinitionException {
+    def MachineState getNextState(MachineState state, List<Move> moves)
+    throws TransitionDefinitionException {
 		// TODO: Compute the next state.
-		return null;
-	}
+        return null;
 
 	/**
 	 * This should compute the topological ordering of propositions.
@@ -115,27 +103,24 @@ public class SamplePropNetStateMachine extends StateMachine {
 	 *
 	 * @return The order in which the truth values of propositions need to be set.
 	 */
-	public List<Proposition> getOrdering()
+    def List<Proposition> getOrdering()
 	{
 	    // List to contain the topological ordering.
 	    List<Proposition> order = new LinkedList<Proposition>();
 
 		// All of the components in the PropNet
-		List<Component> components = new ArrayList<Component>(propNet.getComponents());
+        List<Component> components = new ArrayList<Component>(propNet.getComponents());
 
 		// All of the propositions in the PropNet.
-		List<Proposition> propositions = new ArrayList<Proposition>(propNet.getPropositions());
+        List<Proposition> propositions = new ArrayList<Proposition>(propNet.getPropositions());
 
 	    // TODO: Compute the topological ordering.
 
-		return order;
-	}
+        return order;
 
 	/* Already implemented for you */
-	@Override
-	public List<Role> getRoles() {
-		return roles;
-	}
+    def List<Role> getRoles():
+        return roles;
 
 	/* Helper methods */
 
@@ -150,28 +135,25 @@ public class SamplePropNetStateMachine extends StateMachine {
 	 * @param moves
 	 * @return
 	 */
-	private List<GdlSentence> toDoes(List<Move> moves)
+    private List<GdlSentence> toDoes(List<Move> moves)
 	{
-		List<GdlSentence> doeses = new ArrayList<GdlSentence>(moves.size());
-		Map<Role, Integer> roleIndices = getRoleIndices();
+        List<GdlSentence> doeses = new ArrayList<GdlSentence>(moves.size());
+        Map<Role, Integer> roleIndices = getRoleIndices();
 
-		for (int i = 0; i < roles.size(); i++)
+        for (int i = 0; i < roles.size(); i++)
 		{
-			int index = roleIndices.get(roles.get(i));
-			doeses.add(ProverQueryBuilder.toDoes(roles.get(i), moves.get(index)));
-		}
-		return doeses;
-	}
+            int index = roleIndices.get(roles.get(i));
+            doeses.add(ProverQueryBuilder.toDoes(roles.get(i), moves.get(index)));
+        return doeses;
 
 	/**
 	 * Takes in a Legal Proposition and returns the appropriate corresponding Move
 	 * @param p
 	 * @return a PropNetMove
 	 */
-	public static Move getMoveFromProposition(Proposition p)
+    def static Move getMoveFromProposition(Proposition p)
 	{
-		return new Move(p.getName().get(1));
-	}
+        return new Move(p.getName().get(1));
 
 	/**
 	 * Helper method for parsing the value of a goal proposition
@@ -180,10 +162,9 @@ public class SamplePropNetStateMachine extends StateMachine {
 	 */
     private int getGoalValue(Proposition goalProposition)
 	{
-		GdlRelation relation = (GdlRelation) goalProposition.getName();
-		GdlConstant constant = (GdlConstant) relation.get(1);
-		return Integer.parseInt(constant.toString());
-	}
+        GdlRelation relation = (GdlRelation) goalProposition.getName();
+        GdlConstant constant = (GdlConstant) relation.get(1);
+        return Integer.parseInt(constant.toString());
 
 	/**
 	 * A Naive implementation that computes a PropNetMachineState
@@ -191,18 +172,15 @@ public class SamplePropNetStateMachine extends StateMachine {
 	 * You need not use this method!
 	 * @return PropNetMachineState
 	 */
-	public MachineState getStateFromBase()
+    def MachineState getStateFromBase()
 	{
-		Set<GdlSentence> contents = new HashSet<GdlSentence>();
-		for (Proposition p : propNet.getBasePropositions().values())
+        Set<GdlSentence> contents = new HashSet<GdlSentence>();
+        for (Proposition p : propNet.getBasePropositions().values())
 		{
-			p.setValue(p.getSingleInput().getValue());
-			if (p.getValue())
+            p.setValue(p.getSingleInput().getValue());
+            if (p.getValue())
 			{
-				contents.add(p.getName());
-			}
+                contents.add(p.getName());
 
-		}
-		return new MachineState(contents);
-	}
+        return new MachineState(contents);
 }

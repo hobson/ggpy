@@ -3,11 +3,9 @@ package org.ggp.base.player.request.grammar;
 public abstract class Request
 {
 
-	public abstract String process(long receptionTime);
+    def abstract String process(long receptionTime);
 
-	public abstract String getMatchId();
+    def abstract String getMatchId();
 
-	@Override
-	public abstract String toString();
+    def abstract String toString();
 
-}

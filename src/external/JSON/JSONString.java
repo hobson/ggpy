@@ -14,5 +14,4 @@ public interface JSONString {
 	 *
 	 * @return A strictly syntactically correct JSON text.
 	 */
-	public String toJSONString();
-}
+    def String toJSONString();

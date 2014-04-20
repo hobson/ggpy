@@ -1,38 +1,29 @@
 package org.ggp.base.util.gdl.grammar;
 
-@SuppressWarnings("serial")
-public final class GdlNot extends GdlLiteral
+class GdlNot(GdlLiteral):
 {
 
-	private final GdlLiteral body;
-	private transient Boolean ground;
+    body = GdlLiteral()
+    private transient Boolean ground;
 
-	GdlNot(GdlLiteral body)
+    GdlNot(GdlLiteral body)
 	{
-		this.body = body;
-		ground = null;
-	}
+        this.body = body;
+        ground = null;
 
-	public GdlLiteral getBody()
+    def GdlLiteral getBody()
 	{
-		return body;
-	}
+        return body;
 
-	@Override
-	public boolean isGround()
+    def boolean isGround()
 	{
-		if (ground == null)
+        if (ground == null)
 		{
-			ground = body.isGround();
-		}
+            ground = body.isGround();
 
-		return ground;
-	}
+        return ground;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "( not " + body + " )";
-	}
+        return "( not " + body + " )";
 
-}

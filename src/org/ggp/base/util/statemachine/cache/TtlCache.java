@@ -25,123 +25,98 @@ import java.util.Set;
  * @param <K> Key type
  * @param <V> Value type
  */
-public final class TtlCache<K, V> implements Map<K,V>
+class TtlCache<K, V> implements Map<K,V>
 {
-	private final class Entry
+    private final class Entry
 	{
-		public int ttl;
-		public V value;
+	    def int ttl;
+	    def V value;
 
-		public Entry(V value, int ttl)
+	    def Entry(value=V(), int ttl)
 		{
-			this.value = value;
-			this.ttl = ttl;
-		}
+            this.value = value;
+            this.ttl = ttl;
 
-		@Override
-		@SuppressWarnings("unchecked")
-        public boolean equals(Object o) {
-		    if (o instanceof TtlCache.Entry) {
+    		        public boolean equals(Object o):
+		    if (o instanceof TtlCache.Entry):
 		        return ((Entry)o).value.equals(value);
 		    }
 		    return false;
-		}
-	}
 
-	private final Map<K, Entry> contents;
-	private final int ttl;
+    private final Map<K, Entry> contents;
+    ttl = int()
 
-	public TtlCache(int ttl)
+    def TtlCache(ttl=int())
 	{
-		this.contents = new HashMap<K, Entry>();
-		this.ttl = ttl;
-	}
+        this.contents = new HashMap<K, Entry>();
+        this.ttl = ttl;
 
-	@Override
-	public synchronized boolean containsKey(Object key)
+    def synchronized boolean containsKey(Object key)
 	{
-		return contents.containsKey(key);
-	}
+        return contents.containsKey(key);
 
-	@Override
-	public synchronized V get(Object key)
+    def synchronized V get(Object key)
 	{
-		Entry entry = contents.get(key);
-		if (entry == null)
+        Entry entry = contents.get(key);
+        if (entry == null)
 		    return null;
 
 		// Reset the TTL when a value is accessed directly.
-		entry.ttl = ttl;
-		return entry.value;
-	}
+        entry.ttl = ttl;
+        return entry.value;
 
-	public synchronized void prune()
+    def synchronized void prune()
 	{
-		List<K> toPrune = new ArrayList<K>();
-		for (K key : contents.keySet())
+        List<K> toPrune = new ArrayList<K>();
+        for (K key : contents.keySet())
 		{
-			Entry entry = contents.get(key);
-			if (entry.ttl == 0)
+            Entry entry = contents.get(key);
+            if (entry.ttl == 0)
 			{
-				toPrune.add(key);
-			}
-			entry.ttl--;
-		}
+                toPrune.add(key);
+            entry.ttl--;
 
-		for (K key : toPrune)
+        for (K key : toPrune)
 		{
-			contents.remove(key);
-		}
-	}
+            contents.remove(key);
 
-	@Override
-	public synchronized V put(K key, V value)
+    def synchronized V put(K key, V value)
 	{
-		Entry x = contents.put(key, new Entry(value, ttl));
-		if(x == null) return null;
-		return x.value;
-	}
+        Entry x = contents.put(key, new Entry(value, ttl));
+        if(x == null) return null;
+        return x.value;
 
-	@Override
-	public synchronized int size()
+    def synchronized int size()
 	{
-		return contents.size();
-	}
+        return contents.size();
 
-    @Override
-	public synchronized void clear() {
+    def synchronized void clear():
         contents.clear();
     }
 
-    @Override
-	public synchronized boolean containsValue(Object value) {
+    def synchronized boolean containsValue(Object value):
         return contents.containsValue(value);
     }
 
-    @Override
-	public synchronized boolean isEmpty() {
+    def synchronized boolean isEmpty():
         return contents.isEmpty();
     }
 
-    @Override
-	public synchronized Set<K> keySet() {
+    def synchronized Set<K> keySet():
         return contents.keySet();
     }
 
-    @Override
-	public synchronized void putAll(Map<? extends K, ? extends V> m) {
-         for(Map.Entry<? extends K, ? extends V> anEntry : m.entrySet()) {
+    def synchronized void putAll(Map<?(K, ? extends V> m)):
+            for(Map.Entry<?(K, ? extends V> anEntry : m.entrySet())):
              this.put(anEntry.getKey(), anEntry.getValue());
          }
     }
 
-    @Override
-	public synchronized V remove(Object key) {
+    def synchronized V remove(Object key):
         return contents.remove(key).value;
     }
 
-    @Override
-	public synchronized Collection<V> values() {
+    def synchronized Collection<V> values():
         Collection<V> theValues = new HashSet<V>();
         for (Entry e : contents.values())
             theValues.add(e.value);
@@ -152,21 +127,17 @@ public final class TtlCache<K, V> implements Map<K,V>
         private K key;
         private V value;
 
-        entrySetMapEntry(K k, V v) {
+        entrySetMapEntry(K k, V v):
             key = k;
             value = v;
         }
 
-        @Override
-		public K getKey() { return key; }
-        @Override
-		public V getValue() { return value; }
-        @Override
-		public V setValue(V value) { return (this.value = value); }
+    	    def K getKey() { return key; }
+    	    def V getValue() { return value; }
+    	    def V setValue(V value) { return (this.value = value); }
     }
 
-    @Override
-	public synchronized Set<java.util.Map.Entry<K, V>> entrySet() {
+    def synchronized Set<java.util.Map.Entry<K, V>> entrySet():
         Set<Map.Entry<K,V>> theEntries = new HashSet<Map.Entry<K, V>>();
         for (Map.Entry<K, Entry> e : contents.entrySet())
             theEntries.add(new entrySetMapEntry(e.getKey(), e.getValue().value));

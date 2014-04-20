@@ -89,13 +89,13 @@ public abstract class StateMachine
     // can look up/compute what some Gdl corresponds to in their representation.
     // They are implemented for convenience, using the default ways of generating
     // these objects, but they can be overridden to support machine-specific objects.
-    public MachineState getMachineStateFromSentenceList(Set<GdlSentence> sentenceList) {
+    public MachineState getMachineStateFromSentenceList(Set<GdlSentence> sentenceList):
         return new MachineState(sentenceList);
     }
-    public Role getRoleFromConstant(GdlConstant constant) {
+    public Role getRoleFromConstant(GdlConstant constant):
         return new Role(constant);
     }
-    public Move getMoveFromTerm(GdlTerm term) {
+    public Move getMoveFromTerm(GdlTerm term):
         return new Move(term);
     }
 
@@ -131,7 +131,7 @@ public abstract class StateMachine
      * CONTRACT: After calling this method, the state machine never deals with a state that
      *           is not "theState" or one of its descendants in the game tree.
      */
-    public void updateRoot(MachineState theState) {
+    public void updateRoot(MachineState theState):
         ;
     }
 
@@ -139,7 +139,7 @@ public abstract class StateMachine
     //   Implementations of convenience methods
     // ============================================
 
-    public String getName() {
+    public String getName():
         return this.getClass().getSimpleName();
     }
 
@@ -158,7 +158,7 @@ public abstract class StateMachine
     public List<List<Move>> getLegalJointMoves(MachineState state) throws MoveDefinitionException
     {
         List<List<Move>> legals = new ArrayList<List<Move>>();
-        for (Role role : getRoles()) {
+        for (Role role : getRoles()):
             legals.add(getLegalMoves(state, role));
         }
 
@@ -176,8 +176,8 @@ public abstract class StateMachine
     public List<List<Move>> getLegalJointMoves(MachineState state, Role role, Move move) throws MoveDefinitionException
     {
         List<List<Move>> legals = new ArrayList<List<Move>>();
-        for (Role r : getRoles()) {
-            if (r.equals(role)) {
+        for (Role r : getRoles()):
+            if (r.equals(role)):
                 List<Move> m = new ArrayList<Move>();
                 m.add(move);
                 legals.add(m);
@@ -201,7 +201,7 @@ public abstract class StateMachine
     public List<MachineState> getNextStates(MachineState state) throws MoveDefinitionException, TransitionDefinitionException
     {
         List<MachineState> nextStates = new ArrayList<MachineState>();
-        for (List<Move> move : getLegalJointMoves(state)) {
+        for (List<Move> move : getLegalJointMoves(state)):
             nextStates.add(getNextState(state, move));
         }
 
@@ -220,9 +220,9 @@ public abstract class StateMachine
     {
         Map<Move, List<MachineState>> nextStates = new HashMap<Move, List<MachineState>>();
         Map<Role, Integer> roleIndices = getRoleIndices();
-        for (List<Move> moves : getLegalJointMoves(state)) {
+        for (List<Move> moves : getLegalJointMoves(state)):
             Move move = moves.get(roleIndices.get(role));
-            if (!nextStates.containsKey(move)) {
+            if (!nextStates.containsKey(move)):
                 nextStates.put(move, new ArrayList<MachineState>());
             }
             nextStates.get(move).add(getNextState(state, moves));
@@ -233,10 +233,10 @@ public abstract class StateMachine
 
     protected void crossProductLegalMoves(List<List<Move>> legals, List<List<Move>> crossProduct, LinkedList<Move> partial)
     {
-        if (partial.size() == legals.size()) {
+        if (partial.size() == legals.size()):
             crossProduct.add(new ArrayList<Move>(partial));
         } else {
-            for (Move move : legals.get(partial.size())) {
+            for (Move move : legals.get(partial.size())):
                 partial.addLast(move);
                 crossProductLegalMoves(legals, crossProduct, partial);
                 partial.removeLast();
@@ -253,10 +253,10 @@ public abstract class StateMachine
      */
     public Map<Role, Integer> getRoleIndices()
     {
-        if(roleIndices == null) {
+        if(roleIndices == null):
             roleIndices = new HashMap<Role, Integer>();
             List<Role> roles = getRoles();
-            for (int i = 0; i < roles.size(); i++) {
+            for (int i = 0; i < roles.size(); i++):
                 roleIndices.put(roles.get(i), i);
             }
         }
@@ -276,7 +276,7 @@ public abstract class StateMachine
      */
     public List<Integer> getGoals(MachineState state) throws GoalDefinitionException {
         List<Integer> theGoals = new ArrayList<Integer>();
-        for (Role r : getRoles()) {
+        for (Role r : getRoles()):
             theGoals.add(getGoal(state, r));
         }
         return theGoals;
@@ -289,7 +289,7 @@ public abstract class StateMachine
     public List<Move> getRandomJointMove(MachineState state) throws MoveDefinitionException
     {
         List<Move> random = new ArrayList<Move>();
-        for (Role role : getRoles()) {
+        for (Role role : getRoles()):
             random.add(getRandomMove(state, role));
         }
 
@@ -303,8 +303,8 @@ public abstract class StateMachine
     public List<Move> getRandomJointMove(MachineState state, Role role, Move move) throws MoveDefinitionException
     {
         List<Move> random = new ArrayList<Move>();
-        for (Role r : getRoles()) {
-            if (r.equals(role)) {
+        for (Role r : getRoles()):
+            if (r.equals(role)):
                 random.add(move);
             } else {
                 random.add(getRandomMove(state, r));
@@ -364,7 +364,7 @@ public abstract class StateMachine
      */
     public MachineState performDepthCharge(MachineState state, final int[] theDepth) throws TransitionDefinitionException, MoveDefinitionException {
         int nDepth = 0;
-        while(!isTerminal(state)) {
+        while(!isTerminal(state)):
             nDepth++;
             state = getNextStateDestructively(state, getRandomJointMove(state));
         }
@@ -375,21 +375,21 @@ public abstract class StateMachine
 
     public void getAverageDiscountedScoresFromRepeatedDepthCharges(final MachineState state, final double[] avgScores, final double[] avgDepth, final double discountFactor, final int repetitions) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
     	avgDepth[0] = 0;
-    	for (int j = 0; j < avgScores.length; j++) {
+    	for (int j = 0; j < avgScores.length; j++):
     		avgScores[j] = 0;
     	}
     	final int[] depth = new int[1];
-    	for (int i = 0; i < repetitions; i++) {
+    	for (int i = 0; i < repetitions; i++):
     		MachineState stateForCharge = state.clone();
     		stateForCharge = performDepthCharge(stateForCharge, depth);
     		avgDepth[0] += depth[0];
     		final double accumulatedDiscountFactor = Math.pow(discountFactor, depth[0]);
-    		for (int j = 0; j < avgScores.length; j++) {
+    		for (int j = 0; j < avgScores.length; j++):
     			avgScores[j] += getGoal(stateForCharge, getRoles().get(j)) * accumulatedDiscountFactor;
     		}
     	}
     	avgDepth[0] /= repetitions;
-    	for (int j = 0; j < avgScores.length; j++) {
+    	for (int j = 0; j < avgScores.length; j++):
     		avgScores[j] /= repetitions;
     	}
     }

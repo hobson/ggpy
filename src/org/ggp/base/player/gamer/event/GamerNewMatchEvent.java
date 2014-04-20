@@ -4,26 +4,22 @@ import org.ggp.base.util.gdl.grammar.GdlConstant;
 import org.ggp.base.util.match.Match;
 import org.ggp.base.util.observer.Event;
 
-public final class GamerNewMatchEvent extends Event
+class GamerNewMatchEvent(Event):
 {
 
-	private final Match match;
-	private final GdlConstant roleName;
+    match = Match()
+    roleName = GdlConstant()
 
-	public GamerNewMatchEvent(Match match, GdlConstant roleName)
+    def GamerNewMatchEvent(match=Match(), GdlConstant roleName)
 	{
-		this.match = match;
-		this.roleName = roleName;
-	}
+        this.match = match;
+        this.roleName = roleName;
 
-	public Match getMatch()
+    def Match getMatch()
 	{
-		return match;
-	}
+        return match;
 
-	public GdlConstant getRoleName()
+    def GdlConstant getRoleName()
 	{
-		return roleName;
-	}
+        return roleName;
 
-}

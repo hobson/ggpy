@@ -17,12 +17,11 @@ import external.JSON.JSONObject;
  *
  * @author Sam
  */
-public class RemoteResourceLoader {
-	public static JSONObject loadJSON(String theURL) throws JSONException, IOException {
-		return loadJSON(theURL, 1);
-	}
+class RemoteResourceLoader(object):
+    def static JSONObject loadJSON(String theURL) throws JSONException, IOException {
+        return loadJSON(theURL, 1);
     public static JSONObject loadJSON(String theURL, int nMaxAttempts) throws JSONException, IOException {
-		return new JSONObject(loadRaw(theURL, nMaxAttempts));
+        return new JSONObject(loadRaw(theURL, nMaxAttempts));
     }
 
     public static JSONArray loadJSONArray(String theURL) throws JSONException, IOException {
@@ -37,7 +36,7 @@ public class RemoteResourceLoader {
     }
     public static String loadRaw(String theURL, int nMaxAttempts) throws IOException {
     	int nAttempt = 0;
-    	while(true) {
+    	while(true):
     		nAttempt++;
 	        try {
 		        URL url = new URL(theURL);
@@ -49,7 +48,7 @@ public class RemoteResourceLoader {
 		        if (urlConnection.getContentLength() == 0)
 		            throw new IOException("Could not load URL: " + theURL);
 		        StringBuilder theRawData = new StringBuilder();
-		        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+		        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))):
 		        	do {
 		        		String nextLine = br.readLine();
 		        		if (nextLine == null) break;
@@ -57,8 +56,8 @@ public class RemoteResourceLoader {
 		        	} while (true);
 		        }
 		        return theRawData.toString();
-	        } catch (IOException ie) {
-	        	if (nAttempt >= nMaxAttempts) {
+	        } catch (IOException ie):
+	        	if (nAttempt >= nMaxAttempts):
 	        		throw ie;
 	        	}
 	        }
@@ -77,7 +76,7 @@ public class RemoteResourceLoader {
         BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
         StringBuilder decodedString = new StringBuilder();
         String decodedLine;
-        while ((decodedLine = in.readLine()) != null) {
+        while ((decodedLine = in.readLine()) != null):
             decodedString.append(decodedLine);
         }
         in.close();

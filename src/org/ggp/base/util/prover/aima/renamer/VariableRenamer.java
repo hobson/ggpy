@@ -20,199 +20,157 @@ import org.ggp.base.util.gdl.grammar.GdlTerm;
 import org.ggp.base.util.gdl.grammar.GdlVariable;
 
 
-public class VariableRenamer
+class VariableRenamer
 {
 
-	private int nextName;
+    private int nextName;
 
-	public VariableRenamer()
+    def VariableRenamer()
 	{
-		nextName = 0;
-	}
+        nextName = 0;
 
-	public GdlRule rename(GdlRule rule)
+    def GdlRule rename(GdlRule rule)
 	{
-		return renameRule(rule, new HashMap<GdlVariable, GdlVariable>());
-	}
+        return renameRule(rule, new HashMap<GdlVariable, GdlVariable>());
 
-	public GdlSentence rename(GdlSentence sentence)
+    def GdlSentence rename(GdlSentence sentence)
 	{
-		return renameSentence(sentence, new HashMap<GdlVariable, GdlVariable>());
-	}
+        return renameSentence(sentence, new HashMap<GdlVariable, GdlVariable>());
 
-	private GdlConstant renameConstant(GdlConstant constant, Map<GdlVariable, GdlVariable> renamings)
+    private GdlConstant renameConstant(GdlConstant constant, Map<GdlVariable, GdlVariable> renamings)
 	{
-		return constant;
-	}
+        return constant;
 
-	private GdlDistinct renameDistinct(GdlDistinct distinct, Map<GdlVariable, GdlVariable> renamings)
+    private GdlDistinct renameDistinct(GdlDistinct distinct, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (distinct.isGround())
+        if (distinct.isGround())
 		{
-			return distinct;
-		}
-		else
+            return distinct;
+        else
 		{
-			GdlTerm arg1 = renameTerm(distinct.getArg1(), renamings);
-			GdlTerm arg2 = renameTerm(distinct.getArg2(), renamings);
+            GdlTerm arg1 = renameTerm(distinct.getArg1(), renamings);
+            GdlTerm arg2 = renameTerm(distinct.getArg2(), renamings);
 
-			return GdlPool.getDistinct(arg1, arg2);
-		}
-	}
+            return GdlPool.getDistinct(arg1, arg2);
 
-	private GdlFunction renameFunction(GdlFunction function, Map<GdlVariable, GdlVariable> renamings)
+    private GdlFunction renameFunction(GdlFunction function, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (function.isGround())
+        if (function.isGround())
 		{
-			return function;
-		}
-		else
+            return function;
+        else
 		{
-			GdlConstant name = renameConstant(function.getName(), renamings);
+            GdlConstant name = renameConstant(function.getName(), renamings);
 
-			List<GdlTerm> body = new ArrayList<GdlTerm>();
-			for (int i = 0; i < function.arity(); i++)
+            List<GdlTerm> body = new ArrayList<GdlTerm>();
+            for (int i = 0; i < function.arity(); i++)
 			{
-				body.add(renameTerm(function.get(i), renamings));
-			}
+                body.add(renameTerm(function.get(i), renamings));
 
-			return GdlPool.getFunction(name, body);
-		}
-	}
+            return GdlPool.getFunction(name, body);
 
-	private GdlLiteral renameLiteral(GdlLiteral literal, Map<GdlVariable, GdlVariable> renamings)
+    private GdlLiteral renameLiteral(GdlLiteral literal, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (literal instanceof GdlDistinct)
+        if (literal instanceof GdlDistinct)
 		{
-			return renameDistinct((GdlDistinct) literal, renamings);
-		}
-		else if (literal instanceof GdlNot)
+            return renameDistinct((GdlDistinct) literal, renamings);
+        else if (literal instanceof GdlNot)
 		{
-			return renameNot((GdlNot) literal, renamings);
-		}
-		else if (literal instanceof GdlOr)
+            return renameNot((GdlNot) literal, renamings);
+        else if (literal instanceof GdlOr)
 		{
-			return renameOr((GdlOr) literal, renamings);
-		}
-		else
+            return renameOr((GdlOr) literal, renamings);
+        else
 		{
-			return renameSentence((GdlSentence) literal, renamings);
-		}
-	}
+            return renameSentence((GdlSentence) literal, renamings);
 
-	private GdlNot renameNot(GdlNot not, Map<GdlVariable, GdlVariable> renamings)
+    private GdlNot renameNot(GdlNot not, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (not.isGround())
+        if (not.isGround())
 		{
-			return not;
-		}
-		else
+            return not;
+        else
 		{
-			GdlLiteral body = renameLiteral(not.getBody(), renamings);
-			return GdlPool.getNot(body);
-		}
-	}
+            GdlLiteral body = renameLiteral(not.getBody(), renamings);
+            return GdlPool.getNot(body);
 
-	private GdlOr renameOr(GdlOr or, Map<GdlVariable, GdlVariable> renamings)
+    private GdlOr renameOr(GdlOr or, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (or.isGround())
+        if (or.isGround())
 		{
-			return or;
-		}
-		else
+            return or;
+        else
 		{
-			List<GdlLiteral> disjuncts = new ArrayList<GdlLiteral>();
-			for (int i = 0; i < or.arity(); i++)
+            List<GdlLiteral> disjuncts = new ArrayList<GdlLiteral>();
+            for (int i = 0; i < or.arity(); i++)
 			{
-				disjuncts.add(renameLiteral(or.get(i), renamings));
-			}
+                disjuncts.add(renameLiteral(or.get(i), renamings));
 
-			return GdlPool.getOr(disjuncts);
-		}
-	}
+            return GdlPool.getOr(disjuncts);
 
-	private GdlProposition renameProposition(GdlProposition proposition, Map<GdlVariable, GdlVariable> renamings)
+    private GdlProposition renameProposition(GdlProposition proposition, Map<GdlVariable, GdlVariable> renamings)
 	{
-		return proposition;
-	}
+        return proposition;
 
-	private GdlRelation renameRelation(GdlRelation relation, Map<GdlVariable, GdlVariable> renamings)
+    private GdlRelation renameRelation(GdlRelation relation, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (relation.isGround())
+        if (relation.isGround())
 		{
-			return relation;
-		}
-		else
+            return relation;
+        else
 		{
-			GdlConstant name = renameConstant(relation.getName(), renamings);
+            GdlConstant name = renameConstant(relation.getName(), renamings);
 
-			List<GdlTerm> body = new ArrayList<GdlTerm>();
-			for (int i = 0; i < relation.arity(); i++)
+            List<GdlTerm> body = new ArrayList<GdlTerm>();
+            for (int i = 0; i < relation.arity(); i++)
 			{
-				body.add(renameTerm(relation.get(i), renamings));
-			}
+                body.add(renameTerm(relation.get(i), renamings));
 
-			return GdlPool.getRelation(name, body);
-		}
-	}
+            return GdlPool.getRelation(name, body);
 
-	private GdlRule renameRule(GdlRule rule, Map<GdlVariable, GdlVariable> renamings)
+    private GdlRule renameRule(GdlRule rule, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (rule.isGround())
+        if (rule.isGround())
 		{
-			return rule;
-		}
-		else
+            return rule;
+        else
 		{
-			GdlSentence head = renameSentence(rule.getHead(), renamings);
+            GdlSentence head = renameSentence(rule.getHead(), renamings);
 
-			List<GdlLiteral> body = new ArrayList<GdlLiteral>();
-			for (int i = 0; i < rule.arity(); i++)
+            List<GdlLiteral> body = new ArrayList<GdlLiteral>();
+            for (int i = 0; i < rule.arity(); i++)
 			{
-				body.add(renameLiteral(rule.get(i), renamings));
-			}
+                body.add(renameLiteral(rule.get(i), renamings));
 
-			return GdlPool.getRule(head, body);
-		}
-	}
+            return GdlPool.getRule(head, body);
 
-	private GdlSentence renameSentence(GdlSentence sentence, Map<GdlVariable, GdlVariable> renamings)
+    private GdlSentence renameSentence(GdlSentence sentence, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (sentence instanceof GdlProposition)
+        if (sentence instanceof GdlProposition)
 		{
-			return renameProposition((GdlProposition) sentence, renamings);
-		}
-		else
+            return renameProposition((GdlProposition) sentence, renamings);
+        else
 		{
-			return renameRelation((GdlRelation) sentence, renamings);
-		}
-	}
+            return renameRelation((GdlRelation) sentence, renamings);
 
-	private GdlTerm renameTerm(GdlTerm term, Map<GdlVariable, GdlVariable> renamings)
+    private GdlTerm renameTerm(GdlTerm term, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (term instanceof GdlConstant)
+        if (term instanceof GdlConstant)
 		{
-			return renameConstant((GdlConstant) term, renamings);
-		}
-		else if (term instanceof GdlVariable)
+            return renameConstant((GdlConstant) term, renamings);
+        else if (term instanceof GdlVariable)
 		{
-			return renameVariable((GdlVariable) term, renamings);
-		}
-		else
+            return renameVariable((GdlVariable) term, renamings);
+        else
 		{
-			return renameFunction((GdlFunction) term, renamings);
-		}
-	}
+            return renameFunction((GdlFunction) term, renamings);
 
-	private GdlVariable renameVariable(GdlVariable variable, Map<GdlVariable, GdlVariable> renamings)
+    private GdlVariable renameVariable(GdlVariable variable, Map<GdlVariable, GdlVariable> renamings)
 	{
-		if (!renamings.containsKey(variable))
+        if (!renamings.containsKey(variable))
 		{
-			GdlVariable newName = GdlPool.getVariable("?R" + (nextName++));
-			renamings.put(variable, newName);
-		}
+            GdlVariable newName = GdlPool.getVariable("?R" + (nextName++));
+            renamings.put(variable, newName);
 
-		return renamings.get(variable);
-	}
+        return renamings.get(variable);
 
-}

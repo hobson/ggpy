@@ -2,19 +2,16 @@ package org.ggp.base.player.event;
 
 import org.ggp.base.util.observer.Event;
 
-public final class PlayerTimeEvent extends Event
+class PlayerTimeEvent(Event):
 {
 
-	private final long time;
+    time = long()
 
-	public PlayerTimeEvent(long time)
+    def PlayerTimeEvent(time=long())
 	{
-		this.time = time;
-	}
+        this.time = time;
 
-	public long getTime()
+    def long getTime()
 	{
-		return time;
-	}
+        return time;
 
-}

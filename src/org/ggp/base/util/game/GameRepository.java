@@ -16,22 +16,22 @@ import java.util.Set;
  * @author Sam
  */
 public abstract class GameRepository {
-    public static GameRepository getDefaultRepository() {
+    public static GameRepository getDefaultRepository():
         return new CloudGameRepository("games.ggp.org/base");
     }
 
-    public Game getGame(String theKey) {
-        if (!theGames.containsKey(theKey)) {
+    public Game getGame(String theKey):
+        if (!theGames.containsKey(theKey)):
             Game theGame = getUncachedGame(theKey);
-            if (theGame != null) {
+            if (theGame != null):
                 theGames.put(theKey, theGame);
             }
         }
         return theGames.get(theKey);
     }
 
-    public Set<String> getGameKeys() {
-        if (theGameKeys == null) {
+    public Set<String> getGameKeys():
+        if (theGameKeys == null):
             theGameKeys = getUncachedGameKeys();
         }
         return theGameKeys;

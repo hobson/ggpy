@@ -13,11 +13,9 @@ import org.ggp.base.util.observer.Observer;
  * complex pieces of debug information like the number of match simulations done
  * per second or the expected payoff from taking various moves.
  */
-@SuppressWarnings("serial")
-public abstract class DetailPanel extends JPanel implements Observer
+public abstract class DetailPanel(JPanel implements Observer):
 {
-	public DetailPanel(LayoutManager layoutManager)
+    def DetailPanel(layoutManager=LayoutManager())
 	{
-		super(layoutManager);
-	}
+        super(layoutManager);
 }

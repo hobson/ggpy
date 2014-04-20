@@ -2,19 +2,16 @@ package org.ggp.base.player.gamer.event;
 
 import org.ggp.base.util.observer.Event;
 
-public final class GamerUnrecognizedMatchEvent extends Event
+class GamerUnrecognizedMatchEvent(Event):
 {
 
-	private final String matchId;
+    matchId = ''
 
-	public GamerUnrecognizedMatchEvent(String matchId)
+    def GamerUnrecognizedMatchEvent(matchId='')
 	{
-		this.matchId = matchId;
-	}
+        this.matchId = matchId;
 
-	public String getMatchId()
+    def String getMatchId()
 	{
-		return matchId;
-	}
+        return matchId;
 
-}

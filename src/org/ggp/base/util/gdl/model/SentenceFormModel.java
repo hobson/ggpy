@@ -34,7 +34,7 @@ public interface SentenceFormModel {
 	 * All constant sentence forms are independent, so this is a superset
 	 * of {@link #getConstantSentenceForms()}.
 	 */
-	Set<SentenceForm> getIndependentSentenceForms();
+    Set<SentenceForm> getIndependentSentenceForms();
 
 	/**
 	 * Returns the set of sentence forms that are constant; that is,
@@ -44,7 +44,7 @@ public interface SentenceFormModel {
 	 * The values of these sentences may be precomputed using a
 	 * {@link ConstantChecker}.
 	 */
-	Set<SentenceForm> getConstantSentenceForms();
+    Set<SentenceForm> getConstantSentenceForms();
 
 	/**
 	 * Returns a graph describing how the sentence forms relate to one
@@ -59,13 +59,13 @@ public interface SentenceFormModel {
 	 * {@link DependencyGraphs#toposortSafe(Set, Multimap)} to obtain a
 	 * topological ordering in a way that respects cycles.
 	 */
-	Multimap<SentenceForm, SentenceForm> getDependencyGraph();
+    Multimap<SentenceForm, SentenceForm> getDependencyGraph();
 
 	/**
 	 * Returns the list of sentences specifically listed as true in the
 	 * game description for that sentence form.
 	 */
-	Set<GdlSentence> getSentencesListedAsTrue(SentenceForm form);
+    Set<GdlSentence> getSentencesListedAsTrue(SentenceForm form);
 
 	/**
 	 * Returns the rules that GENERATE the sentence form, not necessarily
@@ -74,12 +74,12 @@ public interface SentenceFormModel {
 	 * Note that if functions can be assigned to variables, this might not
 	 * find all the rules capable of generating sentences of the given form.
 	 */
-	Set<GdlRule> getRules(SentenceForm form);
+    Set<GdlRule> getRules(SentenceForm form);
 
 	/**
 	 * Returns all sentence forms in the model.
 	 */
-	Set<SentenceForm> getSentenceForms();
+    Set<SentenceForm> getSentenceForms();
 
 	/**
 	 * Returns the sentence form of the given sentence.
@@ -89,5 +89,4 @@ public interface SentenceFormModel {
 	/**
 	 * Returns the game description for the game.
 	 */
-	List<Gdl> getDescription();
-}
+    List<Gdl> getDescription();

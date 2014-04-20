@@ -2,88 +2,66 @@ package org.ggp.base.util.gdl.grammar;
 
 import java.util.List;
 
-@SuppressWarnings("serial")
-public final class GdlRelation extends GdlSentence
+class GdlRelation(GdlSentence):
 {
 
-	private final List<GdlTerm> body;
-	private transient Boolean ground;
-	private final GdlConstant name;
+    private final List<GdlTerm> body;
+    private transient Boolean ground;
+    name = GdlConstant()
 
-	GdlRelation(GdlConstant name, List<GdlTerm> body)
+    GdlRelation(GdlConstant name, List<GdlTerm> body)
 	{
-		this.name = name;
-		this.body = body;
-		ground = null;
-	}
+        this.name = name;
+        this.body = body;
+        ground = null;
 
-	@Override
-	public int arity()
+    def int arity()
 	{
-		return body.size();
-	}
+        return body.size();
 
-	private boolean computeGround()
+    private boolean computeGround()
 	{
-		for (GdlTerm term : body)
+        for (GdlTerm term : body)
 		{
-			if (!term.isGround())
+            if (!term.isGround())
 			{
-				return false;
-			}
-		}
+                return false;
 
-		return true;
-	}
+        return true;
 
-	@Override
-	public GdlTerm get(int index)
+    def GdlTerm get(int index)
 	{
-		return body.get(index);
-	}
+        return body.get(index);
 
-	@Override
-	public GdlConstant getName()
+    def GdlConstant getName()
 	{
-		return name;
-	}
+        return name;
 
-	@Override
-	public boolean isGround()
+    def boolean isGround()
 	{
-		if (ground == null)
+        if (ground == null)
 		{
-			ground = computeGround();
-		}
+            ground = computeGround();
 
-		return ground;
-	}
+        return ground;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-		sb.append("( " + name + " ");
-		for (GdlTerm term : body)
+        sb.append("( " + name + " ");
+        for (GdlTerm term : body)
 		{
-			sb.append(term + " ");
-		}
-		sb.append(")");
+            sb.append(term + " ");
+        sb.append(")");
 
-		return sb.toString();
-	}
+        return sb.toString();
 
-	@Override
-	public GdlTerm toTerm()
+    def GdlTerm toTerm()
 	{
-		return GdlPool.getFunction(name, body);
-	}
+        return GdlPool.getFunction(name, body);
 
-	@Override
-	public List<GdlTerm> getBody()
+    def List<GdlTerm> getBody()
 	{
-		return body;
-	}
+        return body;
 
-}

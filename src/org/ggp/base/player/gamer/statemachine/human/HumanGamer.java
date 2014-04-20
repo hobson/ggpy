@@ -24,72 +24,52 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
  * player has a very simplistic user interface; if you actually want to play
  * as a human, you're probably better off using the purpose-built Kiosk app.
  */
-public final class HumanGamer extends StateMachineGamer
+class HumanGamer(StateMachineGamer):
 {
-	@Override
-	public String getName() {
-		return "Human";
-	}
+    def getName():  # String
+        return "Human";
 
 	/**
 	 * Selects the default move as the first legal move, and then waits
 	 * while the Human sets their move. This is done via the HumanDetailPanel.
 	 */
-	@Override
-	public synchronized Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def synchronized Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
-		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
-		move = moves.get(0);
+        List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
+        move = moves.get(0);
 
-		try {
-			notifyObservers(new HumanNewMovesEvent(moves, move));
-			wait(timeout - System.currentTimeMillis() - 500);
-			notifyObservers(new HumanTimeoutEvent(this));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        try {
+            notifyObservers(new HumanNewMovesEvent(moves, move));
+            wait(timeout - System.currentTimeMillis() - 500);
+            notifyObservers(new HumanTimeoutEvent(this));
+		} catch (Exception e):
+            e.printStackTrace();
 
-		return move;
-	}
+        return move;
 
-	private Move move;
-	public void setMove(Move move) {
-		this.move = move;
-	}
+    private Move move;
+    def void setMove(Move move):
+        this.move = move;
 
-	@Override
-	public DetailPanel getDetailPanel() {
-		return new HumanDetailPanel();
-	}
+    def getDetailPanel():  # DetailPanel
+        return new HumanDetailPanel();
 
-	@Override
-	public void preview(Game g, long timeout) throws GamePreviewException {
+    def void preview(Game g, long timeout) throws GamePreviewException {
 		// Human gamer does no game previewing.
-	}
 
-	@Override
-	public void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 		// Human gamer does no metagaming at the beginning of the match.
-	}
 
-	@Override
-	public void stateMachineStop() {
+    def stateMachineStop():  # void
 		// Human gamer does no special cleanup when the match ends normally.
-	}
 
-	@Override
-	public void stateMachineAbort() {
+    def stateMachineAbort():  # void
 		// Human gamer does no special cleanup when the match ends abruptly.
-	}
 
-	@Override
-	public StateMachine getInitialStateMachine() {
-		return new CachedStateMachine(new ProverStateMachine());
-	}
+    def getInitialStateMachine():  # StateMachine
+        return new CachedStateMachine(new ProverStateMachine());
 
-	@Override
-	public boolean isComputerPlayer() {
-		return false;
-	}
+    def isComputerPlayer():  # boolean
+        return false;
 }

@@ -2,19 +2,16 @@ package org.ggp.base.player.event;
 
 import org.ggp.base.util.observer.Event;
 
-public final class PlayerReceivedMessageEvent extends Event
+class PlayerReceivedMessageEvent(Event):
 {
 
-	private final String message;
+    message = ''
 
-	public PlayerReceivedMessageEvent(String message)
+    def PlayerReceivedMessageEvent(message='')
 	{
-		this.message = message;
-	}
+        this.message = message;
 
-	public String getMessage()
+    def String getMessage()
 	{
-		return message;
-	}
+        return message;
 
-}

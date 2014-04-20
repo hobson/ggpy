@@ -9,7 +9,7 @@ import org.ggp.base.util.gdl.transforms.VariableConstrainer;
  * This can be a much more efficient way of handling recursive rules.
  */
 public interface DifferentialForwardChainingReasoner<Rule, Sentences>
-						extends ForwardChainingReasoner<Rule, Sentences> {
+                        extends ForwardChainingReasoner<Rule, Sentences> {
 	/**
 	 * Given a rule, all sentences known to be true, and a set of new sentences,
 	 * returns all new results of the rule that involve at least one of the new
@@ -23,6 +23,5 @@ public interface DifferentialForwardChainingReasoner<Rule, Sentences>
 	 * is derived from should have had the {@link VariableConstrainer}
 	 * transformation applied to it.
 	 */
-	Sentences getRuleResultsForNewSentences(Rule rule, SentenceDomainModel domainModel,
-			Sentences allSentences, Sentences newSentences) throws InterruptedException;
-}
+    Sentences getRuleResultsForNewSentences(Rule rule, SentenceDomainModel domainModel,
+            Sentences allSentences, Sentences newSentences) throws InterruptedException;

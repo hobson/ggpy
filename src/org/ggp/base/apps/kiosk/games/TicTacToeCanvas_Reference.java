@@ -18,22 +18,19 @@ import org.ggp.base.util.statemachine.exceptions.MoveDefinitionException;
  *
  * @author Sam Schreiber
  */
-public class TicTacToeCanvas_Reference extends GameCanvas {
+class TicTacToeCanvas_Reference(GameCanvas):
     public static final long serialVersionUID = 0x1;
 
-    @Override
-	public String getGameName() {
+    def getGameName():  # String
         return "Tic-Tac-Toe (Old Version)";
     }
 
-    @Override
-	protected String getGameKey() {
+    protected String getGameKey():
         return "ticTacToe";
     }
 
     private Graphics mostRecentG;
-    @Override
-	protected void paintGame(Graphics g) {
+    protected void paintGame(Graphics g):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
@@ -51,12 +48,12 @@ public class TicTacToeCanvas_Reference extends GameCanvas {
         if(gameState == null)
             return;
 
-        for(GdlSentence stateFact : gameState.getContents()) {
+        for(GdlSentence stateFact : gameState.getContents()):
             if(stateFact.getBody().size() > 1)
                 continue;
 
             GdlSentence theRealSentence = stateFact.getBody().get(0).toSentence();
-            if(theRealSentence.getName().toString().equals("cell")) {
+            if(theRealSentence.getName().toString().equals("cell")):
                 int xCell = Integer.parseInt(theRealSentence.getBody().get(0).toString());
                 int yCell = Integer.parseInt(theRealSentence.getBody().get(1).toString());
                 char mark = theRealSentence.getBody().get(2).toString().charAt(0);
@@ -66,12 +63,12 @@ public class TicTacToeCanvas_Reference extends GameCanvas {
 
                 g.setColor(Color.BLACK);
                 final int BORDER_SIZE = 35;
-                if(mark == 'b') {
+                if(mark == 'b'):
                     ;
-                } else if(mark == 'x') {
+                } else if(mark == 'x'):
                     g.drawLine(xSpot+BORDER_SIZE, ySpot+BORDER_SIZE, xSpot + width/3 - BORDER_SIZE, ySpot + height/3 - BORDER_SIZE);
                     g.drawLine(xSpot+BORDER_SIZE, ySpot + height/3 - BORDER_SIZE, xSpot + width/3 - BORDER_SIZE, ySpot+BORDER_SIZE);
-                } else if(mark == 'o') {
+                } else if(mark == 'o'):
                     g.drawOval(xSpot+BORDER_SIZE, ySpot+BORDER_SIZE, width/3 - 2*BORDER_SIZE, height/3 - 2*BORDER_SIZE);
                 }
             }
@@ -80,12 +77,12 @@ public class TicTacToeCanvas_Reference extends GameCanvas {
         try {
             List<Move> legalMoves = stateMachine.getLegalMoves(gameState, myRole);
 
-            for(Move legalMove : legalMoves) {
+            for(Move legalMove : legalMoves):
                 if(legalMove.getContents() instanceof GdlConstant)
                     continue;
 
                 GdlFunction moveContents = (GdlFunction) legalMove.getContents();
-				int xCell = Integer.parseInt(moveContents.getBody().get(0).toString());
+                int xCell = Integer.parseInt(moveContents.getBody().get(0).toString());
                 int yCell = Integer.parseInt(moveContents.getBody().get(1).toString());
 
                 int xSpot = (xCell-1)*width/3 + 2;
@@ -93,30 +90,28 @@ public class TicTacToeCanvas_Reference extends GameCanvas {
 
                 final int BORDER_SIZE = 60;
                 g.setColor(Color.GREEN);
-                if(myRole.toString().equals("xplayer")) {
+                if(myRole.toString().equals("xplayer")):
                     g.drawLine(xSpot+BORDER_SIZE, ySpot+BORDER_SIZE, xSpot + width/3 - BORDER_SIZE, ySpot + height/3 - BORDER_SIZE);
                     g.drawLine(xSpot+BORDER_SIZE, ySpot + height/3 - BORDER_SIZE, xSpot + width/3 - BORDER_SIZE, ySpot+BORDER_SIZE);
                 } else {
                     g.drawOval(xSpot+BORDER_SIZE, ySpot+BORDER_SIZE, width/3 - 2*BORDER_SIZE, height/3 - 2*BORDER_SIZE);
                 }
 
-                if(xSelectedCell == xCell && ySelectedCell == yCell) {
+                if(xSelectedCell == xCell && ySelectedCell == yCell):
                     g.drawRect(xSpot+BORDER_SIZE/2, ySpot+BORDER_SIZE/2, width/3-BORDER_SIZE, height/3-BORDER_SIZE);
                 }
             }
-        } catch (MoveDefinitionException e) {
+        } catch (MoveDefinitionException e):
             ;
         }
     }
 
-    @Override
-	protected void handleDragEvent(int dx, int dy) {
+    protected void handleDragEvent(int dx, int dy):
         ;
     }
 
     private int xSelectedCell, ySelectedCell;
-    @Override
-	protected void handleClickEvent(int x, int y) {
+    protected void handleClickEvent(int x, int y):
         int width = mostRecentG.getClipBounds().width;
         int height = mostRecentG.getClipBounds().height;
 
@@ -127,8 +122,8 @@ public class TicTacToeCanvas_Reference extends GameCanvas {
             int yCell = 1+3*y/height;
 
             String moveString = "( mark " + xCell + " " + yCell + " )";
-            for(Move legalMove : legalMoves) {
-                if(legalMove.toString().equals(moveString)) {
+            for(Move legalMove : legalMoves):
+                if(legalMove.toString().equals(moveString)):
                     submitWorkingMove(legalMove);
 
                     xSelectedCell = xCell;
@@ -137,13 +132,12 @@ public class TicTacToeCanvas_Reference extends GameCanvas {
                     repaint();
                 }
             }
-        } catch(Exception e) {
+        } catch(Exception e):
             ;
         }
     }
 
-    @Override
-	public void clearMoveSelection() {
+    def clearMoveSelection():  # void
         xSelectedCell = ySelectedCell = 0;
         submitWorkingMove(null);
 

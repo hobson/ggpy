@@ -37,7 +37,7 @@ import external.JSON.JSONObject;
  *
  * @author Sam Schreiber
  */
-public class SimpleGameSim {
+class SimpleGameSim(object):
     public static final boolean hideStepCounter = true;
     public static final boolean hideControlProposition = true;
     public static final boolean showCurrentState = false;
@@ -54,21 +54,21 @@ public class SimpleGameSim {
             // The match will then be signed using those keys. Do not use the sample keys if you
             // want to actually prove anything.
             theMatch.setCryptographicKeys(new EncodedKeyPair(FileUtils.readFileAsString(new File("src/org/ggp/base/apps/utilities/SampleKeys.json"))));
-        } catch (JSONException e) {
+        } catch (JSONException e):
             System.err.println("Could not load sample cryptograhic keys: " + e);
         }
 
         // Set up fake players to pretend to play the game
         List<String> fakeHosts = new ArrayList<String>();
         List<Integer> fakePorts = new ArrayList<Integer>();
-        for (int i = 0; i < Role.computeRoles(theGame.getRules()).size(); i++) {
+        for (int i = 0; i < Role.computeRoles(theGame.getRules()).size(); i++):
         	fakeHosts.add("SamplePlayer" + i);
         	fakePorts.add(9147+i);
         }
 
         // Set up a game server to play through the game, with all players playing randomly.
         final GameServer theServer = new GameServer(theMatch, fakeHosts, fakePorts);
-        for (int i = 0; i < fakeHosts.size(); i++) {
+        for (int i = 0; i < fakeHosts.size(); i++):
         	theServer.makePlayerPlayRandomly(i);
         }
 
@@ -77,24 +77,23 @@ public class SimpleGameSim {
 
         final Set<GdlSentence> oldContents = new HashSet<GdlSentence>();
         final int[] nState = new int[1];
-        theServer.addObserver(new Observer() {
-			@Override
-			public void observe(Event event) {
-				if (event instanceof ServerNewGameStateEvent) {
-					MachineState theCurrentState = ((ServerNewGameStateEvent)event).getState();
+        theServer.addObserver(new Observer():
+        		    def void observe(Event event):
+                if (event instanceof ServerNewGameStateEvent):
+                    MachineState theCurrentState = ((ServerNewGameStateEvent)event).getState();
 	                if(nState[0] > 0) System.out.print("State[" + nState[0] + "]: ");
 	                Set<GdlSentence> newContents = theCurrentState.getContents();
-	                for(GdlSentence newSentence : newContents) {
+	                for(GdlSentence newSentence : newContents):
 	                    if(hideStepCounter && newSentence.toString().contains("step")) continue;
 	                    if(hideControlProposition && newSentence.toString().contains("control")) continue;
-	                    if(!oldContents.contains(newSentence)) {
+	                    if(!oldContents.contains(newSentence)):
 	                        System.out.print("+" + newSentence + ", ");
 	                    }
 	                }
-	                for(GdlSentence oldSentence : oldContents) {
+	                for(GdlSentence oldSentence : oldContents):
 	                    if(hideStepCounter && oldSentence.toString().contains("step")) continue;
 	                    if(hideControlProposition && oldSentence.toString().contains("control")) continue;
-	                    if(!newContents.contains(oldSentence)) {
+	                    if(!newContents.contains(oldSentence)):
 	                        System.out.print("-" + oldSentence + ", ");
 	                    }
 	                }
@@ -104,21 +103,19 @@ public class SimpleGameSim {
 
 	                if(showCurrentState) System.out.println("State[" + nState[0] + "] Full: " + theCurrentState);
 	                nState[0]++;
-				} else if (event instanceof ServerNewMovesEvent) {
-					System.out.println("Move taken: " + ((ServerNewMovesEvent)event).getMoves());
-				} else if (event instanceof ServerCompletedMatchEvent) {
+				} else if (event instanceof ServerNewMovesEvent):
+                    System.out.println("Move taken: " + ((ServerNewMovesEvent)event).getMoves());
+				} else if (event instanceof ServerCompletedMatchEvent):
 			        System.out.println("State[" + nState[0] + "] Full (Terminal): " + oldContents);
 			        System.out.println("Match information: " + theMatch);
 			        System.out.println("Goals: " + ((ServerCompletedMatchEvent)event).getGoals());
 			        try {
 			        	System.out.println("Match information cryptographically signed? " + SignableJSON.isSignedJSON(new JSONObject(theMatch.toJSON())));
 			        	System.out.println("Match information cryptographic signature valid? " + SignableJSON.verifySignedJSON(new JSONObject(theMatch.toJSON())));
-			        } catch (JSONException je) {
+			        } catch (JSONException je):
 			        	je.printStackTrace();
 			        }
 			        System.out.println("Game over.");
-				}
-			}
 		});
 
         theServer.start();

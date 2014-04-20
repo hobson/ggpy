@@ -7,25 +7,20 @@ import org.ggp.base.util.match.Match;
 import org.ggp.base.util.statemachine.Move;
 
 
-public final class RandomPlayRequestThread extends PlayRequestThread
+class RandomPlayRequestThread(PlayRequestThread):
 {
-	private Move move;
+    private Move move;
 
-	public RandomPlayRequestThread(Match match, List<Move> legalMoves)
+    def RandomPlayRequestThread(match=Match(), List<Move> legalMoves)
 	{
-		super(null, match, null, legalMoves, null, null, 0, null, true);
-		move = legalMoves.get(new Random().nextInt(legalMoves.size()));
-	}
+        super(null, match, null, legalMoves, null, null, 0, null, true);
+        move = legalMoves.get(new Random().nextInt(legalMoves.size()));
 
-	@Override
-	public Move getMove()
+    def Move getMove()
 	{
-		return move;
-	}
+        return move;
 
-	@Override
-	public void run()
+    def void run()
 	{
 		;
-	}
 }

@@ -16,7 +16,7 @@ public interface FunctionInfo {
 	 * Returns the SentenceForm that this functionality information
 	 * is defined for.
 	 */
-	SentenceForm getSentenceForm();
+    SentenceForm getSentenceForm();
 
 	/**
 	 * Returns a list of boolean values indicating which slots in
@@ -25,7 +25,7 @@ public interface FunctionInfo {
 	 * value would be uniquely determined by the other slot's, so
 	 * this would return [true, true].)
 	 */
-	List<Boolean> getDependentSlots();
+    List<Boolean> getDependentSlots();
 
 	/**
 	 * Given a sentence of the constant form's sentence form, finds all
@@ -37,7 +37,7 @@ public interface FunctionInfo {
 	 * it CANNOT be produced in this way.
 	 */
 	//TODO: Replace with utility function in FunctionInfos
-	Set<GdlVariable> getProducibleVars(GdlSentence sentence);
+    Set<GdlVariable> getProducibleVars(GdlSentence sentence);
 
 	/**
 	 * Returns a map from input tuples to results for the given slot of
@@ -47,5 +47,4 @@ public interface FunctionInfo {
 	 * sentence, in order, except for the slot of interest, which is
 	 * omitted from that list.
 	 */
-	Map<ImmutableList<GdlConstant>, GdlConstant> getValueMap(int varIndex);
-}
+    Map<ImmutableList<GdlConstant>, GdlConstant> getValueMap(int varIndex);

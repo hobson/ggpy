@@ -7,20 +7,16 @@ import org.ggp.base.util.observer.Event;
 import org.ggp.base.util.statemachine.Move;
 
 
-@SuppressWarnings("serial")
-public final class ServerNewMovesEvent extends Event implements Serializable
+class ServerNewMovesEvent(Event implements Serializable):
 {
 
-	private final List<Move> moves;
+    private final List<Move> moves;
 
-	public ServerNewMovesEvent(List<Move> moves)
+    def ServerNewMovesEvent(List<Move> moves)
 	{
-		this.moves = moves;
-	}
+        this.moves = moves;
 
-	public List<Move> getMoves()
+    def List<Move> getMoves()
 	{
-		return moves;
-	}
+        return moves;
 
-}

@@ -30,7 +30,7 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  * @author evancox
  * @author Sam
  */
-public abstract class StateMachineGamer extends Gamer
+public abstract class StateMachineGamer(Gamer):
 {
     // =====================================================================
     // First, the abstract methods which need to be overriden by subclasses.
@@ -79,27 +79,24 @@ public abstract class StateMachineGamer extends Gamer
 	/**
 	 * Returns the current state of the game.
 	 */
-	public final MachineState getCurrentState()
+    def final MachineState getCurrentState()
 	{
-		return currentState;
-	}
+        return currentState;
 
 	/**
 	 * Returns the role that this gamer is playing as in the game.
 	 */
-	public final Role getRole()
+    def final Role getRole()
 	{
-		return role;
-	}
+        return role;
 
 	/**
 	 * Returns the state machine.  This is used for calculating the next state and other operations, such as computing
 	 * the legal moves for all players, whether states are terminal, and the goal values of terminal states.
 	 */
-	public final StateMachine getStateMachine()
+    def final StateMachine getStateMachine()
 	{
-		return stateMachine;
-	}
+        return stateMachine;
 
     /**
      * Cleans up the role, currentState and stateMachine. This should only be
@@ -107,7 +104,7 @@ public abstract class StateMachineGamer extends Gamer
      * free up resources that the state machine has tied up. Currently, it is
      * only used in the Proxy, for players designed to run 24/7.
      */
-    protected final void cleanupAfterMatch() {
+    protected final void cleanupAfterMatch():
         role = null;
         currentState = null;
         stateMachine = null;
@@ -125,14 +122,14 @@ public abstract class StateMachineGamer extends Gamer
      *
      * @param newStateMachine the new state machine
      */
-    protected final void switchStateMachine(StateMachine newStateMachine) {
+    protected final void switchStateMachine(StateMachine newStateMachine):
         try {
             MachineState newCurrentState = newStateMachine.getInitialState();
             Role newRole = newStateMachine.getRoleFromConstant(getRoleName());
 
             // Attempt to run through the game history in the new machine
             List<List<GdlTerm>> theMoveHistory = getMatch().getMoveHistory();
-            for(List<GdlTerm> nextMove : theMoveHistory) {
+            for(List<GdlTerm> nextMove : theMoveHistory):
                 List<Move> theJointMove = new ArrayList<Move>();
                 for(GdlTerm theSentence : nextMove)
                     theJointMove.add(newStateMachine.getMoveFromTerm(theSentence));
@@ -143,7 +140,7 @@ public abstract class StateMachineGamer extends Gamer
             role = newRole;
             currentState = newCurrentState;
             stateMachine = newStateMachine;
-        } catch (Exception e) {
+        } catch (Exception e):
             GamerLogger.log("GamePlayer", "Caught an exception while switching state machine!");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
@@ -161,25 +158,21 @@ public abstract class StateMachineGamer extends Gamer
 	 * initializes the state machine and role using the match description, and
 	 * then calls stateMachineMetaGame.
 	 */
-	@Override
-	public final void metaGame(long timeout) throws MetaGamingException
+    def final void metaGame(long timeout) throws MetaGamingException
 	{
-		try
+        try
 		{
-			stateMachine = getInitialStateMachine();
-			stateMachine.initialize(getMatch().getGame().getRules());
-			currentState = stateMachine.getInitialState();
-			role = stateMachine.getRoleFromConstant(getRoleName());
-			getMatch().appendState(currentState.getContents());
+            stateMachine = getInitialStateMachine();
+            stateMachine.initialize(getMatch().getGame().getRules());
+            currentState = stateMachine.getInitialState();
+            role = stateMachine.getRoleFromConstant(getRoleName());
+            getMatch().appendState(currentState.getContents());
 
-			stateMachineMetaGame(timeout);
-		}
-		catch (Exception e)
+            stateMachineMetaGame(timeout);
+        catch (Exception e)
 		{
 		    GamerLogger.logStackTrace("GamePlayer", e);
-			throw new MetaGamingException(e);
-		}
-	}
+            throw new MetaGamingException(e);
 
 	/**
 	 * A wrapper function for stateMachineSelectMove. When we are asked to
@@ -187,74 +180,58 @@ public abstract class StateMachineGamer extends Gamer
 	 * and then calls stateMachineSelectMove to select a move based on that
 	 * current state.
 	 */
-	@Override
-	public final GdlTerm selectMove(long timeout) throws MoveSelectionException
+    def final GdlTerm selectMove(long timeout) throws MoveSelectionException
 	{
-		try
+        try
 		{
-			stateMachine.doPerMoveWork();
+            stateMachine.doPerMoveWork();
 
-			List<GdlTerm> lastMoves = getMatch().getMostRecentMoves();
-			if (lastMoves != null)
+            List<GdlTerm> lastMoves = getMatch().getMostRecentMoves();
+            if (lastMoves != null)
 			{
-				List<Move> moves = new ArrayList<Move>();
-				for (GdlTerm sentence : lastMoves)
+                List<Move> moves = new ArrayList<Move>();
+                for (GdlTerm sentence : lastMoves)
 				{
-					moves.add(stateMachine.getMoveFromTerm(sentence));
-				}
+                    moves.add(stateMachine.getMoveFromTerm(sentence));
 
-				currentState = stateMachine.getNextState(currentState, moves);
-				getMatch().appendState(currentState.getContents());
-			}
+                currentState = stateMachine.getNextState(currentState, moves);
+                getMatch().appendState(currentState.getContents());
 
-			return stateMachineSelectMove(timeout).getContents();
-		}
-		catch (Exception e)
+            return stateMachineSelectMove(timeout).getContents();
+        catch (Exception e)
 		{
 		    GamerLogger.logStackTrace("GamePlayer", e);
-			throw new MoveSelectionException(e);
-		}
-	}
+            throw new MoveSelectionException(e);
 
-	@Override
-	public void stop() throws StoppingException {
-		try {
-			stateMachine.doPerMoveWork();
+    def void stop() throws StoppingException {
+        try {
+            stateMachine.doPerMoveWork();
 
-			List<GdlTerm> lastMoves = getMatch().getMostRecentMoves();
-			if (lastMoves != null)
+            List<GdlTerm> lastMoves = getMatch().getMostRecentMoves();
+            if (lastMoves != null)
 			{
-				List<Move> moves = new ArrayList<Move>();
-				for (GdlTerm sentence : lastMoves)
+                List<Move> moves = new ArrayList<Move>();
+                for (GdlTerm sentence : lastMoves)
 				{
-					moves.add(stateMachine.getMoveFromTerm(sentence));
-				}
+                    moves.add(stateMachine.getMoveFromTerm(sentence));
 
-				currentState = stateMachine.getNextState(currentState, moves);
-				getMatch().appendState(currentState.getContents());
-				getMatch().markCompleted(stateMachine.getGoals(currentState));
-			}
+                currentState = stateMachine.getNextState(currentState, moves);
+                getMatch().appendState(currentState.getContents());
+                getMatch().markCompleted(stateMachine.getGoals(currentState));
 
-			stateMachineStop();
-		}
-		catch (Exception e)
+            stateMachineStop();
+        catch (Exception e)
 		{
-			GamerLogger.logStackTrace("GamePlayer", e);
-			throw new StoppingException(e);
-		}
-	}
+            GamerLogger.logStackTrace("GamePlayer", e);
+            throw new StoppingException(e);
 
-	@Override
-	public void abort() throws AbortingException {
-		try {
-			stateMachineAbort();
-		}
-		catch (Exception e)
+    def void abort() throws AbortingException {
+        try {
+            stateMachineAbort();
+        catch (Exception e)
 		{
-			GamerLogger.logStackTrace("GamePlayer", e);
-			throw new AbortingException(e);
-		}
-	}
+            GamerLogger.logStackTrace("GamePlayer", e);
+            throw new AbortingException(e);
 
     // Internal state about the current state of the state machine.
     private Role role;

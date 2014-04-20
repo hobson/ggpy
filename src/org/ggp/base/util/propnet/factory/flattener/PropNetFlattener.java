@@ -39,19 +39,19 @@ import org.ggp.base.util.logging.GamerLogger;
  * @author Ethan Dreyfuss
  * @author Sam Schreiber (comments)
  */
-public class PropNetFlattener {
+class PropNetFlattener(object):
 
     private List<Gdl> description;
 
-    private class Assignment extends ArrayList<GdlConstant> {
+    private class Assignment(ArrayList<GdlConstant>):
         private static final long serialVersionUID = 1L;
     }
 
-    private class Assignments extends HashSet<Assignment> {
+    private class Assignments(HashSet<Assignment>):
         private static final long serialVersionUID = 1L;
     }
 
-    private class Index extends HashMap<GdlConstant, Assignments> {
+    private class Index(HashMap<GdlConstant, Assignments>):
         private static final long serialVersionUID = 1L;
     }
 
@@ -75,8 +75,7 @@ public class PropNetFlattener {
         public Domain dom;
         GdlTerm key;
 
-        @Override
-        public String toString()
+            public String toString()
         {
             return template.toString();
         }
@@ -92,14 +91,12 @@ public class PropNetFlattener {
             this.originalRule = originalRule;
         }
 
-        @Override
-        public String toString()
+            public String toString()
         {
             return "\n\tProduction: "+(productionTemplate!=null ? productionTemplate.toString() : "null")+" conditions: "+(conditions!=null ? conditions.toString() : "null");
         }
 
-        @Override
-        public boolean equals(Object other)
+            public boolean equals(Object other)
         {
             if(!(other instanceof RuleReference))
                 return false;
@@ -107,8 +104,7 @@ public class PropNetFlattener {
             return rhs.productionTemplate==this.productionTemplate && rhs.conditions.equals(this.conditions);
         }
 
-        @Override
-        public int hashCode()
+            public int hashCode()
         {
             return productionTemplate.hashCode()+conditions.hashCode();
         }
@@ -121,16 +117,14 @@ public class PropNetFlattener {
         public List<Index> indices = new ArrayList<Index>();
         public Set<RuleReference> ruleRefs = new HashSet<RuleReference>();
 
-        @SuppressWarnings("unused")
-        public GdlTerm name, name2;
+                public GdlTerm name, name2;
 
-        @Override
-        public String toString()
+            public String toString()
         {
             return "\nName: "+name+"\nvalues: "+assignments;//+"\nruleRefs: "+ruleRefs;
         }
 
-        public void buildIndices() {
+        public void buildIndices():
             for(Assignment assignment : assignments)
             {
                 addAssignmentToIndex(assignment);
@@ -151,7 +145,7 @@ public class PropNetFlattener {
             }
         }
 
-        public void addAssignmentToIndex(Assignment assignment) {
+        public void addAssignmentToIndex(Assignment assignment):
             for(int i=0; i<assignment.size(); i++)
             {
                 GdlConstant c = assignment.get(i);
@@ -198,7 +192,7 @@ public class PropNetFlattener {
         return getAllInstantiations();
     }
 
-    private List<GdlRule> getAllInstantiations() {
+    private List<GdlRule> getAllInstantiations():
         List<GdlRule> rval = new ArrayList<GdlRule>();
 
         for(Gdl gdl : description)
@@ -265,12 +259,12 @@ public class PropNetFlattener {
         return rval;
     }
 
-    private GdlRule getInstantiation(Gdl gdl, Map<GdlVariable, GdlConstant> varInstantiation) {
+    private GdlRule getInstantiation(Gdl gdl, Map<GdlVariable, GdlConstant> varInstantiation):
         Gdl instant = getInstantiationAux(gdl, varInstantiation);
         return (GdlRule)instant;
     }
 
-    private Gdl getInstantiationAux(Gdl gdl, Map<GdlVariable, GdlConstant> varInstantiation) {
+    private Gdl getInstantiationAux(Gdl gdl, Map<GdlVariable, GdlConstant> varInstantiation):
         if(gdl instanceof GdlRelation)
         {
             GdlRelation relation = (GdlRelation) gdl;
@@ -416,7 +410,7 @@ public class PropNetFlattener {
         }
     }
 
-    private Assignment getConstantList(GdlTerm term) {
+    private Assignment getConstantList(GdlTerm term):
         Assignment rval = new Assignment();
         if(term instanceof GdlConstant)
         {
@@ -433,7 +427,7 @@ public class PropNetFlattener {
         return rval;
     }
 
-    private List<GdlTerm> getConstantAndVariableList(GdlTerm term) {
+    private List<GdlTerm> getConstantAndVariableList(GdlTerm term):
         List<GdlTerm> rval = new ArrayList<GdlTerm>();
         if(term instanceof GdlConstant)
         {
@@ -458,7 +452,7 @@ public class PropNetFlattener {
     GdlConstant doesConst = GdlPool.getConstant("does");
     GdlConstant nextConst = GdlPool.getConstant("next");
     GdlConstant initConst = GdlPool.getConstant("init");
-    private GdlTerm findGenericForm(GdlTerm term) {
+    private GdlTerm findGenericForm(GdlTerm term):
         if(term instanceof GdlConstant)
             return fillerVar;
         else if(term instanceof GdlVariable)
@@ -478,13 +472,13 @@ public class PropNetFlattener {
         return GdlPool.getFunction(name, newBody);
     }
 
-    private List<List<GdlLiteral>> deOr(List<GdlLiteral> rhs) {
+    private List<List<GdlLiteral>> deOr(List<GdlLiteral> rhs):
         List<List<GdlLiteral>> wrapped = new ArrayList<List<GdlLiteral>>();
         wrapped.add(rhs);
         return deOr2(wrapped);
     }
 
-    private List<List<GdlLiteral>> deOr2(List<List<GdlLiteral>> rhsList) {
+    private List<List<GdlLiteral>> deOr2(List<List<GdlLiteral>> rhsList):
         List<List<GdlLiteral>> rval = new ArrayList<List<GdlLiteral>>();
         boolean expandedSomething = false;
         for(List<GdlLiteral> rhs : rhsList)
@@ -529,7 +523,7 @@ public class PropNetFlattener {
             return deOr2(rval);
     }
 
-    private List<Gdl> expandFirstOr(Gdl gdl) {
+    private List<Gdl> expandFirstOr(Gdl gdl):
         List<Gdl> rval;
         List<Gdl> expandedChild;
         if(gdl instanceof GdlDistinct)
@@ -777,7 +771,7 @@ public class PropNetFlattener {
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args):
         List<Gdl> description = GameRepository.getDefaultRepository().getGame("conn4").getRules();
 
         PropNetFlattener flattener = new PropNetFlattener(description);

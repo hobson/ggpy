@@ -39,7 +39,7 @@ import org.xml.sax.SAXException;
  *
  * @author Ethan Dreyfuss and Sam Schreiber
  */
-public class GameStateRenderer {
+class GameStateRenderer(object):
     private static final Dimension defaultSize = new Dimension(600,600);
 
     /* Note: NaiveUserAgent is not thread safe, so whenever the architecture
@@ -67,9 +67,9 @@ public class GameStateRenderer {
             // them as text, and not as styles. So we have to pull them out.
             NodeList styles = dom.getElementsByTagName("style");
             Node head = dom.getElementsByTagName("head").item(0);
-            for (int i = 0; i < styles.getLength(); i += 1) {
+            for (int i = 0; i < styles.getLength(); i += 1):
                 Node parent = styles.item(i).getParentNode();
-                if (!parent.equals(head) && parent.getNamespaceURI().contains("html")) {
+                if (!parent.equals(head) && parent.getNamespaceURI().contains("html")):
                     head.appendChild(styles.item(i));
                 }
             }
@@ -79,7 +79,7 @@ public class GameStateRenderer {
                     defaultSize.width, defaultSize.height);
             style.appendChild(dom.createTextNode(bodyStyle));
             head.appendChild(style);
-        } catch (SAXException | IOException ex) {
+        } catch (SAXException | IOException ex):
             xhtml = "<html><head><title>Error</title></head><body><h1>Error parsing visualization</h1><pre id='pre'></pre></body></html>";
             dom = XMLResource.load(new StringReader(xhtml)).getDocument();
             dom.getElementById("pre").appendChild(dom.createTextNode(ex.toString()));
@@ -97,11 +97,11 @@ public class GameStateRenderer {
         backimage.setData(r.getImage().getData());
     }
 
-    public static synchronized void shrinkCache() {
+    public static synchronized void shrinkCache():
         userAgent.shrinkImageCache();
     }
 
-    private static String getXHTMLfromGameXML(String gameXML, String XSL) {
+    private static String getXHTMLfromGameXML(String gameXML, String XSL):
         XSL = XSL.replace("<!DOCTYPE stylesheet [<!ENTITY ROOT \"http://games.ggp.org/base\">]>", "");
         XSL = XSL.replace("&ROOT;", "http://games.ggp.org/base").trim();
 
@@ -115,7 +115,7 @@ public class GameStateRenderer {
             transformer.setParameter("height", defaultSize.getHeight()-40);
             transformer.transform(new StreamSource(game.getInputStream()),
                     new StreamResult(content.getOutputStream()));
-        } catch (Exception ex) {
+        } catch (Exception ex):
             ex.printStackTrace();
         }
 
@@ -126,35 +126,33 @@ public class GameStateRenderer {
     private static class IOString
     {
         private StringBuffer buf;
-        public IOString(String s) {
+        public IOString(String s):
             buf = new StringBuffer(s);
         }
-        public String getString() {
+        public String getString():
             return buf.toString();
         }
 
-        public InputStream getInputStream() {
+        public InputStream getInputStream():
             return new IOString.IOStringInputStream();
         }
-        public OutputStream getOutputStream() {
+        public OutputStream getOutputStream():
             return new IOString.IOStringOutputStream();
         }
 
-        class IOStringInputStream extends java.io.InputStream {
+        class IOStringInputStream(java.io.InputStream):
             private int position = 0;
-            @Override
-			public int read() throws java.io.IOException
+        		    def int read() throws java.io.IOException
             {
-                if (position < buf.length()) {
+                if (position < buf.length()):
                     return buf.charAt(position++);
                 } else {
                     return -1;
                 }
             }
         }
-        class IOStringOutputStream extends java.io.OutputStream {
-            @Override
-			public void write(int character) throws java.io.IOException {
+        class IOStringOutputStream(java.io.OutputStream):
+        		    def void write(int character) throws java.io.IOException {
                 buf.append((char)character);
             }
         }

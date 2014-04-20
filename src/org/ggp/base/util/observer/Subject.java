@@ -3,8 +3,7 @@ package org.ggp.base.util.observer;
 public interface Subject
 {
 
-	public void addObserver(Observer observer);
+    def void addObserver(Observer observer);
 
-	public void notifyObservers(Event event);
+    def void notifyObservers(Event event);
 
-}

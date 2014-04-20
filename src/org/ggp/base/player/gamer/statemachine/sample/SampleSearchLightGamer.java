@@ -40,18 +40,16 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
  *
  * @author Sam Schreiber
  */
-public final class SampleSearchLightGamer extends StateMachineGamer
+class SampleSearchLightGamer(StateMachineGamer):
 {
 	/**
 	 * Does nothing
 	 */
-	@Override
-	public void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 		// Do nothing.
-	}
 
-	private Random theRandom = new Random();
+    private Random theRandom = new Random();
 
 	/**
 	 * Employs a simple sample "Search Light" algorithm.  First selects a default legal move.
@@ -64,25 +62,23 @@ public final class SampleSearchLightGamer extends StateMachineGamer
 	 * 	<li> Otherwise select the move </li>
 	 * </ol>
 	 */
-	@Override
-	public Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 	    StateMachine theMachine = getStateMachine();
-		long start = System.currentTimeMillis();
-		long finishBy = timeout - 1000;
+        long start = System.currentTimeMillis();
+        long finishBy = timeout - 1000;
 
-		List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole());
-		Move selection = (moves.get(new Random().nextInt(moves.size())));
+        List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole());
+        Move selection = (moves.get(new Random().nextInt(moves.size())));
 
 		// Shuffle the moves into a random order, so that when we find the first
 		// move that doesn't give our opponent a forced win, we aren't always choosing
 		// the first legal move over and over (which is visibly repetitive).
-		List<Move> movesInRandomOrder = new ArrayList<Move>();
-		while(!moves.isEmpty()) {
+        List<Move> movesInRandomOrder = new ArrayList<Move>();
+        while(!moves.isEmpty()):
 		    Move aMove = moves.get(theRandom.nextInt(moves.size()));
 		    movesInRandomOrder.add(aMove);
 		    moves.remove(aMove);
-		}
 
 		// Go through all of the legal moves in a random over, and consider each one.
 		// For each move, we want to determine whether taking that move will give our
@@ -93,9 +89,9 @@ public final class SampleSearchLightGamer extends StateMachineGamer
 		// We will also continue considering moves for two seconds, in case we can stumble
 		// upon a move which would cause us to win: if we find such a move, we will just
 		// immediately take it.
-		boolean reasonableMoveFound = false;
-		int maxGoal = 0;
-		for(Move moveUnderConsideration : movesInRandomOrder) {
+        boolean reasonableMoveFound = false;
+        int maxGoal = 0;
+        for(Move moveUnderConsideration : movesInRandomOrder):
 		    // Check to see if there's time to continue.
 		    if(System.currentTimeMillis() > finishBy) break;
 
@@ -116,10 +112,10 @@ public final class SampleSearchLightGamer extends StateMachineGamer
 		    // or lose? If we lose, don't bother considering it. If we win, then we
 		    // definitely want to take this move. If its goal is better than our current
 		    // best goal, go ahead and tentatively select it
-		    if(theMachine.isTerminal(nextState)) {
-		        if(theMachine.getGoal(nextState, getRole()) == 0) {
+		    if(theMachine.isTerminal(nextState)):
+		        if(theMachine.getGoal(nextState, getRole()) == 0):
 		            continue;
-		        } else if(theMachine.getGoal(nextState, getRole()) == 100) {
+		        } else if(theMachine.getGoal(nextState, getRole()) == 100):
 	                selection = moveUnderConsideration;
 	                break;
 		        } else {
@@ -138,17 +134,17 @@ public final class SampleSearchLightGamer extends StateMachineGamer
 		    // to make us lose, and so if they are offered any move that will make us lose
 		    // they will take it.
 		    boolean forcedLoss = false;
-		    for(List<Move> jointMove : theMachine.getLegalJointMoves(nextState)) {
+		    for(List<Move> jointMove : theMachine.getLegalJointMoves(nextState)):
 		        MachineState nextNextState = theMachine.getNextState(nextState, jointMove);
-		        if(theMachine.isTerminal(nextNextState)) {
-		            if(theMachine.getGoal(nextNextState, getRole()) == 0) {
+		        if(theMachine.isTerminal(nextNextState)):
+		            if(theMachine.getGoal(nextNextState, getRole()) == 0):
 		                forcedLoss = true;
 		                break;
 		            }
 		        }
 
 		        // Check to see if there's time to continue.
-		        if(System.currentTimeMillis() > finishBy) {
+		        if(System.currentTimeMillis() > finishBy):
 		            forcedLoss = true;
 		            break;
 		        }
@@ -156,46 +152,32 @@ public final class SampleSearchLightGamer extends StateMachineGamer
 
 		    // If we've verified that this move isn't going to lead us to a state where
 		    // our opponent can defeat us in one move, we should keep track of it.
-		    if(!forcedLoss) {
+		    if(!forcedLoss):
 		        selection = moveUnderConsideration;
 		        reasonableMoveFound = true;
 		    }
-		}
 
-		long stop = System.currentTimeMillis();
+        long stop = System.currentTimeMillis();
 
-		notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
-		return selection;
-	}
-	@Override
-	public void stateMachineStop() {
+        notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
+        return selection;
+    def stateMachineStop():  # void
 		// Do nothing.
-	}
 	/**
 	 * Uses a CachedProverStateMachine
 	 */
-	@Override
-	public StateMachine getInitialStateMachine() {
-		return new CachedStateMachine(new ProverStateMachine());
-	}
+    def getInitialStateMachine():  # StateMachine
+        return new CachedStateMachine(new ProverStateMachine());
 
-	@Override
-	public String getName() {
-		return "SampleSearchLight";
-	}
+    def getName():  # String
+        return "SampleSearchLight";
 
-	@Override
-	public DetailPanel getDetailPanel() {
-		return new SimpleDetailPanel();
-	}
+    def getDetailPanel():  # DetailPanel
+        return new SimpleDetailPanel();
 
-	@Override
-	public void preview(Game g, long timeout) throws GamePreviewException {
+    def void preview(Game g, long timeout) throws GamePreviewException {
 		// Do nothing.
-	}
 
-	@Override
-	public void stateMachineAbort() {
+    def stateMachineAbort():  # void
 		// Do nothing.
-	}
 }

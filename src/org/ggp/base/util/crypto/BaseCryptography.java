@@ -18,13 +18,13 @@ import external.Base64Coder.Base64Coder;
 import external.JSON.JSONException;
 import external.JSON.JSONObject;
 
-public class BaseCryptography {
-    public static void main(String args[]) {
+class BaseCryptography(object):
+    public static void main(String args[]):
         EncodedKeyPair k = generateKeys();
         System.out.println("{\"PK\":\"" + k.thePublicKey + "\", \"SK\":\"" + k.thePrivateKey + "\"}");
     }
 
-    public static EncodedKeyPair generateKeys() {
+    public static EncodedKeyPair generateKeys():
         try {
             // Generate a 2048-bit RSA key pair
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
@@ -33,12 +33,12 @@ public class BaseCryptography {
             PrivateKey privateKey = keypair.getPrivate();
             PublicKey publicKey = keypair.getPublic();
             return new EncodedKeyPair(publicKey, privateKey);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e):
             return null;
         }
     }
 
-    public static String signData(String thePrivateKey, String theData) {
+    public static String signData(String thePrivateKey, String theData):
         PrivateKey theSK = decodePrivateKey(thePrivateKey);
         if (theSK == null) return null;
 
@@ -47,10 +47,10 @@ public class BaseCryptography {
             sig.initSign(theSK);
             sig.update(theData.getBytes("UTF-8"));
             return encodeSignature(sig.sign());
-        } catch (SignatureException e) {
-        } catch (UnsupportedEncodingException e) {
-        } catch (InvalidKeyException e) {
-        } catch (NoSuchAlgorithmException e) {
+        } catch (SignatureException e):
+        } catch (UnsupportedEncodingException e):
+        } catch (InvalidKeyException e):
+        } catch (NoSuchAlgorithmException e):
         }
         return null;
     }
@@ -73,7 +73,7 @@ public class BaseCryptography {
         public final String thePublicKey;
         public final String thePrivateKey;
 
-        public EncodedKeyPair(PublicKey thePK, PrivateKey theSK) {
+        public EncodedKeyPair(PublicKey thePK, PrivateKey theSK):
             thePublicKey = encodeKey(thePK);
             thePrivateKey = encodeKey(theSK);
         }
@@ -85,42 +85,42 @@ public class BaseCryptography {
     }
 
     /* Functions for encoding and decoding public and private keys */
-    private static String encodeKey(PublicKey thePK) {
+    private static String encodeKey(PublicKey thePK):
         return theCryptographyPrefix + encodeBytes(thePK.getEncoded());
     }
-    private static String encodeKey(PrivateKey theSK) {
+    private static String encodeKey(PrivateKey theSK):
         return theCryptographyPrefix + encodeBytes(theSK.getEncoded());
     }
-    private static String encodeSignature(byte[] theSignatureBytes) {
+    private static String encodeSignature(byte[] theSignatureBytes):
         return theCryptographyPrefix + encodeBytes(theSignatureBytes);
     }
-    private static PublicKey decodePublicKey(String thePK) {
+    private static PublicKey decodePublicKey(String thePK):
         if (!thePK.startsWith(theCryptographyPrefix)) return null;
         thePK = thePK.replaceFirst(theCryptographyPrefix, "");
 
         try {
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePublic(new X509EncodedKeySpec(decodeBytes(thePK)));
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e):
             return null;
-        } catch (InvalidKeySpecException e) {
+        } catch (InvalidKeySpecException e):
             return null;
         }
     }
-    private static PrivateKey decodePrivateKey(String theSK) {
+    private static PrivateKey decodePrivateKey(String theSK):
         if (!theSK.startsWith(theCryptographyPrefix)) return null;
         theSK = theSK.replaceFirst(theCryptographyPrefix, "");
 
         try {
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePrivate(new PKCS8EncodedKeySpec(decodeBytes(theSK)));
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e):
             return null;
-        } catch (InvalidKeySpecException e) {
+        } catch (InvalidKeySpecException e):
             return null;
         }
     }
-    private static byte[] decodeSignature(String theSig) {
+    private static byte[] decodeSignature(String theSig):
         if (!theSig.startsWith(theCryptographyPrefix)) return null;
         theSig = theSig.replaceFirst(theCryptographyPrefix, "");
 
@@ -130,10 +130,10 @@ public class BaseCryptography {
     static final String theCryptographyPrefix = "0";
 
     /* Functions for encoding/decoding arrays of bytes */
-    private static String encodeBytes(byte[] theBytes) {
+    private static String encodeBytes(byte[] theBytes):
         return new String(Base64Coder.encode(theBytes));
     }
-    private static byte[] decodeBytes(String theString) {
+    private static byte[] decodeBytes(String theString):
         return Base64Coder.decode(theString);
     }
 }

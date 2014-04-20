@@ -30,12 +30,12 @@ import org.ggp.base.util.statemachine.Role;
  * class. This takes in a flattened game description, and converts it into an
  * equivalent PropNet.
  */
-public final class PropNetConverter
+class PropNetConverter
 {
 	/** An archive of Propositions, indexed by name. */
-	private Map<GdlSentence, Proposition> propositions;
+    private Map<GdlSentence, Proposition> propositions;
 	/** An archive of Components. */
-	private Set<Component> components;
+    private Set<Component> components;
 
 	/**
 	 * Converts a game description to a PropNet using the following process
@@ -52,54 +52,45 @@ public final class PropNetConverter
 	 *            A game description.
 	 * @return An equivalent PropNet.
 	 */
-	public PropNet convert(List<Role> roles, List<GdlRule> description)
+    def PropNet convert(List<Role> roles, List<GdlRule> description)
 	{
-		propositions = new HashMap<GdlSentence, Proposition>();
-		components = new HashSet<Component>();
+        propositions = new HashMap<GdlSentence, Proposition>();
+        components = new HashSet<Component>();
 
-		for ( GdlRule rule : description )
+        for ( GdlRule rule : description )
 		{
-			if ( rule.arity() > 0 )
+            if ( rule.arity() > 0 )
 			{
-				convertRule(rule);
-			}
-			else
+                convertRule(rule);
+            else
 			{
-				convertStatic(rule.getHead());
-			}
-		}
+                convertStatic(rule.getHead());
 
-		fixDisjunctions();
-		addMissingInputs();
+        fixDisjunctions();
+        addMissingInputs();
 
-		return new PropNet(roles, components);
-	}
+        return new PropNet(roles, components);
 
 	/**
 	 * Creates an equivalent InputProposition for every LegalProposition where
 	 * none already exists.
 	 */
-	private void addMissingInputs()
+    private void addMissingInputs()
 	{
-		List<Proposition> addList = new ArrayList<Proposition>();
-		for ( Proposition proposition : propositions.values() )
+        List<Proposition> addList = new ArrayList<Proposition>();
+        for ( Proposition proposition : propositions.values() )
 		{
-			if ( proposition.getName() instanceof GdlRelation )
+            if ( proposition.getName() instanceof GdlRelation )
 			{
-				GdlRelation relation = (GdlRelation) proposition.getName();
-				if ( relation.getName().getValue().equals("legal") )
+                GdlRelation relation = (GdlRelation) proposition.getName();
+                if ( relation.getName().getValue().equals("legal") )
 				{
-					addList.add(proposition);
-				}
-			}
-		}
+                    addList.add(proposition);
 
-		for ( Proposition addItem : addList )
+        for ( Proposition addItem : addList )
 		{
-			GdlRelation relation = (GdlRelation) addItem.getName();
-			components.add(getProposition(GdlPool.getRelation(GdlPool.getConstant("does"), relation.getBody())));
-		}
-	}
+            GdlRelation relation = (GdlRelation) addItem.getName();
+            components.add(getProposition(GdlPool.getRelation(GdlPool.getConstant("does"), relation.getBody())));
 
 	/**
 	 * Converts a literal to equivalent PropNet Components and returns a
@@ -109,49 +100,45 @@ public final class PropNetConverter
 	 *            The literal to convert to equivalent PropNet Components.
 	 * @return The last of those components.
 	 */
-	private Proposition convertConjunct(GdlLiteral literal)
+    private Proposition convertConjunct(GdlLiteral literal)
 	{
-		if ( literal instanceof GdlDistinct )
+        if ( literal instanceof GdlDistinct )
 		{
-			GdlDistinct distinct = (GdlDistinct) literal;
+            GdlDistinct distinct = (GdlDistinct) literal;
 
-			Proposition proposition = new Proposition(GdlPool.getProposition(GdlPool.getConstant("anon")));
-			Constant constant = new Constant(!distinct.getArg1().equals(distinct.getArg2()));
+            Proposition proposition = new Proposition(GdlPool.getProposition(GdlPool.getConstant("anon")));
+            Constant constant = new Constant(!distinct.getArg1().equals(distinct.getArg2()));
 
-			link(constant, proposition);
+            link(constant, proposition);
 
-			components.add(proposition);
-			components.add(constant);
+            components.add(proposition);
+            components.add(constant);
 
-			return proposition;
-		}
-		else if ( literal instanceof GdlNot )
+            return proposition;
+        else if ( literal instanceof GdlNot )
 		{
-			GdlNot not = (GdlNot) literal;
+            GdlNot not = (GdlNot) literal;
 
-			Proposition input = convertConjunct(not.getBody());
-			Not no = new Not();
-			Proposition output = new Proposition(GdlPool.getProposition(GdlPool.getConstant("anon")));
+            Proposition input = convertConjunct(not.getBody());
+            Not no = new Not();
+            Proposition output = new Proposition(GdlPool.getProposition(GdlPool.getConstant("anon")));
 
-			link(input, no);
-			link(no, output);
+            link(input, no);
+            link(no, output);
 
-			components.add(input);
-			components.add(no);
-			components.add(output);
+            components.add(input);
+            components.add(no);
+            components.add(output);
 
-			return output;
-		}
-		else
+            return output;
+        else
 		{
-			GdlSentence sentence = (GdlSentence) literal;
+            GdlSentence sentence = (GdlSentence) literal;
 
-			Proposition proposition = getProposition(sentence);
-			components.add(proposition);
+            Proposition proposition = getProposition(sentence);
+            components.add(proposition);
 
-			return proposition;
-		}
-	}
+            return proposition;
 
 	/**
 	 * Converts a sentence to equivalent PropNet Components and returns the
@@ -161,32 +148,29 @@ public final class PropNetConverter
 	 *            The sentence to convert to equivalent PropNet Components.
 	 * @return The first of those Components.
 	 */
-	private Proposition convertHead(GdlSentence sentence)
+    private Proposition convertHead(GdlSentence sentence)
 	{
-		if ( sentence.getName().getValue().equals("next") )
+        if ( sentence.getName().getValue().equals("next") )
 		{
-			Proposition head = getProposition(GdlPool.getRelation(GdlPool.getConstant("true"),
+            Proposition head = getProposition(GdlPool.getRelation(GdlPool.getConstant("true"),
 			                                                      sentence.getBody()));
-			Transition transition = new Transition();
-			Proposition preTransition = new Proposition(GdlPool.getProposition(GdlPool.getConstant("anon")));
+            Transition transition = new Transition();
+            Proposition preTransition = new Proposition(GdlPool.getProposition(GdlPool.getConstant("anon")));
 
-			link(preTransition, transition);
-			link(transition, head);
+            link(preTransition, transition);
+            link(transition, head);
 
-			components.add(head);
-			components.add(transition);
-			components.add(preTransition);
+            components.add(head);
+            components.add(transition);
+            components.add(preTransition);
 
-			return preTransition;
-		}
-		else
+            return preTransition;
+        else
 		{
-			Proposition proposition = getProposition(sentence);
-			components.add(proposition);
+            Proposition proposition = getProposition(sentence);
+            components.add(proposition);
 
-			return proposition;
-		}
-	}
+            return proposition;
 
 	/**
 	 * Converts a rule into equivalent PropNet Components by invoking the
@@ -197,22 +181,20 @@ public final class PropNetConverter
 	 * @param rule
 	 *            The rule to convert.
 	 */
-	private void convertRule(GdlRule rule)
+    private void convertRule(GdlRule rule)
 	{
-		Proposition head = convertHead(rule.getHead());
-		And and = new And();
+        Proposition head = convertHead(rule.getHead());
+        And and = new And();
 
-		link(and, head);
+        link(and, head);
 
-		components.add(head);
-		components.add(and);
+        components.add(head);
+        components.add(and);
 
-		for ( GdlLiteral literal : rule.getBody() )
+        for ( GdlLiteral literal : rule.getBody() )
 		{
-			Proposition conjunct = convertConjunct(literal);
-			link(conjunct, and);
-		}
-	}
+            Proposition conjunct = convertConjunct(literal);
+            link(conjunct, and);
 
 	/**
 	 * Converts a sentence to equivalent PropNet Components.
@@ -220,81 +202,72 @@ public final class PropNetConverter
 	 * @param sentence
 	 *            The sentence to convert to equivalent PropNet Components.
 	 */
-	private void convertStatic(GdlSentence sentence)
+    private void convertStatic(GdlSentence sentence)
 	{
-		if ( sentence.getName().getValue().equals("init") )
+        if ( sentence.getName().getValue().equals("init") )
 		{
-			Proposition init = getProposition(GdlPool.getProposition(GdlPool.getConstant("INIT")));
-			Transition transition = new Transition();
-			Proposition proposition = getProposition(GdlPool.getRelation(GdlPool.getConstant("true"),
+            Proposition init = getProposition(GdlPool.getProposition(GdlPool.getConstant("INIT")));
+            Transition transition = new Transition();
+            Proposition proposition = getProposition(GdlPool.getRelation(GdlPool.getConstant("true"),
 			                                                             sentence.getBody()));
 
-			link(init, transition);
-			link(transition, proposition);
+            link(init, transition);
+            link(transition, proposition);
 
-			components.add(init);
-			components.add(transition);
-			components.add(proposition);
-		}
+            components.add(init);
+            components.add(transition);
+            components.add(proposition);
 
-		Constant constant = new Constant(true);
-		Proposition proposition = getProposition(sentence);
+        Constant constant = new Constant(true);
+        Proposition proposition = getProposition(sentence);
 
-		link(constant, proposition);
+        link(constant, proposition);
 
-		components.add(constant);
-		components.add(proposition);
-	}
+        components.add(constant);
+        components.add(proposition);
 
 	/**
 	 * Creates an or gate to combine the inputs to a Proposition wherever one
 	 * has more than one input.
 	 */
-	private void fixDisjunctions()
+    private void fixDisjunctions()
 	{
-		List<Proposition> fixList = new ArrayList<Proposition>();
-		for ( Proposition proposition : propositions.values() )
+        List<Proposition> fixList = new ArrayList<Proposition>();
+        for ( Proposition proposition : propositions.values() )
 		{
-			if ( proposition.getInputs().size() > 1 )
+            if ( proposition.getInputs().size() > 1 )
 			{
-				fixList.add(proposition);
-			}
-		}
+                fixList.add(proposition);
 
-		for ( Proposition fixItem : fixList )
+        for ( Proposition fixItem : fixList )
 		{
-			Or or = new Or();
-			int i = 0;
-			for ( Component input : fixItem.getInputs() )
+            Or or = new Or();
+            int i = 0;
+            for ( Component input : fixItem.getInputs() )
 			{
 			    i++;
 
-				Proposition disjunct = null;
-				if ( fixItem.getName() instanceof GdlProposition )
+                Proposition disjunct = null;
+                if ( fixItem.getName() instanceof GdlProposition )
 				{
-					GdlProposition proposition = (GdlProposition) fixItem.getName();
-					disjunct = new Proposition(GdlPool.getProposition(GdlPool.getConstant(proposition.getName().getValue() + "-" + i)));
-				}
-				else
+                    GdlProposition proposition = (GdlProposition) fixItem.getName();
+                    disjunct = new Proposition(GdlPool.getProposition(GdlPool.getConstant(proposition.getName().getValue() + "-" + i)));
+                else
 				{
-					GdlRelation relation = (GdlRelation) fixItem.getName();
-					disjunct = new Proposition(GdlPool.getRelation(GdlPool.getConstant(relation.getName().getValue() + "-" + i), relation.getBody()));
-				}
+                    GdlRelation relation = (GdlRelation) fixItem.getName();
+                    disjunct = new Proposition(GdlPool.getRelation(GdlPool.getConstant(relation.getName().getValue() + "-" + i), relation.getBody()));
 
-				input.getOutputs().clear();
+                input.getOutputs().clear();
 
-				link(input, disjunct);
-				link(disjunct, or);
+                link(input, disjunct);
+                link(disjunct, or);
 
-				components.add(disjunct);
-			}
+                components.add(disjunct);
 
-			fixItem.getInputs().clear();
-			link(or, fixItem);
+            fixItem.getInputs().clear();
+            link(or, fixItem);
 
-			components.add(or);
-		}
-	}
+            components.add(or);
 
 	/**
 	 * Returns a Proposition with name <tt>term</tt>, creating one if none
@@ -304,14 +277,12 @@ public final class PropNetConverter
 	 *            The name of the Proposition.
 	 * @return A Proposition with name <tt>term</tt>.
 	 */
-	private Proposition getProposition(GdlSentence sentence)
+    private Proposition getProposition(GdlSentence sentence)
 	{
-		if ( !propositions.containsKey(sentence) )
+        if ( !propositions.containsKey(sentence) )
 		{
-			propositions.put(sentence, new Proposition(sentence));
-		}
-		return propositions.get(sentence);
-	}
+            propositions.put(sentence, new Proposition(sentence));
+        return propositions.get(sentence);
 
 	/**
 	 * Adds inputs and outputs to <tt>source</tt> and <tt>target</tt> such
@@ -319,9 +290,8 @@ public final class PropNetConverter
 	 * @param source A component.
 	 * @param target A second component.
 	 */
-	private void link(Component source, Component target)
+    private void link(Component source, Component target)
 	{
-		source.addOutput(target);
-		target.addInput(source);
-	}
+        source.addOutput(target);
+        target.addInput(source);
 }

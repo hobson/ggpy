@@ -2,87 +2,70 @@ package org.ggp.base.util.ui.timer;
 
 import javax.swing.JProgressBar;
 
-@SuppressWarnings("serial")
-public final class JTimerBar extends JProgressBar
+class JTimerBar(JProgressBar):
 {
 
-	private final class TimerThread extends Thread
+    private final class TimerThread(Thread):
 	{
 
-		private final long delta;
-		private long time;
-		private final long timeout;
+	    delta = long()
+        private long time;
+	    timeout = long()
 
-		public TimerThread(long delta, long timeout)
+	    def TimerThread(delta=long(), long timeout)
 		{
-			this.delta = delta;
-			this.timeout = timeout;
-			time = 0;
-		}
+            this.delta = delta;
+            this.timeout = timeout;
+            time = 0;
 
-		@Override
-		public synchronized void run()
+    	    def synchronized void run()
 		{
-			try
+            try
 			{
-				while (time != timeout)
+                while (time != timeout)
 				{
-					time += delta;
-					wait(delta);
-					setValue((int) time);
-				}
-			}
-			catch (InterruptedException e)
+                    time += delta;
+                    wait(delta);
+                    setValue((int) time);
+            catch (InterruptedException e)
 			{
 				// Do nothing.
-			}
-		}
-	}
 
-	private TimerThread timerThread;
+    private TimerThread timerThread;
 
-	public JTimerBar()
+    def JTimerBar()
 	{
-		timerThread = null;
-	}
+        timerThread = null;
 
-	public synchronized void fill()
+    def synchronized void fill()
 	{
-		stop();
-		this.setValue(getMaximum());
-	}
+        stop();
+        this.setValue(getMaximum());
 
-	public synchronized void stop()
+    def synchronized void stop()
 	{
-		try
+        try
 		{
-			if (timerThread != null)
+            if (timerThread != null)
 			{
-				timerThread.interrupt();
-				timerThread.join();
-			}
+                timerThread.interrupt();
+                timerThread.join();
 
-			setValue(0);
-		}
-		catch (Exception e)
+            setValue(0);
+        catch (Exception e)
 		{
-			setIndeterminate(true);
-		}
-	}
+            setIndeterminate(true);
 
-	public synchronized void time(long time, int divisions)
+    def synchronized void time(long time, int divisions)
 	{
-		try
+        try
 		{
-			stop();
-			setMaximum((int) time);
+            stop();
+            setMaximum((int) time);
 
-			timerThread = new TimerThread(time / divisions, time);
-			timerThread.start();
-		}
-		catch (Exception e)
+            timerThread = new TimerThread(time / divisions, time);
+            timerThread.start();
+        catch (Exception e)
 		{
-			setIndeterminate(true);
-		}
-	}
+            setIndeterminate(true);
 }

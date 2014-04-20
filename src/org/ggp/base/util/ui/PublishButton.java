@@ -9,38 +9,36 @@ import javax.swing.JOptionPane;
 import org.ggp.base.server.GameServer;
 
 
-@SuppressWarnings("serial")
-public class PublishButton extends JButton implements ActionListener {
+class PublishButton(JButton implements ActionListener):
     private GameServer theServer;
 
-    public PublishButton(String theName) {
+    public PublishButton(String theName):
         super(theName);
         this.addActionListener(this);
         this.setEnabled(false);
     }
 
-    public void setServer(GameServer theServer) {
+    public void setServer(GameServer theServer):
         this.theServer = theServer;
         this.setEnabled(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this) {
-            if (theServer != null) {
-                if (!theServer.getMatch().getGame().getRepositoryURL().contains("127.0.0.1")) {
+    public void actionPerformed(ActionEvent e):
+        if (e.getSource() == this):
+            if (theServer != null):
+                if (!theServer.getMatch().getGame().getRepositoryURL().contains("127.0.0.1")):
                     String theMatchKey = theServer.startPublishingToSpectatorServer("http://matches.ggp.org/");
-                    if (theMatchKey != null) {
+                    if (theMatchKey != null):
                         String theURL = "http://www.ggp.org/view/all/matches/" + theMatchKey + "/";
                         System.out.println("Publishing to: " + theURL);
                         int nChoice = JOptionPane.showConfirmDialog(this,
                                 "Publishing successfully. Would you like to open the spectator view in a browser?",
                                 "Publishing Match Online",
                                 JOptionPane.YES_NO_OPTION);
-                        if (nChoice == JOptionPane.YES_OPTION) {
+                        if (nChoice == JOptionPane.YES_OPTION):
                             try {
                                 java.awt.Desktop.getDesktop().browse(java.net.URI.create(theURL));
-                            } catch (Exception ee) {
+                            } catch (Exception ee):
                                 ee.printStackTrace();
                             }
                         }

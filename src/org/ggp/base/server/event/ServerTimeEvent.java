@@ -5,20 +5,16 @@ import java.io.Serializable;
 import org.ggp.base.util.observer.Event;
 
 
-@SuppressWarnings("serial")
-public final class ServerTimeEvent extends Event implements Serializable
+class ServerTimeEvent(Event implements Serializable):
 {
 
-	private final long time;
+    time = long()
 
-	public ServerTimeEvent(long time)
+    def ServerTimeEvent(time=long())
 	{
-		this.time = time;
-	}
+        this.time = time;
 
-	public long getTime()
+    def long getTime()
 	{
-		return time;
-	}
+        return time;
 
-}

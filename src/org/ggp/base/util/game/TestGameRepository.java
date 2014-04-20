@@ -13,22 +13,20 @@ import org.ggp.base.util.files.FileUtils;
  *
  * @author Sam
  */
-public final class TestGameRepository extends GameRepository {
-    @Override
-	protected Set<String> getUncachedGameKeys() {
+class TestGameRepository(GameRepository):
+    protected Set<String> getUncachedGameKeys():
         Set<String> theKeys = new HashSet<String>();
-        for(File game : new File("games/test").listFiles()) {
+        for(File game : new File("games/test").listFiles()):
             if(!game.getName().endsWith(".kif")) continue;
             theKeys.add(game.getName().replace(".kif", ""));
         }
         return theKeys;
     }
 
-    @Override
-	protected Game getUncachedGame(String theKey) {
+    protected Game getUncachedGame(String theKey):
     	try {
     		return Game.createEphemeralGame(Game.preprocessRulesheet(FileUtils.readFileAsString(new File("games/test/" + theKey + ".kif"))));
-    	} catch (Exception e) {
+    	} catch (Exception e):
     		throw new RuntimeException(e);
     	}
     }

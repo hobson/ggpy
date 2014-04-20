@@ -4,19 +4,16 @@ import org.ggp.base.player.gamer.statemachine.human.HumanGamer;
 import org.ggp.base.util.observer.Event;
 
 
-public final class HumanTimeoutEvent extends Event
+class HumanTimeoutEvent(Event):
 {
 
-	private final HumanGamer humanPlayer;
+    humanPlayer = HumanGamer()
 
-	public HumanTimeoutEvent(HumanGamer humanPlayer)
+    def HumanTimeoutEvent(humanPlayer=HumanGamer())
 	{
-		this.humanPlayer = humanPlayer;
-	}
+        this.humanPlayer = humanPlayer;
 
-	public HumanGamer getHumanPlayer()
+    def HumanGamer getHumanPlayer()
 	{
-		return humanPlayer;
-	}
+        return humanPlayer;
 
-}

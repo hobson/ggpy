@@ -16,67 +16,56 @@ import org.ggp.base.util.observer.Observer;
 import org.ggp.base.util.ui.table.JZebraTable;
 
 
-@SuppressWarnings("serial")
-public final class MatchPanel extends JPanel implements Observer
+class MatchPanel(JPanel implements Observer):
 {
 
-	private final JZebraTable matchTable;
+    matchTable = JZebraTable()
 
-	public MatchPanel()
+    def MatchPanel()
 	{
-		super(new GridBagLayout());
+        super(new GridBagLayout());
 
-		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn("Match Id");
-		model.addColumn("Role");
-		model.addColumn("Start Clock");
-		model.addColumn("Play Clock");
-		model.addColumn("Status");
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Match Id");
+        model.addColumn("Role");
+        model.addColumn("Start Clock");
+        model.addColumn("Play Clock");
+        model.addColumn("Status");
 
-		matchTable = new JZebraTable(model)
+        matchTable = new JZebraTable(model)
 		{
 
-			@Override
-			public boolean isCellEditable(int rowIndex, int colIndex)
+        		    def boolean isCellEditable(int rowIndex, int colIndex)
 			{
-				return false;
-			}
+                return false;
 		};
-		matchTable.setShowHorizontalLines(true);
-		matchTable.setShowVerticalLines(true);
+        matchTable.setShowHorizontalLines(true);
+        matchTable.setShowVerticalLines(true);
 
-		this.add(new JScrollPane(matchTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 5, 5));
-	}
+        this.add(new JScrollPane(matchTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 5, 5));
 
-	@Override
-	public void observe(Event event)
+    def void observe(Event event)
 	{
-		if (event instanceof GamerCompletedMatchEvent)
+        if (event instanceof GamerCompletedMatchEvent)
 		{
-			observe((GamerCompletedMatchEvent) event);
-		}
-		else if (event instanceof GamerNewMatchEvent)
+            observe((GamerCompletedMatchEvent) event);
+        else if (event instanceof GamerNewMatchEvent)
 		{
-			observe((GamerNewMatchEvent) event);
-		}
-	}
+            observe((GamerNewMatchEvent) event);
 
-	private void observe(GamerCompletedMatchEvent event)
+    private void observe(GamerCompletedMatchEvent event)
 	{
-		DefaultTableModel model = (DefaultTableModel) matchTable.getModel();
-		model.setValueAt("Inactive", model.getRowCount() - 1, 4);
-	}
+        DefaultTableModel model = (DefaultTableModel) matchTable.getModel();
+        model.setValueAt("Inactive", model.getRowCount() - 1, 4);
 
-	private void observe(GamerNewMatchEvent event)
+    private void observe(GamerNewMatchEvent event)
 	{
-		String matchId = event.getMatch().getMatchId();
-		String role = event.getRoleName().toString();
-		String startClock = Integer.toString(event.getMatch().getStartClock());
-		String playClock = Integer.toString(event.getMatch().getPlayClock());
-		String status = "Active";
+        String matchId = event.getMatch().getMatchId();
+        String role = event.getRoleName().toString();
+        String startClock = Integer.toString(event.getMatch().getStartClock());
+        String playClock = Integer.toString(event.getMatch().getPlayClock());
+        String status = "Active";
 
-		DefaultTableModel model = (DefaultTableModel) matchTable.getModel();
-		model.addRow(new String[] { matchId, role, startClock, playClock, status });
-	}
+        DefaultTableModel model = (DefaultTableModel) matchTable.getModel();
+        model.addRow(new String[] { matchId, role, startClock, playClock, status });
 
-}

@@ -31,7 +31,7 @@ import org.python.util.PythonInterpreter;
  * @author Sam
  * @author evancox
  */
-public abstract class PythonGamer extends Gamer
+public abstract class PythonGamer(Gamer):
 {
     Gamer thePythonGamer;
 
@@ -41,8 +41,8 @@ public abstract class PythonGamer extends Gamer
     // Gamer stubs are lazily loaded because the Python interface takes
     // time to initialize, so we only want to load it when necessary, and
     // not for light-weight things like returning the player name.
-    private void lazilyLoadGamerStub() {
-    	if (thePythonGamer == null) {
+    private void lazilyLoadGamerStub():
+    	if (thePythonGamer == null):
 	        try {
 	            // Load in the Python gamer, using a Jython intepreter.
 	            PythonInterpreter interpreter = new PythonInterpreter();
@@ -50,7 +50,7 @@ public abstract class PythonGamer extends Gamer
 	            PyObject thePyClass = interpreter.get(getPythonGamerName());
 	            PyObject PyGamerObject = thePyClass.__call__();
 	            thePythonGamer = (Gamer)PyGamerObject.__tojava__(Gamer.class);
-	        } catch(Exception e) {
+	        } catch(Exception e):
 	            GamerLogger.logError("GamePlayer", "Caught exception in Python initialization:");
 	            GamerLogger.logStackTrace("GamePlayer", e);
 	        }
@@ -64,72 +64,66 @@ public abstract class PythonGamer extends Gamer
     // subclass of this class is a Java-implementation stub for the actual real
     // Python implementation.
 
-    @Override
     public final void preview(Game game, long timeout) throws GamePreviewException {
     	lazilyLoadGamerStub();
         try {
             thePythonGamer.preview(game, timeout);
-        } catch(GamePreviewException e) {
+        } catch(GamePreviewException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachinePreview:");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
     }
 
-    @Override
     public final void metaGame(long timeout) throws MetaGamingException {
     	lazilyLoadGamerStub();
         thePythonGamer.setMatch(getMatch());
         thePythonGamer.setRoleName(getRoleName());
         try {
             thePythonGamer.metaGame(timeout);
-        } catch(MetaGamingException e) {
+        } catch(MetaGamingException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineMetaGame:");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
     }
 
-    @Override
     public final GdlTerm selectMove(long timeout) throws MoveSelectionException {
     	lazilyLoadGamerStub();
         thePythonGamer.setMatch(getMatch());
         thePythonGamer.setRoleName(getRoleName());
         try {
             return thePythonGamer.selectMove(timeout);
-        } catch(MoveSelectionException e) {
+        } catch(MoveSelectionException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineSelectMove:");
             GamerLogger.logStackTrace("GamePlayer", e);
             return null;
         }
     }
 
-    @Override
-    public final void stop() {
+    public final void stop():
     	lazilyLoadGamerStub();
     	thePythonGamer.setMatch(getMatch());
         thePythonGamer.setRoleName(getRoleName());
         try {
             thePythonGamer.stop();
-        } catch(StoppingException e) {
+        } catch(StoppingException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineStop:");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
     }
 
-    @Override
-    public final void abort() {
+    public final void abort():
     	lazilyLoadGamerStub();
     	thePythonGamer.setMatch(getMatch());
         thePythonGamer.setRoleName(getRoleName());
         try {
             thePythonGamer.abort();
-        } catch(AbortingException e) {
+        } catch(AbortingException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Python stateMachineAbort:");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
     }
 
-    @Override
-    public final String getName() {
+    public final String getName():
     	return getPythonGamerName();
     }
 }

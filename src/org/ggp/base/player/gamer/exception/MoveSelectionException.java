@@ -1,16 +1,11 @@
 package org.ggp.base.player.gamer.exception;
 
-@SuppressWarnings("serial")
-public final class MoveSelectionException extends Exception
+class MoveSelectionException(Exception):
 {
-	public MoveSelectionException(Throwable cause) {
-		super(cause);
-	}
+    def MoveSelectionException(cause=Throwable()):
+        super(cause);
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "An unhandled exception ocurred during move selection: " + super.toString();
-	}
+        return "An unhandled exception ocurred during move selection: " + super.toString();
 
-}

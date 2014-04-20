@@ -25,7 +25,7 @@ import org.ggp.base.util.game.LocalGameRepository;
  *
  * @author Sam Schreiber
  */
-public class GameSelector implements ActionListener {
+class GameSelector implements ActionListener {
     JComboBox<NamedItem> theGameList;
     JComboBox<String> theRepositoryList;
 
@@ -36,18 +36,17 @@ public class GameSelector implements ActionListener {
         public final String theKey;
         public final String theName;
 
-        public NamedItem(String theKey, String theName) {
+        public NamedItem(String theKey, String theName):
             this.theKey = theKey;
             this.theName = theName;
         }
 
-        @Override
-		public String toString() {
+    	    def toString():  # String
             return theName;
         }
     }
 
-    public GameSelector() {
+    public GameSelector():
         theGameList = new JComboBox<NamedItem>();
         theGameList.addActionListener(this);
 
@@ -61,14 +60,13 @@ public class GameSelector implements ActionListener {
         theRepositoryList.addItem("Local Game Repository");
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == theRepositoryList) {
+    public void actionPerformed(ActionEvent e):
+        if (e.getSource() == theRepositoryList):
             String theRepositoryName = theRepositoryList.getSelectedItem().toString();
-            if (theCachedRepositories.containsKey(theRepositoryName)) {
+            if (theCachedRepositories.containsKey(theRepositoryName)):
                 theSelectedRepository = theCachedRepositories.get(theRepositoryName);
             } else {
-                if (theRepositoryName.equals("Local Game Repository")) {
+                if (theRepositoryName.equals("Local Game Repository")):
                     theSelectedRepository = new LocalGameRepository();
                 } else {
                     theSelectedRepository = new CloudGameRepository(theRepositoryName);
@@ -79,22 +77,22 @@ public class GameSelector implements ActionListener {
         }
     }
 
-    public GameRepository getSelectedGameRepository() {
+    public GameRepository getSelectedGameRepository():
         return theSelectedRepository;
     }
 
-    public void repopulateGameList() {
+    public void repopulateGameList():
         GameRepository theRepository = getSelectedGameRepository();
         List<String> theKeyList = new ArrayList<String>(theRepository.getGameKeys());
         Collections.sort(theKeyList);
         theGameList.removeAllItems();
-        for (String theKey : theKeyList) {
+        for (String theKey : theKeyList):
             Game theGame = theRepository.getGame(theKey);
-            if (theGame == null) {
+            if (theGame == null):
                 continue;
             }
             String theName = theGame.getName();
-            if (theName == null) {
+            if (theName == null):
                 theName = theKey;
             }
             if (theName.length() > 24)
@@ -103,18 +101,18 @@ public class GameSelector implements ActionListener {
         }
     }
 
-    public JComboBox<String> getRepositoryList() {
+    public JComboBox<String> getRepositoryList():
         return theRepositoryList;
     }
 
-    public JComboBox<NamedItem> getGameList() {
+    public JComboBox<NamedItem> getGameList():
         return theGameList;
     }
 
-    public Game getSelectedGame() {
+    public Game getSelectedGame():
         try {
             return getSelectedGameRepository().getGame(((NamedItem)theGameList.getSelectedItem()).theKey);
-        } catch(Exception e) {
+        } catch(Exception e):
             return null;
         }
     }

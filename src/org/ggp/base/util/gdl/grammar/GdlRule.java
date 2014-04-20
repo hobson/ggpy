@@ -2,78 +2,62 @@ package org.ggp.base.util.gdl.grammar;
 
 import java.util.List;
 
-@SuppressWarnings("serial")
-public final class GdlRule extends Gdl
+class GdlRule(Gdl):
 {
 
-	private final List<GdlLiteral> body;
-	private transient Boolean ground;
-	private final GdlSentence head;
+    private final List<GdlLiteral> body;
+    private transient Boolean ground;
+    head = GdlSentence()
 
-	GdlRule(GdlSentence head, List<GdlLiteral> body)
+    GdlRule(GdlSentence head, List<GdlLiteral> body)
 	{
-		this.head = head;
-		this.body = body;
-		ground = null;
-	}
+        this.head = head;
+        this.body = body;
+        ground = null;
 
-	public int arity()
+    def int arity()
 	{
-		return body.size();
-	}
+        return body.size();
 
-	private Boolean computeGround()
+    private Boolean computeGround()
 	{
-		for (GdlLiteral literal : body)
+        for (GdlLiteral literal : body)
 		{
-			if (!literal.isGround())
+            if (!literal.isGround())
 			{
-				return false;
-			}
-		}
+                return false;
 
-		return true;
-	}
+        return true;
 
-	public GdlLiteral get(int index)
+    def GdlLiteral get(int index)
 	{
-		return body.get(index);
-	}
+        return body.get(index);
 
-	public GdlSentence getHead()
+    def GdlSentence getHead()
 	{
-		return head;
-	}
+        return head;
 
-	public List<GdlLiteral> getBody()
+    def List<GdlLiteral> getBody()
 	{
-		return body;
-	}
+        return body;
 
-	@Override
-	public boolean isGround()
+    def boolean isGround()
 	{
-		if (ground == null)
+        if (ground == null)
 		{
-			ground = computeGround();
-		}
+            ground = computeGround();
 
-		return ground;
-	}
+        return ground;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-		sb.append("( <= " + head + " ");
-		for (GdlLiteral literal : body)
+        sb.append("( <= " + head + " ");
+        for (GdlLiteral literal : body)
 		{
-			sb.append(literal + " ");
-		}
-		sb.append(")");
+            sb.append(literal + " ");
+        sb.append(")");
 
-		return sb.toString();
-	}
+        return sb.toString();
 
-}

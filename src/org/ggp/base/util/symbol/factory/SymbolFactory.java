@@ -11,7 +11,7 @@ import org.ggp.base.util.symbol.grammar.SymbolList;
 import org.ggp.base.util.symbol.grammar.SymbolPool;
 
 
-public final class SymbolFactory
+class SymbolFactory
 {
     public static Symbol create(String string) throws SymbolFormatException
     {
@@ -29,56 +29,47 @@ public final class SymbolFactory
 
     /* Private, implementation-specific methods below here */
 
-	private static Symbol convert(LinkedList<String> tokens)
+    private static Symbol convert(LinkedList<String> tokens)
 	{
-		if (tokens.getFirst().equals("("))
+        if (tokens.getFirst().equals("("))
 		{
-			return convertList(tokens);
-		}
-		else
+            return convertList(tokens);
+        else
 		{
-			return convertAtom(tokens);
-		}
-	}
+            return convertAtom(tokens);
 
-	private static SymbolAtom convertAtom(LinkedList<String> tokens)
+    private static SymbolAtom convertAtom(LinkedList<String> tokens)
 	{
-		return SymbolPool.getAtom(tokens.removeFirst());
-	}
+        return SymbolPool.getAtom(tokens.removeFirst());
 
-	private static SymbolList convertList(LinkedList<String> tokens)
+    private static SymbolList convertList(LinkedList<String> tokens)
 	{
-		List<Symbol> contents = new ArrayList<Symbol>();
+        List<Symbol> contents = new ArrayList<Symbol>();
 
-		tokens.removeFirst();
-		while (!tokens.getFirst().equals(")"))
+        tokens.removeFirst();
+        while (!tokens.getFirst().equals(")"))
 		{
-			contents.add(convert(tokens));
-		}
-		tokens.removeFirst();
+            contents.add(convert(tokens));
+        tokens.removeFirst();
 
-		return SymbolPool.getList(contents);
-	}
+        return SymbolPool.getList(contents);
 
-	private static List<String> lex(String string)
+    private static List<String> lex(String string)
 	{
-		List<String> tokens = new ArrayList<String>();
-		for (String token : string.split(" "))
+        List<String> tokens = new ArrayList<String>();
+        for (String token : string.split(" "))
 		{
-			tokens.add(token);
-		}
+            tokens.add(token);
 
-		return tokens;
-	}
+        return tokens;
 
-	private static String preprocess(String string)
+    private static String preprocess(String string)
 	{
-		string = string.replaceAll("\\(", " ( ");
-		string = string.replaceAll("\\)", " ) ");
+        string = string.replaceAll("\\(", " ( ");
+        string = string.replaceAll("\\)", " ) ");
 
-		string = string.replaceAll("\\s+", " ");
-		string = string.trim();
+        string = string.replaceAll("\\s+", " ");
+        string = string.trim();
 
-		return string;
-	}
+        return string;
 }

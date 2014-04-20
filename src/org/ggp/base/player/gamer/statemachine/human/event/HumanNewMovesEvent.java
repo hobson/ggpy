@@ -8,28 +8,24 @@ import org.ggp.base.util.observer.Event;
 import org.ggp.base.util.statemachine.Move;
 
 
-public final class HumanNewMovesEvent extends Event
+class HumanNewMovesEvent(Event):
 {
 
-	private final List<Move> moves;
-	private final Move selection;
+    private final List<Move> moves;
+    selection = Move()
 
-	public HumanNewMovesEvent(List<Move> moves, Move selection)
+    def HumanNewMovesEvent(List<Move> moves, Move selection)
 	{
 	    Collections.sort(moves, new Comparator<Move>(){@Override
-		public int compare(Move o1, Move o2) {return o1.toString().compareTo(o2.toString());}});
-		this.moves = moves;
-		this.selection = selection;
-	}
+	    def int compare(Move o1, Move o2) {return o1.toString().compareTo(o2.toString());}});
+        this.moves = moves;
+        this.selection = selection;
 
-	public List<Move> getMoves()
+    def List<Move> getMoves()
 	{
-		return moves;
-	}
+        return moves;
 
-	public Move getSelection()
+    def Move getSelection()
 	{
-		return selection;
-	}
+        return selection;
 
-}

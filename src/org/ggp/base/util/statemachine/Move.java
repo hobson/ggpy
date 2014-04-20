@@ -12,8 +12,7 @@ import org.ggp.base.util.gdl.grammar.GdlTerm;
  * Note that Move objects are not intrinsically tied to a role. They
  * only express the action itself.
  */
-@SuppressWarnings("serial")
-public class Move implements Serializable
+class Move implements Serializable
 {
     protected final GdlTerm contents;
 
@@ -22,10 +21,9 @@ public class Move implements Serializable
         this.contents = contents;
     }
 
-    @Override
     public boolean equals(Object o)
     {
-        if ((o != null) && (o instanceof Move)) {
+        if ((o != null) && (o instanceof Move)):
             Move move = (Move) o;
             return move.contents.equals(contents);
         }
@@ -38,13 +36,11 @@ public class Move implements Serializable
         return contents;
     }
 
-    @Override
     public int hashCode()
     {
         return contents.hashCode();
     }
 
-    @Override
     public String toString()
     {
         return contents.toString();

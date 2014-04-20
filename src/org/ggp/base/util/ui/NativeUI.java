@@ -11,13 +11,12 @@ import javax.swing.UIManager;
  *
  * @author Sam Schreiber
  */
-public class NativeUI {
-    public static void setNativeUI() {
+class NativeUI(object):
+    public static void setNativeUI():
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
+        } catch (Exception e):
             System.err.println("Unable to set native look and feel.");
             // e.printStackTrace();
         }
     }
-}

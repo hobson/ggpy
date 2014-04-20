@@ -7,26 +7,22 @@ import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Role;
 
 
-public final class ServerNewMatchEvent extends Event
+class ServerNewMatchEvent(Event):
 {
 
-	private final List<Role> roles;
-	private final MachineState initialState;
+    private final List<Role> roles;
+    initialState = MachineState()
 
-	public ServerNewMatchEvent(List<Role> roles, MachineState initialState)
+    def ServerNewMatchEvent(List<Role> roles, MachineState initialState)
 	{
-		this.roles = roles;
-		this.initialState = initialState;
-	}
+        this.roles = roles;
+        this.initialState = initialState;
 
-	public List<Role> getRoles()
+    def List<Role> getRoles()
 	{
-		return roles;
-	}
+        return roles;
 
-	public MachineState getInitialState()
+    def MachineState getInitialState()
 	{
-		return initialState;
-	}
+        return initialState;
 
-}

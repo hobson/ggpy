@@ -1,37 +1,27 @@
 package org.ggp.base.util.gdl.grammar;
 
-@SuppressWarnings("serial")
-public final class GdlConstant extends GdlTerm
+class GdlConstant(GdlTerm):
 {
 
-	private final String value;
+    value = ''
 
-	GdlConstant(String value)
+    GdlConstant(String value)
 	{
-		this.value = value.intern();
-	}
+        this.value = value.intern();
 
-	public String getValue()
+    def String getValue()
 	{
-		return value;
-	}
+        return value;
 
-	@Override
-	public boolean isGround()
+    def boolean isGround()
 	{
-		return true;
-	}
+        return true;
 
-	@Override
-	public GdlSentence toSentence()
+    def GdlSentence toSentence()
 	{
-		return GdlPool.getProposition(this);
-	}
+        return GdlPool.getProposition(this);
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return value;
-	}
+        return value;
 
-}

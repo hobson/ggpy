@@ -8,30 +8,25 @@ import org.ggp.base.apps.kiosk.templates.CommonGraphics;
 import org.ggp.base.apps.kiosk.templates.GameCanvas_Chessboard;
 
 
-public class ConnectFiveCanvas extends GameCanvas_Chessboard {
+class ConnectFiveCanvas(GameCanvas_Chessboard):
     public static final long serialVersionUID = 0x1;
 
-    @Override
-	public String getGameName() { return "Connect Five"; }
-    @Override
-	protected String getGameKey() { return "connect5"; }
+    def String getGameName() { return "Connect Five"; }
+    protected String getGameKey() { return "connect5"; }
 
-    @Override
-    protected Set<String> getFactsAboutCell(int xCell, int yCell) {
+    protected Set<String> getFactsAboutCell(int xCell, int yCell):
         String xLetter = coordinateToLetter(xCell);
         String yLetter = coordinateToLetter(yCell);
         return gameStateHasFactsMatching("\\( cell " + xLetter + " " + yLetter + " (.*) \\)");
     }
 
-    @Override
-    protected Set<String> getLegalMovesForCell(int xCell, int yCell) {
+    protected Set<String> getLegalMovesForCell(int xCell, int yCell):
         String xLetter = coordinateToLetter(xCell);
         String yLetter = coordinateToLetter(yCell);
         return gameStateHasLegalMovesMatching("\\( mark " + xLetter + " " + yLetter + " \\)");
     }
 
-    @Override
-    protected void renderCellContent(Graphics g, String theFact) {
+    protected void renderCellContent(Graphics g, String theFact):
         String[] cellFacts = theFact.split(" ");
         if(cellFacts[4].equals("b")) return;
 

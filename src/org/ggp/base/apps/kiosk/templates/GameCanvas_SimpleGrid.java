@@ -29,7 +29,7 @@ import org.ggp.base.apps.kiosk.GameCanvas;
  *
  * @author Sam Schreiber
  */
-public abstract class GameCanvas_SimpleGrid extends GameCanvas {
+public abstract class GameCanvas_SimpleGrid(GameCanvas):
     public static final long serialVersionUID = 0x1;
 
     protected abstract int getGridWidth();
@@ -40,8 +40,7 @@ public abstract class GameCanvas_SimpleGrid extends GameCanvas {
     protected boolean coordinatesStartAtOne() { return true; }
 
     private Graphics mostRecentG;
-    @Override
-	protected final void paintGame(Graphics g) {
+    protected final void paintGame(Graphics g):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
@@ -59,10 +58,10 @@ public abstract class GameCanvas_SimpleGrid extends GameCanvas {
         int nCellWidth = width / nGridWidth;
         int nCellHeight = height / nGridHeight;
 
-        for(int x = 0; x < nGridWidth; x++) {
-            for(int y = 0; y < nGridHeight; y++) {
+        for(int x = 0; x < nGridWidth; x++):
+            for(int y = 0; y < nGridHeight; y++):
                 Graphics cellGraphics = g.create(x*nCellWidth, y*nCellHeight, nCellWidth, nCellHeight);
-                if(coordinatesStartAtOne()) {
+                if(coordinatesStartAtOne()):
                     renderCell(cellGraphics, x+1, y+1);
                 } else {
                     renderCell(cellGraphics, x, y);
@@ -71,8 +70,7 @@ public abstract class GameCanvas_SimpleGrid extends GameCanvas {
         }
     }
 
-    @Override
-	protected final void handleClickEvent(int x, int y) {
+    protected final void handleClickEvent(int x, int y):
         int width = mostRecentG.getClipBounds().width;
         int height = mostRecentG.getClipBounds().height;
 
@@ -88,7 +86,7 @@ public abstract class GameCanvas_SimpleGrid extends GameCanvas {
         int xWithin = x % nCellWidth;
         int yWithin = y % nCellHeight;
 
-        if(coordinatesStartAtOne()) {
+        if(coordinatesStartAtOne()):
             handleClickOnCell(xCell+1, yCell+1, xWithin, yWithin);
         } else {
             handleClickOnCell(xCell, yCell, xWithin, yWithin);

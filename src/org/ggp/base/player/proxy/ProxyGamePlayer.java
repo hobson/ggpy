@@ -67,16 +67,16 @@ import org.ggp.base.util.symbol.grammar.SymbolPool;
  *
  * @author Sam Schreiber
  */
-public final class ProxyGamePlayer extends Thread implements Subject
+class ProxyGamePlayer(Thread implements Subject):
 {
-	private final String gamerName;
-	private ServerSocket listener;
-	private ServerSocket clientListener;
-	private final List<Observer> observers;
-	private ClientManager theClientManager;
-	private Gamer theDefaultGamer;
+    gamerName = ''
+    private ServerSocket listener;
+    private ServerSocket clientListener;
+    private final List<Observer> observers;
+    private ClientManager theClientManager;
+    private Gamer theDefaultGamer;
 
-	private class ClientManager extends Thread {
+    private class ClientManager(Thread):
 	    private Process theClientProcess;
 	    private Socket theClientConnection;
 	    private PrintStream theOutput;
@@ -88,7 +88,7 @@ public final class ProxyGamePlayer extends Thread implements Subject
 	    public volatile boolean expectStop = false;
 	    private Thread parentThread;
 
-	    public ClientManager(Thread parentThread) {
+	    public ClientManager(Thread parentThread):
 	        this.parentThread = parentThread;
 
 	        String command = GamerConfiguration.getCommandForJava();
@@ -104,7 +104,7 @@ public final class ProxyGamePlayer extends Thread implements Subject
 	        processArgs.add("org.ggp.base.player.proxy.ProxyGamePlayerClient");
 	        processArgs.add(gamerName);
 	        processArgs.add("" + clientListener.getLocalPort());
-	        if(GamerConfiguration.runningOnLinux()) {
+	        if(GamerConfiguration.runningOnLinux()):
 	        	processArgs.add(0, "nice");
 	        }
 	        ProcessBuilder pb = new ProcessBuilder(processArgs);
@@ -124,60 +124,58 @@ public final class ProxyGamePlayer extends Thread implements Subject
 	            theInput = new BufferedReader(new InputStreamReader(theClientConnection.getInputStream()));
 
 	            GamerLogger.log("Proxy", "[PROXY] Proxy client started.");
-	        } catch(IOException e) {
+	        } catch(IOException e):
 	            GamerLogger.logStackTrace("Proxy", e);
 	        }
 	    }
 
 	    // TODO: remove this class if nothing is being sent over it
-	    private class StreamConnector extends Thread {
+	    private class StreamConnector(Thread):
 	        private InputStream theInput;
 	        private PrintStream theOutput;
 
 	        public volatile boolean pleaseStop = false;
 
-	        public StreamConnector(InputStream theInput, PrintStream theOutput) {
+	        public StreamConnector(InputStream theInput, PrintStream theOutput):
 	            this.theInput = theInput;
 	            this.theOutput = theOutput;
 	        }
 
-	        public boolean isPrintableChar( char c ) {
+	        public boolean isPrintableChar( char c ):
 	            if(!Character.isDefined(c)) return false;
 	            if(Character.isIdentifierIgnorable(c)) return false;
 	            return true;
 	        }
 
-	        @Override
-			public void run() {
+	    		    def run():  # void
 	            try {
-	                while(!pleaseStop) {
+	                while(!pleaseStop):
 	                    int next = theInput.read();
 	                    if(next == -1) break;
 	                    if(!isPrintableChar((char)next))
 	                        next = '@';
 	                    theOutput.write(next);
 	                }
-	            } catch(IOException e) {
+	            } catch(IOException e):
 	                GamerLogger.log("Proxy", "Might be okay:");
 	                GamerLogger.logStackTrace("Proxy", e);
-	            } catch(Exception e) {
+	            } catch(Exception e):
 	                GamerLogger.logStackTrace("Proxy", e);
-	            } catch(Error e) {
+	            } catch(Error e):
                     GamerLogger.logStackTrace("Proxy", e);
                 }
 	        }
 	    }
 
-	    public void sendMessage(ProxyMessage theMessage) {
-            if(theOutput != null) {
+	    public void sendMessage(ProxyMessage theMessage):
+            if(theOutput != null):
                 theMessage.writeTo(theOutput);
                 GamerLogger.log("Proxy", "[PROXY] Wrote message to client: " + theMessage);
             }
 	    }
 
-	    @Override
-		public void run() {
-            while(theInput != null) {
+		    def run():  # void
+            while(theInput != null):
                 try {
                     ProxyMessage in = ProxyMessage.readFrom(theInput);
                     if(pleaseStop)
@@ -188,22 +186,22 @@ public final class ProxyGamePlayer extends Thread implements Subject
                         continue;
 
                     processClientResponse(in, parentThread);
-                } catch(SocketException se) {
+                } catch(SocketException se):
                     if(expectStop)
                         return;
 
                     GamerLogger.logStackTrace("Proxy", se);
                     GamerLogger.logError("Proxy", "Shutting down reader as consequence of socket exception. Presumably this is because the gamer client crashed.");
                     break;
-                } catch(Exception e) {
+                } catch(Exception e):
                     GamerLogger.logStackTrace("Proxy", e);
-                } catch(Error e) {
+                } catch(Error e):
                     GamerLogger.logStackTrace("Proxy", e);
                 }
             }
 	    }
 
-	    public void closeClient() {
+	    public void closeClient():
 	        try {
                 outConnector.pleaseStop = true;
                 errConnector.pleaseStop = true;
@@ -211,80 +209,68 @@ public final class ProxyGamePlayer extends Thread implements Subject
                 theClientConnection.close();
                 theInput = null;
                 theOutput = null;
-            } catch (IOException e) {
+            } catch (IOException e):
                 GamerLogger.logStackTrace("Proxy", e);
             }
 
 	        theClientProcess.destroy();
 	    }
-	}
 
-	public final int myPort;
-	public ProxyGamePlayer(int port, Class<? extends Gamer> gamer) throws IOException
+    def final int myPort;
+    def ProxyGamePlayer(port=int(), Class<?(Gamer> gamer) throws IOException):
 	{
 	    // Use a random gamer as our "default" gamer, that we fall back to
 	    // in the event that we don't get a message from the client, or if
 	    // we need to handle a simple request (START or STOP).
 	    theDefaultGamer = new RandomGamer();
 
-		observers = new ArrayList<Observer>();
-		listener = null;
-		while (listener == null) {
-			try {
-				listener = new ServerSocket(port);
-			} catch (Exception ex) {
-				listener = null;
-				port++;
-				GamerLogger.logError("Proxy", "Failed to start gamer on port: "+(port-1)+" trying port "+port);
-			}
-		}
-		myPort = port;
+        observers = new ArrayList<Observer>();
+        listener = null;
+        while (listener == null):
+            try {
+                listener = new ServerSocket(port);
+			} catch (Exception ex):
+                listener = null;
+                port++;
+                GamerLogger.logError("Proxy", "Failed to start gamer on port: "+(port-1)+" trying port "+port);
+        myPort = port;
 
 		// Start up the socket for communicating with clients
-		int clientPort = 17147;
-		while(clientListener == null) {
+        int clientPort = 17147;
+        while(clientListener == null):
 		    try {
 		        clientListener = new ServerSocket(clientPort);
-		    } catch(Exception ex) {
+		    } catch(Exception ex):
 		        clientListener = null;
 		        clientPort++;
 		    }
-		}
-		GamerLogger.log("Proxy", "[PROXY] Opened client communication socket on port " + clientPort + ".");
+        GamerLogger.log("Proxy", "[PROXY] Opened client communication socket on port " + clientPort + ".");
 
 		// Start up the first ProxyClient
-		gamerName = gamer.getSimpleName();
-	}
+        gamerName = gamer.getSimpleName();
 
-	public int getGamerPort() {
+    def getGamerPort():  # int
 	    return myPort;
-	}
 
-	@Override
-	public void addObserver(Observer observer)
+    def void addObserver(Observer observer)
 	{
-		observers.add(observer);
-	}
+        observers.add(observer);
 
-	@Override
-	public void notifyObservers(Event event)
+    def void notifyObservers(Event event)
 	{
-		for (Observer observer : observers)
+        for (Observer observer : observers)
 		{
-			observer.observe(event);
-		}
-	}
+            observer.observe(event);
 
-	private Random theRandomGenerator = new Random();
-	private long currentMoveCode = 0L;
-	private boolean receivedClientMove = false;
-	private boolean needRestart = false;
+    private Random theRandomGenerator = new Random();
+    private long currentMoveCode = 0L;
+    private boolean receivedClientMove = false;
+    private boolean needRestart = false;
 
-	@Override
-	public void run()
+    def void run()
 	{
-		GamerConfiguration.showConfiguration();
-		GamerLogger.setSpilloverLogfile("spilloverLog");
+        GamerConfiguration.showConfiguration();
+        GamerLogger.setSpilloverLogfile("spilloverLog");
 
 	    // Start up the client manager
 	    theClientManager = new ClientManager(Thread.currentThread());
@@ -296,81 +282,78 @@ public final class ProxyGamePlayer extends Thread implements Subject
 	    QueueListenerThread theListener = new QueueListenerThread();
 	    theListener.start();
 
-		while (true)
+        while (true)
 		{
-			try
+            try
 			{
 			    // First, read a message from the server.
-				ProxyMessage nextMessage = inputQueue.take();
-				Socket connection = inputConnectionQueue.take();
-				String in = nextMessage.theMessage;
-				long receptionTime = nextMessage.receptionTime;
-				notifyObservers(new PlayerReceivedMessageEvent(in));
-				GamerLogger.log("Proxy", "[PROXY] Got incoming message:" + in);
+                ProxyMessage nextMessage = inputQueue.take();
+                Socket connection = inputConnectionQueue.take();
+                String in = nextMessage.theMessage;
+                long receptionTime = nextMessage.receptionTime;
+                notifyObservers(new PlayerReceivedMessageEvent(in));
+                GamerLogger.log("Proxy", "[PROXY] Got incoming message:" + in);
 
 				// Formulate a request, and see how the legal gamer responds.
-				String legalProxiedResponse;
-				Request request = new RequestFactory().create(theDefaultGamer, in);
-				try {
+                String legalProxiedResponse;
+                Request request = new RequestFactory().create(theDefaultGamer, in);
+                try {
 				    legalProxiedResponse = request.process(receptionTime);
-				} catch(OutOfMemoryError e) {
+				} catch(OutOfMemoryError e):
 				    // Something went horribly wrong -- our baseline prover failed.
 				    System.gc();
 				    GamerLogger.logStackTrace("Proxy", e);
 				    legalProxiedResponse = "SORRY";
-				}
-				latestProxiedResponse = legalProxiedResponse;
-				GamerLogger.log("Proxy", "[PROXY] Selected fallback move:" + latestProxiedResponse);
+                latestProxiedResponse = legalProxiedResponse;
+                GamerLogger.log("Proxy", "[PROXY] Selected fallback move:" + latestProxiedResponse);
 
-				if (!(request instanceof InfoRequest)) {
+                if (!(request instanceof InfoRequest)):
 					// Update the move codes and prepare to send the request on to the client.
-					receivedClientMove = false;
+                    receivedClientMove = false;
 			        currentMoveCode = 1 + theRandomGenerator.nextLong();
 			        if(request instanceof StopRequest || request instanceof AbortRequest)
 			            theClientManager.expectStop = true;
 
 					// Send the request on to the client, along with the move code.
-					ProxyMessage theMessage = new ProxyMessage(in, currentMoveCode, receptionTime);
-					theClientManager.sendMessage(theMessage);
+                    ProxyMessage theMessage = new ProxyMessage(in, currentMoveCode, receptionTime);
+                    theClientManager.sendMessage(theMessage);
 	                if(!(request instanceof PlayRequest))   // If we're not asked for a move, just let
 	                    currentMoveCode = 0L;               // the default gamer handle it by switching move code.
 
 	                // Wait the appropriate amount of time for the request.
-					proxyProcessRequest(request, receptionTime);
+                    proxyProcessRequest(request, receptionTime);
 				} else {
-					receivedClientMove = true;
-				}
+                    receivedClientMove = true;
 
 				// Get the latest response, and complain if it's the default response, or isn't a valid response.
-				String out = latestProxiedResponse;
-				if(!receivedClientMove && (request instanceof PlayRequest)) {
+                String out = latestProxiedResponse;
+                if(!receivedClientMove && (request instanceof PlayRequest)):
 				    GamerLogger.logError("Proxy", "[PROXY] Did not receive any move information from client for this turn; falling back to first legal move.");
 				    GamerLogger.logError("ExecutiveSummary", "Proxy did not receive any move information from client this turn: used first legal move.");
-				}
 
 				// Cycle the move codes again so that we will ignore any more responses
 				// that the client sends along to us.
                 currentMoveCode = 0L;
 
                 // And finally write the latest response out to the server.
-				GamerLogger.log("Proxy", "[PROXY] Wrote outgoing message:" + out);
-				HttpWriter.writeAsServer(connection, out);
-				connection.close();
-				notifyObservers(new PlayerSentMessageEvent(out));
+                GamerLogger.log("Proxy", "[PROXY] Wrote outgoing message:" + out);
+                HttpWriter.writeAsServer(connection, out);
+                connection.close();
+                notifyObservers(new PlayerSentMessageEvent(out));
 
 				// Once everything is said and done, restart the client if we're
 				// due for a restart (having finished playing a game).
-				if(needRestart) {
+                if(needRestart):
 	                theClientManager.closeClient();
 	                theClientManager.pleaseStop = true;
 
-	                if(GamerConfiguration.runningOnLinux()) {
+	                if(GamerConfiguration.runningOnLinux()):
 	                	// Clean up the working directory and terminate any orphan processes.
 	                	Thread.sleep(500);
 	                	GamerLogger.log("Proxy", "[PROXY] Calling cleanup scripts.");
 	                	try {
 	                	    Runtime.getRuntime().exec("./cleanup.sh").waitFor();
-	                	} catch(IOException e) {
+	                	} catch(IOException e):
 	                	    GamerLogger.logStackTrace("Proxy", e);
 	                	}
 	                	Thread.sleep(500);
@@ -389,7 +372,7 @@ public final class ProxyGamePlayer extends Thread implements Subject
 
 	                // Okay, seriously garbage collect please. As it turns out,
 	                // this takes some convincing; Java isn't usually eager to do it.
-	                for(int i = 0; i < 10; i++) {
+	                for(int i = 0; i < 10; i++):
 	                    System.gc();
 	                    Thread.sleep(100);
 	                }
@@ -401,32 +384,26 @@ public final class ProxyGamePlayer extends Thread implements Subject
 	                System.out.println("Cleaned up completed match, with a residual " + usedMemoryInMegs + "mb of memory as proxy.");
 
                     needRestart = false;
-				}
-			}
-			catch (Exception e)
+            catch (Exception e)
 			{
 			    GamerLogger.logStackTrace("Proxy", e);
-				notifyObservers(new PlayerDroppedPacketEvent());
-			}
-			catch (Error e)
+                notifyObservers(new PlayerDroppedPacketEvent());
+            catch (Error e)
 			{
 			    GamerLogger.logStackTrace("Proxy", e);
 			    notifyObservers(new PlayerDroppedPacketEvent());
-			}
-		}
-	}
 
-	public static final long METAGAME_BUFFER = Gamer.PREFERRED_METAGAME_BUFFER + 100;
-	public static final long PLAY_BUFFER = Gamer.PREFERRED_PLAY_BUFFER + 100;
+    def static final long METAGAME_BUFFER = Gamer.PREFERRED_METAGAME_BUFFER + 100;
+    def static final long PLAY_BUFFER = Gamer.PREFERRED_PLAY_BUFFER + 100;
 
-    private void proxyProcessRequest(Request theRequest, long receptionTime) {
+    private void proxyProcessRequest(Request theRequest, long receptionTime):
         long startSleeping = System.currentTimeMillis();
         long timeToFinish = receptionTime;
         long timeToSleep = 0L;
 
 	    try {
-    	    if(theRequest instanceof PlayRequest) {
-    	    	if (theDefaultGamer.getMatch() != null) {
+    	    if(theRequest instanceof PlayRequest):
+    	    	if (theDefaultGamer.getMatch() != null):
                   // They have this long to play
                   timeToFinish = receptionTime + theDefaultGamer.getMatch().getPlayClock() * 1000 - PLAY_BUFFER;
                 } else {
@@ -436,7 +413,7 @@ public final class ProxyGamePlayer extends Thread implements Subject
     	        timeToSleep = timeToFinish - System.currentTimeMillis();
     	        if(timeToSleep > 0)
     	            Thread.sleep(timeToSleep);
-    	    } else if(theRequest instanceof StartRequest) {
+    	    } else if(theRequest instanceof StartRequest):
     	        GamerLogger.startFileLogging(theDefaultGamer.getMatch(), theDefaultGamer.getRoleName().toString());
 
     	        System.out.println("Started playing " + theDefaultGamer.getMatch().getMatchId() + ".");
@@ -446,35 +423,34 @@ public final class ProxyGamePlayer extends Thread implements Subject
                 timeToSleep = timeToFinish - System.currentTimeMillis();
                 if(timeToSleep > 0)
                     Thread.sleep(timeToSleep);
-    	   } else if(theRequest instanceof StopRequest || theRequest instanceof AbortRequest) {
+    	   } else if(theRequest instanceof StopRequest || theRequest instanceof AbortRequest):
     	       GamerLogger.stopFileLogging();
     	       needRestart = true;
     	   }
-	    } catch(InterruptedException ie) {
+	    } catch(InterruptedException ie):
 	        // Rise and shine!
 	        GamerLogger.log("Proxy", "[PROXY] Got woken up by final move!");
 	    }
 
 	    GamerLogger.log("Proxy", "[PROXY] Proxy slept for " + (System.currentTimeMillis() - startSleeping) + ", and woke up " + (System.currentTimeMillis() - timeToFinish) + "ms late (started " + (startSleeping - receptionTime) + "ms after receiving message).");
-	}
 
-	private String latestProxiedResponse;
-	private void processClientResponse(ProxyMessage in, Thread toWakeUp) {
+    private String latestProxiedResponse;
+    private void processClientResponse(ProxyMessage in, Thread toWakeUp):
 	    String theirTag = in.theMessage.substring(0,5);
 	    String theirMessage = in.theMessage.substring(5);
 
 	    // Ignore their message unless it has an up-to-date move code.
-	    if(!(in.messageCode == currentMoveCode)) {
+	    if(!(in.messageCode == currentMoveCode)):
 	        if(currentMoveCode > 0)
 	            GamerLogger.logError("Proxy", "CODE MISMATCH: " + currentMoveCode + " vs " + in.messageCode);
 	        return;
 	    }
 
-	    if(theirTag.equals("WORK:")) {
+	    if(theirTag.equals("WORK:")):
             latestProxiedResponse = theirMessage;
             GamerLogger.log("Proxy", "[PROXY] Got latest working move: " + latestProxiedResponse);
             receivedClientMove = true;
-	    } else if(theirTag.equals("DONE:")) {
+	    } else if(theirTag.equals("DONE:")):
             latestProxiedResponse = theirMessage;
             GamerLogger.log("Proxy", "[PROXY] Got a final move: " + latestProxiedResponse);
             receivedClientMove = true;
@@ -483,18 +459,17 @@ public final class ProxyGamePlayer extends Thread implements Subject
 	    }
     }
 
-	private BlockingQueue<ProxyMessage> inputQueue;
-	private BlockingQueue<Socket> inputConnectionQueue;
-	private class QueueListenerThread extends Thread {
-	    @Override
-		public void run() {
-	        while(true) {
+    private BlockingQueue<ProxyMessage> inputQueue;
+    private BlockingQueue<Socket> inputConnectionQueue;
+    private class QueueListenerThread(Thread):
+		    def run():  # void
+	        while(true):
 	            try {
                     // First, read a message from the server.
                     Socket connection = listener.accept();
                     String in = HttpReader.readAsServer(connection).replace('\n', ' ').replace('\r', ' ');
                     long receptionTime = System.currentTimeMillis();
-                    if(inputQueue.remainingCapacity() > 0) {
+                    if(inputQueue.remainingCapacity() > 0):
                         inputQueue.add(new ProxyMessage(in, 0L, receptionTime));
                         inputConnectionQueue.add(connection);
 
@@ -502,12 +477,11 @@ public final class ProxyGamePlayer extends Thread implements Subject
                     } else {
                         GamerLogger.logError("Proxy", "[PROXY QueueListener] Got incoming message from game server: " + in + ". Could not add to queue, because queue is full!");
                     }
-	            } catch(Exception e) {
+	            } catch(Exception e):
 	                GamerLogger.logStackTrace("Proxy", e);
-	            } catch(Error e) {
+	            } catch(Error e):
                     GamerLogger.logStackTrace("Proxy", e);
                 }
 	        }
 	    }
-	}
 }

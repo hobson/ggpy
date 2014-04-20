@@ -15,7 +15,7 @@ import org.ggp.base.util.statemachine.Role;
  * The PropNetFactory class defines the creation of PropNets from game
  * descriptions.
  */
-public final class PropNetFactory
+class PropNetFactory
 {
 	/**
 	 * Creates a PropNet from a game description using the following process:
@@ -28,15 +28,14 @@ public final class PropNetFactory
 	 *            A game description.
 	 * @return An equivalent PropNet.
 	 */
-	public static PropNet create(List<Gdl> description)
+    def static PropNet create(List<Gdl> description)
 	{
         try {
             List<GdlRule> flatDescription = new PropNetFlattener(description).flatten();
             GamerLogger.log("StateMachine", "Converting...");
             return new PropNetConverter().convert(Role.computeRoles(description), flatDescription);
-        } catch(Exception e) {
+        } catch(Exception e):
             GamerLogger.logStackTrace("StateMachine", e);
             return null;
         }
-	}
 }

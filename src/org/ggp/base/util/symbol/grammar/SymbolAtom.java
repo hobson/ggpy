@@ -1,24 +1,19 @@
 package org.ggp.base.util.symbol.grammar;
 
-public final class SymbolAtom extends Symbol
+class SymbolAtom(Symbol):
 {
 
-	private final String value;
+    value = ''
 
-	SymbolAtom(String value)
+    SymbolAtom(String value)
 	{
-		this.value = value.intern();
-	}
+        this.value = value.intern();
 
-	public String getValue()
+    def String getValue()
 	{
-		return value;
-	}
+        return value;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return value;
-	}
+        return value;
 
-}

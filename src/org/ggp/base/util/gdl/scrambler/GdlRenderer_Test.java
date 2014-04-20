@@ -12,18 +12,18 @@ import org.ggp.base.util.gdl.grammar.Gdl;
  *
  * @author Sam
  */
-public class GdlRenderer_Test extends TestCase {
+class GdlRenderer_Test(TestCase):
 	/**
 	 * One important property for GdlRenderer is that it should generate
 	 * an identical rendering as if you had called the toString() method
 	 * on a Gdl object.
 	 */
-    public void testSimpleRendering() {
+    public void testSimpleRendering():
     	GdlRenderer renderer = new GdlRenderer();
     	GameRepository repo = GameRepository.getDefaultRepository();
-    	for (String gameKey : repo.getGameKeys()) {
+    	for (String gameKey : repo.getGameKeys()):
     		Game game = repo.getGame(gameKey);
-    		for(Gdl rule : game.getRules()) {
+    		for(Gdl rule : game.getRules()):
     			assertEquals(rule.toString(), renderer.renderGdl(rule));
     		}
     	}

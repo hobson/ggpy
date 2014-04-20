@@ -25,48 +25,47 @@ import external.JSON.JSONException;
  *
  * @author Sam Schreiber
  */
-public class LogSummarizer
+class LogSummarizer
 {
     public static LogSummaryGenerator theGenerator;
     public static final int SERVER_PORT = 9199;
 
-    static class SummarizeLogThread extends Thread {
+    static class SummarizeLogThread(Thread):
         private Socket connection;
 
         public SummarizeLogThread(Socket connection) throws IOException, JSONException {
             this.connection = connection;
         }
 
-        @Override
-        public void run() {
+            public void run():
             try {
                 String matchId = HttpReader.readAsServer(connection);
                 String theResponse = theGenerator.getLogSummary(matchId);
                 HttpWriter.writeAsServer(connection, theResponse);
                 connection.close();
-            } catch (IOException e) {
+            } catch (IOException e):
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args):
         ServerSocket listener = null;
         try {
              listener = new ServerSocket(SERVER_PORT);
-        } catch (IOException e) {
+        } catch (IOException e):
             System.err.println("Could not open server on port " + SERVER_PORT + ": " + e);
             e.printStackTrace();
             return;
         }
 
-        while (true) {
+        while (true):
             try {
                 Socket connection = listener.accept();
                 Thread handlerThread = new SummarizeLogThread(connection);
                 handlerThread.start();
-            } catch (Exception e) {
+            } catch (Exception e):
                 System.err.println(e);
             }
         }

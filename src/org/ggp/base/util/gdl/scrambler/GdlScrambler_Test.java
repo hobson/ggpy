@@ -21,7 +21,7 @@ import org.ggp.base.util.symbol.factory.exceptions.SymbolFormatException;
  *
  * @author Sam
  */
-public class GdlScrambler_Test extends TestCase {
+class GdlScrambler_Test(TestCase):
     /**
      * When scrambling is disabled, the "NoOpGdlScrambler" is used. This class
      * simply renders the Gdl and parses it in the naive way, without doing any
@@ -47,12 +47,12 @@ public class GdlScrambler_Test extends TestCase {
      * be used to scramble a specific match in the same way, even if it stored and
      * reloaded in the meantime.
      */
-    public void testMappingScramblerConsistency() {
+    public void testMappingScramblerConsistency():
     	GdlScrambler aScrambler = new MappingGdlScrambler(new Random(123));
     	GdlScrambler bScrambler = new MappingGdlScrambler(new Random(123));
     	GdlScrambler cScrambler = new MappingGdlScrambler(new Random(234));
     	GameRepository repo = GameRepository.getDefaultRepository();
-    	for (String gameKey : repo.getGameKeys()) {
+    	for (String gameKey : repo.getGameKeys()):
     		Game game = repo.getGame(gameKey);
     		StringBuilder aScrambledRules = new StringBuilder();
     		StringBuilder bScrambledRules = new StringBuilder();
@@ -60,12 +60,12 @@ public class GdlScrambler_Test extends TestCase {
     		StringBuilder dScrambledRules = new StringBuilder();
     		StringBuilder eScrambledRules = new StringBuilder();
     		StringBuilder fScrambledRules = new StringBuilder();
-    		for(Gdl rule : game.getRules()) {
+    		for(Gdl rule : game.getRules()):
     			aScrambledRules.append(aScrambler.scramble(rule)+"\n");
     			bScrambledRules.append(bScrambler.scramble(rule)+"\n");
     			cScrambledRules.append(cScrambler.scramble(rule)+"\n");
     		}
-    		for(Gdl rule : game.getRules()) {
+    		for(Gdl rule : game.getRules()):
     			dScrambledRules.append(aScrambler.scramble(rule)+"\n");
     			eScrambledRules.append(bScrambler.scramble(rule)+"\n");
     			fScrambledRules.append(cScrambler.scramble(rule)+"\n");
@@ -80,10 +80,10 @@ public class GdlScrambler_Test extends TestCase {
 
     private void runScramblerTest(GdlScrambler scrambler) throws SymbolFormatException, GdlFormatException {
     	GameRepository repo = GameRepository.getDefaultRepository();
-    	for (String gameKey : repo.getGameKeys()) {
+    	for (String gameKey : repo.getGameKeys()):
     		Game game = repo.getGame(gameKey);
     		List<Gdl> theScrambledRules = new ArrayList<Gdl>();
-    		for(Gdl rule : game.getRules()) {
+    		for(Gdl rule : game.getRules()):
     			String renderedRule = rule.toString();
     			String renderedScrambledRule = scrambler.scramble(rule).toString();
     			String renderedUnscrambledRule = scrambler.unscramble(renderedScrambledRule).toString();
@@ -91,7 +91,7 @@ public class GdlScrambler_Test extends TestCase {
     			// If the scrambler claims that it scrambles the game, then the
     			// scrambled rules should be different than the original rules.
     			// Otherwise they should be identical.
-    			if (scrambler.scrambles()) {
+    			if (scrambler.scrambles()):
     				assertTrue(gameKey, !renderedRule.equals(renderedScrambledRule));
     			} else {
     				assertEquals(gameKey, renderedRule, renderedScrambledRule);
@@ -109,12 +109,12 @@ public class GdlScrambler_Test extends TestCase {
     		// be more thorough verification here, like looking at the number of
     		// legal joint moves in the first state, or simulating entire matches,
     		// but that would be expensive.
-			ProverStateMachine pNormal = new ProverStateMachine();
-			ProverStateMachine pScrambled = new ProverStateMachine();
-			pNormal.initialize(game.getRules());
-			pScrambled.initialize(theScrambledRules);
-			assertEquals(gameKey, pNormal.getRoles().size(), pScrambled.getRoles().size());
-			assertEquals(gameKey, pNormal.getInitialState().getContents().size(), pScrambled.getInitialState().getContents().size());
+            ProverStateMachine pNormal = new ProverStateMachine();
+            ProverStateMachine pScrambled = new ProverStateMachine();
+            pNormal.initialize(game.getRules());
+            pScrambled.initialize(theScrambledRules);
+            assertEquals(gameKey, pNormal.getRoles().size(), pScrambled.getRoles().size());
+            assertEquals(gameKey, pNormal.getInitialState().getContents().size(), pScrambled.getInitialState().getContents().size());
     	}
     }
 }

@@ -5,26 +5,21 @@ import org.ggp.base.util.propnet.architecture.Component;
 /**
  * The Transition class is designed to represent pass-through gates.
  */
-@SuppressWarnings("serial")
-public final class Transition extends Component
+class Transition(Component):
 {
 	/**
 	 * Returns the value of the input to the transition.
 	 *
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
-	@Override
-	public boolean getValue()
+    def boolean getValue()
 	{
-		return getSingleInput().getValue();
-	}
+        return getSingleInput().getValue();
 
 	/**
 	 * @see org.ggp.base.util.propnet.architecture.Component#toString()
 	 */
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return toDot("box", "grey", "TRANSITION");
-	}
+        return toDot("box", "grey", "TRANSITION");
 }

@@ -5,11 +5,10 @@ import org.ggp.base.util.propnet.architecture.Component;
 /**
  * The Constant class is designed to represent nodes with fixed logical values.
  */
-@SuppressWarnings("serial")
-public final class Constant extends Component
+class Constant(Component):
 {
 	/** The value of the constant. */
-	private final boolean value;
+    value = boolean()
 
 	/**
 	 * Creates a new Constant with value <tt>value</tt>.
@@ -17,28 +16,23 @@ public final class Constant extends Component
 	 * @param value
 	 *            The value of the Constant.
 	 */
-	public Constant(boolean value)
+    def Constant(value=boolean())
 	{
-		this.value = value;
-	}
+        this.value = value;
 
 	/**
 	 * Returns the value that the constant was initialized to.
 	 *
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
-	@Override
-	public boolean getValue()
+    def boolean getValue()
 	{
-		return value;
-	}
+        return value;
 
 	/**
 	 * @see org.ggp.base.util.propnet.architecture.Component#toString()
 	 */
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return toDot("doublecircle", "grey", Boolean.toString(value).toUpperCase());
-	}
+        return toDot("doublecircle", "grey", Boolean.toString(value).toUpperCase());
 }

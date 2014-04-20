@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.ggp.base.util.gdl.grammar.GdlSentence;
 
-public class MachineState {
-    public MachineState() {
+class MachineState(object):
+    public MachineState():
         this.contents = null;
     }
 
@@ -26,25 +26,21 @@ public class MachineState {
      * of the game being played. Two given states with identical GDL sentences
      * should be identical states of the game.
      */
-	public Set<GdlSentence> getContents()
+    def Set<GdlSentence> getContents()
 	{
         return contents;
     }
 
-	@Override
-	public MachineState clone() {
-		return new MachineState(new HashSet<GdlSentence>(contents));
-	}
+    def clone():  # MachineState
+        return new MachineState(new HashSet<GdlSentence>(contents));
 
 	/* Utility methods */
-    @Override
-	public int hashCode()
+    def int hashCode()
     {
         return getContents().hashCode();
     }
 
-    @Override
-	public String toString()
+    def String toString()
     {
     	Set<GdlSentence> contents = getContents();
     	if(contents == null)
@@ -53,8 +49,7 @@ public class MachineState {
     		return contents.toString();
     }
 
-    @Override
-	public boolean equals(Object o)
+    def boolean equals(Object o)
     {
         if ((o != null) && (o instanceof MachineState))
         {

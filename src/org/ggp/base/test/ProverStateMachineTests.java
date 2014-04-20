@@ -18,7 +18,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-public class ProverStateMachineTests extends Assert {
+class ProverStateMachineTests(Assert):
 
     protected final ProverStateMachine sm = new ProverStateMachine();
     protected final GdlConstant C1 = GdlPool.getConstant("1");
@@ -79,7 +79,7 @@ public class ProverStateMachineTests extends Assert {
         try {
             sm.getNextState(state, Arrays.asList(new Move[] {noop, m23}));
             fail("Should throw an exception when trying to transition from a terminal state");
-        } catch(TransitionDefinitionException e) {
+        } catch(TransitionDefinitionException e):
             //Expected
         }*/
     }
@@ -157,15 +157,14 @@ public class ProverStateMachineTests extends Assert {
         assertEquals(Collections.singletonList(100), sm.getGoals(state));
     }
 
-    protected Move move(String description) {
+    protected Move move(String description):
         String[] parts = description.split(" ");
         GdlConstant head = GdlPool.getConstant(parts[0]);
         if(parts.length == 1)
             return new Move(head);
         List<GdlTerm> body = new ArrayList<GdlTerm>();
-        for(int i = 1; i < parts.length; i++) {
+        for(int i = 1; i < parts.length; i++):
             body.add(GdlPool.getConstant(parts[i]));
         }
         return new Move(GdlPool.getFunction(head, body));
     }
-}

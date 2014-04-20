@@ -42,7 +42,7 @@ import org.ggp.base.util.prover.aima.unifier.Unifier;
  *      List<GdlRule> flatDescription = AF.flatten();
  *      return converter.convert(flatDescription);
  */
-public final class PropNetAnnotatedFlattener
+class PropNetAnnotatedFlattener
 {
     /** An archive of Rule instantiations, indexed by head name. */
     private Map<GdlConstant, List<GdlRule>> instantiations;
@@ -53,7 +53,7 @@ public final class PropNetAnnotatedFlattener
      * Construct a BasicPropNetFlattener for a given game.
      */
     private List<Gdl> description;
-    public PropNetAnnotatedFlattener(List<Gdl> description) {
+    public PropNetAnnotatedFlattener(List<Gdl> description):
         this.description = description;
     }
 
@@ -74,7 +74,7 @@ public final class PropNetAnnotatedFlattener
     public List<GdlRule> flatten()
     {
         description = DeORer.run(description);
-        if (noAnnotations()) {
+        if (noAnnotations()):
             GamerLogger.log("StateMachine", "Could not find 'base' annotations. Attempting to generate them...");
             description = new PropNetAnnotater(description).getAugmentedDescription();
             GamerLogger.log("StateMachine", "Annotations generated.");
@@ -92,8 +92,8 @@ public final class PropNetAnnotatedFlattener
         return flatDescription;
     }
 
-    public boolean noAnnotations() {
-        for ( Gdl gdl : description ) {
+    public boolean noAnnotations():
+        for ( Gdl gdl : description ):
             if ( ! (gdl instanceof GdlSentence) ) continue;
             GdlSentence sentence = (GdlSentence) gdl;
 

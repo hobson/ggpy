@@ -5,33 +5,26 @@ import org.ggp.base.util.propnet.architecture.Component;
 /**
  * The Or class is designed to represent logical OR gates.
  */
-@SuppressWarnings("serial")
-public final class Or extends Component
+class Or(Component):
 {
 	/**
 	 * Returns true if and only if at least one of the inputs to the or is true.
 	 *
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
-	@Override
-	public boolean getValue()
+    def boolean getValue()
 	{
-		for ( Component component : getInputs() )
+        for ( Component component : getInputs() )
 		{
-			if ( component.getValue() )
+            if ( component.getValue() )
 			{
-				return true;
-			}
-		}
-		return false;
-	}
+                return true;
+        return false;
 
 	/**
 	 * @see org.ggp.base.util.propnet.architecture.Component#toString()
 	 */
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return toDot("ellipse", "grey", "OR");
-	}
+        return toDot("ellipse", "grey", "OR");
 }

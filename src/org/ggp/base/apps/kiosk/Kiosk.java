@@ -57,8 +57,7 @@ import com.google.common.collect.Lists;
  *
  * @author Sam
  */
-@SuppressWarnings("serial")
-public final class Kiosk extends JPanel implements ActionListener, ItemListener, Observer
+class Kiosk(JPanel implements ActionListener, ItemListener, Observer):
 {
     public static final String remotePlayerString = "[REMOTE PLAYER]";
 
@@ -75,9 +74,8 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
     {
         NativeUI.setNativeUI();
         final Kiosk serverPanel = new Kiosk();
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-			public void run() {
+        javax.swing.SwingUtilities.invokeLater(new Runnable():
+        		    def run():  # void
                 createAndShowGUI(serverPanel);
             }
         });
@@ -97,7 +95,7 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
     private final JPanel theGUIPanel;
 
     private final JComboBox<String> playerComboBox;
-    private List<Class<? extends Gamer>> gamers = null;
+    private List<Class<?(Gamer>> gamers = null;):
     private final JTextField computerAddress;
 
     private final GameRepository theRepository;
@@ -111,12 +109,12 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
         GamerLogger.setFileToDisplay("GamePlayer");
 
         SortedSet<AvailableGame> theAvailableGames = new TreeSet<AvailableGame>();
-        Set<Class<? extends GameCanvas>> theAvailableCanvasList = ProjectSearcher.GAME_CANVASES.getConcreteClasses();
-        for(Class<? extends GameCanvas> availableCanvas : theAvailableCanvasList) {
+        Set<Class<?(GameCanvas>> theAvailableCanvasList = ProjectSearcher.GAME_CANVASES.getConcreteClasses();):
+        for(Class<?(GameCanvas> availableCanvas : theAvailableCanvasList)):
             try {
                 GameCanvas theCanvas = availableCanvas.newInstance();
                 theAvailableGames.add(new AvailableGame(theCanvas.getGameName(), theCanvas.getGameKey(), availableCanvas));
-            } catch(Exception e) {
+            } catch(Exception e):
                 ;
             }
         }
@@ -138,11 +136,11 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
         {
             try {
                 Gamer g = (Gamer) gamer.newInstance();
-                if (!g.isComputerPlayer()) {
+                if (!g.isComputerPlayer()):
                 	throw new Exception("Kiosk only considers computer players");
                 }
                 playerComboBox.addItem(g.getName());
-            } catch(Exception ex) {
+            } catch(Exception ex):
                 gamers.remove(gamer);
             }
         }
@@ -192,7 +190,7 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
             theHumanGamer = new KioskGamer(theGUIPanel);
             theHumanPlayer = new GamePlayer(DEFAULT_HUMAN_PORT, theHumanGamer);
             theHumanPlayer.start();
-        } catch(Exception e) {
+        } catch(Exception e):
             e.printStackTrace();
         }
 
@@ -206,65 +204,58 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
         private String gameName, kifFile;
         private Class<?> theCanvasClass;
 
-        public AvailableGame(String gameName, String kifFile, Class<?> theCanvasClass) {
+        public AvailableGame(String gameName, String kifFile, Class<?> theCanvasClass):
             this.gameName = gameName;
             this.kifFile = kifFile;
             this.theCanvasClass = theCanvasClass;
         }
 
-        @Override
-		public String toString() {
+    	    def toString():  # String
             return gameName;
         }
 
-        public GameCanvas getCanvas() {
+        public GameCanvas getCanvas():
             try {
                 return (GameCanvas)theCanvasClass.newInstance();
-            } catch (InstantiationException e) {
+            } catch (InstantiationException e):
                 e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (IllegalAccessException e):
                 e.printStackTrace();
             }
             return null;
         }
 
-        @Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result
+    	    def hashCode():  # int
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + getOuterType().hashCode();
+            result = prime * result
 					+ ((gameName == null) ? 0 : gameName.hashCode());
-			return result;
-		}
+            return result;
 
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			AvailableGame other = (AvailableGame) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (gameName == null) {
-				if (other.gameName != null)
-					return false;
+    	    def boolean equals(Object obj):
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            AvailableGame other = (AvailableGame) obj;
+            if (!getOuterType().equals(other.getOuterType()))
+                return false;
+            if (gameName == null):
+                if (other.gameName != null)
+                    return false;
 			} else if (!gameName.equals(other.gameName))
-				return false;
-			return true;
-		}
+                return false;
+            return true;
 
-		@Override
-        public int compareTo(AvailableGame o) {
+            public int compareTo(AvailableGame o):
             return gameName.compareTo(o.gameName);
         }
 
-		private Kiosk getOuterType() {
-			return Kiosk.this;
-		}
+        private Kiosk getOuterType():
+            return Kiosk.this;
     }
 
     private GamePlayer theComputerPlayer = null;
@@ -276,10 +267,9 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
     private static final int DEFAULT_HUMAN_PORT = 3333;
     private static final int DEFAULT_COMPUTER_PORT = 3334;
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == runButton) {
-            if (kioskServer != null && !kioskServer.getMatch().isCompleted()) {
+    public void actionPerformed(ActionEvent e):
+        if(e.getSource() == runButton):
+            if (kioskServer != null && !kioskServer.getMatch().isCompleted()):
             	// When a match is started while another match is still running,
             	// abort the ongoing match so that the new one can start. This
             	// also directly tells the human gamer to abort, since otherwise
@@ -291,7 +281,7 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
             	kioskServer = null;
             	try {
             		theHumanGamer.abort();
-            	} catch (AbortingException ae) {
+            	} catch (AbortingException ae):
             		ae.printStackTrace();
             	}
             	System.gc();
@@ -304,7 +294,7 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
                 AvailableGame theGame = selectedGame.getSelectedValue();
                 Game game = theRepository.getGame(theGame.kifFile);
 
-                if (game == null) {
+                if (game == null):
                 	JOptionPane.showMessageDialog(this, "Cannot load game data for " + theGame.kifFile, "Error", JOptionPane.ERROR_MESSAGE);
                 	return;
                 }
@@ -317,16 +307,16 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
 
                 // Stop old player if it's not the right type
                 String computerPlayerName = (String) playerComboBox.getSelectedItem();
-                if(theComputerPlayer != null && !theComputerPlayer.getGamer().getName().equals(computerPlayerName)) {
+                if(theComputerPlayer != null && !theComputerPlayer.getGamer().getName().equals(computerPlayerName)):
                     theComputerPlayer.interrupt();
                     Thread.sleep(100);
                     theComputerPlayer = null;
                 }
 
                 // Start a new player if necessary
-                if(theComputerPlayer == null) {
+                if(theComputerPlayer == null):
                     Gamer gamer = null;
-                    if(!playerComboBox.getSelectedItem().equals(remotePlayerString)) {
+                    if(!playerComboBox.getSelectedItem().equals(remotePlayerString)):
                         Class<?> gamerClass = gamers.get(playerComboBox.getSelectedIndex());
                         try {
                             gamer = (Gamer) gamerClass.newInstance();
@@ -341,13 +331,13 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
                 List<Integer> ports = new ArrayList<Integer>();
                 List<String> playerNames = new ArrayList<String>();
 
-                if(!flipRoles.isSelected()) {
+                if(!flipRoles.isSelected()):
                     hosts.add("127.0.0.1");
                     ports.add(theHumanPlayer.getGamerPort());
                     playerNames.add("Human");
                 }
 
-                if(playerComboBox.getSelectedItem().equals(remotePlayerString)) {
+                if(playerComboBox.getSelectedItem().equals(remotePlayerString)):
                     try {
                         String[] splitAddress = computerAddress.getText().split(":");
                         String hostname = splitAddress[0];
@@ -356,7 +346,7 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
                         hosts.add(hostname);
                         ports.add(port);
                         playerNames.add("Computer");
-                    } catch(Exception ex) {
+                    } catch(Exception ex):
                         ex.printStackTrace();
                         return;
                     }
@@ -366,7 +356,7 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
                     playerNames.add("Computer");
                 }
 
-                if(flipRoles.isSelected()) {
+                if(flipRoles.isSelected()):
                     hosts.add("127.0.0.1");
                     ports.add(theHumanPlayer.getGamerPort());
                     playerNames.add("Human");
@@ -382,16 +372,15 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
                 kioskServer.start();
 
                 publishButton.setServer(kioskServer);
-            } catch(Exception ex) {
+            } catch(Exception ex):
                 ex.printStackTrace();
             }
         }
     }
 
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        if(e.getSource() == playerComboBox) {
-            if(playerComboBox.getSelectedItem().equals(remotePlayerString)) {
+    public void itemStateChanged(ItemEvent e):
+        if(e.getSource() == playerComboBox):
+            if(playerComboBox.getSelectedItem().equals(remotePlayerString)):
                 computerAddress.setVisible(true);
             } else {
                 computerAddress.setVisible(false);
@@ -400,15 +389,14 @@ public final class Kiosk extends JPanel implements ActionListener, ItemListener,
         }
     }
 
-    @Override
-    public void observe(Event event) {
-        if(event instanceof ServerIllegalMoveEvent) {
+    public void observe(Event event):
+        if(event instanceof ServerIllegalMoveEvent):
             ServerIllegalMoveEvent x = (ServerIllegalMoveEvent)event;
             System.err.println("Got illegal move [" + x.getMove() + "] by role [" + x.getRole() + "].");
-        } else if (event instanceof ServerTimeoutEvent) {
+        } else if (event instanceof ServerTimeoutEvent):
             ServerTimeoutEvent x = (ServerTimeoutEvent)event;
             System.err.println("Timeout when communicating with role [" + x.getRole() + "].");
-        } else if (event instanceof ServerConnectionErrorEvent) {
+        } else if (event instanceof ServerConnectionErrorEvent):
             ServerConnectionErrorEvent x = (ServerConnectionErrorEvent)event;
             System.err.println("Connection error when communicating with role [" + x.getRole() + "].");
         }

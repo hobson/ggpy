@@ -26,8 +26,7 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
 import org.ggp.base.util.ui.GameStateRenderer;
 import org.ggp.base.util.ui.timer.JTimerBar;
 
-@SuppressWarnings("serial")
-public final class VisualizationPanel extends JPanel implements Observer
+class VisualizationPanel(JPanel implements Observer):
 {
     private final Game theGame;
     private final VisualizationPanel myThis;
@@ -47,28 +46,25 @@ public final class VisualizationPanel extends JPanel implements Observer
         this.add(timerBar, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 5, 5));
     }
 
-	private int stepCount = 1;
-	@Override
-	public void observe(Event event)
+    private int stepCount = 1;
+    def void observe(Event event)
 	{
-	    if (event instanceof ServerNewGameStateEvent) {
+	    if (event instanceof ServerNewGameStateEvent):
 	        MachineState s = ((ServerNewGameStateEvent)event).getState();
 	        rt.submit(s, stepCount++);
-	    } else if (event instanceof ServerTimeEvent) {
+	    } else if (event instanceof ServerTimeEvent):
 	        timerBar.time(((ServerTimeEvent) event).getTime(), 500);
-	    } else if (event instanceof ServerCompletedMatchEvent) {
+	    } else if (event instanceof ServerCompletedMatchEvent):
 	        rt.finish();
 	        timerBar.stop();
-	    } else if (event instanceof ServerNewMatchEvent) {
+	    } else if (event instanceof ServerNewMatchEvent):
 	        MachineState s = ((ServerNewMatchEvent) event).getInitialState();
 	        rt.submit(s, stepCount);
-		}
-	}
 
-	private class RenderThread extends Thread {
+    private class RenderThread(Thread):
 	    private final LinkedBlockingQueue<VizJob> queue;
 
-	    public RenderThread() {
+	    public RenderThread():
 	        this.queue = new LinkedBlockingQueue<>();
 	    }
 
@@ -77,41 +73,38 @@ public final class VisualizationPanel extends JPanel implements Observer
 	        public void render() {}
 	    };
 
-	    private final class StopJob extends VizJob {
-            @Override
-            public boolean stop() {
+	    private final class StopJob(VizJob):
+                    public boolean stop():
                 return true;
             }
 	    }
 
-	    private final class RenderJob extends VizJob {
+	    private final class RenderJob(VizJob):
 	        private MachineState state;
 	        private int stepNum;
 
-	        public RenderJob(MachineState state, int stepNum) {
+	        public RenderJob(MachineState state, int stepNum):
 	            this.state = state;
 	            this.stepNum = stepNum;
 	        }
 
-	        @Override
-	        public boolean stop() {
+	    	        public boolean stop():
 	            return false;
 	        }
 
-	        @Override
-	        public void render() {
+	    	        public void render():
 	            JPanel newPanel = null;
 	            try {
 	                String XML = Match.renderStateXML(state.getContents());
 	                String XSL = theGame.getStylesheet();
-	                if (XSL != null) {
+	                if (XSL != null):
 	                    newPanel = new VizContainerPanel(XML, XSL, myThis);
 	                }
-	            } catch(Exception ex) {
+	            } catch(Exception ex):
 	                ex.printStackTrace();
 	            }
 
-	            if(newPanel != null) {
+	            if(newPanel != null):
 	                boolean atEnd = (tabs.getSelectedIndex() == tabs.getTabCount()-1);
 	                try {
 	                    for(int i = tabs.getTabCount(); i < stepNum; i++)
@@ -119,51 +112,49 @@ public final class VisualizationPanel extends JPanel implements Observer
 	                    tabs.setComponentAt(stepNum-1, newPanel);
 	                    tabs.setTitleAt(stepNum-1, new Integer(stepNum).toString());
 
-	                    if(atEnd) {
+	                    if(atEnd):
 	                        tabs.setSelectedIndex(tabs.getTabCount()-1);
 	                    }
-	                } catch(Exception ex) {
+	                } catch(Exception ex):
 	                    System.err.println("Adding rendered visualization panel failed for: " + theGame.getKey());
 	                }
 	            }
 	        }
 	    }
 
-	    public void submit(MachineState state, int stepNum) {
+	    public void submit(MachineState state, int stepNum):
 	        queue.add(new RenderJob(state, stepNum));
 	    }
 
-	    public void finish() {
+	    public void finish():
 	        queue.add(new StopJob());
 	    }
 
-	    @Override
-	    public void run() {
+		    public void run():
 	        boolean running = true;
 	        int interrupted = 0;
-	        while (running) {
+	        while (running):
 	            try {
 	                VizJob job = queue.take();
 	                interrupted = 0;
-	                if (!job.stop()) {
+	                if (!job.stop()):
 	                    job.render();
 	                } else {
 	                    GameStateRenderer.shrinkCache();
 	                    running = false;
 	                }
-	            } catch (InterruptedException e) {
+	            } catch (InterruptedException e):
 	                interrupted += 1;
-	                if ((interrupted % 10) == 0) {
+	                if ((interrupted % 10) == 0):
 	                    System.err.println("Render thread interrupted "+interrupted+" times in a row");
 	                }
 	            }
 	        }
 	    }
-	}
 
 	// Simple test that loads the nineBoardTicTacToe game and visualizes
 	// a randomly-played match, to demonstrate that visualization works.
-	public static void main(String args[]) {
+    def static void main(String args[]):
         JFrame frame = new JFrame("Visualization Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -185,8 +176,7 @@ public final class VisualizationPanel extends JPanel implements Observer
                 System.out.println("State: " + theCurrentState);
             } while(!theMachine.isTerminal(theCurrentState));
             theVisual.observe(new ServerNewGameStateEvent(theCurrentState));
-        } catch (Exception e) {
+        } catch (Exception e):
             e.printStackTrace();
         }
-	}
 }

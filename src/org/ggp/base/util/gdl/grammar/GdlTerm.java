@@ -1,15 +1,11 @@
 package org.ggp.base.util.gdl.grammar;
 
-@SuppressWarnings("serial")
-public abstract class GdlTerm extends Gdl
+public abstract class GdlTerm(Gdl):
 {
 
-	@Override
-	public abstract boolean isGround();
+    def abstract boolean isGround();
 
-	public abstract GdlSentence toSentence();
+    def abstract GdlSentence toSentence();
 
-	@Override
-	public abstract String toString();
+    def abstract String toString();
 
-}

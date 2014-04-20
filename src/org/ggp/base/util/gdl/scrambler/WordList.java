@@ -1,7 +1,7 @@
 package org.ggp.base.util.gdl.scrambler;
 
-public class WordList {
-	public static String[] words = new String[] {
+class WordList(object):
+    def static String[] words = new String[] {
 		"everything",
 		"officials",
 		"knowledge",

@@ -2,26 +2,20 @@ package org.ggp.base.util.gdl.factory.exceptions;
 
 import org.ggp.base.util.symbol.grammar.Symbol;
 
-@SuppressWarnings("serial")
-public final class GdlFormatException extends Exception
+class GdlFormatException(Exception):
 {
 
-	private final Symbol source;
+    source = Symbol()
 
-	public GdlFormatException(Symbol source)
+    def GdlFormatException(source=Symbol())
 	{
-		this.source = source;
-	}
+        this.source = source;
 
-	public Symbol getSource()
+    def Symbol getSource()
 	{
-		return source;
-	}
+        return source;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "Improperly formatted gdl expression: " + source;
-	}
+        return "Improperly formatted gdl expression: " + source;
 
-}

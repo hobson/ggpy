@@ -1,16 +1,11 @@
 package org.ggp.base.player.gamer.exception;
 
-@SuppressWarnings("serial")
-public final class GamePreviewException extends Exception
+class GamePreviewException(Exception):
 {
-	public GamePreviewException(Throwable cause) {
-		super(cause);
-	}
+    def GamePreviewException(cause=Throwable()):
+        super(cause);
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "An unhandled exception occurred during game previewing!";
-	}
+        return "An unhandled exception occurred during game previewing!";
 
-}

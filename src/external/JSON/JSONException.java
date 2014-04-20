@@ -5,25 +5,23 @@ package external.JSON;
  * @author JSON.org
  * @version 2010-12-24
  */
-public class JSONException extends Exception {
-	private static final long serialVersionUID = 0;
-	private Throwable cause;
+class JSONException(Exception):
+    private static final long serialVersionUID = 0;
+    private Throwable cause;
 
     /**
      * Constructs a JSONException with an explanatory message.
      * @param message Detail about the reason for the exception.
      */
-    public JSONException(String message) {
+    public JSONException(String message):
         super(message);
     }
 
-    public JSONException(Throwable cause) {
+    public JSONException(Throwable cause):
         super(cause.getMessage());
         this.cause = cause;
     }
 
-    @Override
-	public Throwable getCause() {
+    def getCause():  # Throwable
         return this.cause;
     }
-}

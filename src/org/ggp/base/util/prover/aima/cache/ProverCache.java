@@ -13,49 +13,41 @@ import org.ggp.base.util.prover.aima.substitution.Substitution;
 import org.ggp.base.util.prover.aima.unifier.Unifier;
 
 
-public final class ProverCache
+class ProverCache
 {
 
-	private final Map<GdlSentence, Set<GdlSentence>> contents;
+    private final Map<GdlSentence, Set<GdlSentence>> contents;
 
-	public ProverCache()
+    def ProverCache()
 	{
-		contents = new HashMap<GdlSentence, Set<GdlSentence>>();
-	}
+        contents = new HashMap<GdlSentence, Set<GdlSentence>>();
 
 	/**
 	 * NOTE: The given sentence must have been renamed with a VariableRenamer.
 	 */
-	public boolean contains(GdlSentence renamedSentence)
+    def boolean contains(GdlSentence renamedSentence)
 	{
-		return contents.containsKey(renamedSentence);
-	}
+        return contents.containsKey(renamedSentence);
 
-	public List<Substitution> get(GdlSentence sentence, GdlSentence varRenamedSentence)
+    def List<Substitution> get(GdlSentence sentence, GdlSentence varRenamedSentence)
 	{
-		Set<GdlSentence> cacheContents = contents.get(varRenamedSentence);
-		if (cacheContents == null) {
-			return null;
-		}
-		Set<Substitution> results = new HashSet<Substitution>();
-		for (GdlSentence answer : cacheContents)
+        Set<GdlSentence> cacheContents = contents.get(varRenamedSentence);
+        if (cacheContents == null):
+            return null;
+        Set<Substitution> results = new HashSet<Substitution>();
+        for (GdlSentence answer : cacheContents)
 		{
-			results.add(Unifier.unify(sentence, answer));
-		}
+            results.add(Unifier.unify(sentence, answer));
 
-		return new ArrayList<Substitution>(results);
-	}
+        return new ArrayList<Substitution>(results);
 
-	public void put(GdlSentence sentence, GdlSentence renamedSentence,
-			Set<Substitution> answers)
+    def void put(GdlSentence sentence, GdlSentence renamedSentence,
+            Set<Substitution> answers)
 	{
-		Set<GdlSentence> results = new HashSet<GdlSentence>();
-		for (Substitution answer : answers)
+        Set<GdlSentence> results = new HashSet<GdlSentence>();
+        for (Substitution answer : answers)
 		{
-			results.add(Substituter.substitute(sentence, answer));
-		}
+            results.add(Substituter.substitute(sentence, answer));
 
-		contents.put(renamedSentence, results);
-	}
+        contents.put(renamedSentence, results);
 
-}

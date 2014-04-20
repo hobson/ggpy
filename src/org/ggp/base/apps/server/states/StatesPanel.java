@@ -17,19 +17,16 @@ import org.ggp.base.util.observer.Observer;
 import org.ggp.base.util.statemachine.MachineState;
 
 
-@SuppressWarnings("serial")
-public class StatesPanel extends JPanel implements Observer {
-	private JTabbedPane tabs = new JTabbedPane();
+class StatesPanel(JPanel implements Observer):
+    private JTabbedPane tabs = new JTabbedPane();
 
-	public StatesPanel()
+    def StatesPanel()
 	{
-		this.add(tabs);
-	}
+        this.add(tabs);
 
-	private int stepCount = 1;
-	@Override
-	public void observe(Event event) {
-		if (event instanceof ServerNewGameStateEvent)
+    private int stepCount = 1;
+    def void observe(Event event):
+        if (event instanceof ServerNewGameStateEvent)
 		{
 	        MachineState s = ((ServerNewGameStateEvent)event).getState();
 	        // TODO: Perhaps this should run in a separate thread, as in the
@@ -61,10 +58,7 @@ public class StatesPanel extends JPanel implements Observer {
 	        tabs.setComponentAt(stepNum-1, statePanel);
 	        tabs.setTitleAt(stepNum-1, new Integer(stepNum).toString());
 
-	        if(atEnd) {
+	        if(atEnd):
 	        	tabs.setSelectedIndex(tabs.getTabCount()-1);
 	        }
-		}
-	}
 
-}

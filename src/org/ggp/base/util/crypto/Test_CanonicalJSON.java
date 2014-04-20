@@ -11,8 +11,8 @@ import org.ggp.base.util.crypto.CanonicalJSON.CanonicalizationStrategy;
  *
  * @author Sam
  */
-public class Test_CanonicalJSON extends TestCase {
-    public void testSimpleCanonicalization() {
+class Test_CanonicalJSON(TestCase):
+    public void testSimpleCanonicalization():
         CanonicalizationStrategy theStrategy = CanonicalizationStrategy.SIMPLE;
 
         String a = CanonicalJSON.getCanonicalForm("{1:2,2:3,3:{2:5,c:4,7:9,a:6}}", theStrategy);

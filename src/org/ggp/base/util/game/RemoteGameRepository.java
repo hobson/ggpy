@@ -16,56 +16,54 @@ import external.JSON.JSONObject;
  *
  * @author Sam
  */
-public final class RemoteGameRepository extends GameRepository {
+class RemoteGameRepository(GameRepository):
     private final String theRepoURL;
 
-    public RemoteGameRepository(String theURL) {
+    public RemoteGameRepository(String theURL):
         theRepoURL = properlyFormatURL(theURL);
     }
 
-    @Override
-	protected Set<String> getUncachedGameKeys() {
+    protected Set<String> getUncachedGameKeys():
     	Set<String> theGameKeys = new HashSet<String>();
         try {
             JSONArray theArray = RemoteResourceLoader.loadJSONArray(theRepoURL + "/games/");
-            for(int i = 0; i < theArray.length(); i++) {
+            for(int i = 0; i < theArray.length(); i++):
                 theGameKeys.add(theArray.getString(i));
             }
-        } catch (Exception e) {
+        } catch (Exception e):
             e.printStackTrace();
         }
         return theGameKeys;
     }
 
-    @Override
-	protected Game getUncachedGame(String theKey) {
+    protected Game getUncachedGame(String theKey):
         return loadSingleGame(getGameURL(theKey));
     }
 
-    public static Game loadSingleGame(String theGameURL) {
+    public static Game loadSingleGame(String theGameURL):
         String[] theSplitURL = theGameURL.split("/");
         String theKey = theSplitURL[theSplitURL.length-1];
 
         try {
             JSONObject theMetadata = getGameMetadataFromRepository(theGameURL);
             return loadSingleGameFromMetadata(theKey, theGameURL, theMetadata);
-        } catch (JSONException e) {
+        } catch (JSONException e):
             e.printStackTrace();
             return null;
-        } catch (IOException e) {
+        } catch (IOException e):
             e.printStackTrace();
             return null;
         }
     }
 
-    protected static Game loadSingleGameFromMetadata(String theKey, String theGameURL, JSONObject theMetadata) {
+    protected static Game loadSingleGameFromMetadata(String theKey, String theGameURL, JSONObject theMetadata):
         // Ensure that the game URL has a version.
         try {
             int theVersion = theMetadata.getInt("version");
-            if (!isVersioned(theGameURL, theVersion)) {
+            if (!isVersioned(theGameURL, theVersion)):
               theGameURL = addVersionToGameURL(theGameURL, theVersion);
             }
-        } catch(JSONException e) {
+        } catch(JSONException e):
             e.printStackTrace();
             return null;
         }
@@ -83,26 +81,26 @@ public final class RemoteGameRepository extends GameRepository {
         return new Game(theKey, theName, theDescription, theGameURL, theStylesheet, theRulesheet);
     }
 
-    JSONObject getBundledMetadata() {
+    JSONObject getBundledMetadata():
         try {
             return RemoteResourceLoader.loadJSON(theRepoURL + "/games/metadata");
-        } catch (JSONException e) {
+        } catch (JSONException e):
         	return null;
-        } catch (IOException e) {
+        } catch (IOException e):
             return null;
         }
     }
 
     // ============================================================================================
-    protected String getGameURL(String theGameKey) {
+    protected String getGameURL(String theGameKey):
         return theRepoURL + "/games/" + theGameKey + "/";
     }
 
-    protected static String addVersionToGameURL(String theGameURL, int theVersion) {
+    protected static String addVersionToGameURL(String theGameURL, int theVersion):
         return theGameURL + "v" + theVersion + "/";
     }
 
-    protected static boolean isVersioned(String theGameURL, int theVersion) {
+    protected static boolean isVersioned(String theGameURL, int theVersion):
         return theGameURL.endsWith("/v" + theVersion + "/");
     }
 
@@ -110,16 +108,16 @@ public final class RemoteGameRepository extends GameRepository {
         return RemoteResourceLoader.loadJSON(theGameURL);
     }
 
-    protected static String getGameResourceFromMetadata(String theGameURL, JSONObject theMetadata, String theResource) {
+    protected static String getGameResourceFromMetadata(String theGameURL, JSONObject theMetadata, String theResource):
         try {
             String theResourceFile = theMetadata.getString(theResource);
             return RemoteResourceLoader.loadRaw(theGameURL + theResourceFile);
-        } catch (Exception e) {
+        } catch (Exception e):
             return null;
         }
     }
 
-    static String properlyFormatURL(String theURL) {
+    static String properlyFormatURL(String theURL):
         if (!theURL.startsWith("http://"))
             theURL = "http://" + theURL;
         if (theURL.endsWith("/"))

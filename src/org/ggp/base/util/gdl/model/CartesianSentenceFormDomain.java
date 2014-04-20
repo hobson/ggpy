@@ -23,58 +23,43 @@ import com.google.common.collect.Sets;
  * This is a more compact representation than a {@link FullSentenceFormDomain},
  * but has less expressive power.
  */
-public class CartesianSentenceFormDomain implements SentenceFormDomain {
-	private final SentenceForm form;
-	private final ImmutableList<ImmutableSet<GdlConstant>> domainsForSlots;
+class CartesianSentenceFormDomain implements SentenceFormDomain {
+    form = SentenceForm()
+    private final ImmutableList<ImmutableSet<GdlConstant>> domainsForSlots;
 
-	private CartesianSentenceFormDomain(SentenceForm form,
-			ImmutableList<ImmutableSet<GdlConstant>> domainsForSlots) {
-		this.form = form;
-		this.domainsForSlots = domainsForSlots;
-	}
+    private CartesianSentenceFormDomain(SentenceForm form,
+            ImmutableList<ImmutableSet<GdlConstant>> domainsForSlots):
+        this.form = form;
+        this.domainsForSlots = domainsForSlots;
 
-	public static CartesianSentenceFormDomain create(SentenceForm form,
-			List<Set<GdlConstant>> domainsForSlots) {
-		return new CartesianSentenceFormDomain(form,
-				ImmutableList.copyOf(Lists.transform(domainsForSlots,
-						new Function<Set<GdlConstant>, ImmutableSet<GdlConstant>>() {
-					@Override
-					public ImmutableSet<GdlConstant> apply(Set<GdlConstant> input) {
-						return ImmutableSet.copyOf(input);
-					}
+    def static CartesianSentenceFormDomain create(SentenceForm form,
+            List<Set<GdlConstant>> domainsForSlots):
+        return new CartesianSentenceFormDomain(form,
+                ImmutableList.copyOf(Lists.transform(domainsForSlots,
+                        new Function<Set<GdlConstant>, ImmutableSet<GdlConstant>>():
+                				    def ImmutableSet<GdlConstant> apply(Set<GdlConstant> input):
+                        return ImmutableSet.copyOf(input);
 				})));
-	}
 
-	public static SentenceFormDomain create(SentenceForm form,
-			SetMultimap<Integer, GdlConstant> setMultimap) {
-		Preconditions.checkNotNull(setMultimap);
+    def static SentenceFormDomain create(SentenceForm form,
+            SetMultimap<Integer, GdlConstant> setMultimap):
+        Preconditions.checkNotNull(setMultimap);
 
-		List<Set<GdlConstant>> domainsForSlots = Lists.newArrayList();
-		for (int i = 0; i < form.getTupleSize(); i++) {
-			domainsForSlots.add(setMultimap.get(i));
-		}
-		return create(form, domainsForSlots);
-	}
+        List<Set<GdlConstant>> domainsForSlots = Lists.newArrayList();
+        for (int i = 0; i < form.getTupleSize(); i++):
+            domainsForSlots.add(setMultimap.get(i));
+        return create(form, domainsForSlots);
 
-	@Override
-	public Iterator<GdlSentence> iterator() {
-		return Iterators.transform(Sets.cartesianProduct(domainsForSlots).iterator(),
-				new Function<List<GdlConstant>, GdlSentence>() {
-			@Override
-			public GdlSentence apply(List<GdlConstant> input) {
-				return form.getSentenceFromTuple(input);
-			}
+    def Iterator<GdlSentence> iterator():
+        return Iterators.transform(Sets.cartesianProduct(domainsForSlots).iterator(),
+                new Function<List<GdlConstant>, GdlSentence>():
+        		    def GdlSentence apply(List<GdlConstant> input):
+                return form.getSentenceFromTuple(input);
 		});
-	}
 
-	@Override
-	public SentenceForm getForm() {
-		return form;
-	}
+    def getForm():  # SentenceForm
+        return form;
 
-	@Override
-	public Set<GdlConstant> getDomainForSlot(int slotIndex) {
-		Preconditions.checkElementIndex(slotIndex, form.getTupleSize());
-		return domainsForSlots.get(slotIndex);
-	}
-}
+    def Set<GdlConstant> getDomainForSlot(int slotIndex):
+        Preconditions.checkElementIndex(slotIndex, form.getTupleSize());
+        return domainsForSlots.get(slotIndex);

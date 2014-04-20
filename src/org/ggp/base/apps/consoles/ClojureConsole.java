@@ -17,15 +17,15 @@ import clojure.lang.Var;
  *
  * @author Sam
  */
-public class ClojureConsole {
-    public static void main(String[] args) {
+class ClojureConsole(object):
+    public static void main(String[] args):
         Symbol CLOJURE_MAIN = Symbol.intern("clojure.main");
         Var REQUIRE = RT.var("clojure.core", "require");
         Var MAIN = RT.var("clojure.main", "main");
         try {
             REQUIRE.invoke(CLOJURE_MAIN);
             MAIN.applyTo(RT.seq(new String[]{}));
-        } catch(Exception e) {
+        } catch(Exception e):
             e.printStackTrace();
         }
     }

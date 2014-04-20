@@ -7,30 +7,24 @@ import org.ggp.base.apps.kiosk.templates.CommonGraphics;
 import org.ggp.base.apps.kiosk.templates.GameCanvas_SimpleGrid;
 
 
-public class ConnectFourCanvas extends GameCanvas_SimpleGrid {
+class ConnectFourCanvas(GameCanvas_SimpleGrid):
     private static final long serialVersionUID = 1L;
 
-    @Override
-	public String getGameName() { return "Connect Four"; }
-    @Override
-	protected String getGameKey() { return "connectFour"; }
-    @Override
-	protected int getGridHeight() { return 6; }
-    @Override
-	protected int getGridWidth() { return 8; }
+    def String getGameName() { return "Connect Four"; }
+    protected String getGameKey() { return "connectFour"; }
+    protected int getGridHeight() { return 6; }
+    protected int getGridWidth() { return 8; }
 
     private int selectedColumn = 0;
 
-    @Override
-    protected void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin) {
-        if(gameStateHasLegalMove("( drop " + xCell + " )")) {
+    protected void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin):
+        if(gameStateHasLegalMove("( drop " + xCell + " )")):
             selectedColumn = xCell;
             submitWorkingMove(stringToMove("( drop " + xCell + " )"));
         }
     }
 
-    @Override
-    protected void renderCell(Graphics g, int xCell, int yCell) {
+    protected void renderCell(Graphics g, int xCell, int yCell):
         yCell = 7 - yCell;
 
         int width = g.getClipBounds().width;
@@ -39,24 +33,23 @@ public class ConnectFourCanvas extends GameCanvas_SimpleGrid {
         g.setColor(Color.BLACK);
         g.drawRect(1, 1, width-2, height-2);
 
-        if(gameStateHasFact("( cell " + xCell + " " + yCell + " red )")) {
+        if(gameStateHasFact("( cell " + xCell + " " + yCell + " red )")):
             g.setColor(Color.RED);
             CommonGraphics.drawCheckersPiece(g, "wp");
-        } else if(gameStateHasFact("( cell " + xCell + " " + yCell + " black )")) {
+        } else if(gameStateHasFact("( cell " + xCell + " " + yCell + " black )")):
             g.setColor(Color.BLACK);
             CommonGraphics.drawCheckersPiece(g, "bp");
         } else {
             ;
         }
 
-        if(selectedColumn == xCell) {
+        if(selectedColumn == xCell):
             g.setColor(Color.GREEN);
             g.drawRect(3, 3, width-6, height-6);
         }
     }
 
-    @Override
-    public void clearMoveSelection() {
+    public void clearMoveSelection():
         submitWorkingMove(null);
         selectedColumn = 0;
 

@@ -17,7 +17,7 @@ import junit.framework.TestCase;
  *
  * @author Sam
  */
-public class Test_Http extends TestCase {
+class Test_Http(TestCase):
     public void testSimpleEcho() throws IOException {
         SocketPair testPair = new SocketPair();
         doSimpleEchoCheck(testPair, "Hello World", "SamplePlayer");
@@ -106,14 +106,14 @@ public class Test_Http extends TestCase {
         public Socket client;
         public Socket server;
 
-        public SocketPair() {
+        public SocketPair():
             // Create a server socket on the first available port.
             int defaultTestingPort = 13174;
             ServerSocket ss = null;
             do {
                 try {
                     ss = new ServerSocket(defaultTestingPort);
-                } catch(Exception e) {
+                } catch(Exception e):
                     ss = null;
                     defaultTestingPort++;
                 }
@@ -122,7 +122,7 @@ public class Test_Http extends TestCase {
             try {
                 client = new Socket("127.0.0.1", defaultTestingPort);
                 server = ss.accept();
-            } catch(Exception e) {
+            } catch(Exception e):
                 fail("Could not establish connection: " + e);
                 e.printStackTrace();
             }

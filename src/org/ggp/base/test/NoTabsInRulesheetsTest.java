@@ -11,14 +11,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-public class NoTabsInRulesheetsTest extends Assert {
+class NoTabsInRulesheetsTest(Assert):
     // Check that GGP-Base's games use spaces, not tabs.
     @Test
-    public void testNoTabsInRulesheets() {
+    public void testNoTabsInRulesheets():
         File testGamesFolder = new File("games", "test");
         assertTrue(testGamesFolder.isDirectory());
 
-        for (File gameFile : testGamesFolder.listFiles(new KifFileFilter())) {
+        for (File gameFile : testGamesFolder.listFiles(new KifFileFilter())):
             String fileContents = FileUtils.readFileAsString(gameFile);
             assertFalse("The game "+gameFile+" contains tabs. Run the main method in NoTabsInRulesheetsTest to fix this.", fileContents.contains("\t"));
         }
@@ -29,7 +29,7 @@ public class NoTabsInRulesheetsTest extends Assert {
         File testGamesFolder = new File("games", "test");
         assertTrue(testGamesFolder.isDirectory());
 
-        for (File gameFile : testGamesFolder.listFiles(new KifFileFilter())) {
+        for (File gameFile : testGamesFolder.listFiles(new KifFileFilter())):
             String fileContents = FileUtils.readFileAsString(gameFile);
             String newContents = fileContents.replaceAll("\t", "    "); //four spaces
             overwriteFileWithString(gameFile, newContents);
@@ -42,10 +42,7 @@ public class NoTabsInRulesheetsTest extends Assert {
         writer.close();
     }
 
-	static class KifFileFilter implements FileFilter {
-	    @Override
-	    public boolean accept(File pathname) {
+    static class KifFileFilter implements FileFilter {
+		    public boolean accept(File pathname):
 	        return pathname.getName().endsWith(".kif");
 	    }
-	}
-}

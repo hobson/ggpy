@@ -77,7 +77,7 @@ import org.ggp.base.util.statemachine.MachineState;
  *
  * @author Sam Schreiber
  */
-public abstract class GameCanvas_FancyGrid extends GameCanvas_SimpleGrid {
+public abstract class GameCanvas_FancyGrid(GameCanvas_SimpleGrid):
     private static final long serialVersionUID = 1L;
 
     protected abstract Set<String> getFactsAboutCell(int xCell, int yCell);
@@ -89,8 +89,8 @@ public abstract class GameCanvas_FancyGrid extends GameCanvas_SimpleGrid {
 
     protected void renderCellContent(Graphics g, String theFact) {};
     protected void renderCellContent(Graphics g, Set<String> theFacts){
-        if(theFacts.size() > 0) {
-            if(theFacts.size() > 1) {
+        if(theFacts.size() > 0):
+            if(theFacts.size() > 1):
                 System.err.println("More than one fact for a cell? Unexpected!");
             }
 
@@ -101,7 +101,7 @@ public abstract class GameCanvas_FancyGrid extends GameCanvas_SimpleGrid {
 
     protected boolean useGridVisualization() { return true; }
 
-    protected final boolean isSelectedCell(int xCell, int yCell) {
+    protected final boolean isSelectedCell(int xCell, int yCell):
         return (yCell == selectedRow && xCell == selectedColumn);
     }
 
@@ -109,9 +109,8 @@ public abstract class GameCanvas_FancyGrid extends GameCanvas_SimpleGrid {
     private int selectedColumn = -1;
     private String currentSelectedMove;
     private Iterator<String> possibleSelectedMoves = null;
-    @Override
-	protected final void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin) {
-        if(selectedRow != yCell || selectedColumn != xCell || !possibleSelectedMoves.hasNext()) {
+    protected final void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin):
+        if(selectedRow != yCell || selectedColumn != xCell || !possibleSelectedMoves.hasNext()):
             SortedSet<String> theMoves = new TreeSet<String>(getLegalMovesForCell(xCell, yCell));
             if(theMoves.size() == 0)
                 return;
@@ -128,7 +127,7 @@ public abstract class GameCanvas_FancyGrid extends GameCanvas_SimpleGrid {
     // Cache all of the facts about cells that we compute, since they should not
     // change unless the game state changes.
     private Map<Integer, Set<String>> factsCache = new HashMap<Integer, Set<String>>();
-    protected Set<String> getCachedFactsAboutCell(int xCell, int yCell) {
+    protected Set<String> getCachedFactsAboutCell(int xCell, int yCell):
         int cellHash = xCell*getGridHeight()*2 + yCell;
         Set<String> cachedFacts = factsCache.get(cellHash);
         if(cachedFacts != null)
@@ -140,27 +139,24 @@ public abstract class GameCanvas_FancyGrid extends GameCanvas_SimpleGrid {
     }
 
     // When the game state changes, clear our cache of known facts.
-    @Override
-	public void updateGameState(MachineState gameState) {
+    def void updateGameState(MachineState gameState):
         factsCache.clear();
         super.updateGameState(gameState);
     }
 
-    @Override
-	protected final void renderCell(Graphics g, int xCell, int yCell) {
+    protected final void renderCell(Graphics g, int xCell, int yCell):
         renderCellBackground(g, xCell, yCell);
         renderCellContent(g, getCachedFactsAboutCell(xCell, yCell));
         if(useGridVisualization()) CommonGraphics.drawCellBorder(g);
         renderCellForeground(g, xCell, yCell);
-        if(!currentSelectedMove.isEmpty()) {
+        if(!currentSelectedMove.isEmpty()):
             renderMoveSelectionForCell(g, xCell, yCell, currentSelectedMove);
             if(useGridVisualization() && isSelectedCell(xCell, yCell))
                 CommonGraphics.drawSelectionBox(g);
         }
     }
 
-    @Override
-	public final void clearMoveSelection() {
+    def final void clearMoveSelection():
         submitWorkingMove(null);
 
         possibleSelectedMoves = null;

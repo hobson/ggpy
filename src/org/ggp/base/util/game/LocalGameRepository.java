@@ -30,22 +30,22 @@ import external.JSON.JSONObject;
  *
  * @author Sam
  */
-public final class LocalGameRepository extends GameRepository {
+class LocalGameRepository(GameRepository):
     private static final int REPO_SERVER_PORT = 9140;
     private static HttpServer theLocalRepoServer = null;
     private static String theLocalRepoURL = "http://127.0.0.1:" + REPO_SERVER_PORT;
 
     private static RemoteGameRepository theRealRepo;
 
-    public LocalGameRepository() {
-    	synchronized (LocalGameRepository.class) {
-    		if (theLocalRepoServer == null) {
+    public LocalGameRepository():
+    	synchronized (LocalGameRepository.class):
+    		if (theLocalRepoServer == null):
     			try {
     				theLocalRepoServer = HttpServer.create(new InetSocketAddress(REPO_SERVER_PORT), 0);
     				theLocalRepoServer.createContext("/", new LocalRepoServer());
     				theLocalRepoServer.setExecutor(null); // creates a default executor
     				theLocalRepoServer.start();
-    			} catch (IOException e) {
+    			} catch (IOException e):
     				throw new RuntimeException(e);
     			}
     		}
@@ -56,29 +56,26 @@ public final class LocalGameRepository extends GameRepository {
 
     public void cleanUp()
     {
-        if (theLocalRepoServer != null) {
+        if (theLocalRepoServer != null):
         	theLocalRepoServer.stop(0);
         }
     }
 
-    @Override
-    protected Game getUncachedGame(String theKey) {
+    protected Game getUncachedGame(String theKey):
         return theRealRepo.getGame(theKey);
     }
 
-    @Override
-    protected Set<String> getUncachedGameKeys() {
+    protected Set<String> getUncachedGameKeys():
         return theRealRepo.getGameKeys();
     }
 
     // ========================
 
     class LocalRepoServer implements HttpHandler {
-        @Override
-		public void handle(HttpExchange t) throws IOException {
+    	    def void handle(HttpExchange t) throws IOException {
             String theURI = t.getRequestURI().toString();
             byte[] response = BaseRepository.getResponseBytesForURI(theURI);
-            if (response == null) {
+            if (response == null):
                 t.sendResponseHeaders(404, 0);
                 OutputStream os = t.getResponseBody();
                 os.close();
@@ -94,7 +91,7 @@ public final class LocalGameRepository extends GameRepository {
     static class BaseRepository {
         public static final String repositoryRootDirectory = theLocalRepoURL;
 
-        public static boolean shouldIgnoreFile(String fileName) {
+        public static boolean shouldIgnoreFile(String fileName):
         	if (fileName.startsWith(".")) return true;
         	if (fileName.contains(" ")) return true;
         	return false;
@@ -103,19 +100,19 @@ public final class LocalGameRepository extends GameRepository {
         public static byte[] getResponseBytesForURI(String reqURI) throws IOException {
             // Files not under /games/games/ aren't versioned,
             // and can just be accessed directly.
-            if (!reqURI.startsWith("/games/")) {
+            if (!reqURI.startsWith("/games/")):
                 return getBytesForFile(new File("games" + reqURI));
             }
 
             // Provide a listing of all of the metadata files for all of
             // the games, on request.
-            if (reqURI.equals("/games/metadata")) {
+            if (reqURI.equals("/games/metadata")):
                 JSONObject theGameMetaMap = new JSONObject();
-                for (String gameName : new File("games", "games").list()) {
+                for (String gameName : new File("games", "games").list()):
                 	if (shouldIgnoreFile(gameName)) continue;
                     try {
                         theGameMetaMap.put(gameName, new JSONObject(new String(getResponseBytesForURI("/games/" + gameName + "/"))));
-                    } catch (JSONException e) {
+                    } catch (JSONException e):
                         e.printStackTrace();
                     }
                 }
@@ -124,7 +121,7 @@ public final class LocalGameRepository extends GameRepository {
 
             // Accessing the folder containing a game should show the game's
             // associated metadata (which includes the contents of the folder).
-            if(reqURI.endsWith("/") && reqURI.length() > 9) {
+            if(reqURI.endsWith("/") && reqURI.length() > 9):
                 reqURI += "METADATA";
             }
 
@@ -136,17 +133,17 @@ public final class LocalGameRepository extends GameRepository {
                 String vPart = thePrefix.substring(thePrefix.lastIndexOf("/v")+2);
                 theExplicitVersion = Integer.parseInt(vPart);
                 thePrefix = thePrefix.substring(0, thePrefix.lastIndexOf("/v"));
-            } catch (Exception e) {
+            } catch (Exception e):
                 ;
             }
 
             // Sanity check: raise an exception if the parsing didn't work.
-            if (theExplicitVersion == null) {
-                if (!reqURI.equals(thePrefix + "/" + theSuffix)) {
+            if (theExplicitVersion == null):
+                if (!reqURI.equals(thePrefix + "/" + theSuffix)):
                     throw new RuntimeException(reqURI + " != [~v] " + (thePrefix + "/" + theSuffix));
                 }
             } else {
-                if (!reqURI.equals(thePrefix + "/v" + theExplicitVersion + "/" + theSuffix)) {
+                if (!reqURI.equals(thePrefix + "/v" + theExplicitVersion + "/" + theSuffix)):
                     throw new RuntimeException(reqURI + " != [v] " + (thePrefix + "/v" + theExplicitVersion + "/" + theSuffix));
                 }
             }
@@ -159,10 +156,10 @@ public final class LocalGameRepository extends GameRepository {
             if (theFetchedVersion == null) theFetchedVersion = nMaxVersion;
             if (theFetchedVersion < 0 || theFetchedVersion > nMaxVersion) return null;
 
-            while (theFetchedVersion >= 0) {
+            while (theFetchedVersion >= 0):
                 byte[] theBytes = getBytesForVersionedFile(thePrefix, theFetchedVersion, theSuffix);
-                if (theBytes != null) {
-                    if (theSuffix.equals("METADATA")) {
+                if (theBytes != null):
+                    if (theSuffix.equals("METADATA")):
                         theBytes = adjustMetadataJSON(reqURI, theBytes, theExplicitVersion, nMaxVersion);
                     }
                     return theBytes;
@@ -177,7 +174,7 @@ public final class LocalGameRepository extends GameRepository {
         public static byte[] adjustMetadataJSON(String reqURI, byte[] theMetaBytes, Integer nExplicitVersion, int nMaxVersion) throws IOException {
             try {
                 JSONObject theMetaJSON = new JSONObject(new String(theMetaBytes));
-                if (nExplicitVersion == null) {
+                if (nExplicitVersion == null):
                     theMetaJSON.put("version", nMaxVersion);
                 } else {
                     theMetaJSON.put("version", nExplicitVersion);
@@ -185,23 +182,23 @@ public final class LocalGameRepository extends GameRepository {
                 String theRulesheet = new String(getResponseBytesForURI(reqURI.replace("METADATA",theMetaJSON.getString("rulesheet"))));
                 MetadataCompleter.completeMetadataFromRulesheet(theMetaJSON, theRulesheet);
                 return theMetaJSON.toString().getBytes();
-            } catch (JSONException je) {
+            } catch (JSONException je):
                 throw new IOException(je);
             }
         }
 
-        private static int getMaxVersionForDirectory(File theDir) {
-            if (!theDir.exists() || !theDir.isDirectory()) {
+        private static int getMaxVersionForDirectory(File theDir):
+            if (!theDir.exists() || !theDir.isDirectory()):
                 return -1;
             }
 
             int maxVersion = 0;
             String[] children = theDir.list();
-            for (String s : children) {
+            for (String s : children):
             	if (shouldIgnoreFile(s)) continue;
-                if (s.startsWith("v")) {
+                if (s.startsWith("v")):
                     int nVersion = Integer.parseInt(s.substring(1));
-                    if (nVersion > maxVersion) {
+                    if (nVersion > maxVersion):
                         maxVersion = nVersion;
                     }
                 }
@@ -209,36 +206,36 @@ public final class LocalGameRepository extends GameRepository {
             return maxVersion;
         }
 
-        private static byte[] getBytesForVersionedFile(String thePrefix, int theVersion, String theSuffix) {
-            if (theVersion == 0) {
+        private static byte[] getBytesForVersionedFile(String thePrefix, int theVersion, String theSuffix):
+            if (theVersion == 0):
                 return getBytesForFile(new File("games", thePrefix + "/" + theSuffix));
             } else {
                 return getBytesForFile(new File("games", thePrefix + "/v" + theVersion + "/" + theSuffix));
             }
         }
 
-        private static byte[] getBytesForFile(File theFile) {
+        private static byte[] getBytesForFile(File theFile):
             try {
-                if (!theFile.exists()) {
+                if (!theFile.exists()):
                     return null;
-                } else if (theFile.isDirectory()) {
+                } else if (theFile.isDirectory()):
                     return readDirectory(theFile).getBytes();
-                } else if (theFile.getName().endsWith(".png")) {
+                } else if (theFile.getName().endsWith(".png")):
                     // TODO: Handle other binary formats?
                     return readBinaryFile(theFile);
-                } else if (theFile.getName().endsWith(".xsl")) {
+                } else if (theFile.getName().endsWith(".xsl")):
                     return transformXSL(readFile(theFile)).getBytes();
-                } else if (theFile.getName().endsWith(".js")) {
+                } else if (theFile.getName().endsWith(".js")):
                     return transformJS(readFile(theFile)).getBytes();
                 } else {
                     return readFile(theFile).getBytes();
                 }
-            } catch (IOException e) {
+            } catch (IOException e):
                 return null;
             }
         }
 
-        private static String transformXSL(String theContent) {
+        private static String transformXSL(String theContent):
             // Special case override for XSLT
             return "<!DOCTYPE stylesheet [<!ENTITY ROOT \""+repositoryRootDirectory+"\">]>\n\n" + theContent;
         }
@@ -248,7 +245,7 @@ public final class LocalGameRepository extends GameRepository {
             // let games share a common board user interface, but this should
             // really be handled in a cleaner, more general way with javascript
             // libraries and imports.
-            if (theContent.contains("[BOARD_INTERFACE_JS]")) {
+            if (theContent.contains("[BOARD_INTERFACE_JS]")):
                 String theCommonBoardJS = readFile(new File("games/resources/scripts/BoardInterface.js"));
                 theContent = theContent.replaceFirst("\\[BOARD_INTERFACE_JS\\]", theCommonBoardJS);
             }
@@ -261,7 +258,7 @@ public final class LocalGameRepository extends GameRepository {
             response.append("[");
 
             String[] children = theDirectory.list();
-            for (int i=0; i<children.length; i++) {
+            for (int i=0; i<children.length; i++):
             	if (shouldIgnoreFile(children[i])) continue;
                 // Get filename of file or directory
                 response.append("\"");
@@ -281,7 +278,7 @@ public final class LocalGameRepository extends GameRepository {
         	try {
         		String response = "";
         		String line;
-        		while( (line = br.readLine()) != null ) {
+        		while( (line = br.readLine()) != null ):
         			response += line + "\n";
         		}
 
@@ -297,7 +294,7 @@ public final class LocalGameRepository extends GameRepository {
 
             // Transfer bytes from in to out
             byte[] buf = new byte[1024];
-            while (in.read(buf) > 0) {
+            while (in.read(buf) > 0):
                 out.write(buf);
             }
             in.close();
@@ -317,10 +314,9 @@ public final class LocalGameRepository extends GameRepository {
     	 * @param theRulesheet
     	 * @throws JSONException
     	 */
-    	public static void completeMetadataFromRulesheet(JSONObject theMetaJSON, String theRulesheet) throws JSONException {
+        def static void completeMetadataFromRulesheet(JSONObject theMetaJSON, String theRulesheet) throws JSONException {
     		List<Role> theRoles = Role.computeRoles(Game.createEphemeralGame(Game.preprocessRulesheet(theRulesheet)).getRules());
             theMetaJSON.put("roleNames", theRoles);
             theMetaJSON.put("numRoles", theRoles.size());
     	}
     }
-}

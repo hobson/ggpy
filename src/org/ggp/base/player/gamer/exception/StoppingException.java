@@ -1,16 +1,11 @@
 package org.ggp.base.player.gamer.exception;
 
-@SuppressWarnings("serial")
-public final class StoppingException extends Exception
+class StoppingException(Exception):
 {
-	public StoppingException(Throwable cause) {
-		super(cause);
-	}
+    def StoppingException(cause=Throwable()):
+        super(cause);
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "An unhandled exception ocurred during stopping: " + super.toString();
-	}
+        return "An unhandled exception ocurred during stopping: " + super.toString();
 
-}

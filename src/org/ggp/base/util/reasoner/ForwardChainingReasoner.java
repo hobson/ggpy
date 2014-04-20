@@ -22,7 +22,7 @@ public interface ForwardChainingReasoner<Rule, Sentences> {
 	 * rules, depending on the implementation and how it is
 	 * instantiated.
 	 */
-	Sentences getConstantSentences();
+    Sentences getConstantSentences();
 
 	/**
 	 * Given a rule and all sentences known to be true so far, returns
@@ -32,17 +32,16 @@ public interface ForwardChainingReasoner<Rule, Sentences> {
 	 * is derived from should have had the {@link VariableConstrainer}
 	 * transformation applied to it.
 	 */
-	Sentences getRuleResults(Rule rule, SentenceDomainModel domainModel,
-			Sentences sentencesSoFar) throws InterruptedException;
+    Sentences getRuleResults(Rule rule, SentenceDomainModel domainModel,
+            Sentences sentencesSoFar) throws InterruptedException;
 
 	/**
 	 * Returns the union of the two sets of sentences. Calling this
 	 * method invalidates oldSentences.
 	 */
-	Sentences getUnion(Sentences oldSentences, Sentences newSentences);
+    Sentences getUnion(Sentences oldSentences, Sentences newSentences);
 
 	/**
 	 * Returns true iff newSentences is a subset of oldSentences.
 	 */
-	boolean isSubsetOf(Sentences oldSentences, Sentences newSentences);
-}
+    boolean isSubsetOf(Sentences oldSentences, Sentences newSentences);

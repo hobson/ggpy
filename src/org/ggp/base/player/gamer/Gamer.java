@@ -28,19 +28,18 @@ import org.ggp.base.util.observer.Subject;
  */
 public abstract class Gamer implements Subject
 {
-	private Match match;
-	private GdlConstant roleName;
+    private Match match;
+    private GdlConstant roleName;
 
-	public Gamer()
+    def Gamer()
 	{
-		observers = new ArrayList<Observer>();
+        observers = new ArrayList<Observer>();
 
 		// When not playing a match, the variables 'match'
 		// and 'roleName' should be NULL. This indicates that
 		// the player is available for starting a new match.
-		match = null;
-		roleName = null;
-	}
+        match = null;
+        roleName = null;
 
 	/* The following values are recommendations to the implementations
 	 * for the minimum length of time to leave between the stated timeout
@@ -50,67 +49,55 @@ public abstract class Gamer implements Subject
     public static final long PREFERRED_PLAY_BUFFER = 1900;
 
 	// ==== The Gaming Algorithms ====
-	public abstract void metaGame(long timeout) throws MetaGamingException;
+    def abstract void metaGame(long timeout) throws MetaGamingException;
 
-	public abstract GdlTerm selectMove(long timeout) throws MoveSelectionException;
+    def abstract GdlTerm selectMove(long timeout) throws MoveSelectionException;
 
 	/* Note that the match's goal values will not necessarily be known when
 	 * stop() is called, as we only know the final set of moves and haven't
 	 * interpreted them yet. To get the final goal values, process the final
 	 * moves of the game.
 	 */
-	public abstract void stop() throws StoppingException;  // Cleanly stop playing the match
+    def abstract void stop() throws StoppingException;  // Cleanly stop playing the match
 
-	public abstract void abort() throws AbortingException;  // Abruptly stop playing the match
+    def abstract void abort() throws AbortingException;  // Abruptly stop playing the match
 
-	public abstract void preview(Game g, long timeout) throws GamePreviewException;  // Preview a game
+    def abstract void preview(Game g, long timeout) throws GamePreviewException;  // Preview a game
 
 	// ==== Gamer Profile and Configuration ====
-	public abstract String getName();
-	public String getSpecies() { return null; }
+    def abstract String getName();
+    def String getSpecies() { return null; }
 
-	public boolean isComputerPlayer() {
-		return true;
-	}
+    def isComputerPlayer():  # boolean
+        return true;
 
-	public ConfigPanel getConfigPanel() {
-		return new EmptyConfigPanel();
-	}
+    def getConfigPanel():  # ConfigPanel
+        return new EmptyConfigPanel();
 
-	public DetailPanel getDetailPanel() {
-		return new EmptyDetailPanel();
-	}
+    def getDetailPanel():  # DetailPanel
+        return new EmptyDetailPanel();
 
 	// ==== Accessors ====
-	public final Match getMatch() {
-		return match;
-	}
+    def final Match getMatch():
+        return match;
 
-	public final void setMatch(Match match) {
-		this.match = match;
-	}
+    def final void setMatch(Match match):
+        this.match = match;
 
-	public final GdlConstant getRoleName() {
-		return roleName;
-	}
+    def final GdlConstant getRoleName():
+        return roleName;
 
-	public final void setRoleName(GdlConstant roleName) {
-		this.roleName = roleName;
-	}
+    def final void setRoleName(GdlConstant roleName):
+        this.roleName = roleName;
 
 	// ==== Observer Stuff ====
-	private final List<Observer> observers;
-	@Override
-	public final void addObserver(Observer observer)
+    private final List<Observer> observers;
+    def final void addObserver(Observer observer)
 	{
-		observers.add(observer);
-	}
+        observers.add(observer);
 
-	@Override
-	public final void notifyObservers(Event event)
+    def final void notifyObservers(Event event)
 	{
-		for (Observer observer : observers) {
-			observer.observe(event);
-		}
-	}
+        for (Observer observer : observers):
+            observer.observe(event);
 }

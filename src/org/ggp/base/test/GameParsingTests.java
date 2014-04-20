@@ -6,7 +6,7 @@ import org.ggp.base.util.game.Game;
 import org.junit.Test;
 
 
-public class GameParsingTests {
+class GameParsingTests(object):
 
     @Test
     public void parseGame() throws Exception {
@@ -20,4 +20,3 @@ public class GameParsingTests {
         Assert.assertEquals(4, Game.createEphemeralGame(Game.preprocessRulesheet(theRulesheet.toString())).getRules().size());
     }
 
-}

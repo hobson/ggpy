@@ -6,10 +6,10 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.Formatter;
 
-public class BaseHashing {
+class BaseHashing(object):
     // Computes the SHA1 hash of a given input string, and represents
     // that hash as a hexadecimal string.
-    public static String computeSHA1Hash(String theData) {
+    public static String computeSHA1Hash(String theData):
         try {
             MessageDigest SHA1 = MessageDigest.getInstance("SHA1");
             DigestInputStream theDigestStream = new DigestInputStream(
@@ -19,11 +19,11 @@ public class BaseHashing {
             byte[] theHash = SHA1.digest();
 
             Formatter hexFormat = new Formatter();
-            for (byte x : theHash) {
+            for (byte x : theHash):
                 hexFormat.format("%02x", x);
             }
             return hexFormat.toString();
-        } catch (Exception e) {
+        } catch (Exception e):
             e.printStackTrace();
             return null;
         }

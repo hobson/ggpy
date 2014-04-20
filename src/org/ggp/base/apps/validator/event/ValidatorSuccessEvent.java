@@ -5,23 +5,19 @@ import java.util.List;
 import org.ggp.base.util.observer.Event;
 import org.ggp.base.validator.ValidatorWarning;
 
-public final class ValidatorSuccessEvent extends Event
+class ValidatorSuccessEvent(Event):
 {
-	private final String name;
-	private final List<ValidatorWarning> warnings;
+    name = ''
+    private final List<ValidatorWarning> warnings;
 
-	public ValidatorSuccessEvent(String name, List<ValidatorWarning> warnings)
+    def ValidatorSuccessEvent(name='', List<ValidatorWarning> warnings)
 	{
-		this.name = name;
-		this.warnings = warnings;
-	}
+        this.name = name;
+        this.warnings = warnings;
 
-	public String getName()
+    def String getName()
 	{
-		return name;
-	}
+        return name;
 
-	public List<ValidatorWarning> getWarnings() {
-		return warnings;
-	}
-}
+    def List<ValidatorWarning> getWarnings():
+        return warnings;

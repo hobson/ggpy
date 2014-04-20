@@ -29,17 +29,16 @@ import org.xhtmlrenderer.render.BlockBox;
 import org.xhtmlrenderer.simple.extend.FormSubmissionListener;
 import org.xhtmlrenderer.swing.ImageReplacedElement;
 
-public class SVGReplacedElementFactory implements ReplacedElementFactory {
-    @Override
-    public ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight) {
+class SVGReplacedElementFactory implements ReplacedElementFactory {
+    public ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight):
         Element element = box.getElement();
-        if("svg".equals(element.getNodeName())) {
+        if("svg".equals(element.getNodeName())):
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder;
 
             try {
                 documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            } catch (ParserConfigurationException e) {
+            } catch (ParserConfigurationException e):
                 throw new RuntimeException(e);
             }
             Document svgDocument = documentBuilder.newDocument();
@@ -49,7 +48,7 @@ public class SVGReplacedElementFactory implements ReplacedElementFactory {
             try {
                 int width = box.getContentWidth() - 20;
                 return new ImageReplacedElement(rasterize(svgDocument, width), width, width);
-            } catch (IOException e) {
+            } catch (IOException e):
                 return null;
             }
         }
@@ -88,15 +87,13 @@ public class SVGReplacedElementFactory implements ReplacedElementFactory {
 
             TranscoderInput input = new TranscoderInput(dom);
 
-            ImageTranscoder t = new ImageTranscoder() {
+            ImageTranscoder t = new ImageTranscoder():
 
-                @Override
-                public BufferedImage createImage(int w, int h) {
+                            public BufferedImage createImage(int w, int h):
                     return new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
                 }
 
-                @Override
-                public void writeImage(BufferedImage image, TranscoderOutput out)
+                            public void writeImage(BufferedImage image, TranscoderOutput out)
                         throws TranscoderException {
                     int wd = image.getWidth() / 2;
                     int ht = image.getHeight() / 2;
@@ -114,7 +111,7 @@ public class SVGReplacedElementFactory implements ReplacedElementFactory {
             t.setTranscodingHints(transcoderHints);
             t.transcode(input, null);
         }
-        catch (TranscoderException ex) {
+        catch (TranscoderException ex):
             // Requires Java 6
             ex.printStackTrace();
             throw new IOException("Couldn't convert SVG");
@@ -125,15 +122,12 @@ public class SVGReplacedElementFactory implements ReplacedElementFactory {
 
         return imagePointer[0];
     }
-    @Override
-    public void reset() {
+    public void reset():
     }
 
-    @Override
-    public void remove(Element e) {
+    public void remove(Element e):
     }
 
-    @Override
-    public void setFormSubmissionListener(FormSubmissionListener listener) {
+    public void setFormSubmissionListener(FormSubmissionListener listener):
     }
 }

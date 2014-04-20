@@ -3,33 +3,26 @@ package org.ggp.base.util.statemachine.exceptions;
 import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Role;
 
-@SuppressWarnings("serial")
-public final class MoveDefinitionException extends Exception
+class MoveDefinitionException(Exception):
 {
 
-	private final Role role;
-	private final MachineState state;
+    role = Role()
+    state = MachineState()
 
-	public MoveDefinitionException(MachineState state, Role role)
+    def MoveDefinitionException(state=MachineState(), Role role)
 	{
-		this.state = state;
-		this.role = role;
-	}
+        this.state = state;
+        this.role = role;
 
-	public Role getRole()
+    def Role getRole()
 	{
-		return role;
-	}
+        return role;
 
-	public MachineState getState()
+    def MachineState getState()
 	{
-		return state;
-	}
+        return state;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "There are no legal moves defined for " + role + " in " + state;
-	}
+        return "There are no legal moves defined for " + role + " in " + state;
 
-}

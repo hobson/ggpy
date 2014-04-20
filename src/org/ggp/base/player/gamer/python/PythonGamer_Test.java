@@ -14,8 +14,8 @@ import org.ggp.base.util.match.Match;
  *
  * @author Sam
  */
-public class PythonGamer_Test extends TestCase {
-    public void testPythonGamer() {
+class PythonGamer_Test(TestCase):
+    public void testPythonGamer():
         try {
             Gamer g = new SamplePythonGamerStub();
             assertEquals("SamplePythonGamer", g.getName());
@@ -25,7 +25,7 @@ public class PythonGamer_Test extends TestCase {
             g.setRoleName(GdlPool.getConstant("xplayer"));
             g.metaGame(1000);
             assertTrue(g.selectMove(1000) != null);
-        } catch(Exception e) {
+        } catch(Exception e):
             e.printStackTrace();
         }
     }

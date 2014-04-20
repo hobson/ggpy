@@ -1,16 +1,11 @@
 package org.ggp.base.player.gamer.exception;
 
-@SuppressWarnings("serial")
-public final class MetaGamingException extends Exception
+class MetaGamingException(Exception):
 {
-	public MetaGamingException(Throwable cause) {
-		super(cause);
-	}
+    def MetaGamingException(cause=Throwable()):
+        super(cause);
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "An unhandled exception occurred during metagaming: " + super.toString();
-	}
+        return "An unhandled exception occurred during metagaming: " + super.toString();
 
-}

@@ -4,17 +4,15 @@ import org.ggp.base.util.observer.Event;
 import org.ggp.base.util.statemachine.MachineState;
 
 
-public final class ServerNewGameStateEvent extends Event
+class ServerNewGameStateEvent(Event):
 {
-	private final MachineState state;
+    state = MachineState()
 
-	public ServerNewGameStateEvent(MachineState state)
+    def ServerNewGameStateEvent(state=MachineState())
 	{
-		this.state = state;
-	}
+        this.state = state;
 
-	public MachineState getState()
+    def MachineState getState()
 	{
-		return state;
-	}
+        return state;
 }

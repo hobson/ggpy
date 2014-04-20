@@ -47,7 +47,7 @@ import external.JSON.JSONObject;
  *
  * @author Sam Schreiber
  */
-public final class TiltyardRequestFarm
+class TiltyardRequestFarm
 {
     public static final int SERVER_PORT = 9125;
     private static final String registrationURL = "http://tiltyard.ggp.org/backends/register/farm";
@@ -57,23 +57,22 @@ public final class TiltyardRequestFarm
 
     public static boolean testMode = false;
 
-    static EncodedKeyPair getKeyPair(String keyPairString) {
+    static EncodedKeyPair getKeyPair(String keyPairString):
     	if (keyPairString == null)
     		return null;
         try {
             return new EncodedKeyPair(keyPairString);
-        } catch (JSONException e) {
+        } catch (JSONException e):
             return null;
         }
     }
     public static final EncodedKeyPair theBackendKeys = getKeyPair(FileUtils.readFileAsString(new File("src/org/ggp/base/apps/tiltyard/BackendKeys.json")));
-    public static String generateSignedPing() {
+    public static String generateSignedPing():
     	String zone = null;
    		try {
-			zone = RemoteResourceLoader.loadRaw("http://metadata/computeMetadata/v1beta1/instance/zone");
-		} catch (IOException e1) {
+            zone = RemoteResourceLoader.loadRaw("http://metadata/computeMetadata/v1beta1/instance/zone");
+		} catch (IOException e1):
 			// If we can't acquire the request farm zone, just silently drop it.
-		}
 
         JSONObject thePing = new JSONObject();
         try {
@@ -81,14 +80,14 @@ public final class TiltyardRequestFarm
             thePing.put("lastTimeBlock", (System.currentTimeMillis() / 3600000));
             thePing.put("nextTimeBlock", (System.currentTimeMillis() / 3600000)+1);
             SignableJSON.signJSON(thePing, theBackendKeys.thePublicKey, theBackendKeys.thePrivateKey);
-        } catch (JSONException e) {
+        } catch (JSONException e):
             e.printStackTrace();
         }
         return thePing.toString();
     }
 
     // Connections are run asynchronously in their own threads.
-    static class RunRequestThread extends Thread {
+    static class RunRequestThread(Thread):
     	String targetHost, requestContent, forPlayerName, callbackURL, originalRequest;
     	int targetPort, timeoutClock;
     	boolean fastReturn;
@@ -99,11 +98,11 @@ public final class TiltyardRequestFarm
             System.out.println("On " + new Date() + ", client has requested: " + line);
 
             String response = null;
-            if (line.equals("ping")) {
+            if (line.equals("ping")):
                 response = generateSignedPing();
             } else {
-                synchronized (activeRequests) {
-                	if (activeRequests.contains(line)) {
+                synchronized (activeRequests):
+                	if (activeRequests.contains(line)):
                 		connection.close();
                 	} else {
                 		activeRequests.add(line);
@@ -118,7 +117,7 @@ public final class TiltyardRequestFarm
                 callbackURL = theJSON.getString("callbackURL");
                 forPlayerName = theJSON.getString("forPlayerName");
                 requestContent = theJSON.getString("requestContent");
-                if (theJSON.has("fastReturn")) {
+                if (theJSON.has("fastReturn")):
                 	fastReturn = theJSON.getBoolean("fastReturn");
                 } else {
                 	fastReturn = true;
@@ -132,10 +131,9 @@ public final class TiltyardRequestFarm
             connection.close();
         }
 
-        @Override
-        public void run() {
-            if (originalRequest != null) {
-            	synchronized (ongoingRequestsLock) {
+            public void run():
+            if (originalRequest != null):
+            	synchronized (ongoingRequestsLock):
             		ongoingRequests++;
             	}
                 System.out.println("On " + new Date() + ", starting request. There are now " + ongoingRequests + " ongoing requests.");
@@ -147,85 +145,82 @@ public final class TiltyardRequestFarm
 	                	String response = HttpRequest.issueRequest(targetHost, targetPort, forPlayerName, requestContent, timeoutClock);
 	                	responseJSON.put("response", response);
 	                	responseJSON.put("responseType", "OK");
-	                } catch (SocketTimeoutException te) {
+	                } catch (SocketTimeoutException te):
 	                	responseJSON.put("responseType", "TO");
-	                } catch (IOException ie) {
+	                } catch (IOException ie):
 	                	responseJSON.put("responseType", "CE");
 	                }
-	                if (!testMode) {
+	                if (!testMode):
 	                	SignableJSON.signJSON(responseJSON, theBackendKeys.thePublicKey, theBackendKeys.thePrivateKey);
 	                }
-                } catch (JSONException je) {
+                } catch (JSONException je):
                 	throw new RuntimeException(je);
                 }
                 long timeSpent = System.currentTimeMillis() - startTime;
-                if (!fastReturn && timeSpent < timeoutClock) {
+                if (!fastReturn && timeSpent < timeoutClock):
                 	try {
-						Thread.sleep(timeoutClock - timeSpent);
-					} catch (InterruptedException e) {
+                        Thread.sleep(timeoutClock - timeSpent);
+					} catch (InterruptedException e):
 						;
-					}
                 }
                 int nPostAttempts = 0;
-                while (true) {
+                while (true):
                 	try {
                 		RemoteResourceLoader.postRawWithTimeout(callbackURL, responseJSON.toString(), Integer.MAX_VALUE);
                 		break;
-                	} catch (IOException ie) {
+                	} catch (IOException ie):
                 		nPostAttempts++;
                 		try {
-							Thread.sleep(nPostAttempts < 10 ? 1000 : 15000);
-						} catch (InterruptedException e) {
+                            Thread.sleep(nPostAttempts < 10 ? 1000 : 15000);
+						} catch (InterruptedException e):
 							;
-						}
                 	}
                 }
-                synchronized (ongoingRequestsLock) {
+                synchronized (ongoingRequestsLock):
                 	ongoingRequests--;
-                	if (ongoingRequests == 0) {
+                	if (ongoingRequests == 0):
                 		System.gc();
                 		System.out.println("On " + new Date() + ", completed request. Garbage collecting since there are no ongoing requests.");
                 	} else {
                 		System.out.println("On " + new Date() + ", completed request. There are now " + ongoingRequests + " ongoing requests.");
                 	}
                 }
-                synchronized (activeRequests) {
+                synchronized (activeRequests):
                 	activeRequests.remove(originalRequest);
                 }
             }
         }
     }
 
-    static class TiltyardRegistration extends Thread {
-        @Override
-        public void run() {
+    static class TiltyardRegistration(Thread):
+            public void run():
             // Send a registration ping to Tiltyard every five minutes.
-            while (true) {
+            while (true):
                 try {
                     RemoteResourceLoader.postRawWithTimeout(registrationURL, generateSignedPing(), 2500);
-                } catch (Exception e) {
+                } catch (Exception e):
                     e.printStackTrace();
                 }
                 try {
                     Thread.sleep(5 * 60 * 1000);
-                } catch (Exception e) {
+                } catch (Exception e):
                     e.printStackTrace();
                 }
             }
        }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args):
         ServerSocket listener = null;
         try {
              listener = new ServerSocket(SERVER_PORT);
-        } catch (IOException e) {
+        } catch (IOException e):
             System.err.println("Could not open server on port " + SERVER_PORT + ": " + e);
             e.printStackTrace();
             return;
         }
-        if (!testMode) {
-	        if (theBackendKeys == null) {
+        if (!testMode):
+	        if (theBackendKeys == null):
 	            System.err.println("Could not load cryptographic keys for signing request responses.");
 	            return;
 	        }
@@ -233,14 +228,13 @@ public final class TiltyardRequestFarm
         }
 
         Set<String> activeRequests = new HashSet<String>();
-        while (true) {
+        while (true):
             try {
                 Socket connection = listener.accept();
                 RunRequestThread handlerThread = new RunRequestThread(connection, activeRequests);
                 handlerThread.start();
-            } catch (Exception e) {
+            } catch (Exception e):
                 System.err.println(e);
             }
         }
     }
-}

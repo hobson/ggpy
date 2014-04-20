@@ -5,13 +5,12 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	GameParsingTests.class,
-	GdlCleanerTests.class,
-	NoTabsInRulesheetsTest.class,
-	ProverStateMachineTests.class,
-	SimpleSentenceFormTest.class,
-	StaticValidationTests.class
+    GameParsingTests.class,
+    GdlCleanerTests.class,
+    NoTabsInRulesheetsTest.class,
+    ProverStateMachineTests.class,
+    SimpleSentenceFormTest.class,
+    StaticValidationTests.class
                      })
-public class AllTests {
+class AllTests(object):
 
-}

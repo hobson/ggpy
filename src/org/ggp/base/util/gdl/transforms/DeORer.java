@@ -28,7 +28,7 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
  *
  * @author Ethan Dreyfuss
  */
-public class DeORer {
+class DeORer(object):
     public static List<Gdl> run(List<Gdl> description)
     {
         List<Gdl> newDesc = new ArrayList<Gdl>();
@@ -49,13 +49,13 @@ public class DeORer {
         return newDesc;
     }
 
-    private static List<List<GdlLiteral>> deOr(List<GdlLiteral> rhs) {
+    private static List<List<GdlLiteral>> deOr(List<GdlLiteral> rhs):
         List<List<GdlLiteral>> wrapped = new ArrayList<List<GdlLiteral>>();
         wrapped.add(rhs);
         return deOr2(wrapped);
     }
 
-    private static List<List<GdlLiteral>> deOr2(List<List<GdlLiteral>> rhsList) {
+    private static List<List<GdlLiteral>> deOr2(List<List<GdlLiteral>> rhsList):
         List<List<GdlLiteral>> rval = new ArrayList<List<GdlLiteral>>();
         boolean expandedSomething = false;
         for(List<GdlLiteral> rhs : rhsList)
@@ -100,7 +100,7 @@ public class DeORer {
             return deOr2(rval);
     }
 
-    private static List<Gdl> expandFirstOr(Gdl gdl) {
+    private static List<Gdl> expandFirstOr(Gdl gdl):
         List<Gdl> rval;
         List<Gdl> expandedChild;
         if(gdl instanceof GdlDistinct)
@@ -177,4 +177,3 @@ public class DeORer {
             throw new RuntimeException("Uh oh, gdl hierarchy must have been extended without updating this code.");
         }
     }
-}

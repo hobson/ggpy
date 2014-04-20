@@ -14,8 +14,8 @@ import org.ggp.base.util.match.Match;
  *
  * @author Sam
  */
-public class ClojureGamer_Test extends TestCase {
-    public void testClojureGamer() {
+class ClojureGamer_Test(TestCase):
+    public void testClojureGamer():
         try {
             Gamer g = new SampleClojureGamerStub();
             assertEquals("SampleClojureGamer", g.getName());
@@ -25,7 +25,7 @@ public class ClojureGamer_Test extends TestCase {
             g.setRoleName(GdlPool.getConstant("xplayer"));
             g.metaGame(1000);
             assertTrue(g.selectMove(1000) != null);
-        } catch(Exception e) {
+        } catch(Exception e):
             e.printStackTrace();
         }
     }

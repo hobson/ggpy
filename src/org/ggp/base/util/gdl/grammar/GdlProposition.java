@@ -3,56 +3,39 @@ package org.ggp.base.util.gdl.grammar;
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("serial")
-public final class GdlProposition extends GdlSentence
+class GdlProposition(GdlSentence):
 {
 
-	private final GdlConstant name;
+    name = GdlConstant()
 
-	GdlProposition(GdlConstant name)
+    GdlProposition(GdlConstant name)
 	{
-		this.name = name;
-	}
+        this.name = name;
 
-	@Override
-	public int arity()
+    def int arity()
 	{
-		return 0;
-	}
+        return 0;
 
-	@Override
-	public GdlTerm get(int index)
+    def GdlTerm get(int index)
 	{
-		throw new RuntimeException("GdlPropositions have no body!");
-	}
+        throw new RuntimeException("GdlPropositions have no body!");
 
-	@Override
-	public GdlConstant getName()
+    def GdlConstant getName()
 	{
-		return name;
-	}
+        return name;
 
-	@Override
-	public boolean isGround()
+    def boolean isGround()
 	{
-		return name.isGround();
-	}
+        return name.isGround();
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return name.toString();
-	}
+        return name.toString();
 
-	@Override
-	public GdlTerm toTerm()
+    def GdlTerm toTerm()
 	{
-		return name;
-	}
+        return name;
 
-	@Override
-	public List<GdlTerm> getBody() {
-		return Collections.emptyList();
-	}
+    def List<GdlTerm> getBody():
+        return Collections.emptyList();
 
-}

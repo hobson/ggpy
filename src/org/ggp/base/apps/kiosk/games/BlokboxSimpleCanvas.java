@@ -15,28 +15,24 @@ import org.ggp.base.apps.kiosk.templates.GameCanvas_SimpleGrid;
 import org.ggp.base.util.statemachine.MachineState;
 
 
-public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
+class BlokboxSimpleCanvas(GameCanvas_SimpleGrid):
     private static final long serialVersionUID = 1L;
 
-    @Override
-	public String getGameName() { return "Blokbox Simple"; }
-    @Override
-	protected String getGameKey() { return "blokbox_simple"; }
+    def String getGameName() { return "Blokbox Simple"; }
+    protected String getGameKey() { return "blokbox_simple"; }
 
-    protected Set<String> getLegalMovesForCell(int xCell, int yCell) {
+    protected Set<String> getLegalMovesForCell(int xCell, int yCell):
         if(selectedPiece == -1) return new HashSet<String>();
         return gameStateHasLegalMovesMatching("\\( place " + selectedPiece + " " + xCell + " " + yCell + " \\)");
     }
 
     // ========================================================================
-    @Override
-	protected int getGridHeight() { return 20; }
-    @Override
-	protected int getGridWidth() { return 20; }
+    protected int getGridHeight() { return 20; }
+    protected int getGridWidth() { return 20; }
 
-    protected Set<String> getFactsAboutCell(int xCell, int yCell) {
+    protected Set<String> getFactsAboutCell(int xCell, int yCell):
         Set<String> theFacts = gameStateHasFactsMatching("\\( cell " + xCell + " " + yCell + " (.*) \\)");
-        if(xCell >= 15 || yCell >= 15) {
+        if(xCell >= 15 || yCell >= 15):
             int nPiece = pieceGrid[xCell-1][yCell-1];
             theFacts.addAll(gameStateHasFactsMatching("\\( owns " + myRole + " " + nPiece + " \\)"));
         }
@@ -66,11 +62,11 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
             { 0, 0, 0,16,16,16, 0,17, 0, 9, 9, 9, 9, 0,19, 0, 3, 3, 3, 3}
     };
 
-    protected void renderCellBackground(Graphics g, int xCell, int yCell) {
+    protected void renderCellBackground(Graphics g, int xCell, int yCell):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
 
-        if ((xCell == 15 && yCell <= 15) || (yCell == 15 && xCell <= 15)) {
+        if ((xCell == 15 && yCell <= 15) || (yCell == 15 && xCell <= 15)):
             if (xCell == 15) width /= 2;
             if (yCell == 15) height /= 2;
             width++;
@@ -88,7 +84,7 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
             return;
         }
 
-        if (xCell <= 14 && yCell <= 14) {
+        if (xCell <= 14 && yCell <= 14):
             CommonGraphics.drawCellBorder(g);
             return;
         }
@@ -101,9 +97,9 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
         if (xCell == 20 && yCell == 2) CommonGraphics.fillWithString(g, "S", 2.0);
     }
 
-    protected void renderCellContent(Graphics g, String theFact) {
+    protected void renderCellContent(Graphics g, String theFact):
         String[] cellFacts = theFact.split(" ");
-        if(cellFacts[1].equals("owns")) {
+        if(cellFacts[1].equals("owns")):
             if (myRole.toString().contains("orange"))
                  g.setColor(Color.orange);
             else g.setColor(Color.magenta);
@@ -115,9 +111,9 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
             g.drawRect(0, 0, width, height);
         } else {
             String cellPlayer = cellFacts[4];
-            if (cellPlayer.equals("orange")) {
+            if (cellPlayer.equals("orange")):
                 g.setColor(Color.ORANGE);
-            } else if (cellPlayer.equals("purple")) {
+            } else if (cellPlayer.equals("purple")):
                 g.setColor(Color.MAGENTA);
             }
             int width = g.getClipBounds().width;
@@ -128,13 +124,13 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
         }
     }
 
-    protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove) {
-        if (selectedPiece == pieceGrid[xCell-1][yCell-1]) {
+    protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove):
+        if (selectedPiece == pieceGrid[xCell-1][yCell-1]):
             CommonGraphics.drawSelectionBox(g);
             return;
         }
 
-        if (selectedRow == yCell && selectedColumn == xCell) {
+        if (selectedRow == yCell && selectedColumn == xCell):
             CommonGraphics.drawSelectionBox(g);
             return;
         }
@@ -148,8 +144,8 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
     // the player is interacting with the pieces sidebar).
 
     protected void renderCellContent(Graphics g, Set<String> theFacts){
-        if(theFacts.size() > 0) {
-            if(theFacts.size() > 1) {
+        if(theFacts.size() > 0):
+            if(theFacts.size() > 1):
                 System.err.println("More than one fact for a cell? Unexpected!");
             }
 
@@ -164,11 +160,10 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
     private int selectedColumn = -1;
     private String currentSelectedMove;
     private Iterator<String> possibleSelectedMoves = null;
-    @Override
-	protected final void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin) {
+    protected final void handleClickOnCell(int xCell, int yCell, int xWithin, int yWithin):
         if(xCell > 20 || yCell > 20) return;
 
-        if(xCell > 15 || yCell > 15) {
+        if(xCell > 15 || yCell > 15):
             int nPiece = pieceGrid[xCell-1][yCell-1];
             selectedPiece = -1;
             if (nPiece > 0 && getCachedFactsAboutCell(xCell, yCell).size() > 0)
@@ -183,7 +178,7 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
         }
         if(selectedPiece == -1) return;
 
-        if(selectedRow != yCell || selectedColumn != xCell || !possibleSelectedMoves.hasNext()) {
+        if(selectedRow != yCell || selectedColumn != xCell || !possibleSelectedMoves.hasNext()):
             SortedSet<String> theMoves = new TreeSet<String>(getLegalMovesForCell(xCell, yCell));
             if(theMoves.size() == 0)
                 return;
@@ -199,7 +194,7 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
     // Cache all of the facts about cells that we compute, since they should not
     // change unless the game state changes.
     private Map<Integer, Set<String>> factsCache = new HashMap<Integer, Set<String>>();
-    protected Set<String> getCachedFactsAboutCell(int xCell, int yCell) {
+    protected Set<String> getCachedFactsAboutCell(int xCell, int yCell):
         int cellHash = xCell*getGridHeight()*2 + yCell;
         Set<String> cachedFacts = factsCache.get(cellHash);
         if(cachedFacts != null)
@@ -211,21 +206,18 @@ public class BlokboxSimpleCanvas extends GameCanvas_SimpleGrid {
     }
 
     // When the game state changes, clear our cache of known facts.
-    @Override
-	public void updateGameState(MachineState gameState) {
+    def void updateGameState(MachineState gameState):
         factsCache.clear();
         super.updateGameState(gameState);
     }
 
-    @Override
-	protected final void renderCell(Graphics g, int xCell, int yCell) {
+    protected final void renderCell(Graphics g, int xCell, int yCell):
         renderCellBackground(g, xCell, yCell);
         renderCellContent(g, getCachedFactsAboutCell(xCell, yCell));
         renderMoveSelectionForCell(g, xCell, yCell, currentSelectedMove);
     }
 
-    @Override
-	public final void clearMoveSelection() {
+    def final void clearMoveSelection():
         submitWorkingMove(null);
 
         selectedPiece = -1;

@@ -6,33 +6,26 @@ import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
 
 
-@SuppressWarnings("serial")
-public final class TransitionDefinitionException extends Exception
+class TransitionDefinitionException(Exception):
 {
 
-	private final List<Move> moves;
-	private final MachineState state;
+    private final List<Move> moves;
+    state = MachineState()
 
-	public TransitionDefinitionException(MachineState state, List<Move> moves)
+    def TransitionDefinitionException(state=MachineState(), List<Move> moves)
 	{
-		this.state = state;
-		this.moves = moves;
-	}
+        this.state = state;
+        this.moves = moves;
 
-	public List<Move> getMoves()
+    def List<Move> getMoves()
 	{
-		return moves;
-	}
+        return moves;
 
-	public MachineState getState()
+    def MachineState getState()
 	{
-		return state;
-	}
+        return state;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "Transition is poorly defined for " + moves + " in " + state;
-	}
+        return "Transition is poorly defined for " + moves + " in " + state;
 
-}

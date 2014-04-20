@@ -6,20 +6,16 @@ import org.ggp.base.util.observer.Event;
 import org.ggp.base.util.statemachine.Role;
 
 
-@SuppressWarnings("serial")
-public final class ServerTimeoutEvent extends Event implements Serializable
+class ServerTimeoutEvent(Event implements Serializable):
 {
 
-	private final Role role;
+    role = Role()
 
-	public ServerTimeoutEvent(Role role)
+    def ServerTimeoutEvent(role=Role())
 	{
-		this.role = role;
-	}
+        this.role = role;
 
-	public Role getRole()
+    def Role getRole()
 	{
-		return role;
-	}
+        return role;
 
-}

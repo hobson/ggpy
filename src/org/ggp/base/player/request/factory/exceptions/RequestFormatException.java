@@ -1,26 +1,20 @@
 package org.ggp.base.player.request.factory.exceptions;
 
-@SuppressWarnings("serial")
-public final class RequestFormatException extends Exception
+class RequestFormatException(Exception):
 {
-	private final String source;
-	private final Exception bad;
+    source = ''
+    bad = Exception()
 
-	public RequestFormatException(String source, Exception bad)
+    def RequestFormatException(source='', Exception bad)
 	{
-		this.source = source;
-		this.bad = bad;
-	}
+        this.source = source;
+        this.bad = bad;
 
-	public String getSource()
+    def String getSource()
 	{
-		return source;
-	}
+        return source;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "Improperly formatted request: " + source + ", resulting in exception: " + bad;
-	}
+        return "Improperly formatted request: " + source + ", resulting in exception: " + bad;
 
-}

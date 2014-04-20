@@ -12,16 +12,12 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  * SampleNoopGamer is a minimal gamer which always plays NOOP regardless
  * of which moves are actually legal in the current state of the game.
  */
-public final class SampleNoopGamer extends SampleGamer
+class SampleNoopGamer(SampleGamer):
 {
-	@Override
-	public Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
-		return new Move(GdlPool.getConstant("NOOP"));
-	}
+        return new Move(GdlPool.getConstant("NOOP"));
 
-	@Override
-	public DetailPanel getDetailPanel() {
-		return new EmptyDetailPanel();
-	}
+    def getDetailPanel():  # DetailPanel
+        return new EmptyDetailPanel();
 }

@@ -29,7 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.InetAddress;
 
-public class GamerConfiguration {
+class GamerConfiguration(object):
     private static String strSystemOS;
     private static String strProfileName;
     private static int nMemoryForGamer;     // in MB
@@ -39,7 +39,7 @@ public class GamerConfiguration {
     private static final int OS_MACOS = 2;
     private static final int OS_LINUX = 3;
 
-    public static void showConfiguration() {
+    public static void showConfiguration():
         String osType = "Unknown";
         if(runningOnLinux()) osType = "Linux";
         if(runningOnMacOS()) osType = "MacOS";
@@ -47,10 +47,10 @@ public class GamerConfiguration {
         System.out.println(String.format("Configured according to the %s Profile, running on %s which is a variety of %s, allocating %d MB of memory to the gaming process.", strProfileName, strSystemOS, osType, nMemoryForGamer));
     }
 
-    private static String getComputerName() {
+    private static String getComputerName():
         try {
             return InetAddress.getLocalHost().getHostName().toLowerCase();
-        } catch (Exception e) {
+        } catch (Exception e):
             return null;
         }
     }
@@ -62,16 +62,16 @@ public class GamerConfiguration {
         try {
             String line;
             BufferedReader in = new BufferedReader(new FileReader("src/org/ggp/base/util/configuration/gamerProfiles"));
-            while((line = in.readLine()) != null) {
+            while((line = in.readLine()) != null):
                 if(line.length() == 0) continue;
                 if(line.charAt(0) == '#') continue;
                 String[] splitLine = line.split("\\s+");
-                if(splitLine[0].equals(strProfileName)) {
+                if(splitLine[0].equals(strProfileName)):
                     nMemoryForGamer = Integer.parseInt(splitLine[1]);
                     strProfileName = splitLine[2];
                     foundProfile = true;
                     break;
-                } else if(splitLine[0].equals("*")) {
+                } else if(splitLine[0].equals("*")):
                     nMemoryForGamer = Integer.parseInt(splitLine[1]);
                     strProfileName = splitLine[2];
                     foundProfile = true;
@@ -79,23 +79,23 @@ public class GamerConfiguration {
                 }
             }
             in.close();
-        } catch (FileNotFoundException fe) {
+        } catch (FileNotFoundException fe):
             ;
-        } catch (Exception e) {
+        } catch (Exception e):
             e.printStackTrace();
         }
 
-        if(!foundProfile) {
+        if(!foundProfile):
             nMemoryForGamer = 1000;
             strProfileName = "Default";
         }
 
         strSystemOS = System.getProperty("os.name");
-        if(strSystemOS.contains("Linux")) {
+        if(strSystemOS.contains("Linux")):
             nOperatingSystem = OS_LINUX;
-        } else if(strSystemOS.contains("Mac OS")) {
+        } else if(strSystemOS.contains("Mac OS")):
             nOperatingSystem = OS_MACOS;
-        } else if(strSystemOS.contains("Windows")) {
+        } else if(strSystemOS.contains("Windows")):
             nOperatingSystem = OS_WINDOWS;
         } else {
             ;
@@ -104,16 +104,16 @@ public class GamerConfiguration {
 
     // OS-neutral accessors
 
-    public static String getCommandForJava() {
-        if(nOperatingSystem == OS_MACOS) {
+    public static String getCommandForJava():
+        if(nOperatingSystem == OS_MACOS):
             return "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Commands/java";
         } else {
             return "java";
         }
     }
 
-    public static String getCommandForJavac() {
-        if(nOperatingSystem == OS_MACOS) {
+    public static String getCommandForJavac():
+        if(nOperatingSystem == OS_MACOS):
             return "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Commands/javac";
         } else {
             return "javac";
@@ -122,31 +122,31 @@ public class GamerConfiguration {
 
     // Accessors
 
-    public static boolean runningOnLinux () {
+    public static boolean runningOnLinux ():
         return nOperatingSystem == OS_LINUX;
     }
 
-    public static boolean runningOnMacOS () {
+    public static boolean runningOnMacOS ():
         return nOperatingSystem == OS_MACOS;
     }
 
-    public static boolean runningOnWindows () {
+    public static boolean runningOnWindows ():
         return nOperatingSystem == OS_WINDOWS;
     }
 
-    public static String getOperatingSystemName() {
+    public static String getOperatingSystemName():
         return strSystemOS;
     }
 
-    public static String getProfileName() {
+    public static String getProfileName():
         return strProfileName;
     }
 
-    public static int getMemoryForGamer() {
+    public static int getMemoryForGamer():
         return nMemoryForGamer;
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]):
         System.out.println("Computer name: " + getComputerName());
         GamerConfiguration.showConfiguration();
     }

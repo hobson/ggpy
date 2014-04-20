@@ -23,27 +23,26 @@ import org.ggp.base.util.statemachine.exceptions.TransitionDefinitionException;
  *
  * @author Sam Schreiber
  */
-public final class SampleMonteCarloGamer extends SampleGamer
+class SampleMonteCarloGamer(SampleGamer):
 {
 	/**
 	 * Employs a simple sample "Monte Carlo" algorithm.
 	 */
-	@Override
-	public Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 	    StateMachine theMachine = getStateMachine();
-		long start = System.currentTimeMillis();
-		long finishBy = timeout - 1000;
+        long start = System.currentTimeMillis();
+        long finishBy = timeout - 1000;
 
-		List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole());
-		Move selection = moves.get(0);
-		if (moves.size() > 1) {
+        List<Move> moves = theMachine.getLegalMoves(getCurrentState(), getRole());
+        Move selection = moves.get(0);
+        if (moves.size() > 1):
     		int[] moveTotalPoints = new int[moves.size()];
     		int[] moveTotalAttempts = new int[moves.size()];
 
     		// Perform depth charges for each candidate move, and keep track
     		// of the total score and total attempts accumulated for each move.
-    		for (int i = 0; true; i = (i+1) % moves.size()) {
+    		for (int i = 0; true; i = (i+1) % moves.size()):
     		    if (System.currentTimeMillis() > finishBy)
     		        break;
 
@@ -54,37 +53,34 @@ public final class SampleMonteCarloGamer extends SampleGamer
 
     		// Compute the expected score for each move.
     		double[] moveExpectedPoints = new double[moves.size()];
-    		for (int i = 0; i < moves.size(); i++) {
+    		for (int i = 0; i < moves.size(); i++):
     		    moveExpectedPoints[i] = (double)moveTotalPoints[i] / moveTotalAttempts[i];
     		}
 
     		// Find the move with the best expected score.
     		int bestMove = 0;
     		double bestMoveScore = moveExpectedPoints[0];
-    		for (int i = 1; i < moves.size(); i++) {
-    		    if (moveExpectedPoints[i] > bestMoveScore) {
+    		for (int i = 1; i < moves.size(); i++):
+    		    if (moveExpectedPoints[i] > bestMoveScore):
     		        bestMoveScore = moveExpectedPoints[i];
     		        bestMove = i;
     		    }
     		}
     		selection = moves.get(bestMove);
-		}
 
-		long stop = System.currentTimeMillis();
+        long stop = System.currentTimeMillis();
 
-		notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
-		return selection;
-	}
+        notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
+        return selection;
 
-	private int[] depth = new int[1];
-	int performDepthChargeFromMove(MachineState theState, Move myMove) {
+    private int[] depth = new int[1];
+    int performDepthChargeFromMove(MachineState theState, Move myMove):
 	    StateMachine theMachine = getStateMachine();
 	    try {
             MachineState finalState = theMachine.performDepthCharge(theMachine.getRandomNextState(theState, getRole(), myMove), depth);
             return theMachine.getGoal(finalState, getRole());
-        } catch (Exception e) {
+        } catch (Exception e):
             e.printStackTrace();
             return 0;
         }
-	}
 }

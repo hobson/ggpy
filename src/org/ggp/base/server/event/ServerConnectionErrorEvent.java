@@ -6,20 +6,16 @@ import org.ggp.base.util.observer.Event;
 import org.ggp.base.util.statemachine.Role;
 
 
-@SuppressWarnings("serial")
-public final class ServerConnectionErrorEvent extends Event implements Serializable
+class ServerConnectionErrorEvent(Event implements Serializable):
 {
 
-	private final Role role;
+    role = Role()
 
-	public ServerConnectionErrorEvent(Role role)
+    def ServerConnectionErrorEvent(role=Role())
 	{
-		this.role = role;
-	}
+        this.role = role;
 
-	public Role getRole()
+    def Role getRole()
 	{
-		return role;
-	}
+        return role;
 
-}

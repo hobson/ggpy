@@ -31,7 +31,7 @@ import clojure.lang.Var;
  *
  * @author Sam Schreiber
  */
-public abstract class ClojureGamer extends Gamer
+public abstract class ClojureGamer(Gamer):
 {
     Gamer theClojureGamer;
 
@@ -41,8 +41,8 @@ public abstract class ClojureGamer extends Gamer
     // Gamer stubs are lazily loaded because the Clojure interface takes
     // time to initialize, so we only want to load it when necessary, and
     // not for light-weight things like returning the player name.
-    private void lazilyLoadGamerStub() {
-    	if (theClojureGamer == null) {
+    private void lazilyLoadGamerStub():
+    	if (theClojureGamer == null):
 	        try {
 	            // Load the Clojure script -- as a side effect this initializes the runtime.
 	            RT.loadResourceScript(getClojureGamerFile() + ".clj");
@@ -52,7 +52,7 @@ public abstract class ClojureGamer extends Gamer
 
 	            // Call it!
 	            theClojureGamer = (Gamer)gamerVar.invoke();
-	        } catch(Exception e) {
+	        } catch(Exception e):
 	            GamerLogger.logError("GamePlayer", "Caught exception in Clojure initialization:");
 	            GamerLogger.logStackTrace("GamePlayer", e);
 	        }
@@ -66,72 +66,66 @@ public abstract class ClojureGamer extends Gamer
     // subclass of this class is a Java-implementation stub for the actual real
     // Clojure implementation.
 
-    @Override
     public final void preview(Game game, long timeout) throws GamePreviewException {
     	lazilyLoadGamerStub();
         try {
             theClojureGamer.preview(game, timeout);
-        } catch(GamePreviewException e) {
+        } catch(GamePreviewException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineMetaGame:");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
     }
 
-    @Override
     public final void metaGame(long timeout) throws MetaGamingException {
     	lazilyLoadGamerStub();
         theClojureGamer.setMatch(getMatch());
         theClojureGamer.setRoleName(getRoleName());
         try {
             theClojureGamer.metaGame(timeout);
-        } catch(MetaGamingException e) {
+        } catch(MetaGamingException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineMetaGame:");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
     }
 
-    @Override
     public final GdlTerm selectMove(long timeout) throws MoveSelectionException {
     	lazilyLoadGamerStub();
         theClojureGamer.setMatch(getMatch());
         theClojureGamer.setRoleName(getRoleName());
         try {
             return theClojureGamer.selectMove(timeout);
-        } catch(MoveSelectionException e) {
+        } catch(MoveSelectionException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineSelectMove:");
             GamerLogger.logStackTrace("GamePlayer", e);
             return null;
         }
     }
 
-    @Override
-    public final void stop() {
+    public final void stop():
     	lazilyLoadGamerStub();
         theClojureGamer.setMatch(getMatch());
         theClojureGamer.setRoleName(getRoleName());
         try {
             theClojureGamer.stop();
-        } catch(StoppingException e) {
+        } catch(StoppingException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineStop:");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
     }
 
-    @Override
-    public final void abort() {
+    public final void abort():
     	lazilyLoadGamerStub();
         theClojureGamer.setMatch(getMatch());
         theClojureGamer.setRoleName(getRoleName());
         try {
             theClojureGamer.abort();
-        } catch(AbortingException e) {
+        } catch(AbortingException e):
             GamerLogger.logError("GamePlayer", "Caught exception in Clojure stateMachineAbort:");
             GamerLogger.logStackTrace("GamePlayer", e);
         }
     }
 
-   @Override
-    public final String getName() {
+    public final String getName():
 	   return getClojureGamerName();
     }
 }

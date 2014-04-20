@@ -20,7 +20,7 @@ import org.ggp.base.util.statemachine.MachineState;
 import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.Role;
 
-public class GameGUI extends JPanel implements Subject, Observer, ActionListener {
+class GameGUI(JPanel implements Subject, Observer, ActionListener):
     public static final long serialVersionUID = 0x1;
 
     private GameCanvas theCanvas;
@@ -35,7 +35,7 @@ public class GameGUI extends JPanel implements Subject, Observer, ActionListener
     private boolean moveBeingSubmitted = false;
     private boolean stillMetagaming = true;
 
-    public GameGUI(GameCanvas theCanvas) {
+    public GameGUI(GameCanvas theCanvas):
         super(new BorderLayout());
 
         this.theCanvas = theCanvas;
@@ -77,26 +77,25 @@ public class GameGUI extends JPanel implements Subject, Observer, ActionListener
         updateControls();
     }
 
-    public void beginPlay() {
+    public void beginPlay():
     	stillMetagaming = false;
     	updateControls();
     }
 
-    public void updateGameState(MachineState gameState) {
+    public void updateGameState(MachineState gameState):
     	moveBeingSubmitted = false;
         theCanvas.updateGameState(gameState);
         updateControls();
     }
 
-    public void setRole(Role r) {
+    public void setRole(Role r):
         theCanvas.setRole(r);
     }
 
-    @Override
-    public void observe(Event event) {
-        if(event instanceof MoveSelectedEvent) {
+    public void observe(Event event):
+        if(event instanceof MoveSelectedEvent):
             workingMove = ((MoveSelectedEvent)event).getMove();
-            if(((MoveSelectedEvent)event).isFinal()) {
+            if(((MoveSelectedEvent)event).isFinal()):
             	moveBeingSubmitted = true;
             	updateControls();
             	notifyObservers(new MoveSelectedEvent(workingMove));
@@ -105,13 +104,13 @@ public class GameGUI extends JPanel implements Subject, Observer, ActionListener
         }
     }
 
-    private void updateControls() {
+    private void updateControls():
         submitMoveButton.setEnabled(!gameOver && !moveBeingSubmitted && !stillMetagaming);
         clearSelectionButton.setEnabled(!gameOver && !moveBeingSubmitted && !stillMetagaming);
         theCanvas.setEnabled(!gameOver && !moveBeingSubmitted && !stillMetagaming);
 
         if(gameOver) return;
-        if(workingMove == null) {
+        if(workingMove == null):
             workingMoveLabel.setText("  Working Move: <none>");
             submitMoveButton.setEnabled(false);
             clearSelectionButton.setEnabled(false);
@@ -120,7 +119,7 @@ public class GameGUI extends JPanel implements Subject, Observer, ActionListener
         }
     }
 
-    public void showFinalMessage(String theMessage) {
+    public void showFinalMessage(String theMessage):
         workingMoveLabel.setText(theMessage);
         workingMoveLabel.setForeground(Color.RED);
         gameOver = true;
@@ -130,14 +129,13 @@ public class GameGUI extends JPanel implements Subject, Observer, ActionListener
         repaint();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e):
         if(gameOver) return;
 
-        if(e.getSource() == clearSelectionButton) {
+        if(e.getSource() == clearSelectionButton):
             theCanvas.clearMoveSelection();
-        } else if(e.getSource() == submitMoveButton) {
-            if(workingMove != null) {
+        } else if(e.getSource() == submitMoveButton):
+            if(workingMove != null):
                 moveBeingSubmitted = true;
                 updateControls();
                 notifyObservers(new MoveSelectedEvent(workingMove));
@@ -148,13 +146,11 @@ public class GameGUI extends JPanel implements Subject, Observer, ActionListener
     // Subject boilerplate
     private Set<Observer> theObservers = new HashSet<Observer>();
 
-    @Override
-    public void addObserver(Observer observer) {
+    public void addObserver(Observer observer):
         theObservers.add(observer);
     }
 
-    @Override
-    public void notifyObservers(Event event) {
+    public void notifyObservers(Event event):
         for(Observer theObserver : theObservers)
             theObserver.observe(event);
     }

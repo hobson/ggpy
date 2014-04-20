@@ -7,7 +7,7 @@ import org.ggp.base.util.gdl.grammar.GdlTerm;
 import org.ggp.base.util.gdl.grammar.GdlVariable;
 import org.ggp.base.util.prover.aima.substitution.Substitution;
 
-public final class Unifier
+class Unifier
 {
 
     public static Substitution unify(GdlSentence x, GdlSentence y)
@@ -81,4 +81,3 @@ public final class Unifier
         }
     }
 
-}

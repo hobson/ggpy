@@ -10,7 +10,7 @@ import org.ggp.base.util.crypto.CanonicalJSON.CanonicalizationStrategy;
 import external.JSON.JSONException;
 import external.JSON.JSONObject;
 
-public class SignableJSON {
+class SignableJSON(object):
     // If we need to use a canonicalization strategy that's not SIMPLE,
     // we can change this prefix to indicate that while still maintaining
     // backwards compatibility.
@@ -46,10 +46,10 @@ public class SignableJSON {
         tempObject.remove("matchHostSignature");
         try {
             return BaseCryptography.verifySignature(thePK, theSignature, CanonicalJSON.getCanonicalForm(tempObject, CanonicalizationStrategy.SIMPLE));
-        } catch (InvalidKeyException e) {
-        } catch (SignatureException e) {
-        } catch (NoSuchAlgorithmException e) {
-        } catch (UnsupportedEncodingException e) {
+        } catch (InvalidKeyException e):
+        } catch (SignatureException e):
+        } catch (NoSuchAlgorithmException e):
+        } catch (UnsupportedEncodingException e):
         }
         return false;
     }

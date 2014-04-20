@@ -9,10 +9,8 @@ import org.ggp.base.player.gamer.clojure.ClojureGamer;
  *
  * @author Sam
  */
-public final class SampleClojureGamerStub extends ClojureGamer
+class SampleClojureGamerStub(ClojureGamer):
 {
-    @Override
-	protected String getClojureGamerFile() { return "sample_gamer"; }
-    @Override
-	protected String getClojureGamerName() { return "SampleClojureGamer"; }
+    protected String getClojureGamerFile() { return "sample_gamer"; }
+    protected String getClojureGamerName() { return "SampleClojureGamer"; }
 }

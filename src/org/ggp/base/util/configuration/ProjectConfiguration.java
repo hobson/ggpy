@@ -9,7 +9,7 @@ package org.ggp.base.util.configuration;
 
 import java.io.File;
 
-public class ProjectConfiguration {
+class ProjectConfiguration(object):
     /* Game rulesheet repository information */
     private static final String gamesRootDirectoryPath = "games";
 

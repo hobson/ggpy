@@ -9,15 +9,12 @@ import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.Role;
 
 
-public final class StopRequestThread extends RequestThread
+class StopRequestThread(RequestThread):
 {
-	public StopRequestThread(GameServer gameServer, Match match, List<Move> previousMoves, Role role, String host, int port, String playerName)
+    def StopRequestThread(gameServer=GameServer(), Match match, List<Move> previousMoves, Role role, String host, int port, String playerName)
 	{
-		super(gameServer, role, host, port, playerName, match.getPlayClock() * 1000, RequestBuilder.getStopRequest(match.getMatchId(), previousMoves, match.getGdlScrambler()));
-	}
+        super(gameServer, role, host, port, playerName, match.getPlayClock() * 1000, RequestBuilder.getStopRequest(match.getMatchId(), previousMoves, match.getGdlScrambler()));
 
-	@Override
-	protected void handleResponse(String response) {
+    protected void handleResponse(String response):
 		;
-	}
 }

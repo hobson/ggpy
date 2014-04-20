@@ -11,16 +11,11 @@ import org.ggp.base.util.observer.Event;
 /**
  * This is a detail panel that contains no information at all.
  */
-@SuppressWarnings("serial")
-public class EmptyDetailPanel extends DetailPanel {
+class EmptyDetailPanel(DetailPanel):
 
-	public EmptyDetailPanel() {
-		super(new GridBagLayout());
-		this.add(new JLabel("No details available."), new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 5, 5));
-	}
+    def EmptyDetailPanel():
+        super(new GridBagLayout());
+        this.add(new JLabel("No details available."), new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 5, 5));
 
-	@Override
-	public void observe(Event event) {
+    def void observe(Event event):
 		// Do nothing when notified about events
-	}
-}

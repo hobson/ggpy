@@ -6,20 +6,16 @@ import java.util.List;
 import org.ggp.base.util.observer.Event;
 
 
-@SuppressWarnings("serial")
-public final class ServerCompletedMatchEvent extends Event implements Serializable
+class ServerCompletedMatchEvent(Event implements Serializable):
 {
 
-	private final List<Integer> goals;
+    private final List<Integer> goals;
 
-	public ServerCompletedMatchEvent(List<Integer> goals)
+    def ServerCompletedMatchEvent(List<Integer> goals)
 	{
-		this.goals = goals;
-	}
+        this.goals = goals;
 
-	public List<Integer> getGoals()
+    def List<Integer> getGoals()
 	{
-		return goals;
-	}
+        return goals;
 
-}

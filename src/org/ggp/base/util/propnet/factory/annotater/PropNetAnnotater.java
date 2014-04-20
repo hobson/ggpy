@@ -35,7 +35,7 @@ import org.ggp.base.util.gdl.grammar.GdlVariable;
  *
  * @author Ethan Dreyfuss
  */
-public class PropNetAnnotater {
+class PropNetAnnotater(object):
     private List<Gdl> description;
 //  private List<GdlRelation> relations = new ArrayList<GdlRelation>();
     private Set<GdlRelation> baseRelations = new HashSet<GdlRelation>();
@@ -48,8 +48,7 @@ public class PropNetAnnotater {
         public Set<Set<Domain>> functionRefs = new HashSet<Set<Domain>>();
         public Location loc;
 
-        @Override
-        public String toString()
+            public String toString()
         {
             return "Name: "+loc.name+" index: "+loc.idx+"\nvalues: "+values+"\nfunctionRefs: "+functionRefs;
         }
@@ -62,15 +61,13 @@ public class PropNetAnnotater {
         public Location()
         {}
 
-        @SuppressWarnings("unused")
-        public Location(Location other)
+                public Location(Location other)
         {
             name = other.name;
             idx = other.idx;
         }
 
-        @Override
-        public boolean equals(Object other)
+            public boolean equals(Object other)
         {
             if(!(other instanceof Location))
                 return false;
@@ -78,8 +75,7 @@ public class PropNetAnnotater {
             return Objects.equals(idx, rhs.idx) && name.toString().equals(rhs.name.toString());
         }
 
-        @Override
-        public int hashCode()
+            public int hashCode()
         {
             byte[] bytes = name.toString().getBytes();
             BigInteger bigInt = new BigInteger(bytes);
@@ -87,8 +83,7 @@ public class PropNetAnnotater {
             return val+idx;
         }
 
-        @Override
-        public String toString()
+            public String toString()
         {
             return name.toString()+"("+idx+")";
         }
@@ -135,7 +130,7 @@ public class PropNetAnnotater {
         return rval;
     }
 
-    private Set<GdlRelation> mergeBaseRelations(Set<GdlRelation> rels) {
+    private Set<GdlRelation> mergeBaseRelations(Set<GdlRelation> rels):
         HashMap<GdlConstant,List<Set<GdlConstant>>> merges = new HashMap<GdlConstant, List<Set<GdlConstant>>>();
         for(GdlRelation rel : rels)
         {
@@ -169,8 +164,7 @@ public class PropNetAnnotater {
 
     private class SortTerms implements Comparator<GdlTerm>
     {
-        @Override
-		public int compare(GdlTerm arg0, GdlTerm arg1) {
+    	    def int compare(GdlTerm arg0, GdlTerm arg1):
             GdlConstant a1 = (GdlConstant)arg0;
             GdlConstant a2 = (GdlConstant)arg1;
             String s1 = a1.toString();
@@ -195,7 +189,7 @@ public class PropNetAnnotater {
         }
     }
 
-    private void addRelToMerge(GdlRelation rel, List<Set<GdlConstant>> merge) {
+    private void addRelToMerge(GdlRelation rel, List<Set<GdlConstant>> merge):
         for(int i=1; i<rel.arity(); i++)
         {
             GdlTerm t = rel.get(i);
@@ -470,7 +464,7 @@ public class PropNetAnnotater {
         }
     }
 
-    private Set<Domain> findAllInstancesOf(GdlVariable var, List<GdlLiteral> RHS) {
+    private Set<Domain> findAllInstancesOf(GdlVariable var, List<GdlLiteral> RHS):
         Set<Domain> rval = new HashSet<Domain>();
 
         for(GdlLiteral literal : RHS)
@@ -481,11 +475,11 @@ public class PropNetAnnotater {
         return rval;
     }
 
-    private Set<Domain> findAllInstancesOf(GdlVariable var, GdlLiteral literal) {
+    private Set<Domain> findAllInstancesOf(GdlVariable var, GdlLiteral literal):
         return findAllInstancesOf(var,literal,null);
     }
 
-    private Set<Domain> findAllInstancesOf(GdlVariable var, Gdl gdl, Location loc) {
+    private Set<Domain> findAllInstancesOf(GdlVariable var, Gdl gdl, Location loc):
         if(!domains.containsKey(loc))
             domains.put(loc, new Domain(loc));
 
@@ -683,7 +677,7 @@ public class PropNetAnnotater {
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args):
         List<Gdl> description = GameRepository.getDefaultRepository().getGame("conn4").getRules();;
 
         PropNetAnnotater aa = new PropNetAnnotater(description);

@@ -1,37 +1,27 @@
 package org.ggp.base.util.gdl.grammar;
 
-@SuppressWarnings("serial")
-public final class GdlVariable extends GdlTerm
+class GdlVariable(GdlTerm):
 {
 
-	private final String name;
+    name = ''
 
-	GdlVariable(String name)
+    GdlVariable(String name)
 	{
-		this.name = name.intern();
-	}
+        this.name = name.intern();
 
-	public String getName()
+    def String getName()
 	{
-		return name;
-	}
+        return name;
 
-	@Override
-	public boolean isGround()
+    def boolean isGround()
 	{
-		return false;
-	}
+        return false;
 
-	@Override
-	public GdlSentence toSentence()
+    def GdlSentence toSentence()
 	{
-		throw new RuntimeException("Unable to convert a GdlVariable to a GdlSentence!");
-	}
+        throw new RuntimeException("Unable to convert a GdlVariable to a GdlSentence!");
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return name;
-	}
+        return name;
 
-}

@@ -1,16 +1,11 @@
 package org.ggp.base.player.gamer.exception;
 
-@SuppressWarnings("serial")
-public final class AbortingException extends Exception
+class AbortingException(Exception):
 {
-	public AbortingException(Throwable cause) {
-		super(cause);
-	}
+    def AbortingException(cause=Throwable()):
+        super(cause);
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "An unhandled exception ocurred during aborting: " + super.toString();
-	}
+        return "An unhandled exception ocurred during aborting: " + super.toString();
 
-}

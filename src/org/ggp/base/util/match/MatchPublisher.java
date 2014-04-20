@@ -9,9 +9,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class MatchPublisher {
+class MatchPublisher(object):
     public static String publishToSpectatorServer(String spectatorURL, Match theMatch) throws IOException {
-        if (theMatch.getGameRepositoryURL().isEmpty()) {
+        if (theMatch.getGameRepositoryURL().isEmpty()):
             throw new IOException("Match doesn't have appropriate metadata for publication to a spectator server: " + theMatch);
         } else {
             return performPOST(spectatorURL, theMatch.getSpectatorAuthToken(), theMatch.toJSON());
@@ -31,34 +31,33 @@ public class MatchPublisher {
             writer.write("AUTH=" + theAuth + "&DATA=" + message);
             writer.close();
 
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK):
                 return new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
             } else {
                 String errorDescription = "?";
                 try { errorDescription = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine(); } catch (Exception q) {};
                 throw new IOException(connection.getResponseCode() + ": " + errorDescription);
             }
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException e):
             throw new IOException(e);
-        } catch (IOException e) {
+        } catch (IOException e):
             throw e;
         }
     }
 
-    static class MatchPublisherThread extends Thread {
+    static class MatchPublisherThread(Thread):
         private Match theMatch;
         private String spectatorURL;
 
-        public MatchPublisherThread(String spectatorURL, Match theMatch) {
+        public MatchPublisherThread(String spectatorURL, Match theMatch):
             this.theMatch = theMatch;
             this.spectatorURL = spectatorURL;
         }
 
-        @Override
-        public void run() {
+            public void run():
             try {
                 MatchPublisher.publishToSpectatorServer(spectatorURL, theMatch);
-            } catch (IOException e) {
+            } catch (IOException e):
                 e.printStackTrace();
             }
         }

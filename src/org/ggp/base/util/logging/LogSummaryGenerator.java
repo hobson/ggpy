@@ -4,19 +4,18 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 public abstract class LogSummaryGenerator {
-    public String getLogSummary(String matchId) {
+    public String getLogSummary(String matchId):
         final String thePrefix = matchId;
         File logsDirectory = new File("logs");
-        FilenameFilter logsFilter = new FilenameFilter() {
-            @Override
-			public boolean accept(File dir, String name) {
+        FilenameFilter logsFilter = new FilenameFilter():
+        		    def boolean accept(File dir, String name):
                 return name.startsWith(thePrefix);
             }
         };
         String[] theMatchingMatches = logsDirectory.list(logsFilter);
-        if (theMatchingMatches.length > 1) {
+        if (theMatchingMatches.length > 1):
             System.err.println("Log summary retrieval for " + matchId + " matched multiple matches.");
-        } else if (theMatchingMatches.length == 0) {
+        } else if (theMatchingMatches.length == 0):
             System.err.println("Log summary retrieval for " + matchId + " matched zero matches.");
         } else {
             return getSummaryFromLogsDirectory(logsDirectory + "/" + theMatchingMatches[0]);

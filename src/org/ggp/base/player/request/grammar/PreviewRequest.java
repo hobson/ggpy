@@ -5,55 +5,47 @@ import org.ggp.base.player.gamer.exception.GamePreviewException;
 import org.ggp.base.util.game.Game;
 import org.ggp.base.util.logging.GamerLogger;
 
-public final class PreviewRequest extends Request
+class PreviewRequest(Request):
 {
-	private final Game game;
-	private final Gamer gamer;
-	private final int previewClock;
+    game = Game()
+    gamer = Gamer()
+    previewClock = int()
 
-	public PreviewRequest(Gamer gamer, Game theGame, int previewClock)
+    def PreviewRequest(gamer=Gamer(), Game theGame, int previewClock)
 	{
-		this.gamer = gamer;
-		this.game = theGame;
-		this.previewClock = previewClock;
-	}
+        this.gamer = gamer;
+        this.game = theGame;
+        this.previewClock = previewClock;
 
-	@Override
-	public String getMatchId() {
-		return null;
-	}
+    def getMatchId():  # String
+        return null;
 
-	@Override
-	public String process(long receptionTime)
+    def String process(long receptionTime)
 	{
 		// Ensure that we aren't already playing a match. If we are,
 	    // ignore the message, saying that we're busy.
-		if (gamer.getMatch() != null) {
+        if (gamer.getMatch() != null):
             GamerLogger.logError("GamePlayer", "Got preview message while already busy playing a game: ignoring.");
             //gamer.notifyObservers(new GamerUnrecognizedMatchEvent(matchId));
             return "busy";
         }
 
 		// Otherwise, if we're not busy, have the gamer start previewing.
-		try {
+        try {
 			//gamer.notifyObservers(new PlayerTimeEvent(gamer.getMatch().getStartClock() * 1000));
-			gamer.preview(game, previewClock * 1000 + receptionTime);
+            gamer.preview(game, previewClock * 1000 + receptionTime);
 			//gamer.metaGame(gamer.getMatch().getStartClock() * 1000 + receptionTime);
-		} catch (GamePreviewException e) {
+		} catch (GamePreviewException e):
 		    GamerLogger.logStackTrace("GamePlayer", e);
 
 		    // Upon encountering an uncaught exception during previewing,
 		    // assume that indicates that we aren't actually able to play
 		    // right now, and tell the server that we're busy.
-			return "busy";
-		}
+            return "busy";
 
-		return "ready";
-	}
+        return "ready";
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "start";
-	}
+        return "start";
 }

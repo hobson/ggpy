@@ -13,37 +13,31 @@ import org.ggp.base.util.gdl.grammar.GdlRule;
 import org.ggp.base.util.gdl.grammar.GdlSentence;
 
 
-public final class KnowledgeBase
+class KnowledgeBase
 {
-	private final Map<GdlConstant, List<GdlRule>> contents;
+    private final Map<GdlConstant, List<GdlRule>> contents;
 
-	public KnowledgeBase(Set<? extends Gdl> description)
+    def KnowledgeBase(Set<?(Gdl> description)):
 	{
-		contents = new HashMap<GdlConstant, List<GdlRule>>();
-		for (Gdl gdl : description)
+        contents = new HashMap<GdlConstant, List<GdlRule>>();
+        for (Gdl gdl : description)
 		{
-			GdlRule rule = (gdl instanceof GdlRule) ? (GdlRule) gdl : GdlPool.getRule((GdlSentence) gdl);
-			GdlConstant key = rule.getHead().getName();
+            GdlRule rule = (gdl instanceof GdlRule) ? (GdlRule) gdl : GdlPool.getRule((GdlSentence) gdl);
+            GdlConstant key = rule.getHead().getName();
 
-			if (!contents.containsKey(key))
+            if (!contents.containsKey(key))
 			{
-				contents.put(key, new ArrayList<GdlRule>());
-			}
-			contents.get(key).add(rule);
-		}
-	}
+                contents.put(key, new ArrayList<GdlRule>());
+            contents.get(key).add(rule);
 
-	public synchronized List<GdlRule> fetch(GdlSentence sentence)
+    def synchronized List<GdlRule> fetch(GdlSentence sentence)
 	{
-		GdlConstant key = sentence.getName();
+        GdlConstant key = sentence.getName();
 
-		if (contents.containsKey(key))
+        if (contents.containsKey(key))
 		{
-			return contents.get(key);
-		}
-		else
+            return contents.get(key);
+        else
 		{
-			return new ArrayList<GdlRule>();
-		}
-	}
+            return new ArrayList<GdlRule>();
 }

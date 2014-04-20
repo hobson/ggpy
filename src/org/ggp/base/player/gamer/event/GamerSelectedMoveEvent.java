@@ -5,27 +5,22 @@ import java.util.List;
 import org.ggp.base.util.observer.Event;
 import org.ggp.base.util.statemachine.Move;
 
-public final class GamerSelectedMoveEvent extends Event
+class GamerSelectedMoveEvent(Event):
 {
-	private final List<Move> moves;
-	private final Move selection;
-	private final long time;
+    private final List<Move> moves;
+    selection = Move()
+    time = long()
 
-	public GamerSelectedMoveEvent(List<Move> moves, Move selection, long time) {
-		this.moves = moves;
-		this.selection = selection;
-		this.time = time;
-	}
+    def GamerSelectedMoveEvent(List<Move> moves, Move selection, long time):
+        this.moves = moves;
+        this.selection = selection;
+        this.time = time;
 
-	public List<Move> getMoves() {
-		return moves;
-	}
+    def List<Move> getMoves():
+        return moves;
 
-	public Move getSelection() {
-		return selection;
-	}
+    def getSelection():  # Move
+        return selection;
 
-	public long getTime() {
-		return time;
-	}
-}
+    def getTime():  # long
+        return time;

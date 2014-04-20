@@ -4,13 +4,10 @@ import java.awt.LayoutManager;
 
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
-public abstract class ConfigPanel extends JPanel
+public abstract class ConfigPanel(JPanel):
 {
 
-	public ConfigPanel(LayoutManager layoutManager)
+    def ConfigPanel(layoutManager=LayoutManager())
 	{
-		super(layoutManager);
-	}
+        super(layoutManager);
 
-}

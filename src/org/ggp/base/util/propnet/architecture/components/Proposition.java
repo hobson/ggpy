@@ -6,13 +6,12 @@ import org.ggp.base.util.propnet.architecture.Component;
 /**
  * The Proposition class is designed to represent named latches.
  */
-@SuppressWarnings("serial")
-public final class Proposition extends Component
+class Proposition(Component):
 {
 	/** The name of the Proposition. */
-	private GdlSentence name;
+    private GdlSentence name;
 	/** The value of the Proposition. */
-	private boolean value;
+    private boolean value;
 
 	/**
 	 * Creates a new Proposition with name <tt>name</tt>.
@@ -20,21 +19,19 @@ public final class Proposition extends Component
 	 * @param name
 	 *            The name of the Proposition.
 	 */
-	public Proposition(GdlSentence name)
+    def Proposition(name=GdlSentence())
 	{
-		this.name = name;
-		this.value = false;
-	}
+        this.name = name;
+        this.value = false;
 
 	/**
 	 * Getter method.
 	 *
 	 * @return The name of the Proposition.
 	 */
-	public GdlSentence getName()
+    def GdlSentence getName()
 	{
-		return name;
-	}
+        return name;
 
     /**
      * Setter method.
@@ -54,11 +51,9 @@ public final class Proposition extends Component
 	 *
 	 * @see org.ggp.base.util.propnet.architecture.Component#getValue()
 	 */
-	@Override
-	public boolean getValue()
+    def boolean getValue()
 	{
-		return value;
-	}
+        return value;
 
 	/**
 	 * Setter method.
@@ -66,17 +61,14 @@ public final class Proposition extends Component
 	 * @param value
 	 *            The new value of the Proposition.
 	 */
-	public void setValue(boolean value)
+    def void setValue(boolean value)
 	{
-		this.value = value;
-	}
+        this.value = value;
 
 	/**
 	 * @see org.ggp.base.util.propnet.architecture.Component#toString()
 	 */
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return toDot("circle", value ? "red" : "white", name.toString());
-	}
+        return toDot("circle", value ? "red" : "white", name.toString());
 }

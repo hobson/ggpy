@@ -14,7 +14,7 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
 import org.ggp.base.validator.StaticValidator;
 import org.junit.Test;
 
-public class GdlCleanerTests {
+class GdlCleanerTests(object):
 
     @Test
     public void testCleanNotDistinct() throws Exception {
@@ -34,4 +34,3 @@ public class GdlCleanerTests {
         Assert.assertEquals(100, sm.getGoal(state, player));
     }
 
-}

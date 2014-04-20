@@ -27,204 +27,169 @@ import org.ggp.base.util.prover.aima.unifier.Unifier;
 import com.google.common.collect.Sets;
 
 
-public final class AimaProver implements Prover
+class AimaProver implements Prover
 {
 
-	private final KnowledgeBase knowledgeBase;
+    knowledgeBase = KnowledgeBase()
 
-	private final ProverCache fixedAnswerCache = new ProverCache();
+    private final ProverCache fixedAnswerCache = new ProverCache();
 
-	public AimaProver(List<Gdl> description)
+    def AimaProver(List<Gdl> description)
 	{
-		description = DistinctAndNotMover.run(description);
-		knowledgeBase = new KnowledgeBase(Sets.newHashSet(description));
-	}
+        description = DistinctAndNotMover.run(description);
+        knowledgeBase = new KnowledgeBase(Sets.newHashSet(description));
 
-	private Set<GdlSentence> ask(GdlSentence query, Set<GdlSentence> context, boolean askOne)
+    private Set<GdlSentence> ask(GdlSentence query, Set<GdlSentence> context, boolean askOne)
 	{
-		LinkedList<GdlLiteral> goals = new LinkedList<GdlLiteral>();
-		goals.add(query);
+        LinkedList<GdlLiteral> goals = new LinkedList<GdlLiteral>();
+        goals.add(query);
 
-		Set<Substitution> answers = new HashSet<Substitution>();
-		Set<GdlSentence> alreadyAsking = new HashSet<GdlSentence>();
-		ask(goals, new KnowledgeBase(context), new Substitution(), new ProverCache(), new VariableRenamer(), askOne, answers, alreadyAsking);
+        Set<Substitution> answers = new HashSet<Substitution>();
+        Set<GdlSentence> alreadyAsking = new HashSet<GdlSentence>();
+        ask(goals, new KnowledgeBase(context), new Substitution(), new ProverCache(), new VariableRenamer(), askOne, answers, alreadyAsking);
 
-		Set<GdlSentence> results = new HashSet<GdlSentence>();
-		for (Substitution theta : answers)
+        Set<GdlSentence> results = new HashSet<GdlSentence>();
+        for (Substitution theta : answers)
 		{
-			results.add(Substituter.substitute(query, theta));
-		}
+            results.add(Substituter.substitute(query, theta));
 
-		return results;
-	}
+        return results;
 
 	// Returns true iff the result is constant across all possible states of the game.
-	private boolean ask(LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private boolean ask(LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
-		if (goals.size() == 0)
+        if (goals.size() == 0)
 		{
-			results.add(theta);
-			return true;
-		}
-		else
+            results.add(theta);
+            return true;
+        else
 		{
-			GdlLiteral literal = goals.removeFirst();
-			GdlLiteral qPrime = Substituter.substitute(literal, theta);
+            GdlLiteral literal = goals.removeFirst();
+            GdlLiteral qPrime = Substituter.substitute(literal, theta);
 
-			boolean isConstant;
+            boolean isConstant;
 
-			if (qPrime instanceof GdlDistinct)
+            if (qPrime instanceof GdlDistinct)
 			{
-				GdlDistinct distinct = (GdlDistinct) qPrime;
-				isConstant = askDistinct(distinct, goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
-			}
-			else if (qPrime instanceof GdlNot)
+                GdlDistinct distinct = (GdlDistinct) qPrime;
+                isConstant = askDistinct(distinct, goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
+            else if (qPrime instanceof GdlNot)
 			{
-				GdlNot not = (GdlNot) qPrime;
-				isConstant = askNot(not, goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
-			}
-			else if (qPrime instanceof GdlOr)
+                GdlNot not = (GdlNot) qPrime;
+                isConstant = askNot(not, goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
+            else if (qPrime instanceof GdlOr)
 			{
-				GdlOr or = (GdlOr) qPrime;
-				isConstant = askOr(or, goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
-			}
-			else
+                GdlOr or = (GdlOr) qPrime;
+                isConstant = askOr(or, goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
+            else
 			{
-				GdlSentence sentence = (GdlSentence) qPrime;
-				isConstant = askSentence(sentence, goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
-			}
+                GdlSentence sentence = (GdlSentence) qPrime;
+                isConstant = askSentence(sentence, goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
 
-			goals.addFirst(literal);
-			return isConstant;
-		}
-	}
+            goals.addFirst(literal);
+            return isConstant;
 
-	@Override
-	public Set<GdlSentence> askAll(GdlSentence query, Set<GdlSentence> context)
+    def Set<GdlSentence> askAll(GdlSentence query, Set<GdlSentence> context)
 	{
-		return ask(query, context, false);
-	}
+        return ask(query, context, false);
 
 	// Returns true iff the result is constant across all possible states of the game.
-	private boolean askDistinct(GdlDistinct distinct, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private boolean askDistinct(GdlDistinct distinct, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
-		if (!distinct.getArg1().equals(distinct.getArg2()))
+        if (!distinct.getArg1().equals(distinct.getArg2()))
 		{
-			return ask(goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
-		}
-		return true;
-	}
+            return ask(goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
+        return true;
 
 	// Returns true iff the result is constant across all possible states of the game.
-	private boolean askNot(GdlNot not, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private boolean askNot(GdlNot not, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
-		LinkedList<GdlLiteral> notGoals = new LinkedList<GdlLiteral>();
-		notGoals.add(not.getBody());
+        LinkedList<GdlLiteral> notGoals = new LinkedList<GdlLiteral>();
+        notGoals.add(not.getBody());
 
-		Set<Substitution> notResults = new HashSet<Substitution>();
-		boolean isConstant = true;
-		isConstant &= ask(notGoals, context, theta, cache, renamer, true, notResults, alreadyAsking);
+        Set<Substitution> notResults = new HashSet<Substitution>();
+        boolean isConstant = true;
+        isConstant &= ask(notGoals, context, theta, cache, renamer, true, notResults, alreadyAsking);
 
-		if (notResults.size() == 0)
+        if (notResults.size() == 0)
 		{
-			isConstant &= ask(goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
-		}
-		return isConstant;
-	}
+            isConstant &= ask(goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
+        return isConstant;
 
-	@Override
-	public GdlSentence askOne(GdlSentence query, Set<GdlSentence> context)
+    def GdlSentence askOne(GdlSentence query, Set<GdlSentence> context)
 	{
-		Set<GdlSentence> results = ask(query, context, true);
-		return (results.size() > 0) ? results.iterator().next() : null;
-	}
+        Set<GdlSentence> results = ask(query, context, true);
+        return (results.size() > 0) ? results.iterator().next() : null;
 
 	// Returns true iff the result is constant across all possible states of the game.
-	private boolean askOr(GdlOr or, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private boolean askOr(GdlOr or, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
-		boolean isConstant = true;
-		for (int i = 0; i < or.arity(); i++)
+        boolean isConstant = true;
+        for (int i = 0; i < or.arity(); i++)
 		{
-			goals.addFirst(or.get(i));
-			isConstant &= ask(goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
-			goals.removeFirst();
+            goals.addFirst(or.get(i));
+            isConstant &= ask(goals, context, theta, cache, renamer, askOne, results, alreadyAsking);
+            goals.removeFirst();
 
-			if (askOne && (results.size() > 0))
+            if (askOne && (results.size() > 0))
 			{
-				break;
-			}
-		}
-		return isConstant;
-	}
+                break;
+        return isConstant;
 
 	// Returns true iff the result is constant across all possible states of the game.
-	private boolean askSentence(GdlSentence sentence, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
+    private boolean askSentence(GdlSentence sentence, LinkedList<GdlLiteral> goals, KnowledgeBase context, Substitution theta, ProverCache cache, VariableRenamer renamer, boolean askOne, Set<Substitution> results, Set<GdlSentence> alreadyAsking)
 	{
-		GdlSentence varRenamedSentence = new VariableRenamer().rename(sentence);
-		if (!fixedAnswerCache.contains(varRenamedSentence) && !cache.contains(varRenamedSentence))
+        GdlSentence varRenamedSentence = new VariableRenamer().rename(sentence);
+        if (!fixedAnswerCache.contains(varRenamedSentence) && !cache.contains(varRenamedSentence))
 		{
 			//Prevent infinite loops on certain recursive queries.
-			if(alreadyAsking.contains(sentence)) {
-				return false;
-			}
-			alreadyAsking.add(sentence);
-			List<GdlRule> candidates = new ArrayList<GdlRule>();
-			candidates.addAll(knowledgeBase.fetch(sentence));
-			candidates.addAll(context.fetch(sentence));
-			boolean isConstant = !isTrueOrDoesSentence(sentence);
+            if(alreadyAsking.contains(sentence)):
+                return false;
+            alreadyAsking.add(sentence);
+            List<GdlRule> candidates = new ArrayList<GdlRule>();
+            candidates.addAll(knowledgeBase.fetch(sentence));
+            candidates.addAll(context.fetch(sentence));
+            boolean isConstant = !isTrueOrDoesSentence(sentence);
 
-			Set<Substitution> sentenceResults = new HashSet<Substitution>();
-			for (GdlRule rule : candidates)
+            Set<Substitution> sentenceResults = new HashSet<Substitution>();
+            for (GdlRule rule : candidates)
 			{
-				GdlRule r = renamer.rename(rule);
-				Substitution thetaPrime = Unifier.unify(r.getHead(), sentence);
+                GdlRule r = renamer.rename(rule);
+                Substitution thetaPrime = Unifier.unify(r.getHead(), sentence);
 
-				if (thetaPrime != null)
+                if (thetaPrime != null)
 				{
-					LinkedList<GdlLiteral> sentenceGoals = new LinkedList<GdlLiteral>();
-					for (int i = 0; i < r.arity(); i++)
+                    LinkedList<GdlLiteral> sentenceGoals = new LinkedList<GdlLiteral>();
+                    for (int i = 0; i < r.arity(); i++)
 					{
-						sentenceGoals.add(r.get(i));
-					}
+                        sentenceGoals.add(r.get(i));
 
-					isConstant &= ask(sentenceGoals, context, theta.compose(thetaPrime), cache, renamer, false, sentenceResults, alreadyAsking);
-				}
-			}
+                    isConstant &= ask(sentenceGoals, context, theta.compose(thetaPrime), cache, renamer, false, sentenceResults, alreadyAsking);
 
-			if (isConstant) {
-				fixedAnswerCache.put(sentence, varRenamedSentence, sentenceResults);
+            if (isConstant):
+                fixedAnswerCache.put(sentence, varRenamedSentence, sentenceResults);
 			} else {
-				cache.put(sentence, varRenamedSentence, sentenceResults);
-			}
+                cache.put(sentence, varRenamedSentence, sentenceResults);
 
-			alreadyAsking.remove(sentence);
-		}
+            alreadyAsking.remove(sentence);
 
-		List<Substitution> cachedResults = fixedAnswerCache.get(sentence, varRenamedSentence);
-		boolean isConstant = (cachedResults != null);
-		if (cachedResults == null) {
-			cachedResults = cache.get(sentence, varRenamedSentence);
-		}
-		for (Substitution thetaPrime : cachedResults)
+        List<Substitution> cachedResults = fixedAnswerCache.get(sentence, varRenamedSentence);
+        boolean isConstant = (cachedResults != null);
+        if (cachedResults == null):
+            cachedResults = cache.get(sentence, varRenamedSentence);
+        for (Substitution thetaPrime : cachedResults)
 		{
-			isConstant &= ask(goals, context, theta.compose(thetaPrime), cache, renamer, askOne, results, alreadyAsking);
-			if (askOne && (results.size() > 0))
+            isConstant &= ask(goals, context, theta.compose(thetaPrime), cache, renamer, askOne, results, alreadyAsking);
+            if (askOne && (results.size() > 0))
 			{
-				break;
-			}
-		}
-		return isConstant;
-	}
+                break;
+        return isConstant;
 
-	private boolean isTrueOrDoesSentence(GdlSentence sentence) {
-		GdlConstant name = sentence.getName();
-		return name == GdlPool.TRUE || name == GdlPool.DOES;
-	}
+    private boolean isTrueOrDoesSentence(GdlSentence sentence):
+        GdlConstant name = sentence.getName();
+        return name == GdlPool.TRUE || name == GdlPool.DOES;
 
-	@Override
-	public boolean prove(GdlSentence query, Set<GdlSentence> context)
+    def boolean prove(GdlSentence query, Set<GdlSentence> context)
 	{
-		return askOne(query, context) != null;
-	}
+        return askOne(query, context) != null;
 
-}

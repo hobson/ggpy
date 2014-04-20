@@ -2,25 +2,21 @@ package org.ggp.base.apps.validator.event;
 
 import org.ggp.base.util.observer.Event;
 
-public class ValidatorFailureEvent extends Event
+class ValidatorFailureEvent(Event):
 {
-	private final String name;
-	private final Exception exception;
+    name = ''
+    exception = Exception()
 
-	public ValidatorFailureEvent(String name, Exception exception)
+    def ValidatorFailureEvent(name='', Exception exception)
 	{
-		this.name = name;
-		this.exception = exception;
-	}
+        this.name = name;
+        this.exception = exception;
 
-	public String getName()
+    def String getName()
 	{
-		return name;
-	}
+        return name;
 
-	public Exception getException()
+    def Exception getException()
 	{
-		return exception;
-	}
+        return exception;
 
-}

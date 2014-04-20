@@ -5,7 +5,7 @@ import org.ggp.base.validator.StaticValidator;
 import org.ggp.base.validator.ValidatorException;
 import org.junit.Test;
 
-public class StaticValidationTests {
+class StaticValidationTests(object):
 
     @Test
     public void testConn4Validation() throws Exception {
@@ -96,4 +96,3 @@ public class StaticValidationTests {
     protected void validate(String gameName) throws Exception {
         new StaticValidator().checkValidity(new TestGameRepository().getGame(gameName));
     }
-}

@@ -13,7 +13,7 @@ import java.util.Set;
 public abstract class Component implements Serializable
 {
 
-	private static final long serialVersionUID = 352524175700224447L;
+    private static final long serialVersionUID = 352524175700224447L;
     /** The inputs to the component. */
     private final Set<Component> inputs;
     /** The outputs of the component. */
@@ -51,13 +51,11 @@ public abstract class Component implements Serializable
 
     public void removeAllInputs()
     {
-		inputs.clear();
-	}
+        inputs.clear();
 
-	public void removeAllOutputs()
+    def void removeAllOutputs()
 	{
-		outputs.clear();
-	}
+        outputs.clear();
 
     /**
      * Adds a new output.
@@ -87,7 +85,7 @@ public abstract class Component implements Serializable
      *
      * @return The single input to the component.
      */
-    public Component getSingleInput() {
+    public Component getSingleInput():
         assert inputs.size() == 1;
         return inputs.iterator().next();
     }
@@ -109,7 +107,7 @@ public abstract class Component implements Serializable
      *
      * @return The single output to the component.
      */
-    public Component getSingleOutput() {
+    public Component getSingleOutput():
         assert outputs.size() == 1;
         return outputs.iterator().next();
     }
@@ -126,7 +124,6 @@ public abstract class Component implements Serializable
      *
      * @see java.lang.Object#toString()
      */
-    @Override
     public abstract String toString();
 
     /**

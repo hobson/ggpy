@@ -8,24 +8,19 @@ import org.ggp.base.apps.kiosk.templates.CommonGraphics;
 import org.ggp.base.apps.kiosk.templates.GameCanvas_Chessboard;
 
 
-public class CheckersSmallCanvas extends GameCanvas_Chessboard {
+class CheckersSmallCanvas(GameCanvas_Chessboard):
     private static final long serialVersionUID = 1L;
 
-    @Override
-	public String getGameName() { return "Checkers (Small)"; }
-    @Override
-	protected String getGameKey() { return "checkersSmall"; }
+    def String getGameName() { return "Checkers (Small)"; }
+    protected String getGameKey() { return "checkersSmall"; }
 
-    @Override
-	protected int getGridHeight() { return 8; }
-    @Override
-	protected int getGridWidth() { return 8; }
+    protected int getGridHeight() { return 8; }
+    protected int getGridWidth() { return 8; }
 
-    @Override
-    protected void renderCellForeground(Graphics g, int xCell, int yCell) {
+    protected void renderCellForeground(Graphics g, int xCell, int yCell):
         xCell--;
 
-        if(xCell == 0 || xCell == 7) {
+        if(xCell == 0 || xCell == 7):
             int width = g.getClipBounds().width;
             int height = g.getClipBounds().height;
 
@@ -34,8 +29,7 @@ public class CheckersSmallCanvas extends GameCanvas_Chessboard {
         }
     }
 
-    @Override
-    protected Set<String> getLegalMovesForCell(int xCell, int yCell) {
+    protected Set<String> getLegalMovesForCell(int xCell, int yCell):
         xCell--;
 
         String xLetter = coordinateToLetter(xCell);
@@ -45,25 +39,22 @@ public class CheckersSmallCanvas extends GameCanvas_Chessboard {
         return theMoves;
     }
 
-    @Override
-    protected Set<String> getFactsAboutCell(int xCell, int yCell) {
+    protected Set<String> getFactsAboutCell(int xCell, int yCell):
         xCell--;
 
         String xLetter = coordinateToLetter(xCell);
         return gameStateHasFactsMatching("\\( cell " + xLetter + " " + yCell + " (.*) \\)");
     }
 
-    @Override
-    protected void renderCellContent(Graphics g, String theFact) {
+    protected void renderCellContent(Graphics g, String theFact):
         String[] cellFacts = theFact.split(" ");
         String cellType = cellFacts[4];
-        if(!cellType.equals("b")) {
+        if(!cellType.equals("b")):
             CommonGraphics.drawCheckersPiece(g, cellType);
         }
     }
 
-    @Override
-    protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove) {
+    protected void renderMoveSelectionForCell(Graphics g, int xCell, int yCell, String theMove):
         int width = g.getClipBounds().width;
         int height = g.getClipBounds().height;
         xCell--;
@@ -73,24 +64,24 @@ public class CheckersSmallCanvas extends GameCanvas_Chessboard {
         String[] moveParts = theMove.split(" ");
         String xTarget = moveParts[5];
         int yTarget = Integer.parseInt(moveParts[6]);
-        if(xLetter.equals(xTarget) && yCell == yTarget) {
+        if(xLetter.equals(xTarget) && yCell == yTarget):
             g.setColor(Color.BLUE);
             g.drawRect(3, 3, width-6, height-6);
             CommonGraphics.fillWithString(g, "X", 3);
         }
-        if(moveParts.length > 8) {
+        if(moveParts.length > 8):
             xTarget = moveParts[7];
             yTarget = Integer.parseInt(moveParts[8]);
-            if(xLetter.equals(xTarget) && yCell == yTarget) {
+            if(xLetter.equals(xTarget) && yCell == yTarget):
                 g.setColor(Color.BLUE);
                 g.drawRect(3, 3, width-6, height-6);
                 CommonGraphics.fillWithString(g, "Y", 3);
             }
         }
-        if(moveParts.length > 10) {
+        if(moveParts.length > 10):
             xTarget = moveParts[9];
             yTarget = Integer.parseInt(moveParts[10]);
-            if(xLetter.equals(xTarget) && yCell == yTarget) {
+            if(xLetter.equals(xTarget) && yCell == yTarget):
                 g.setColor(Color.BLUE);
                 g.drawRect(3, 3, width-6, height-6);
                 CommonGraphics.fillWithString(g, "Z", 3);

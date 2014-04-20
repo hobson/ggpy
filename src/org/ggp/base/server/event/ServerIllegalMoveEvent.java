@@ -7,27 +7,22 @@ import org.ggp.base.util.statemachine.Move;
 import org.ggp.base.util.statemachine.Role;
 
 
-@SuppressWarnings("serial")
-public final class ServerIllegalMoveEvent extends Event implements Serializable
+class ServerIllegalMoveEvent(Event implements Serializable):
 {
 
-	private final Move move;
-	private final Role role;
+    move = Move()
+    role = Role()
 
-	public ServerIllegalMoveEvent(Role role, Move move)
+    def ServerIllegalMoveEvent(role=Role(), Move move)
 	{
-		this.role = role;
-		this.move = move;
-	}
+        this.role = role;
+        this.move = move;
 
-	public Move getMove()
+    def Move getMove()
 	{
-		return move;
-	}
+        return move;
 
-	public Role getRole()
+    def Role getRole()
 	{
-		return role;
-	}
+        return role;
 
-}

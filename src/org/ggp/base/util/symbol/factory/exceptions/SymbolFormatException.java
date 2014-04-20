@@ -1,25 +1,19 @@
 package org.ggp.base.util.symbol.factory.exceptions;
 
-@SuppressWarnings("serial")
-public final class SymbolFormatException extends Exception
+class SymbolFormatException(Exception):
 {
 
-	private final String source;
+    source = ''
 
-	public SymbolFormatException(String source)
+    def SymbolFormatException(source='')
 	{
-		this.source = source;
-	}
+        this.source = source;
 
-	public String getSource()
+    def String getSource()
 	{
-		return source;
-	}
+        return source;
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		return "Improperly formatted symbolic expression: " + source;
-	}
+        return "Improperly formatted symbolic expression: " + source;
 
-}

@@ -23,25 +23,23 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
  *
  * @author Sam Schreiber
  */
-public class FailsafeStateMachine extends StateMachine
+class FailsafeStateMachine(StateMachine):
 {
     private StateMachine theBackingMachine = null;
     private List<Gdl> gameDescription;
 
-    public FailsafeStateMachine (StateMachine theInitialMachine) {
+    public FailsafeStateMachine (StateMachine theInitialMachine):
         theBackingMachine = theInitialMachine;
     }
 
-    @Override
-    public String getName() {
-        if(theBackingMachine != null) {
+    public String getName():
+        if(theBackingMachine != null):
             return "Failsafe(" + theBackingMachine.getName() + ")";
         }
         return "Failsafe(null)";
     }
 
-    @Override
-    public synchronized void initialize(List<Gdl> description) {
+    public synchronized void initialize(List<Gdl> description):
         this.gameDescription = description;
 
         if(attemptLoadingInitialMachine())
@@ -56,12 +54,12 @@ public class FailsafeStateMachine extends StateMachine
         theBackingMachine = null;
     }
 
-    private void failGracefully(Exception e1, Error e2) {
+    private void failGracefully(Exception e1, Error e2):
         if(e1 != null) GamerLogger.logStackTrace("StateMachine", e1);
         if(e2 != null) GamerLogger.logStackTrace("StateMachine", e2);
         GamerLogger.logError("StateMachine", "Failsafe Machine: graceful failure mode kicking in.");
 
-        if(theBackingMachine.getClass() != ProverStateMachine.class) {
+        if(theBackingMachine.getClass() != ProverStateMachine.class):
             GamerLogger.logError("StateMachine", "Failsafe Machine: online failure for " + theBackingMachine.getClass() + ". Attempting to restart with a standard prover.");
             if(attemptLoadingProverMachine())
                 return;
@@ -71,291 +69,278 @@ public class FailsafeStateMachine extends StateMachine
         GamerLogger.logError("StateMachine", "Failsafe Machine: online failure for regular prover. Cannot recover.");
     }
 
-    private boolean attemptLoadingInitialMachine() {
+    private boolean attemptLoadingInitialMachine():
         try {
             theBackingMachine.initialize(gameDescription);
             GamerLogger.log("StateMachine", "Failsafe Machine: successfully activated initial state machine for use!");
             return true;
-        } catch(Exception e1) {
-        } catch(ThreadDeath d) {
+        } catch(Exception e1):
+        } catch(ThreadDeath d):
             throw d;
-        } catch(Error e2) {
+        } catch(Error e2):
         }
         return false;
     }
 
-    private boolean attemptLoadingProverMachine() {
+    private boolean attemptLoadingProverMachine():
         try {
             StateMachine theStateMachine = new ProverStateMachine();
             theStateMachine.initialize(gameDescription);
             theBackingMachine = theStateMachine;
             GamerLogger.log("StateMachine", "Failsafe Machine: successfully loaded traditional prover.");
             return true;
-        } catch(Exception e1) {
-        } catch(ThreadDeath d) {
+        } catch(Exception e1):
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e2) {
+        } catch(Error e2):
         }
         return false;
     }
 
-    @Override
     public int getGoal(MachineState state, Role role) throws GoalDefinitionException {
         if(theBackingMachine == null)
             return 0;
 
         try {
             return theBackingMachine.getGoal(state, role);
-        } catch(GoalDefinitionException ge) {
+        } catch(GoalDefinitionException ge):
             throw ge;
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getGoal(state, role);
     }
 
-    @Override
-    public MachineState getInitialState() {
+    public MachineState getInitialState():
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getInitialState();
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getInitialState();
     }
 
-    @Override
     public List<Move> getLegalMoves(MachineState state, Role role) throws MoveDefinitionException {
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getLegalMoves(state, role);
-        } catch(MoveDefinitionException me) {
+        } catch(MoveDefinitionException me):
             throw me;
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getLegalMoves(state, role);
     }
 
-    @Override
     public Move getRandomMove(MachineState state, Role role) throws MoveDefinitionException {
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getRandomMove(state, role);
-        } catch(MoveDefinitionException me) {
+        } catch(MoveDefinitionException me):
             throw me;
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getRandomMove(state, role);
     }
 
-    @Override
-    public MachineState getMachineStateFromSentenceList(Set<GdlSentence> sentenceList) {
+    public MachineState getMachineStateFromSentenceList(Set<GdlSentence> sentenceList):
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getMachineStateFromSentenceList(sentenceList);
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getMachineStateFromSentenceList(sentenceList);
     }
 
-    @Override
-    public Move getMoveFromTerm(GdlTerm term) {
+    public Move getMoveFromTerm(GdlTerm term):
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getMoveFromTerm(term);
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getMoveFromTerm(term);
     }
 
-    @Override
     public MachineState getNextState(MachineState state, List<Move> moves) throws TransitionDefinitionException {
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getNextState(state, moves);
-        } catch(TransitionDefinitionException te) {
+        } catch(TransitionDefinitionException te):
             throw te;
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getNextState(state, moves);
     }
 
-    @Override
     public MachineState getNextStateDestructively(MachineState state, List<Move> moves) throws TransitionDefinitionException {
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getNextStateDestructively(state, moves);
-        } catch(TransitionDefinitionException te) {
+        } catch(TransitionDefinitionException te):
             throw te;
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getNextStateDestructively(state, moves);
     }
 
-    @Override
-    public Role getRoleFromConstant(GdlConstant constant) {
+    public Role getRoleFromConstant(GdlConstant constant):
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getRoleFromConstant(constant);
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getRoleFromConstant(constant);
     }
 
-    @Override
-    public List<Role> getRoles() {
+    public List<Role> getRoles():
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.getRoles();
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return getRoles();
     }
 
-    @Override
-    public boolean isTerminal(MachineState state) {
+    public boolean isTerminal(MachineState state):
         if(theBackingMachine == null)
             return false;
 
         try {
             return theBackingMachine.isTerminal(state);
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return isTerminal(state);
     }
 
-    @Override
     public MachineState performDepthCharge(MachineState state, int[] theDepth) throws TransitionDefinitionException, MoveDefinitionException {
         if(theBackingMachine == null)
             return null;
 
         try {
             return theBackingMachine.performDepthCharge(state, theDepth);
-        } catch (TransitionDefinitionException te) {
+        } catch (TransitionDefinitionException te):
         	throw te;
-        } catch (MoveDefinitionException me) {
+        } catch (MoveDefinitionException me):
         	throw me;
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         return performDepthCharge(state, theDepth);
     }
 
-    @Override
     public void getAverageDiscountedScoresFromRepeatedDepthCharges(MachineState state, double[] avgScores, double[] avgDepth, double discountFactor, int repetitions) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException {
         if(theBackingMachine == null)
             return;
@@ -363,47 +348,46 @@ public class FailsafeStateMachine extends StateMachine
         try {
             theBackingMachine.getAverageDiscountedScoresFromRepeatedDepthCharges(state, avgScores, avgDepth, discountFactor, repetitions);
             return;
-        } catch (TransitionDefinitionException te) {
+        } catch (TransitionDefinitionException te):
         	throw te;
-        } catch (MoveDefinitionException me) {
+        } catch (MoveDefinitionException me):
         	throw me;
-        } catch (GoalDefinitionException ge) {
+        } catch (GoalDefinitionException ge):
         	throw ge;
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         getAverageDiscountedScoresFromRepeatedDepthCharges(state, avgScores, avgDepth, discountFactor, repetitions);
     }
 
-    @Override
-    public void updateRoot(MachineState theState) {
+    public void updateRoot(MachineState theState):
         if(theBackingMachine == null)
             return;
 
         try {
             theBackingMachine.updateRoot(theState);
             return;
-        } catch(Exception e) {
+        } catch(Exception e):
             failGracefully(e, null);
-        } catch(ThreadDeath d) {
+        } catch(ThreadDeath d):
             throw d;
-        } catch(OutOfMemoryError e) {
+        } catch(OutOfMemoryError e):
             throw e;
-        } catch(Error e) {
+        } catch(Error e):
             failGracefully(null, e);
         }
 
         updateRoot(theState);
     }
 
-    public StateMachine getBackingMachine() {
+    public StateMachine getBackingMachine():
         return theBackingMachine;
     }
 }

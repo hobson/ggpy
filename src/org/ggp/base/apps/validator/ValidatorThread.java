@@ -13,42 +13,32 @@ import org.ggp.base.validator.GameValidator;
 import org.ggp.base.validator.ValidatorException;
 import org.ggp.base.validator.ValidatorWarning;
 
-public final class ValidatorThread extends Thread implements Subject
+class ValidatorThread(Thread implements Subject):
 {
-	private final Game theGame;
-	private final GameValidator theValidator;
-	private final List<Observer> observers;
+    theGame = Game()
+    theValidator = GameValidator()
+    private final List<Observer> observers;
 
-	public ValidatorThread(Game theGame, GameValidator theValidator)
+    def ValidatorThread(theGame=Game(), GameValidator theValidator)
 	{
-		this.theGame = theGame;
-		this.theValidator = theValidator;
-		this.observers = new ArrayList<Observer>();
-	}
+        this.theGame = theGame;
+        this.theValidator = theValidator;
+        this.observers = new ArrayList<Observer>();
 
-	@Override
-	public void addObserver(Observer observer)
+    def void addObserver(Observer observer)
 	{
-		observers.add(observer);
-	}
+        observers.add(observer);
 
-	@Override
-	public void notifyObservers(Event event)
+    def void notifyObservers(Event event)
 	{
-		for (Observer observer : observers)
+        for (Observer observer : observers)
 		{
-			observer.observe(event);
-		}
-	}
+            observer.observe(event);
 
-	@Override
-	public void run()
+    def void run()
 	{
-		try {
-			List<ValidatorWarning> warnings = theValidator.checkValidity(theGame);
-			notifyObservers(new ValidatorSuccessEvent(theValidator.getClass().getSimpleName(), warnings));
-		} catch (ValidatorException ve) {
-			notifyObservers(new ValidatorFailureEvent(theValidator.getClass().getSimpleName(), ve));
-		}
-	}
-}
+        try {
+            List<ValidatorWarning> warnings = theValidator.checkValidity(theGame);
+            notifyObservers(new ValidatorSuccessEvent(theValidator.getClass().getSimpleName(), warnings));
+		} catch (ValidatorException ve):
+            notifyObservers(new ValidatorFailureEvent(theValidator.getClass().getSimpleName(), ve));

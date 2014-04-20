@@ -2,39 +2,32 @@ package org.ggp.base.util.symbol.grammar;
 
 import java.util.List;
 
-public final class SymbolList extends Symbol
+class SymbolList(Symbol):
 {
 
-	private final List<Symbol> contents;
+    private final List<Symbol> contents;
 
-	SymbolList(List<Symbol> contents)
+    SymbolList(List<Symbol> contents)
 	{
-		this.contents = contents;
-	}
+        this.contents = contents;
 
-	public Symbol get(int index)
+    def Symbol get(int index)
 	{
-		return contents.get(index);
-	}
+        return contents.get(index);
 
-	public int size()
+    def int size()
 	{
-		return contents.size();
-	}
+        return contents.size();
 
-	@Override
-	public String toString()
+    def String toString()
 	{
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-		sb.append("( ");
-		for (Symbol symbol : contents)
+        sb.append("( ");
+        for (Symbol symbol : contents)
 		{
-			sb.append(symbol.toString() + " ");
-		}
-		sb.append(")");
+            sb.append(symbol.toString() + " ");
+        sb.append(")");
 
-		return sb.toString();
-	}
+        return sb.toString();
 
-}

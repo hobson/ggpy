@@ -8,13 +8,12 @@ import org.ggp.base.util.gdl.grammar.GdlConstant;
 import org.ggp.base.util.gdl.grammar.GdlVariable;
 
 
-public interface AssignmentIterator extends Iterator<Map<GdlVariable, GdlConstant>> {
+public interface AssignmentIterator(Iterator<Map<GdlVariable, GdlConstant>>):
 
 	/**
 	 * Request that the next assignment change at least one
 	 * of the listed variables from its current assignment.
 	 */
-	void changeOneInNext(Collection<GdlVariable> varsToChange,
-			Map<GdlVariable, GdlConstant> assignment);
+    void changeOneInNext(Collection<GdlVariable> varsToChange,
+            Map<GdlVariable, GdlConstant> assignment);
 
-}

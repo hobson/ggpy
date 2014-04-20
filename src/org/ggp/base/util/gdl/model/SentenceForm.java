@@ -22,24 +22,24 @@ public interface SentenceForm {
 	/**
 	 * Returns the name of all sentences with this form.
 	 */
-	GdlConstant getName();
+    GdlConstant getName();
 
 	/**
 	 * Returns a sentence form exactly like this one, except
 	 * with a new name.
 	 */
-	SentenceForm withName(GdlConstant name);
+    SentenceForm withName(GdlConstant name);
 
 	/**
 	 * Returns true iff the given sentence is of this sentence form.
 	 */
-	boolean matches(GdlSentence relation);
+    boolean matches(GdlSentence relation);
 
 	/**
 	 * Returns the number of constants and/or variables that a sentence
 	 * of this form contains.
 	 */
-	int getTupleSize();
+    int getTupleSize();
 
 	/**
 	 * Given a list of GdlConstants and/or GdlVariables in the
@@ -50,5 +50,4 @@ public interface SentenceForm {
 	 * see {@link GdlUtils#getTupleFromSentence(GdlSentence)} and
 	 * {@link GdlUtils#getTupleFromGroundSentence(GdlSentence)}.
 	 */
-	GdlSentence getSentenceFromTuple(List<? extends GdlTerm> tuple);
-}
+    GdlSentence getSentenceFromTuple(List<?(GdlTerm> tuple);):

@@ -13,43 +13,34 @@ import org.xhtmlrenderer.layout.LayoutContext;
 import org.xhtmlrenderer.render.BlockBox;
 import org.xhtmlrenderer.simple.extend.FormSubmissionListener;
 
-public class ChainingReplacedElementFactory implements ReplacedElementFactory {
+class ChainingReplacedElementFactory implements ReplacedElementFactory {
     private List<ReplacedElementFactory> replacedElementFactories = new ArrayList<ReplacedElementFactory>();
 
-    public void addReplacedElementFactory(ReplacedElementFactory replacedElementFactory) {
-	replacedElementFactories.add(0, replacedElementFactory);
+    public void addReplacedElementFactory(ReplacedElementFactory replacedElementFactory):
+    replacedElementFactories.add(0, replacedElementFactory);
     }
 
 
-    @Override
-    public ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight) {
-	for(ReplacedElementFactory replacedElementFactory : replacedElementFactories) {
+    public ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight):
+    for(ReplacedElementFactory replacedElementFactory : replacedElementFactories):
 	    ReplacedElement element = replacedElementFactory.createReplacedElement(c, box, uac, cssWidth, cssHeight);
-	    if(element != null) {
-		return element;
+	    if(element != null):
+        return element;
 	    }
-	}
-	return null;
+    return null;
     }
 
-    @Override
-    public void reset() {
-	for(ReplacedElementFactory replacedElementFactory : replacedElementFactories) {
+    public void reset():
+    for(ReplacedElementFactory replacedElementFactory : replacedElementFactories):
 	    replacedElementFactory.reset();
-	}
     }
 
-    @Override
-    public void remove(Element e) {
-	for(ReplacedElementFactory replacedElementFactory : replacedElementFactories) {
+    public void remove(Element e):
+    for(ReplacedElementFactory replacedElementFactory : replacedElementFactories):
 	    replacedElementFactory.remove(e);
-	}
     }
 
-    @Override
-    public void setFormSubmissionListener(FormSubmissionListener listener) {
-	for(ReplacedElementFactory replacedElementFactory : replacedElementFactories) {
+    public void setFormSubmissionListener(FormSubmissionListener listener):
+    for(ReplacedElementFactory replacedElementFactory : replacedElementFactories):
 	    replacedElementFactory.setFormSubmissionListener(listener);
-	}
     }
-}

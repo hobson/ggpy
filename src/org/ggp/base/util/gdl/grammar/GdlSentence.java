@@ -2,24 +2,20 @@ package org.ggp.base.util.gdl.grammar;
 
 import java.util.List;
 
-@SuppressWarnings("serial")
-public abstract class GdlSentence extends GdlLiteral
+public abstract class GdlSentence(GdlLiteral):
 {
 
-	public abstract int arity();
+    def abstract int arity();
 
-	public abstract GdlTerm get(int index);
+    def abstract GdlTerm get(int index);
 
-	public abstract GdlConstant getName();
+    def abstract GdlConstant getName();
 
-	@Override
-	public abstract boolean isGround();
+    def abstract boolean isGround();
 
-	@Override
-	public abstract String toString();
+    def abstract String toString();
 
-	public abstract GdlTerm toTerm();
+    def abstract GdlTerm toTerm();
 
-	public abstract List<GdlTerm> getBody();
+    def abstract List<GdlTerm> getBody();
 
-}

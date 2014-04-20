@@ -53,7 +53,7 @@ import external.JSON.JSONObject;
  * @author Sam
  */
 
-public final class Game {
+class Game(object):
     private final String theKey;
     private final String theName;
     private final String theDescription;
@@ -61,11 +61,11 @@ public final class Game {
     private final String theStylesheet;
     private final String theRulesheet;
 
-    public static Game createEphemeralGame(String theRulesheet) {
+    public static Game createEphemeralGame(String theRulesheet):
         return new Game(null, null, null, null, null, theRulesheet);
     }
 
-    protected Game (String theKey, String theName, String theDescription, String theRepositoryURL, String theStylesheet, String theRulesheet) {
+    protected Game (String theKey, String theName, String theDescription, String theRepositoryURL, String theStylesheet, String theRulesheet):
         this.theKey = theKey;
         this.theName = theName;
         this.theDescription = theDescription;
@@ -74,27 +74,27 @@ public final class Game {
         this.theRulesheet = theRulesheet;
     }
 
-    public String getKey() {
+    public String getKey():
         return theKey;
     }
 
-    public String getName() {
+    public String getName():
         return theName;
     }
 
-    public String getRepositoryURL() {
+    public String getRepositoryURL():
         return theRepositoryURL;
     }
 
-    public String getDescription() {
+    public String getDescription():
         return theDescription;
     }
 
-    public String getStylesheet() {
+    public String getStylesheet():
         return theStylesheet;
     }
 
-    public String getRulesheet() {
+    public String getRulesheet():
     	return theRulesheet;
     }
 
@@ -109,23 +109,22 @@ public final class Game {
      * @param raw rulesheet
      * @return processed rulesheet
      */
-    public static String preprocessRulesheet(String rawRulesheet) {
+    public static String preprocessRulesheet(String rawRulesheet):
 		// First, strip all of the comments from the rulesheet.
-		StringBuilder rulesheetBuilder = new StringBuilder();
-		String[] rulesheetLines = rawRulesheet.split("[\n\r]");
-		for (int i = 0; i < rulesheetLines.length; i++) {
-			String line = rulesheetLines[i];
-			int comment = line.indexOf(';');
-			int cutoff = (comment == -1) ? line.length() : comment;
-			rulesheetBuilder.append(line.substring(0, cutoff));
-			rulesheetBuilder.append(" ");
-		}
-		String processedRulesheet = rulesheetBuilder.toString();
+        StringBuilder rulesheetBuilder = new StringBuilder();
+        String[] rulesheetLines = rawRulesheet.split("[\n\r]");
+        for (int i = 0; i < rulesheetLines.length; i++):
+            String line = rulesheetLines[i];
+            int comment = line.indexOf(';');
+            int cutoff = (comment == -1) ? line.length() : comment;
+            rulesheetBuilder.append(line.substring(0, cutoff));
+            rulesheetBuilder.append(" ");
+        String processedRulesheet = rulesheetBuilder.toString();
 
 		// Add opening and closing parens for parsing as symbol list.
-		processedRulesheet = "( " + processedRulesheet + " )";
+        processedRulesheet = "( " + processedRulesheet + " )";
 
-		return processedRulesheet;
+        return processedRulesheet;
     }
 
     /**
@@ -140,7 +139,7 @@ public final class Game {
      *
      * @return
      */
-    public List<Gdl> getRules() {
+    public List<Gdl> getRules():
     	try {
 	        List<Gdl> rules = new ArrayList<Gdl>();
 	        SymbolList list = (SymbolList) SymbolFactory.create(theRulesheet);
@@ -149,16 +148,16 @@ public final class Game {
 	            rules.add(GdlFactory.create(list.get(i)));
 	        }
 	        return rules;
-    	} catch (GdlFormatException e) {
+    	} catch (GdlFormatException e):
     		e.printStackTrace();
     		return null;
-    	} catch (SymbolFormatException e) {
+    	} catch (SymbolFormatException e):
     		e.printStackTrace();
     		return null;
     	}
     }
 
-    public String serializeToJSON() {
+    public String serializeToJSON():
         try {
             JSONObject theGameObject = new JSONObject();
             theGameObject.put("theKey", getKey());
@@ -169,13 +168,13 @@ public final class Game {
             theGameObject.put("theRulesheet", getRulesheet());
 
             return theGameObject.toString();
-        } catch(Exception e) {
+        } catch(Exception e):
             e.printStackTrace();
             return null;
         }
     }
 
-    public static Game loadFromJSON(String theSerializedGame) {
+    public static Game loadFromJSON(String theSerializedGame):
         try {
             JSONObject theGameObject = new JSONObject(theSerializedGame);
 
@@ -210,7 +209,7 @@ public final class Game {
             } catch (Exception e) {}
 
             return new Game(theKey, theName, theDescription, theRepositoryURL, theStylesheet, theRulesheet);
-        } catch(Exception e) {
+        } catch(Exception e):
             e.printStackTrace();
             return null;
         }

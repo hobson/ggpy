@@ -18,9 +18,8 @@ import javax.swing.border.TitledBorder;
  * application that also needs to alert the user about warnings that occur in
  * lower-level components, like the network communication stack.
  */
-@SuppressWarnings("serial")
-public class ConsolePanel extends JPanel {
-    public ConsolePanel() {
+class ConsolePanel(JPane1):
+    def __init__(self, ):
         super(new BorderLayout());
 
         // Create an output console.
@@ -36,17 +35,14 @@ public class ConsolePanel extends JPanel {
 
         // Send the standard out and standard error streams
         // to this panel, instead.
-        OutputStream out = new OutputStream() {
-            @Override
-			public void write(int b) throws IOException {
+        OutputStream out = new OutputStream():
+        		    def void write(int b) throws IOException {
                 updateTextArea(String.valueOf((char) b));
             }
-            @Override
-			public void write(byte[] b, int off, int len) throws IOException {
+        		    def void write(byte[] b, int off, int len) throws IOException {
                 updateTextArea(new String(b, off, len));
             }
-            @Override
-			public void write(byte[] b) throws IOException {
+        		    def void write(byte[] b) throws IOException {
                 write(b, 0, b.length);
             }
         };
@@ -55,10 +51,9 @@ public class ConsolePanel extends JPanel {
     }
 
     private final JTextArea outputConsole;
-    private void updateTextArea(final String text) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-			public void run() {
+    private void updateTextArea(final String text):
+        SwingUtilities.invokeLater(new Runnable():
+        		    def run():  # void
                 outputConsole.append(text);
             }
         });

@@ -21,55 +21,39 @@ import org.ggp.base.util.statemachine.implementation.prover.ProverStateMachine;
  * RandomGamer is a very simple state-machine-based Gamer that will always
  * pick randomly from the legal moves it finds at any state in the game.
  */
-public final class RandomGamer extends StateMachineGamer
+class RandomGamer(StateMachineGamer):
 {
-	@Override
-	public String getName() {
-		return "Random";
-	}
+    def getName():  # String
+        return "Random";
 
-	@Override
-	public Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def Move stateMachineSelectMove(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
-		long start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
 
-		List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
-		Move selection = (moves.get(new Random().nextInt(moves.size())));
+        List<Move> moves = getStateMachine().getLegalMoves(getCurrentState(), getRole());
+        Move selection = (moves.get(new Random().nextInt(moves.size())));
 
-		long stop = System.currentTimeMillis();
+        long stop = System.currentTimeMillis();
 
-		notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
-		return selection;
-	}
+        notifyObservers(new GamerSelectedMoveEvent(moves, selection, stop - start));
+        return selection;
 
-	@Override
-	public StateMachine getInitialStateMachine() {
-		return new CachedStateMachine(new ProverStateMachine());
-	}
+    def getInitialStateMachine():  # StateMachine
+        return new CachedStateMachine(new ProverStateMachine());
 
-	@Override
-	public void preview(Game g, long timeout) throws GamePreviewException {
+    def void preview(Game g, long timeout) throws GamePreviewException {
 		// Random gamer does no game previewing.
-	}
 
-	@Override
-	public void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
+    def void stateMachineMetaGame(long timeout) throws TransitionDefinitionException, MoveDefinitionException, GoalDefinitionException
 	{
 		// Random gamer does no metagaming at the beginning of the match.
-	}
 
-	@Override
-	public void stateMachineStop() {
+    def stateMachineStop():  # void
 		// Random gamer does no special cleanup when the match ends normally.
-	}
 
-	@Override
-	public void stateMachineAbort() {
+    def stateMachineAbort():  # void
 		// Random gamer does no special cleanup when the match ends abruptly.
-	}
 
-	@Override
-	public DetailPanel getDetailPanel() {
-		return new SimpleDetailPanel();
-	}
+    def getDetailPanel():  # DetailPanel
+        return new SimpleDetailPanel();
 }
