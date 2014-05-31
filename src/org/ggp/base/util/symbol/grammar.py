@@ -176,7 +176,7 @@ class SymbolFactory(object):
         """ generated source for method convertList """
         contents = ArrayList()
         tokens.removeFirst()
-        while not tokens.getFirst() == ""):
+        while not tokens.getFirst() == "":  # java2python added an extra close-paren
             contents.add(cls.convert(tokens))
         tokens.removeFirst()
         return SymbolPool.getList(contents)
