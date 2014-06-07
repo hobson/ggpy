@@ -1,57 +1,36 @@
-=====================================
-= GENERAL GAME PLAYING BASE PACKAGE =
-=====================================
+===============================
+= General Game Playing Python =
+===============================
 
-Application Suite for the General Game Playing Project;
- - A GUI-based GameKiosk        (for playing human-vs-computer matches)
- - A GUI-based GamePlayer       (for running computer players)
- - A GUI-based GameServer       (for hosting matches)
- - A GUI-based GDLValidator     (for validating game rulesheets)
+None of this works, so don't bother...
 
-Support code for the above.
+j2py is the only branch that has significant portions of Sam's GGP-Base java packages translated into *nonworking* python
 
-                            == QUICK START GUIDE ===
+ - reader -- A GDL parser/interpretter/lexer
+ - player -- A GGP game playing service (socket server)
+ - viewer -- An html5 viewer/logger/UX for players
+ - util   -- Utilities 
 
-    Getting started is as simple as writing a new player that inherits from the
-StateMachineGamer class. StateMachineGamer is based on the state machine view
-of general game playing, in which playing a game is represented as proceeding
-through a state machine. The underlying state machine, which you can access via
-getStateMachine() when inheriting from StateMachineGamer, provides methods that
-you can use to investigate the game being player:
+Quick Start
+-----------
 
-    * Each game has a starting state.
-        getInitialState() is the starting state.
+Launch a player by running ggpy.player as a script from a unix shell or ggpy.player.start from a python shell
 
-    * Each state has legal moves for every player.
-        getLegalMoves(state, role) are the legal moves for <role> in <state>.
+Details
+-------
 
-    * Some states are terminal, and in those states "goal" values are defined
-      for every player, indicating whether they won or lost.
-        isTerminal(state) indicates whether a state is terminal.
-        getGoal(state, role) is the goal value for <role> in <state>.
+This is the plan...
 
-    * Given a legal move for each player, you can transition from one state to
-      the next state, after the players make their respective moves.
-        getNextState(state, moves) is the result of making <moves> at <state>.
+    get_initial_state() -- retrieve the starting game state
 
-    A simple Prover-based state machine implementation is included in GGP Base,
-so you don't need to worry about the details of converting a game description
-into a state machine. To write a gamer based on StateMachineGamer, derive your
-class from players.gamer.statemachine.StateMachineGamer. Applications like the
-PlayerPanel should automatically recognize your new class and it should appear
-in their lists of available players right away.
+    get_legal_moves(state, role) -- retrieve legal moves for <role> (player) in <state>
 
-    For examples of simple players, see src/player/gamer/statemachine/reflex,
-where two extremely simple "reflex-based" players are included: LegalGamer and
-RandomGamer. LegalGamer always chooses the first legal move available, and the
-RandomGamer always chooses a random legal move.
+    is_terminal(state) -- indicates whether a state is terminal.
 
-                              === MISC NOTES ===
+    get_goal(state, role) -- is the goal value for <role> in <state>.
 
-* This is the 4/1/2010 release of GGP code for CS227B, compiled and maintained
-  by Sam Schreiber with help and support from Ethan Dreyfuss, Eric Schkufza,
-  Keith Schwarz, Steven Bills, and Mike Mintz.
+    get_next_state(state, moves) -- where moves are legal <moves> for in <state>
 
-* This project is licensed under the New BSD License. Licensing information for
-  the project can be found in the licenses/LICENSE file. Licensing information
-  for the included external libraries can be found in the licenses/ directory.
+    StateMachine(gdl) -- an instance of the state-machine generated using a prover 
+
+See Sam Schreiber's original GGP-Base code and documentation for the canonical implementation and to check my logic.
