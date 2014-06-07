@@ -1,4 +1,4 @@
-# setup.py for PUG
+# setup.py for GGPy (General Game Python)
 from distutils.core import setup
 #from setuptest import test
 
@@ -20,7 +20,7 @@ dependency_links=[line.url for line in requirements if line.url]
 
 setup(
     name = package_name,
-    packages = [package_name],  # without this: Downloading/unpacking pug ... ImportError: No module named pug ... from pug import __version__, __name__, __doc__, _github_url_
+    packages = [package_name],  # without this: Downloading/unpacking ggpy ... ImportError: No module named ggpy ... from ggpy import __version__, __name__, __doc__, _github_url_
     include_package_data = True,  # install non-.py files listed in MANIFEST.in (.js, .html, .txt, .md, etc)
     install_requires = install_requires,
     dependency_links = dependency_links,
