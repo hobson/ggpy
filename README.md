@@ -13,9 +13,9 @@ Other bits (like Sam Schreiber's ggp-base folder) have separate [FOSS licenses](
 Branches
 --------
 
-  - [j2py](https://github.com/hobson/ggpy/tree/j2py)  some of Sam's GGP-Base java packages ported to *nonworking* python.
-  - [master](https://github.com/hobson/ggpy/tree/master)  python-from-scratch player server (under construction)
-  - [sam](https://github.com/hobson/ggpy/tree/sam) -- most of Sam's java packages still in tact and working
+  - [j2py](https://github.com/hobson/ggpy/tree/j2py): Some of Sam's GGP-Base java packages ported to *nonworking* python.
+  - [master](https://github.com/hobson/ggpy/tree/master): From-scratch python  player server (under construction)
+  - [sam](https://github.com/hobson/ggpy/tree/sam): Most of Sam's java packages still in tact and working
 
 Python Code Layout (plan)
 ------------------
