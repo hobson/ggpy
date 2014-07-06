@@ -1,6 +1,5 @@
-===============================
-= General Game Playing Python =
-===============================
+General Game Playing pYthon
+===========================
 
 Under construction. Not ready for habitation. Apply [here](mailto:ggpy@totalgood.com) for construction work...
 
@@ -8,14 +7,15 @@ Open Source!
 ------------
 
 Anything by Hobson (the ggpy folder) is [MIT License](https://github.com/hobson/ggpy/tree/master/LICENSE.txt)
+
 Other bits (like Sam Schreiber's ggp-base folder) have separate [FOSS licenses](https://github.com/hobson/ggpy/tree/master/ggp-base/licences)
 
 Branches
 --------
 
-    - [j2py](https://github.com/hobson/ggpy/tree/j2py)  some of Sam's GGP-Base java packages ported to *nonworking* python.
-    - [master](https://github.com/hobson/ggpy/tree/master)  python-from-scratch player server (under construction)
-    - [sam](https://github.com/hobson/ggpy/tree/sam) -- most of Sam's java packages still in tact and working
+  - [j2py](https://github.com/hobson/ggpy/tree/j2py)  some of Sam's GGP-Base java packages ported to *nonworking* python.
+  - [master](https://github.com/hobson/ggpy/tree/master)  python-from-scratch player server (under construction)
+  - [sam](https://github.com/hobson/ggpy/tree/sam) -- most of Sam's java packages still in tact and working
 
 Python Code Layout (plan)
 ------------------
