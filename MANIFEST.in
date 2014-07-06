@@ -1,9 +1,9 @@
 # list of non-*.py files that should be included with every distribution (pip install)
 include *.txt
-include README
+# include README
 # recursive-include . *.txt
-include *.md
-# recursive-include . *.md
+# include *.md
+recursive-include . *.md
 # include *.rst
 # recursive-include . *.rst
 recursive-include ggpy/docs *
