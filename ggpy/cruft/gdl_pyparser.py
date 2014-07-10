@@ -1,8 +1,8 @@
 import pyparsing as pp
 
-
 # capital letter followed by any number of alphanum or underscore chars
-function_constant = pp.Word(pp.srange("[A-Z]", pp.srange("[a-zA-Z0-9_]")))
+function_constant = pp.Word(pp.srange("[A-Za-z]"), pp.srange("[a-zA-Z0-9_]"))
+identifier = pp.Word(pp.srange("[A-Za-z]"), pp.srange("[a-zA-Z0-9_]"))
 comment = pp.Word(';') + pp.restOfLine('comment')
 
 # GDL keywords ("Relation Constants")
@@ -27,20 +27,20 @@ relation_constant = role | inpt | base | init | next | does | legal | goal | ter
 
 # Numerical contant
 # FIXME: too permissive -- accepts 10 numbers, "00", "01", ... "09"
-number = pp.Keyword('100') | pp.Word(pp.nums, min=1, max=2)
+number = (pp.Keyword('100') | pp.Word(pp.nums, min=1, max=2))
 
 # the only operator/relationship constant
 implies = pp.Keyword('<=')
 
-# Nested parentheses
-enclosed = pp.Forward()
-nested_parens = pp.nestedExpr('(', ')', content=enclosed).leaveWhitespace()
-enclosed << (pp.Word(word | true | nested_parens)
+# any whitespace delimitted tokens within parentheses will be parsed
+grammar = pp.Forward()
+nested_expressions = pp.nestedExpr(content=grammar)
+grammar << ((relation_constant | function_constant | identifier) | nested_expressions)
 
 # role_sentence = role + nested_parens
 
 #term = pp.Combine(word) | parens
-enclosed << pp.Optional(implies) + pp.OneOrMore(nested_parens)
+#enclosed << pp.Optional(implies) + pp.OneOrMore(nested_parens)
 
 
 
@@ -55,8 +55,8 @@ enclosed << pp.Optional(implies) + pp.OneOrMore(nested_parens)
 
 
 
-sentence = (role | init | next | does | terms | word) + nested_parens
-gdl_game = pp.OneOrMore(sentence)
+# sentence = (role | init | next | does | terms | word) + nested_parens
+gdl_game = pp.OneOrMore(nested_expressions)
 
 
 # nestedParens = pp.nestedExpr('(', ')') 
@@ -82,3 +82,11 @@ gdl_game = pp.OneOrMore(sentence)
 
 # # self explanatory
 # prolog_sentences = pp.OneOrMore(sentence)
+
+
+token = (relation_constant | number | pp.Word(pp.alphas + pp.nums))
+
+# Define the simple recursive grammar
+grammar = pp.Forward()
+nested_parentheses = pp.nestedExpr('(', ')', content=grammar) 
+grammar << (token | nested_parentheses)

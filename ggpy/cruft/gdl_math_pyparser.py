@@ -13,9 +13,9 @@ class Stack(object):
     _stack = None
 
     def __init__(self):
-        _stack = []
+        self._stack = []
 
-    def pushFirst( strg, loc, toks ):
+    def pushFirst( s, loc, toks ):
         exprStack.append( toks[0] )
 
     def pushUMinus( strg, loc, toks ):
@@ -24,7 +24,7 @@ class Stack(object):
             #~ exprStack.append( '-1' )
             #~ exprStack.append( '*' )
 
-def expression_grammar()
+def expression_grammar():
     # GDL keywords ("Relation Constants")
     role = pp.Keyword('role')  # role(a) means that a is a player name/side in the game.
     inpt = pp.Keyword('input') # input(t) means that t is a base proposition in the game.
