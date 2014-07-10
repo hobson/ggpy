@@ -18,6 +18,9 @@ terminal = pp.Keyword('terminal')  # terminal means that the current state is a 
 distinct = pp.Keyword('distinct')  # distinct(x,y) means that the values of x and y are different.
 true = pp.Keyword('true')  # true(p) means that the datum p is true in the current state.
 
+variable = pp.Word('?', pp.alphas)
+
+
 # GDL-II Relation Constants
 sees = pp.Keyword('sees')  # The predicate sees(?r,?p) means that role ?r perceives ?p in the next game state.
 random = pp.Keyword('random')  # A predefined player that choses legal moves randomly
@@ -32,61 +35,9 @@ number = (pp.Keyword('100') | pp.Word(pp.nums, min=1, max=2))
 # the only operator/relationship constant
 implies = pp.Keyword('<=')
 
-# any whitespace delimitted tokens within parentheses will be parsed
-grammar = pp.Forward()
-nested_expressions = pp.nestedExpr(content=grammar)
-grammar << ((relation_constant | function_constant | identifier) | nested_expressions)
-
-# role_sentence = role + nested_parens
-
-#term = pp.Combine(word) | parens
-#enclosed << pp.Optional(implies) + pp.OneOrMore(nested_parens)
-
-
-
-# # alternative grouped expression evaluation that includes exponentiation from fourFn.py example on pyparser page
-# expression = pp.Forward()
-# atom = (pp.Optional("-") + ( number | (relation | relation_constant) + left_paren + expression + right_paren ).setParseAction( pushFirst ) | ( left_paren + expression.suppress() + right_paren )).setParseAction(pushUMinus) 
-# exponent = pp.Forward()
-# exponent << atom + pp.ZeroOrMore( ( exponentiation + exponent ).setParseAction( pushFirst ) )
-# term = exponent + pp.ZeroOrMore( ( multiplication + exponent ).setParseAction( pushFirst ) )
-# expression << term + pp.ZeroOrMore( ( addition + term ).setParseAction( pushFirst ) )
-
-
-
-
-# sentence = (role | init | next | does | terms | word) + nested_parens
-gdl_game = pp.OneOrMore(nested_expressions)
-
-
-# nestedParens = pp.nestedExpr('(', ')') 
-
-# relationship = pp.Word(pp.alphas).setResultsName('relationship')
-
-# number = pp.Word(pp.nums + '.')
-# variable = pp.Word(pp.alphas)
-# # an argument to a relationship can be either a number or a variable
-# argument = number | variable
-
-# # arguments are a delimited list of 'argument' surrounded by parenthesis
-# arguments= (pp.Suppress('(') + pp.delimitedList(argument) +
-#             pp.Suppress(')')).setResultsName('arguments')
-
-# # a fact is composed of a relationship and it's arguments 
-# # (I'm aware it's actually more complicated than this
-# # it's just a simplifying assumption)
-# fact = (relationship + arguments).setResultsName('facts', listAllMatches=True)
-
-# # a sentence is a fact plus a period
-# sentence = fact + pp.Suppress('.')
-
-# # self explanatory
-# prolog_sentences = pp.OneOrMore(sentence)
-
-
-token = (relation_constant | number | pp.Word(pp.alphas + pp.nums))
+token = (implies | variable | relation_constant | number | pp.Word(pp.alphas + pp.nums))
 
 # Define the simple recursive grammar
 grammar = pp.Forward()
 nested_parentheses = pp.nestedExpr('(', ')', content=grammar) 
-grammar << (token | nested_parentheses)
+grammar << (implies | variable | relation_constant | number | pp.Word(pp.alphas + pp.nums) | nested_parentheses)
