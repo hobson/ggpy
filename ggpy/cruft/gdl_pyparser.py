@@ -41,3 +41,6 @@ token = (implies | variable | relation_constant | number | pp.Word(pp.alphas + p
 grammar = pp.Forward()
 nested_parentheses = pp.nestedExpr('(', ')', content=grammar) 
 grammar << (implies | variable | relation_constant | number | pp.Word(pp.alphas + pp.nums) | nested_parentheses)
+sentence = grammar + pp.lineEnd
+
+game_description = pp.OneOrMore(sentence)
