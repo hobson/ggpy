@@ -3,7 +3,7 @@ import pyparsing as pp
 # capital letter followed by any number of alphanum or underscore chars
 function_constant = pp.Word(pp.srange("[A-Za-z]"), pp.srange("[a-zA-Z0-9_]"))
 identifier = pp.Word(pp.srange("[A-Za-z]"), pp.srange("[a-zA-Z0-9_]"))
-comment = pp.Word(';') + pp.restOfLine('comment')
+comment = pp.OneOrMore(pp.Word(';').suppress()) + pp.restOfLine('comment')
 
 # GDL keywords ("Relation Constants")
 role = pp.Keyword('role')  # role(a) means that a is a player name/side in the game.
@@ -20,7 +20,6 @@ true = pp.Keyword('true')  # true(p) means that the datum p is true in the curre
 
 variable = pp.Word('?', pp.alphas)
 
-
 # GDL-II Relation Constants
 sees = pp.Keyword('sees')  # The predicate sees(?r,?p) means that role ?r perceives ?p in the next game state.
 random = pp.Keyword('random')  # A predefined player that choses legal moves randomly
@@ -32,15 +31,15 @@ relation_constant = role | inpt | base | init | next | does | legal | goal | ter
 # FIXME: too permissive -- accepts 10 numbers, "00", "01", ... "09"
 number = (pp.Keyword('100') | pp.Word(pp.nums, min=1, max=2))
 
-# the only operator/relationship constant
+# the only binary operator (relationship constant?)
 implies = pp.Keyword('<=')
 
 token = (implies | variable | relation_constant | number | pp.Word(pp.alphas + pp.nums))
 
-# Define the simple recursive grammar
+# Define recursive grammar for nested paretheticals
 grammar = pp.Forward()
 nested_parentheses = pp.nestedExpr('(', ')', content=grammar) 
 grammar << (implies | variable | relation_constant | number | pp.Word(pp.alphas + pp.nums) | nested_parentheses)
-sentence = grammar + pp.lineEnd
+sentence = grammar + (comment | pp.lineEnd.suppress())
 
-game_description = pp.OneOrMore(sentence)
+game_description = pp.OneOrMore(comment | sentence)
