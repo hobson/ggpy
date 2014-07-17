@@ -135,6 +135,12 @@ def nest_args(list_or_obj):
     return list_or_obj
 
 
+def normalize_ands(list_or_obj):
+    """
+    >>> normalize_ands(['<=', 'p', 'does', ['white', 'a'], '&', 'true', ['s']])
+    ['<=', ['p'] ['does', ['white', 'a']], ['true', ['s']]'
+    """
+
 # keyword_meta =  { 
 #                 'role': {'nargs': 1},
 #                 'base': {'nargs': 1},
