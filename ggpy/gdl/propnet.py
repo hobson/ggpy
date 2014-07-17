@@ -85,10 +85,54 @@ class Goal(Node):
         super(Terminal, self).__init__(label)
 
 
-def listify(list_or_obj):
-    if (hasattr(list_or_obj, 'append') and hasattr('__iter__')) or isinstance(list_or_obj, (list, ParseResults)):
+def is_parse_result(list_or_obj):
+    return (hasattr(list_or_obj, 'append') and hasattr(list_or_obj, '__iter__')) or isinstance(list_or_obj, (list, ParseResults))
+
+
+def denest(list_or_obj):
+    """Simplify excess nesting parenthesese if necessary, e.g. "((base b))"->"(base b)"
+
+    Only denests the first branch in the nested tree
+
+    >>> denest([[['base', 'b']]])
+    ['base', 'b']
+    >>> denest(['base', 'b'])
+    ['base', 'b']
+    >>> denest([['input', [['white', 'place', 1]]]])
+    ['input', [['white', 'place', 1]]]
+    """
+    while is_parse_result(list_or_obj) and len(list_or_obj) == 1 and is_parse_result(list_or_obj[0]):
+        return denest(list_or_obj[0])
+    return list_or_obj
+
+
+def nest(list_or_obj):
+    """Add outermost parenthesese if none present, e.g. "base b"->"(base b)"
+
+    >>> nest('base')
+    ['base']
+    """
+    if (hasattr(list_or_obj, 'append') and hasattr(list_or_obj, '__iter__')) or isinstance(list_or_obj, (list, ParseResults)):
         return list_or_obj
     return [list_or_obj]
+
+
+def nest_args(list_or_obj):
+    """Add parenthesese aroung function arguments, e.g. "(base b)"->"(base(b))"
+
+    >>> nest_args(['base', 'b'])
+    ['base', ['b']]
+    >>> nest_args(['input', 'white', 1])
+    ['input', ['white', 1]]
+    >>> nest_args(['input', [['white', 1]]])
+    ['input', ['white', 1]]
+    """
+    # 
+    if len(list_or_obj) > 1:
+        list_or_obj[1] = denest(list_or_obj[1:])
+        if len(list_or_obj[1:]) > 1:
+            del(list_or_obj[2:])
+    return list_or_obj
 
 
 # keyword_meta =  { 
@@ -131,21 +175,18 @@ class LogicNetwork(nx.MultiDiGraph):
         elif len(args) == 1:
             toks = args
         print 'parse_action(s, loc, toks=%s)' % toks
-        toks = listify(toks)
+        toks = denest(toks)
         print 'parse_action(s, loc, toks=%s)' % toks
         print len(toks)
-        toks[0] = listify(toks[0])
-        print len(toks[0])
-        if len(toks[0]) > 1:
-            toks[0][1] = toks[0][1:]
-        name, type = None, toks[0][0]
+        toks = nest_args(toks)
+        name, type = None, toks[0]
         if type in ['role', 'base']:
             # print toks, toks[0][0], ' '.join(toks[0][1])
-            name = '-'.join(toks[0][1])
+            name = '-'.join(toks[1])
             # print 'adding node named %s ...' % name
         elif type in ['legal', 'input']:
             # print toks, toks[0][0], ' '.join(toks[0][1])
-            name = 'does(' + ','.join(toks[1][1]) + ')'
+            name = 'does(' + ','.join(toks[1]) + ')'
             # print 'adding node named %s ...' % name
         elif type == '<=':
             pass
@@ -173,11 +214,11 @@ def noop(toks):
     print toks
     return toks
 
-def propnet_from_gdl(gdl='chapter10.gdl', verbosity=None):
+def propnet_from_gdl(gdl='chapter10', verbosity=None):
     propnet = LogicNetwork()
     parser.sentence.setParseAction(propnet.parse_action)
     parser.game_description.setParseAction(noop)
-    for path in [gdl, os.path.join(os.path.dirname(__file__), '..', 'example_game_gdl', gdl)]:
+    for path in [gdl, os.path.join(os.path.dirname(__file__), '..', 'example_game_gdl', gdl + '.gdl')]:
         try:
             with open(path) as fpin:
                 gdl = fpin.read()
@@ -188,11 +229,11 @@ def propnet_from_gdl(gdl='chapter10.gdl', verbosity=None):
     print propnet.nodes()
     return propnet
 
-def propnet_from_example():
+def propnet_from_example(game_name='chapter10'):
     from gdl import parser
     net = LogicNetwork()
     parser.sentence.setParseAction(net.parse_action)
-    parser.game_description.parseFile('example_game_gdl/chapter10.gdl')
+    parser.game_description.parseFile(os.path.join('example_game_gdl', game_name + '.gdl'))
     return net
 
 def test():

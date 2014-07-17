@@ -8,9 +8,9 @@ comment = pp.OneOrMore(pp.Word(';').suppress()) + pp.restOfLine('comment')
 # GDL keywords ("Relation Constants")
 role = pp.Keyword('role')  # role(p) means that p is a player name/side in the game.
 inpt = pp.Keyword('input') # input(t) means that t is a base proposition in the game.
-base = pp.Keyword('base')  # base(a) means that a is an action in the game.
-init = pp.Keyword('init')  # init(p) means that the datum p is true in the initial state.
-next = pp.Keyword('next')  # next(p) means that the datum p is true in the next state.
+base = pp.Keyword('base')  # base(a) means that a is an action in the game, the outcome of a turn.
+init = pp.Keyword('init')  # init(p) means that the datum p is true in the initial state of the game.
+next = pp.Keyword('next')  # next(p) means that the datum p is true in the next state of the game.
 does = pp.Keyword('does')  # does(r, a) means that player r performs action a in the current state.
 legal = pp.Keyword('legal')  # legal(r, a) means it is legal for r to play a in the current state.
 goal = pp.Keyword('goal')  # goal(r, n) means that player the current state has utility n for player r. n must be an integer from 0 through 100.
