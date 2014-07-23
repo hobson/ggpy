@@ -6,14 +6,15 @@ Hobson Lane <hobson@totalgood.com>
 Open-source under MIT-license: [LICENSE.txt](github.com/hobson/ggpy/LICENSE.txt)
 """
 
-import networkx as nx
-# import pyparsing as pp
-import operator
-
-import parser 
 import os
+import networkx as nx
+import operator
+# import pyparsing as pp
 
 from pyparsing import ParseResults
+
+from gdl import parser
+
 
 class Node(object):
     def __init__(self, label=''):
@@ -89,69 +90,137 @@ def is_parse_result(list_or_obj):
     return (hasattr(list_or_obj, 'append') and hasattr(list_or_obj, '__iter__')) or isinstance(list_or_obj, (list, ParseResults))
 
 
-def denest(list_or_obj):
+def denest(list_or_obj, verbosity=0):
     """Simplify excess nesting parenthesese if necessary, e.g. "((base b))"->"(base b)"
 
     Only denests the first branch in the nested tree
 
     >>> denest([[['base', 'b']]])
     ['base', 'b']
+    >>> denest([['base', ['b']]])
+    ['base', ['b']]
+    >>> denest([[['base'], ['b']]])
+    ['base', ['b']]
     >>> denest(['base', 'b'])
     ['base', 'b']
     >>> denest([['input', [['white', 'place', 1]]]])
-    ['input', [['white', 'place', 1]]]
+    ['input', ['white', 'place', 1]]
     """
+    if verbosity:
+        print "denest(%r)" % list_or_obj
+    # unwrap any nested 1-length lists 
     while is_parse_result(list_or_obj) and len(list_or_obj) == 1 and is_parse_result(list_or_obj[0]):
         return denest(list_or_obj[0])
+    if verbosity:
+        print "%r is not nested 1-length" % list_or_obj
+    # unwrap any keywords
+    if is_parse_result(list_or_obj):
+        if len(list_or_obj) == 1 and not is_parse_result(list_or_obj[0]) and list_or_obj[0] in parser.RELATION_CONSTANTS:
+            if verbosity:
+                print "denesting 1-length list of keywords: %r" % list_or_obj
+            return list_or_obj[0]
+        else:
+            return [denest(loo) for loo in list_or_obj]
+    if verbosity:
+        print "denested or non-keyword: %r" % list_or_obj
     return list_or_obj
 
 
-def nest(list_or_obj):
+def nest(list_or_obj, verbosity=0):
     """Add outermost parenthesese if none present, e.g. "base b"->"(base b)"
 
     >>> nest('base')
-    ['base']
+    'base'
+    >>> nest([['base'], ['b']])
+    ['base', ['b']]
+    >>> nest('identifier')
+    ['identifier']
+    >>> nest(['<=', 'p', 'does', ['white', 'a'], '&', 'true', ['s']])
+    ['<=', ['p'], 'does', [['white'], ['a']], '&', 'true', ['s']]
     """
-    if (hasattr(list_or_obj, 'append') and hasattr(list_or_obj, '__iter__')) or isinstance(list_or_obj, (list, ParseResults)):
+    if verbosity:
+        print "nest(%r)" % list_or_obj
+    if is_parse_result(list_or_obj):
+        if verbosity:
+            print 'nest(loo) for loo in %r' % list_or_obj
+        return denest([nest(loo) for loo in list_or_obj])
+    # leave keyword identifiers unwrapped (no brackets)
+    elif list_or_obj in parser.RELATION_CONSTANTS:
+        if verbosity:
+            print 'keyword left alone: %r' % list_or_obj
         return list_or_obj
-    return [list_or_obj]
+    # wrap non-keyword identifiers and numbers with brackets
+    if verbosity:
+        print 'wrapping nonkeywords with brackets: denest([%r])' % list_or_obj
+    return denest([list_or_obj])
 
 
-def nest_args(list_or_obj):
+def nest_args(list_or_obj, verbosity=0):
     """Add parenthesese aroung function arguments, e.g. "(base b)"->"(base(b))"
 
     >>> nest_args(['base', 'b'])
     ['base', ['b']]
+    >>> nest_args(['s'])
+    ['s']
+    >>> nest_args('s')
+    ['s']
     >>> nest_args(['input', 'white', 1])
-    ['input', ['white', 1]]
+    ['input', [['white'], [1]]]
     >>> nest_args(['input', [['white', 1]]])
-    ['input', ['white', 1]]
+    ['input', [['white'], [1]]]
+    >>> nest_args(['<=', 'p', 'does', ['white', 'a'], '&', 'true', ['s']])  
+    ['<=', [['p'], 'does', [['white'], ['a']], '&', 'true', ['s']]]
     """
-    # 
-    if len(list_or_obj) > 1:
-        list_or_obj[1] = denest(list_or_obj[1:])
+    if verbosity:
+        print "nest_args(%r)" % list_or_obj
+    list_or_obj = nest(list_or_obj)
+    if verbosity:
+        print 'after nesting identifiers: %r' % list_or_obj
+    # this is same as `nest(list_or_obj)` but leaves function names bare
+    if isinstance(list_or_obj, basestring):
+        return list_or_obj
+    # for a list of strings, arenthesize the strings (arguments) after the first string (funciton name)
+    elif len(list_or_obj) > 1 and isinstance(list_or_obj[0], basestring): #list_or_obj[0] in parser.RELATION_CONSTANTS:
+        # make sure the args are wrapped in a single pair of brackets (the function names are NOT bracketed)  
+        nargs = parser.RELATION_CONSTANTS.get(list_or_obj[0], 1)
+        # ensure that there's only one pair of brackets around the args and it's the next item in the list
+        list_or_obj[1] = denest(list_or_obj[1:nargs+1])
+        # clean up the expressions that were processed already
         if len(list_or_obj[1:]) > 1:
-            del(list_or_obj[2:])
-    return list_or_obj
+            if verbosity:
+                print 'deleting these expressions: %r' % list_or_obj[2:nargs+1]
+            del(list_or_obj[2:nargs+1])
+        if verbosity:
+            print 'nesting the elements of this list: %r' % list_or_obj[1:]
+        return [list_or_obj[0]] + [denest([nest_args(loo) for loo in list_or_obj[1:]])]
+    if verbosity:
+        print 'bracketing the expression %r' % list_or_obj
+    return denest([list_or_obj])
+
 
 
 def normalize_ands(list_or_obj):
-    """
-    >>> normalize_ands(['<=', 'p', 'does', ['white', 'a'], '&', 'true', ['s']])
-    ['<=', ['p'] ['does', ['white', 'a']], ['true', ['s']]'
-    """
+    """Remove implied and operators
 
-# keyword_meta =  { 
-#                 'role': {'nargs': 1},
-#                 'base': {'nargs': 1},
-#                 'input': {'nargs': 2},
-#                 'legal': {'nargs': 2},
-#                 }
+    >>> normalize_ands(['<=', 'p', 'does', ['white', 'a'], '&', 'true', ['s']])
+    ['<=', [['p'], 'does', [['white'], ['a']], 'true', ['s']]]
+    """
+    if isinstance(list_or_obj, basestring):
+        if list_or_obj.lower() in ['and', '&', '&&']:
+            return None
+        else:
+            return list_or_obj
+    else:
+        toks = [normalize_ands(tok) for tok in nest_args(list_or_obj)]
+        return [tok for tok in toks if tok]
+
+
 
 
 class LogicNetwork(nx.MultiDiGraph):
 
     def __init__(self, *args, **kwargs):
+        self.verbosity = kwargs.get('verbosity', 1)
         return super(LogicNetwork, self).__init__(self, *args, **kwargs)
 
     def add_node(self, type=None, name=None, mark=None, source=None):
@@ -180,24 +249,50 @@ class LogicNetwork(nx.MultiDiGraph):
             loc, toks = args
         elif len(args) == 1:
             toks = args
-        print 'parse_action(s, loc, toks=%s)' % toks
+        if self.verbosity:
+            print 'parse_action(s, loc, toks=%s)' % toks
         toks = denest(toks)
-        print 'parse_action(s, loc, toks=%s)' % toks
-        print len(toks)
+        if self.verbosity:
+            print 'denest(toks): %r' % toks
+        toks = nest_args(toks)    
+        if self.verbosity:
+            print 'nest_args(toks): %r' % toks
         toks = nest_args(toks)
-        name, type = None, toks[0]
-        if type in ['role', 'base']:
+        type = toks[0]
+        name = None
+        # if len(toks) > 1:
+        #     if is_parse_result(toks[1]):
+        #         if any(is_parse_result(toks[1][i]) for i in len(toks[1])):
+        #             if not any(is_parse_result(toks[1][0][i]) for i in range(len(toks[1][0]))):
+        #                 name = '-'.join('-'.join(tok) for tok in toks[1][0])
+        #         else:
+        #             name = '-'.join(toks[1])
+        #     else:
+        #         name = toks[1]
+        if type == 'role':
+            name = None  # no need to add a node for each new value of the role variable
+        elif type == 'base':
             # print toks, toks[0][0], ' '.join(toks[0][1])
             name = '-'.join(toks[1])
             # print 'adding node named %s ...' % name
         elif type in ['legal', 'input']:
             # print toks, toks[0][0], ' '.join(toks[0][1])
-            name = 'does(' + ','.join(toks[1]) + ')'
+            name = 'does(' + ','.join(tok[0] for tok in toks[1]) + ')'
             # print 'adding node named %s ...' % name
         elif type == '<=':
-            pass
-        print name
+            if self.verbosity:
+                print 'proposition (<=): %r' % toks
+            # next keyword defines a transition node and the arcs into it and from the transition to a base node
+            if is_parse_result(toks[1][0]) or toks[1][0] not in parser.RELATION_CONSTANTS:
+                self.add_node(type=type, name=toks[1][0][0], mark=None, source=None)
+            elif toks[1] == 'next':
+                # print toks, toks[0][0], ' '.join(toks[0][1])
+                name = '-'.join(toks[2])
+                # print 'adding node named %s ...' % name
+                pass
         if name:
+            if self.verbosity:
+                print 'adding unconnected node for name: %r' % name
             self.add_node(type=type, name=name, mark=None, source=None)
         # print 'added node, now have %s' % self.nodes()
 

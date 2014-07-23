@@ -1,5 +1,7 @@
 import pyparsing as pp
 
+MAX_NUM_ARGS = 1000000000  # max of 1 billion arguments for any function (relation constant)
+
 # function constants are usually lowercase, but haven't found that as a hard requirement in the spec
 function_constant = pp.Word(pp.srange("[A-Za-z]"), pp.srange("[a-zA-Z0-9_]"))
 identifier = pp.Word(pp.srange("[A-Za-z]"), pp.srange("[a-zA-Z0-9_]"))
@@ -18,12 +20,21 @@ terminal = pp.Keyword('terminal')  # terminal(d) means that if the datam d is tr
 distinct = pp.Keyword('distinct')  # distinct(x, y) means that the values of x and y are different.
 true = pp.Keyword('true')  # true(p) means that the datum p is true in the current state.
 
-# GDL-I Relation Constants
-relation_constant = role | inpt | base | init | next | does | legal | goal | terminal | distinct | true
-
 # GDL-II Relation Constants
 sees = pp.Keyword('sees')  # The predicate sees(?r,?p) means that role ?r perceives ?p in the next game state.
 random = pp.Keyword('random')  # A predefined player that choses legal moves randomly
+
+# GDL-I and GDL-II Relation Constants
+relation_constant = role | inpt | base | init | next | does | legal | goal | terminal | distinct | true | sees | random
+
+# TODO: DRY this up
+# functions (keywords that should be followed by the number of arguments indicated)
+RELATION_CONSTANTS =  {
+    'role': 1, 'input': 2, 'base': 1, 'init': 1, 'next': 1, 'does': 2, 'legal': 2, 'goal': 2, 'terminal': 1,  'distinct': 2, 'true': 1,
+    'sees': 1, 'random': 1,
+    '<=': MAX_NUM_ARGS,
+    '&': 1,
+    }
 
 # other tokens/terms
 variable = pp.Word('?', pp.alphas)
@@ -47,6 +58,10 @@ grammar << (implies | variable | relation_constant | number | operator | identif
 sentence = (expression | grammar) + (comment | pp.lineEnd.suppress() | pp.stringEnd.suppress())
 
 game_description = pp.OneOrMore(comment | sentence)
+
+
+
+
 
 def test():
     import os
