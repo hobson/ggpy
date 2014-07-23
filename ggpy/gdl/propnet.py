@@ -285,6 +285,7 @@ class LogicNetwork(nx.MultiDiGraph):
             # next keyword defines a transition node and the arcs into it and from the transition to a base node
             if is_parse_result(toks[1][0]) or toks[1][0] not in parser.RELATION_CONSTANTS:
                 self.add_node(type=type, name=toks[1][0][0], mark=None, source=None)
+                # FIXME: add edges to/from transition
             elif toks[1] == 'next':
                 # print toks, toks[0][0], ' '.join(toks[0][1])
                 name = '-'.join(toks[2])
