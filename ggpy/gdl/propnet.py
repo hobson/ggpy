@@ -217,9 +217,19 @@ def normalize_ands(list_or_obj):
 
 
 
-class LogicNetwork(nx.MultiDiGraph):
+class LogicNetwork(nx.DiGraph):
+    """A networkx graph representation of a set of Propositional Logic facts/sentences
+
+    Called a "propnet" in General Game Playing at coursera.
+
+    To allow multiple edges to share the same source and destination
+    change the LogicNetwork parent to nx.MultiDiGraph
+    """
 
     def __init__(self, *args, **kwargs):
+        self.sentences = []
+        self.base_nodes = []
+        self.redundant_edges = True  # whether to allow redundant edges (same source and destination) to be created
         self.verbosity = kwargs.get('verbosity', 1)
         return super(LogicNetwork, self).__init__(self, *args, **kwargs)
 
@@ -232,6 +242,24 @@ class LogicNetwork(nx.MultiDiGraph):
         attr = { 'type': type, 'name': name, 'mark': mark, 'source': source }
         print attr
         super(LogicNetwork, self).add_node(name, attr=attr)
+
+    def get_nodes_by_attribute(self, **kwargs):
+        return [n for n in self.nodes_iter() 
+                if all(self.node[n]['attr'].get(k, None) == v for k, v in kwargs.iteritems())]
+
+    def get_nodes_by_type(self, type):
+        return [n for n in self.nodes_iter() 
+                if self.node[n]['attr'].get('type', None) == type]
+
+    def get_base_nodes(self):
+        if self.verbosity:
+            print 'looking for base nodes'
+        self.base_nodes = [n for n in self.nodes_iter()
+                if self.node[n]['attr'].get('type', None) == 'base']
+        if self.verbosity:
+            print 'found %d base nodes' % len(self.base_nodes)
+        return self.base_nodes
+        
 
     def parse_action(self, *args):
         '''Action to perform (add_node) when a new GDL token (word) is successfully parsed.
@@ -282,12 +310,19 @@ class LogicNetwork(nx.MultiDiGraph):
         elif type == '<=':
             if self.verbosity:
                 print 'proposition (<=): %r' % toks
-            # next keyword defines a transition node and the arcs into it and from the transition to a base node
             if is_parse_result(toks[1][0]) or toks[1][0] not in parser.RELATION_CONSTANTS:
                 self.add_node(type=type, name=toks[1][0][0], mark=None, source=None)
                 # FIXME: add edges to/from transition
-            elif toks[1] == 'next':
-                # print toks, toks[0][0], ' '.join(toks[0][1])
+            if toks[1][0] == 'next':
+                # next keyword defines a transition node and the arcs into it and from the transition to a base node
+                for b in self.get_base_nodes():
+                    if self.verbosity > 1:
+                        print 'adding edge to base node found: %r' % b
+                    edge = toks[1][1][1][0], toks[1][1][0][0]
+                    # don't add redundant edges
+                    if self.redundant_edges or edge not in self.edges():
+                        self.add_edge(*edge)
+                    # print toks, toks[0][0], ' '.join(toks[0][1])
                 name = '-'.join(toks[2])
                 # print 'adding node named %s ...' % name
                 pass
@@ -296,6 +331,7 @@ class LogicNetwork(nx.MultiDiGraph):
                 print 'adding unconnected node for name: %r' % name
             self.add_node(type=type, name=name, mark=None, source=None)
         # print 'added node, now have %s' % self.nodes()
+        self.sentences += [toks]
 
 
 class View(Node):
