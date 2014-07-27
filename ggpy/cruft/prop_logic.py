@@ -75,46 +75,57 @@ expression = operatorPrecedence(atom,
     ("",    2, opAssoc.LEFT, And),
 #     ("implies",  3, opAssoc.RIGHT, Implies),  # ValueError: if numterms=3, opExpr must be a tuple or list of two expressions
     ])
-p = True
-q = False
-r = True
-tests = [
-        ("p and not q", True),
-        ("not not p", True),
-        ("not(p and q)", True),
-        ("q or not p and r", False),
-        ("q or (not p and r)", False),  # FIXME: doesn't check the not precedence priority properly
-        ("not (p and r) or q", False),
-        ("(q or (not (p and r)))", False),
-        ("(q or not p) or not r", False),
-        ("q or not (p and r)", False),
-        ("p or q or r", True),
-        ("p or q or r and False", True),
-        ("(p or q or r) and False", False),
-        ("p q", False),
-        ("(p q)", False),
-        ("(p) (q)", False),
-        ("(q or (p and q))", False),
-        ("p r", True),
-        ("(p r)", True),
-        ("(p) (r)", True),
-        ("(q or (p and r))", True),
-        ]
 
 
-print "p, q, r = %r, %r, %r" % (p, q, r)
-print
-passed, failed = 0, 0
-for s, expected in tests:
-    result = expression.parseString(s)[0]
-    print '      test string: %s' % s 
-    print 'python expression: %s == %r' % (result, bool(result))
-    if bool(result) == expected:
-        passed += 1
-        print 'Passed'
-        print
-    else:
-        failed += 1
-        print 'TEST FAILED! Expected: %r' % expected
-        print
-print "Passed %d out of %d, Failed %d" % (passed, passed + failed, failed)
+def test():
+    import time
+    # FIXME: define assignment operator for non-global assignment of value to variables in subsequent expressions
+    global p, q, r
+    p, q, r = True, False, True
+    tests = [
+                ("p and not q", True),
+                ("not not p", True),
+                ("not(p and q)", True),
+                ("q or not p and r", False),
+                ("q or (not p and r)", False),  # FIXME: doesn't check the not precedence priority properly
+                ("not (p and r) or q", False),  # FIXME: this takes unusually long to process (1.5 seconds!)
+                ("(q or (not (p and r)))", False),
+                ("(q or not p) or not r", False),
+                ("q or not (p and r)", False),
+                ("p or q or r", True),
+                ("p or q or r and False", True),
+                ("(p or q or r) and False", False),
+                ("p q", False),
+                ("(p q)", False),
+                ("(p) (q)", False),
+                ("(q or (p and q))", False),
+                ("p r", True),
+                ("(p r)", True),
+                ("(p) (r)", True),
+                ("(q or (p and r))", True),
+            ]
+
+
+    print "p, q, r = %r, %r, %r" % (p, q, r)
+    print
+    passed, failed = 0, 0
+    for s, expected in tests:
+        t0 = time.time()
+        result = expression.parseString(s)[0]
+        dt = time.time() - t0
+        print '      test string: %s' % s 
+        print 'python expression: %s == %r     (%g microseconds)' % (result, bool(result), dt * 1000000)
+        if bool(result) == expected:
+            passed += 1
+            print 'Passed'
+            print
+        else:
+            failed += 1
+            print 'TEST FAILED! Expected: %r' % expected
+            print
+    print "Passed %d out of %d, Failed %d" % (passed, passed + failed, failed)
+    return failed
+
+
+if __name__ == '__main__':
+    test()
