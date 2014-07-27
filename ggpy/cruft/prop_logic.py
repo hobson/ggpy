@@ -14,6 +14,9 @@ class Atom(object):
     symbol = '&'
     literals = ('and', 'AND', ' ', 'And', '&&')
     def __init__(self,t):
+        self.keyword = Keyword(self.symbol)
+        for lit in self.literals:
+            self.keyword |= Keyword(lit)
         self.args = t[0][0:]
     def evaluate(self, a):
         if a == 'and':
@@ -34,7 +37,8 @@ class And(Atom):
         return True
 
 class Or(Atom):
-    symbol = '|'    
+    symbol = '|'
+    literals = ('or', 'OR', 'Or', '||')
     def __nonzero__(self):
         for a in self.args[0::2]:
             if self.evaluate(a):
@@ -42,24 +46,30 @@ class Or(Atom):
         return False
 
 class Not(Atom):
+    symbol = '~'
+    literals = ('not', 'Not', 'NOT', '!')
     def __init__(self, t):
         self.arg = t[0][1]
+    # override the Atom stringifier because it assumes binary operators and Not is a unary operator
     def __str__(self):
-        return "~" + str(self.arg)
+        return self.symbol + str(self.arg)
     def __nonzero__(self):
         return not self.evaluate(self.arg)
 
 
 class Implies(Atom):
+    symbol = '<='
+    literals = ('-:', 'implies', 'Implies', 'IMPLIES')
+    # override the Atom stringifier because it assumes binary operators and Implies is a unary (infinite arity?) operator
     def __str__(self):
-        return "<=" + str(self.arg)
+        return self.symbol + str(self.arg)
     def __nonzero__(self):
         return all(self.evaluate(a) for a in self.args)
 
 atom = Word(alphas, max=1) | oneOf("True False")
 expression = operatorPrecedence(atom,
     [
-    ("not", 1, opAssoc.RIGHT, Not),
+    ("not" , 1, opAssoc.RIGHT, Not),
     ("and", 2, opAssoc.LEFT, And),
     ("or",  2, opAssoc.LEFT, Or),
     ("",    2, opAssoc.LEFT, And),
