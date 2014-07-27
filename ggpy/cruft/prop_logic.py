@@ -10,33 +10,34 @@
 from pyparsing import *
 
 class Atom(object):
+    # default atom (even empty string) is treated as an AND operation
+    symbol = '&'
+    literals = ('and', 'AND', ' ', 'And', '&&')
     def __init__(self,t):
-        self.args = t[0][0::2]
+        self.args = t[0][0:]
+    def evaluate(self, a):
+        if a == 'and':
+            return True
+        if isinstance(a, basestring):
+            return eval(a)
+        else:
+            return bool(a)
     def __str__(self):
-        sep = " %s " % self.reprsymbol
-        return "(" + sep.join(map(str,self.args)) + ")"
+        sep = " %s " % self.symbol
+        return "(" + sep.join(map(str, [a for a in self.args if a not in self.literals])) + ")"
     
 class And(Atom):
-    reprsymbol = '&'
     def __nonzero__(self):
         for a in self.args:
-            if isinstance(a,basestring):
-                v = eval(a)
-            else:
-                v = bool(a)
-            if not v:
+            if not self.evaluate(a):
                 return False
         return True
 
 class Or(Atom):
-    reprsymbol = '|'    
+    symbol = '|'    
     def __nonzero__(self):
-        for a in self.args:
-            if isinstance(a,basestring):
-                v = eval(a)
-            else:
-                v = bool(a)
-            if v:
+        for a in self.args[0::2]:
+            if self.evaluate(a):
                 return True
         return False
 
@@ -46,30 +47,22 @@ class Not(Atom):
     def __str__(self):
         return "~" + str(self.arg)
     def __nonzero__(self):
-        if isinstance(self.arg,basestring):
-            v = eval(self.arg)
-        else:
-            v = bool(self.arg)
-        return not v
+        return not self.evaluate(self.arg)
+
 
 class Implies(Atom):
-    def __init__(self, t):
-        self.arg = t[0][1]  # need to make sure it joins all sub expressions with an implied And
     def __str__(self):
         return "<=" + str(self.arg)
     def __nonzero__(self):
-        if isinstance(self.arg,basestring):
-            v = eval(self.arg)
-        else:
-            v = bool(self.arg)
-        return not v
+        return all(self.evaluate(a) for a in self.args)
 
 atom = Word(alphas, max=1) | oneOf("True False")
 expression = operatorPrecedence(atom,
     [
     ("not", 1, opAssoc.RIGHT, Not),
-    ("and", 2, opAssoc.RIGHT, And),
-    ("or",  2, opAssoc.RIGHT, Or),
+    ("and", 2, opAssoc.LEFT, And),
+    ("or",  2, opAssoc.LEFT, Or),
+    ("",    2, opAssoc.LEFT, And),
 #     ("implies",  3, opAssoc.RIGHT, Implies),  # ValueError: if numterms=3, opExpr must be a tuple or list of two expressions
     ])
 test = ["p and not q",
@@ -82,7 +75,13 @@ test = ["p and not q",
         "p or q or r and False",
         "(p or q or r) and False",
         "p q", # ignores the implied AND and only reports value of p
+        "(p q)", # ignores the implied AND and only reports value of p
+        "(p) (q)", # ignores the implied AND and only reports value of p
         "(q or (p and q))",  # implied AND doesn't work, expects closing parenthesis
+        "p r", # ignores the implied AND and only reports value of p
+        "(p r)", # ignores the implied AND and only reports value of p
+        "(p) (r)", # ignores the implied AND and only reports value of p
+        "(q or (p and r))",  # implied AND doesn't work, expects closing parenthesis
         ]
 
 p = True
