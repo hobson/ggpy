@@ -19,7 +19,7 @@ class Atom(object):
             self.keyword |= Keyword(lit)
         self.args = t[0][0:]
     def evaluate(self, a):
-        if a == 'and':
+        if a in self.literals:
             return True
         if isinstance(a, basestring):
             return eval(a)
@@ -75,32 +75,46 @@ expression = operatorPrecedence(atom,
     ("",    2, opAssoc.LEFT, And),
 #     ("implies",  3, opAssoc.RIGHT, Implies),  # ValueError: if numterms=3, opExpr must be a tuple or list of two expressions
     ])
-test = ["p and not q",
-        "not not p",
-        "not(p and q)",
-        "q or not p and r",
-        "q or not p or not r",
-        "q or not (p and r)",
-        "p or q or r",
-        "p or q or r and False",
-        "(p or q or r) and False",
-        "p q", # ignores the implied AND and only reports value of p
-        "(p q)", # ignores the implied AND and only reports value of p
-        "(p) (q)", # ignores the implied AND and only reports value of p
-        "(q or (p and q))",  # implied AND doesn't work, expects closing parenthesis
-        "p r", # ignores the implied AND and only reports value of p
-        "(p r)", # ignores the implied AND and only reports value of p
-        "(p) (r)", # ignores the implied AND and only reports value of p
-        "(q or (p and r))",  # implied AND doesn't work, expects closing parenthesis
-        ]
-
 p = True
 q = False
 r = True
-print "p =", p
-print "q =", q
-print "r =", r
+tests = [
+        ("p and not q", True),
+        ("not not p", True),
+        ("not(p and q)", True),
+        ("q or not p and r", False),
+        ("q or (not p and r)", False),  # FIXME: doesn't check the not precedence priority properly
+        ("not (p and r) or q", False),
+        ("(q or (not (p and r)))", False),
+        ("(q or not p) or not r", False),
+        ("q or not (p and r)", False),
+        ("p or q or r", True),
+        ("p or q or r and False", True),
+        ("(p or q or r) and False", False),
+        ("p q", False),
+        ("(p q)", False),
+        ("(p) (q)", False),
+        ("(q or (p and q))", False),
+        ("p r", True),
+        ("(p r)", True),
+        ("(p) (r)", True),
+        ("(q or (p and r))", True),
+        ]
+
+
+print "p, q, r = %r, %r, %r" % (p, q, r)
 print
-for t in test:
-    res = expression.parseString(t)[0]
-    print t,'\n', res, '=', bool(res),'\n'
+passed, failed = 0, 0
+for s, expected in tests:
+    result = expression.parseString(s)[0]
+    print '      test string: %s' % s 
+    print 'python expression: %s == %r' % (result, bool(result))
+    if bool(result) == expected:
+        passed += 1
+        print 'Passed'
+        print
+    else:
+        failed += 1
+        print 'TEST FAILED! Expected: %r' % expected
+        print
+print "Passed %d out of %d, Failed %d" % (passed, passed + failed, failed)
