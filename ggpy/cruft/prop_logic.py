@@ -13,11 +13,17 @@ class Atom(object):
     # default atom (even empty string) is treated as an AND operation
     symbol = '&'
     literals = ('and', 'AND', ' ', 'And', '&&')
-    def __init__(self,t):
-        self.keyword = Keyword(self.symbol)
-        for lit in self.literals:
-            self.keyword |= Keyword(lit)
+
+    @classmethod
+    def get_parser(cls):
+        cls.parser = Keyword(cls.symbol)
+        for lit in cls.literals:
+            cls.parser |= Keyword(lit)
+        return cls.parser
+
+    def __init__(self, t):
         self.args = t[0][0:]
+
     def evaluate(self, a):
         if a in self.literals:
             return True
@@ -25,16 +31,19 @@ class Atom(object):
             return eval(a)
         else:
             return bool(a)
+
     def __str__(self):
         sep = " %s " % self.symbol
         return "(" + sep.join(map(str, [a for a in self.args if a not in self.literals])) + ")"
-    
+
+
 class And(Atom):
     def __nonzero__(self):
         for a in self.args:
             if not self.evaluate(a):
                 return False
         return True
+
 
 class Or(Atom):
     symbol = '|'
@@ -66,13 +75,14 @@ class Implies(Atom):
     def __nonzero__(self):
         return all(self.evaluate(a) for a in self.args)
 
+
 atom = Word(alphas, max=1) | oneOf("True False")
 expression = operatorPrecedence(atom,
     [
-    ("not" , 1, opAssoc.RIGHT, Not),
-    ("and", 2, opAssoc.LEFT, And),
-    ("or",  2, opAssoc.LEFT, Or),
-    ("",    2, opAssoc.LEFT, And),
+    (Not.get_parser(), 1, opAssoc.RIGHT, Not),
+    (And.get_parser(), 2, opAssoc.LEFT, And),
+    (Or.get_parser(),  2, opAssoc.LEFT, Or),
+    ("", 2, opAssoc.LEFT, And),
 #     ("implies",  3, opAssoc.RIGHT, Implies),  # ValueError: if numterms=3, opExpr must be a tuple or list of two expressions
     ])
 
@@ -114,7 +124,7 @@ def test():
         result = expression.parseString(s)[0]
         dt = time.time() - t0
         print '      test string: %s' % s 
-        print 'python expression: %s == %r     (%g microseconds)' % (result, bool(result), dt * 1000000)
+        print 'python expression: %s == %r     (%3f ms)' % (result, bool(result), dt * 1000)
         if bool(result) == expected:
             passed += 1
             print 'Passed'
