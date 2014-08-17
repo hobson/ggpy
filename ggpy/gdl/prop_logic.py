@@ -74,7 +74,7 @@ class Not(Atom):
 class Implies(Atom):
     symbol = '='
     implied_operator = Atom.symbol
-    literals = ('<=', '-:', '<-', 'implies', 'Implies', 'IMPLIES')
+    literals = '<=', '-:', '<-', 'implies', 'Implies', 'IMPLIES'
 
     def __init__(self):
         super(Implies, self).__init__()
@@ -88,7 +88,11 @@ class Implies(Atom):
         return self.variable + self.symbol + str(self.implied_operator.join(self.args[1:]))
 
     def __nonzero__(self):
-        return all(self.evaluate(a) for a in self.args)
+        return all(self.evaluate(a) for a in self.args[1:])
+
+class EOL(Atom):
+    symbol = '\n'
+    literals = '.', '\r', '\n'
 
 
 def create_variable(token_tree):
