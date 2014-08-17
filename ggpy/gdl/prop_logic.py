@@ -40,6 +40,7 @@ class Atom(object):
 
 
 class And(Atom):
+
     def __nonzero__(self):
         for a in self.args:
             if not self.evaluate(a):
@@ -50,30 +51,42 @@ class And(Atom):
 class Or(Atom):
     symbol = '|'
     literals = ('or', 'OR', 'Or', '||')
+
     def __nonzero__(self):
         for a in self.args[0::2]:
             if self.evaluate(a):
                 return True
         return False
 
+
 class Not(Atom):
     symbol = '~'
     literals = ('not', 'Not', 'NOT', '!')
-    def __init__(self, t):
-        self.arg = t[0][1]
-    # override the Atom stringifier because it assumes binary operators and Not is a unary operator
+
     def __str__(self):
-        return self.symbol + str(self.arg)
+        """Override the Atom stringifier because it assumes binary operators and Not is unary"""
+        return self.symbol + str(self.args[1])
+
     def __nonzero__(self):
         return not self.evaluate(self.arg)
 
 
 class Implies(Atom):
-    symbol = '<='
-    literals = ('-:', 'implies', 'Implies', 'IMPLIES')
-    # override the Atom stringifier because it assumes binary operators and Implies is a unary (infinite arity?) operator
+    symbol = '='
+    implied_operator = Atom.symbol
+    literals = ('<=', '-:', '<-', 'implies', 'Implies', 'IMPLIES')
+
+    def __init__(self):
+        super(Implies, self).__init__()
+        self.variable = self.args[0]
+
     def __str__(self):
-        return self.symbol + str(self.arg)
+        """
+        Implies (assignment?) is not really an operator so not sure if it should be derived from Atom
+        Implies is variable arity in GDL, with an implied And between arguments.
+        """
+        return self.variable + self.symbol + str(self.implied_operator.join(self.args[1:]))
+
     def __nonzero__(self):
         return all(self.evaluate(a) for a in self.args)
 
@@ -144,7 +157,7 @@ def test():
                 ("; comments are strings instead of bools",  " comments are strings instead of bools"),
                 ("(this or (that and theother2))", True),
                 ("__new_hidden_variable | theother2   ; raise an exception so that system hidden globals that begin are protected", pp.ParseException("Expected W:(;)")),
-                ("(<= (x True))", getattr(sys.modules[__name__], 'x')),
+                ("(<= (x) (True))", getattr(sys.modules[__name__], 'x')),
             ]
 
 
